@@ -70,9 +70,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-        HWND hwnd = CreateWindowExW(0, L"BalloonWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
-            nullptr);
+        HWND hwnd = CreateWindowExW(0, L"BalloonWindowClass", g_szAppName,
+            (WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX) & ~WS_THICKFRAME, // サイズ変更を無効化
+            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
+            nullptr, nullptr, hInstance, nullptr);
         // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"BalloonWindowClass", g_szAppName, WS_POPUP,
         // to default to fullscreen.
 
@@ -194,8 +195,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (lParam)
         {
             auto info = reinterpret_cast<MINMAXINFO*>(lParam);
-            info->ptMinTrackSize.x = 320;
-            info->ptMinTrackSize.y = 200;
+            info->ptMinTrackSize.x = 1280;
+            info->ptMinTrackSize.y = 720;
         }
         break;
 
@@ -246,8 +247,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                int width = 800;
-                int height = 600;
+                int width = 1280;
+                int height = 720;
                 if (game)
                     game->GetDefaultSize(width, height);
 
