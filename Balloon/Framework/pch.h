@@ -105,4 +105,4 @@ namespace DX
 #include <Model.h>
 #include <DDSTextureLoader.h>
 #include <WICTextureLoader.h>
-#include <StepTimer.h>
+#include <Framework/StepTimer.h>

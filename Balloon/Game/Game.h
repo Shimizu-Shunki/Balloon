@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include "DeviceResources.h"
-#include "StepTimer.h"
-
+#include "Framework/DeviceResources.h"
+#include "Framework/StepTimer.h"
 #include "Framework/Graphics.h"
 
 

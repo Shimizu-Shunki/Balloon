@@ -2,7 +2,7 @@
 #pragma once
 #ifndef GRAPHICS_DEFINED
 #define GRAPHICS_DEFINED
-#include <DeviceResources.h>
+#include <Framework/DeviceResources.h>
 //#include "InputManager.h"
 
 // DirectX GraphicsƒNƒ‰ƒX
