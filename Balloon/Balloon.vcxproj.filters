@@ -20,6 +20,15 @@
     <Filter Include="Game">
       <UniqueIdentifier>{243e51c6-33b6-47ea-add2-14287270367b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{bcbbc88d-a107-45d0-8ecd-152625a8ac39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Sea">
+      <UniqueIdentifier>{1e6b8b51-2e63-4145-83d3-f04f76e7a4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\UI">
+      <UniqueIdentifier>{834defef-20c9-470b-977c-9ba667d9b63d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Graphics.h">
@@ -68,6 +77,18 @@
     <ClInclude Include="Framework\pch.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\InputManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\AudioManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Sounds.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Graphics.cpp">
@@ -108,6 +129,15 @@
     <ClCompile Include="Framework\pch.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\InputManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\AudioManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
@@ -122,5 +152,34 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\packages.config" />
+    <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli">
+      <Filter>Resources\Sea</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\UI\UI.hlsli">
+      <Filter>Resources\UI</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_DS.hlsl">
+      <Filter>Resources\Sea</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_HS.hlsl">
+      <Filter>Resources\Sea</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_PS.hlsl">
+      <Filter>Resources\Sea</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_VS.hlsl">
+      <Filter>Resources\Sea</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_GS.hlsl">
+      <Filter>Resources\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_PS.hlsl">
+      <Filter>Resources\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_VS.hlsl">
+      <Filter>Resources\UI</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
