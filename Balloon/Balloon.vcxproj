@@ -194,6 +194,10 @@
     <ClInclude Include="Framework\Resources.h" />
     <ClInclude Include="Framework\SceneManager.h" />
     <ClInclude Include="Framework\Sounds.h" />
+    <ClInclude Include="Framework\StateMachine\Parameters.h" />
+    <ClInclude Include="Framework\StateMachine\StateController.h" />
+    <ClInclude Include="Framework\StateMachine\StateMachine.h" />
+    <ClInclude Include="Framework\StateMachine\Transition.h" />
     <ClInclude Include="Framework\StepTimer.h" />
     <ClInclude Include="Framework\Tween\Tween.h" />
     <ClInclude Include="Framework\Tween\TweenManager.h" />
@@ -241,6 +245,10 @@
     <ClCompile Include="Framework\RenderManager.cpp" />
     <ClCompile Include="Framework\Resources.cpp" />
     <ClCompile Include="Framework\SceneManager.cpp" />
+    <ClCompile Include="Framework\StateMachine\Parameters.cpp" />
+    <ClCompile Include="Framework\StateMachine\StateController.cpp" />
+    <ClCompile Include="Framework\StateMachine\StateMachine.cpp" />
+    <ClCompile Include="Framework\StateMachine\Transition.cpp" />
     <ClCompile Include="Framework\Tween\Tween.cpp" />
     <ClCompile Include="Framework\Tween\TweenManager.cpp" />
     <ClCompile Include="Game\Cameras\DebugCamera.cpp" />

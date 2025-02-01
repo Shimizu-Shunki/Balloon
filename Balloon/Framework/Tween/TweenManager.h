@@ -6,11 +6,11 @@
 class Tween;
 class CommonResources;
 
+
 class TweenManager {
 
 private:
-
-	static const int INITIAL_TWEEN_COUNT;
+	static constexpr int INITIAL_TWEEN_COUNT = 10;
 
 private:
 	//	コンストラクタ

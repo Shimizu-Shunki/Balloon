@@ -110,11 +110,12 @@ void AudioManager::Update(DX::StepTimer const& timer)
 	m_currentBGM->SetVolume(m_currentValue);
 	
 	// フェードが終了したら
-	if (m_currentValue >= m_endValueme) {
+	if (t >= 1.0f) {
 		m_currentValue = m_endValueme;
 		// 最終音量を設定
 		m_currentBGM->SetVolume(m_currentValue);
 
+		if(m_currentValue <= 0.0f)
 		// 音量が0になった時はBGMを停止する
 		m_currentBGM->Stop(true);
 

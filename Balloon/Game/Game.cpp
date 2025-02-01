@@ -94,6 +94,7 @@ void Game::Initialize(HWND window, int width, int height)
     m_commonResources->SetRenderManager(m_renderManager);
     // オーディオマネージャーの生成
     m_audioManager = AudioManager::GetInstance();
+    m_audioManager->Initialize();
     m_commonResources->SetAudioManager(m_audioManager);
     // シーンマネージャーの生成
     m_sceneManager = SceneManager::GetInstance();
@@ -183,6 +184,8 @@ void Game::Update(DX::StepTimer const& timer)
 {
     // 入力マネージャーの更新処理
     m_inputManager->Update();
+    // オーディオマネージャーの更新処理
+    m_audioManager->Update(timer);
     // スカイスフィアの更新処理
     m_skySphere->Update();
     // Tweenマネージャーの更新処理

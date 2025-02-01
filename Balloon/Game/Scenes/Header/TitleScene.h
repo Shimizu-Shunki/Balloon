@@ -3,6 +3,7 @@
 
 
 class CommonResources;
+class StateMachine;
 class RenderManager;
 class IObject;
 class Transform;
@@ -33,6 +34,9 @@ private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
+
+	// ステートマシーン
+	std::unique_ptr<StateMachine> m_stateMachine;
 
 
 };

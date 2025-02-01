@@ -45,6 +45,8 @@ void PlayScene::Start()
 {
 	// TweenƒeƒXƒg
 	m_rootObject[0]->GetTransform()->GetTween()->DORotation({ 0.0f,30.0f,30.0f }, 4.0f).SetEase(Tween::EasingType::EaseInBounce);
+	// BGM‚ðÄ¶
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
 }
 
 void PlayScene::Update()

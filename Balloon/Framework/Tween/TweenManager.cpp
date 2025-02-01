@@ -2,8 +2,6 @@
 #include "Framework/Tween/TweenManager.h"
 #include "Framework/CommonResources.h"
 
-const int TweenManager::INITIAL_TWEEN_COUNT = 10;
-
 // コンストラクタ
 TweenManager::TweenManager()
 {
