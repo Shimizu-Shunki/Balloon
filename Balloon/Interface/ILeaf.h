@@ -1,9 +1,9 @@
 #pragma once
 #ifndef ILEAF_DEFINED
 #define ILEAF_DEFINED
-#include "Interface/IComponent.h"
+#include "Interface/IObject.h"
 
-class ILeaf : public IComponent
+class ILeaf : public IObject
 {
 };
 

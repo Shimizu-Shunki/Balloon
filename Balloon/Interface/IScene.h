@@ -12,7 +12,7 @@ public:
 	// スタート処理
 	virtual void Start() = 0;
 	// 更新処理
-	virtual void Update(float elapsed_time) = 0;
+	virtual void Update() = 0;
 	// 描画処理
 	virtual void Render() = 0;
 	// 終了処理

@@ -29,11 +29,53 @@
     <Filter Include="Resources\UI">
       <UniqueIdentifier>{834defef-20c9-470b-977c-9ba667d9b63d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{540aedfc-9b0d-4688-8ebb-fc2fab8f3c00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Header">
+      <UniqueIdentifier>{1892c341-9bdb-4e0e-99a4-1382732c8696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Source">
+      <UniqueIdentifier>{e8384e93-0145-4d85-90a0-6338a4f7e1ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{f7970cc4-695a-4f78-ae90-621f573258ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Fade">
+      <UniqueIdentifier>{03a4780f-91ee-4dd0-b162-5a69a52415cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Material">
+      <UniqueIdentifier>{022c874a-d8df-41d1-b985-7a1faefb8d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{ba03a761-a929-4067-8d8c-509517826a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Transform">
+      <UniqueIdentifier>{964a2be4-59b4-4c45-b997-a6ae113bf06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes\Header">
+      <UniqueIdentifier>{1ff3fe06-de4e-47f2-832a-69cdd37a3d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes\Source">
+      <UniqueIdentifier>{cd72ecad-1dff-4b30-b161-63f5c41464e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Cameras">
+      <UniqueIdentifier>{c5087c7d-1cd1-4874-87bf-1348ceec02ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\PhysicsBody">
+      <UniqueIdentifier>{ba8948ea-6dee-429f-afe6-dbb85a70202c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Sky">
+      <UniqueIdentifier>{712e36ac-ed4b-4ea7-a550-1146d6c31e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Root">
+      <UniqueIdentifier>{9b0a90a5-a48f-439a-8365-786985aa311a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Tween">
+      <UniqueIdentifier>{a2f8b4e3-d5f8-4d5a-9799-cf6a4a38f895}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framework\Graphics.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
       <Filter>Framework\Microsoft</Filter>
     </ClInclude>
@@ -89,11 +131,98 @@
     <ClInclude Include="Framework\Sounds.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Player\Header\Body.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\Head.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\LeftArm.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\LeftFoot.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\Player.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\RightArm.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Header\RightFoot.h">
+      <Filter>Game\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ICamera.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ICollision.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IObject.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IComposite.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ILeaf.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IScene.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IState.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Fade\Fade.h">
+      <Filter>Game\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Material\SpriteMaterial.h">
+      <Filter>Game\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Material\Buffers.h">
+      <Filter>Game\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\SceneManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\CommonResources.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\RenderManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Transform\Transform.h">
+      <Filter>Game\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\PlayScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\CameraManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\DebugCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\ResultScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\TitleScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Sky\SkySphere.h">
+      <Filter>Game\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Tween\Tween.h">
+      <Filter>Framework\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Tween\TweenManager.h">
+      <Filter>Framework\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Easing.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framework\Graphics.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
       <Filter>Framework\Microsoft</Filter>
     </ClCompile>
@@ -138,9 +267,69 @@
     <ClCompile Include="Framework\AudioManager.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\Source\Body.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\Head.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\LeftArm.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\LeftFoot.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\Player.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\RightArm.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Source\RightFoot.cpp">
+      <Filter>Game\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Fade\Fade.cpp">
+      <Filter>Game\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Material\SpriteMaterial.cpp">
+      <Filter>Game\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\SceneManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\RenderManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Transform\Transform.cpp">
+      <Filter>Game\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\PlayScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\CameraManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\DebugCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\ResultScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\TitleScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Sky\SkySphere.cpp">
+      <Filter>Game\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Tween\Tween.cpp">
+      <Filter>Framework\Tween</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Tween\TweenManager.cpp">
+      <Filter>Framework\Tween</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="directx.ico">
+    <Image Include="Game\Balloon.ico">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>
@@ -158,6 +347,10 @@
     <None Include="Resources\Shaders\hlsl\UI\UI.hlsli">
       <Filter>Resources\UI</Filter>
     </None>
+    <None Include="Common.hlsli">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_DS.hlsl">
@@ -181,5 +374,8 @@
     <FxCompile Include="Resources\Shaders\hlsl\UI\UI_VS.hlsl">
       <Filter>Resources\UI</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game\resource.rc" />
   </ItemGroup>
 </Project>

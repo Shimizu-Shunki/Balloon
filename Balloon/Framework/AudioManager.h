@@ -5,26 +5,15 @@
 
 class AudioManager
 {
-	// BGMの再生
-	// SEの再生
-
-	// BGMの再生　フェードアウト
-	// BGMの停止　フェードイン
-
 public :
+	
 
-	// デストラクタ
-	~AudioManager();
-
-	// InputManagerクラスのインスタンスを取得する
-	static AudioManager* const GetInstance();
 	// マスター音量を設定する
 	void SetMasterVolume(const float& volume);
 	// SEの音量を設定する
 	void SetSeVolume(const float& volume);
 	// BGMの音量を設定する
 	void SetBgmVolume(const float& volume);
-
 
 public:
 	// 初期化処理
@@ -41,20 +30,26 @@ public:
 	void PlaySE();
 
 private:
-	// コンストラクタ
+	//	コンストラクタ
 	AudioManager();
+	// デストラクタ
+	~AudioManager();
+public:
+	AudioManager(const AudioManager&) = delete;             // コピー禁止
+	AudioManager& operator=(const AudioManager&) = delete;  // コピー代入禁止
+	AudioManager(const AudioManager&&) = delete;            // ムーブ禁止
+	AudioManager& operator=(const AudioManager&&) = delete; // ムーブ代入禁止
 
-	
-
+	//	シングルトンインスタンスの取得
+	static AudioManager* GetInstance()
+	{
+		static AudioManager instance;
+		return &instance;
+	}
 
 private:
-	// タイマー
-	DX::StepTimer m_stepTimer;
-
+	
 	using BgmMap = std::unordered_map<XACT_WAVEBANK_SOUNDS, std::unique_ptr<DirectX::SoundEffectInstance>>;
-
-	// AudioManagerクラスのインスタンスへのポインタ
-	static std::unique_ptr<AudioManager> m_audioManager;
 
 	// オーディオエンジン
 	std::unique_ptr<DirectX::AudioEngine> m_audioEngine;
@@ -69,15 +64,20 @@ private:
 	bool m_isActive;
 	// SEフラグ
 	bool m_isSE;
-	// タイム
-	float m_timer;
+	// SEタイム
+	float m_seTimer;
 	// フェードタイム
 	float m_fadeTime;
 	// 現在の音量
 	float m_currentValue;
 
-	std::unique_ptr<DirectX::SoundEffect> m_soundEffectBGM;
-	
+	// フェード中の経過時間
+	float m_fadeElapsedTime;
+	// スタートボリューム
+	float m_startValueme;
+	// 終了ボリューム
+	float m_endValueme;
+
 
 	std::unique_ptr<DirectX::SoundEffect> m_soundEffectSE;
 	std::unique_ptr<DirectX::SoundEffectInstance> m_soundEffectInstanceSE;
@@ -87,7 +87,4 @@ private:
 	float m_seVolume;
 	// BGMの音量
 	float m_bgmVolume;
-
-	// 非同期処理の管理
-	std::future<void> fadeFuture; 
 };

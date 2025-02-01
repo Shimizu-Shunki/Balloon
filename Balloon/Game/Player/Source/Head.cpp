@@ -1,24 +1,20 @@
-#include "pch.h"
+#include "Framework/pch.h"
 #include "Game/Player/Header/Head.h"
-#include "Game/Player/Character.h"
-#include "Framework/CollisionManager.h"
-#include "Game/Balloon/Balloon.h"
-#include "Framework/InputManager.h"
-#include "Game/Player/Enemy.h"
-#include "Game/Collider/Collider.h"
-#include "Game/Player/Hand.h"
-#include "Game/Player/Jump.h"
-#include "Framework/Resources.h"
+#include "Framework/CommonResources.h"
 
 
-Head::Head(CollisionManager* collisionManger, IComponent* parent, const int balloonIndex, const DirectX::SimpleMath::Vector3& initialPosition, const float& initialAngle)
+
+Head::Head(IObject* parent)
 	:
 	m_parent(parent),
-	m_initialPosition(initialPosition),
-	m_initialAngle(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Up, initialAngle))
+	m_transform{},
+	m_childs{},
+	m_objectId{},
+	m_isActive{},
+	m_model{}
 {
-	m_collisionManager = collisionManger;
-	m_inputManager = InputManager::GetInstance();
+	// インスタンスを取得する
+	m_commonResources = CommonResources::GetInstance();
 }
 
 Head::~Head()
@@ -33,105 +29,61 @@ void Head::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
+	// モデルを取得
+	m_model = m_commonResources->GetResources()->GetPlayerHeadModel();
 
-	m_isKinematic = false;
+	m_transform = std::make_unique<Transform>();
 
-	// オブジェクトIDを設定
-	m_objectId = ObjectID::PLAYER;
+	// 位置を初期化
+	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
+	// 回転角を初期化
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
+	// スケールを初期化
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
 
-	// 現在の座標を初期化
-	m_currentPosition = m_initialPosition;
-	// 現在の回転を初期化
-	m_rotationTurretAngle = m_initialAngle;
-	// 大きさを初期化
-	m_scale = DirectX::SimpleMath::Vector3::One;
+	// トランスフォームを親に設定
+	m_transform->SetParent(m_parent->GetTransform());
+	// 親のTransformに自分自身を子供に設定
+	m_parent->GetTransform()->SetChild(m_transform.get());
 
-	// モデルを取得する
-	m_model = Resources::GetInstance()->GetPlayerHeadModel();
+	// 描画管理クラスにTransformとモデルを設定
+	m_commonResources->GetRenderManager()->AddModel({
+		m_transform.get(),
+		m_model
+	});
+
 }
 
-void Head::Update(const float elapsedTime, const DirectX::SimpleMath::Vector3& position, const DirectX::SimpleMath::Quaternion& angle)
+void Head::Update()
 {
 
-
-
-
-	// 当たり判定の更新
-	for (auto& collider : m_colliders)
+	// 子供を更新する
+	for (const auto& childObject : m_childs)
 	{
-		collider->Update(m_currentPosition);
-	}
-	// 子オブジェクトを更新する
-	for (auto& child : m_child)
-	{
-		// 風船を更新する
-		child->Update(elapsedTime, m_currentPosition, m_currentAngle);
-	}
-}
-
-// 描画処理
-void Head::Render()
-{
-	// 当たり判定の更新
-	for (auto& collider : m_colliders)
-	{
-		collider->DebugRender();
-	}
-	// 子オブジェクトを描画する
-	for (auto& childes : m_child)
-	{
-		// 子オブジェクトを描画する
-		childes->Render();
+		childObject->Update();
 	}
 }
 
-void Head::Attach(std::unique_ptr<IComponent> turretParts)
+void Head::Finalize() {}
+
+
+void Head::Attach(std::unique_ptr<IObject> turretParts, IObject::ObjectID objectId)
 {
-	// 砲塔部品を追加する
-	turretParts->Initialize(IComponent::ObjectID::BALLOON, true);
-	// 子オブジェクトをアタッチ
-	m_child.emplace_back(std::move(turretParts));
+	// パーツの初期化
+	turretParts->Initialize(objectId, true);
+	// 子供に登録
+	m_childs.emplace_back(std::move(turretParts));
 }
 
-void Head::OnCollisionEnter(IComponent* component)
-{
-	m_gravity = 0.0f;
-	m_velocity.y = 0.0f;
-	m_isGravity = false;
-}
 
-void Head::OnCollisionStay(IComponent* component)
+void Head::Detach(std::unique_ptr<IObject> turretParts)
 {
 
 }
 
-void Head::OnCollisionExit(IComponent* component)
-{
-	m_isGravity = true;
-}
-
-
-
-void Head::OnTriggerEnter(IComponent* component)
-{
-}
-void Head::OnTriggerStay(IComponent* component)
-{
-}
-void Head::OnTriggerExit(IComponent* component)
-{
-}
-
-
-
-void Head::Detach(std::unique_ptr<IComponent> turretParts)
-{
-
-}
-
-void Head::Finalize()
-{
-
-}
-
-
+void Head::OnCollisionEnter(IObject* object) { (void)object; }
+void Head::OnCollisionStay(IObject* object) { (void)object; }
+void Head::OnCollisionExit(IObject* object) { (void)object; }
+void Head::OnTriggerEnter(IObject* object) { (void)object; }
+void Head::OnTriggerStay(IObject* object) { (void)object; }
+void Head::OnTriggerExit(IObject* object) { (void)object; }

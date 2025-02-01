@@ -1,9 +1,9 @@
 #pragma once
 #ifndef ICAMERA_DEFINED
 #define IICAMERA_DEFINED
-#include "pch.h"
-#include "StepTimer.h"
-#include "Interface/IComponent.h"
+#include "Framework/pch.h"
+#include "Framework/StepTimer.h"
+#include "Interface/IObject.h"
 
 
 class ICamera
@@ -40,7 +40,7 @@ public:
 	// 更新処理
 	virtual void Update(const float& deltaTime) = 0;
 	// ビュー行列の作成
-	virtual void CalculateViewMatrix() = 0;
+	virtual DirectX::SimpleMath::Matrix CalculateViewMatrix() = 0;
 };
 
 

@@ -1,11 +1,11 @@
 #pragma once
 #include <future>
-#include "Shader/2DSpriteShader/Sprite2DShader.h"
-#include "Scenes/SceneManager/SceneManager.h"
+#include "Game/Material/SpriteMaterial.h"
+#include "Game/Material/Buffers.h"
+#include "Framework/SceneManager.h"
+#include "Framework/Resources.h"
 
-class SceneManager;
-class Sprite2DShader;
-
+class CommonResources;
 
 class Fade
 {
@@ -20,110 +20,73 @@ public:
 	// デストラクタ
 	~Fade();
 
+	// 更新処理
+	void Update();
+
 public:
 
 	// フェードイン処理
+	void FadeIN(float duration);
+	// フェードアウト処理　シーン切り替え付き
 	template <typename T>
-	void ChangeSceneFadeIN(float duration) // 任意の秒数を引数で渡す
+	void ChangeSceneFadeOUT(float duration)
 	{
-		// フェード処理中なら処理を終了
-		if (m_isActive)
-			return;
+		// フェード処理中なら true を返す
+		if (m_isActive) return;
 
-		m_isActive = true; // フェード処理開始
-		m_sprite->SetRuleProgress(0.0f); // アルファ値をシェーダーに設定
+		// 次のシーンの初期化を非同期で実行
+		m_sceneManager->NextSceneLoade<T>();
 
-		// 次のシーンのロードを準備
-		//m_sceneManager->NextSceneLoade<T>([this]() {
-		//	// シーンロード後の処理をここに記述可能
-		//});
-		
+		// フェード時間を設定
+		m_duration = duration;
 
-		// 非同期タスクを起動
-		m_future = std::async(std::launch::async, [this, duration]()
-		{
-			// 初期アルファ値（完全不透明）
-			float alpha = 0.0f;
-			// アルファ値の増加量（step を動的に計算）
-			const float step = 1.0f / (duration / 0.016f);
+		// ルール画像の進行度を初期化
+		m_constBuffer.ruleProgress = 0.0f;
+		// ルール画像の反転をしない
+		m_constBuffer.ruleInverse = 0;
 
-			while (alpha < 1.0f)
-			{
-				alpha += step;
-				if (alpha > 1.0f)
-				{
-					alpha = 1.0f;
-				}
+		// スタート進行度
+		m_startProgress = 0.0f;
+		// エンド進行度
+		m_endProgress = 1.0f;
 
-				m_sprite->SetRuleProgress(alpha); // アルファ値をシェーダーに設定
-				// フレーム待機 (16ms → 60FPS相当)
-				std::this_thread::sleep_for(std::chrono::milliseconds(16));
-			}
-
-			// フェードを非アクティブ
-			m_isActive = false;
-
-			// シーンを切り替える
-			//m_sceneManager->ChageScene();
-		});
+		// フェード処理をアクティブにする
+		m_isActive = true;
 	}
-
-
-	// フェードアウト処理
-	//bool FadeOUT();
-
-	void FadeOUT(float duration)
-	{
-		// フェード処理中なら処理を終了
-		if (m_isActive)
-			return;
-
-		m_isActive = true; // フェード処理開始
-		m_sprite->SetRuleProgress(1.0f); // アルファ値をシェーダーに設定
-
-		// 非同期タスクを起動
-		m_future = std::async(std::launch::async, [this, duration]()
-		{
-			// 初期アルファ値（完全不透明）
-			float alpha = 1.0f;
-			// アルファ値の減少量（step を動的に計算）
-			const float step = 1.0f / (duration / 0.016f);
-
-			while (alpha > 0.0f)
-			{
-				alpha -= step;
-				if (alpha < 0.0f)
-				{
-					alpha = 0.0f;
-				}
-
-				m_sprite->SetRuleProgress(alpha); // アルファ値をシェーダーに設定
-				// フレーム待機 (16ms → 60FPS相当)
-				std::this_thread::sleep_for(std::chrono::milliseconds(16));
-			}
-
-			// フェードを非アクティブ
-			m_isActive = false;
-		});
-	}
-
 
 	// 描画する
 	void Render();
 
 	private:
 
+		// 共有リソース
+		CommonResources* m_commonResources;
+
+		// コンテキスト
+		ID3D11DeviceContext1* m_context;
+
+		// バッファ
+		ConstBuffer m_constBuffer;
+		
+		// 画像サイズ
+		int m_textureSizeW, m_textureSizeH;
+
 		// シーンマネージャー
 		SceneManager* m_sceneManager;
-		// フェード用テクスチャ
-		std::unique_ptr<Sprite2DShader> m_sprite;
+		// フェード用マテリアル
+		std::unique_ptr<SpriteMaterial> m_spriteMaterial;
 		// 非同期タスク管理用
 		std::future<void> m_future;
-		
+
 		// フェード時間
-		float m_fadeTime;
+		float m_duration;
+		// ルール画像の現在の進行度
+		float m_curentRuleProgress;
+		// 現在の経過時間
+		float m_curentTime;
+		// スタート　エンド進行度
+		float m_startProgress, m_endProgress;
 		// フェードアクティブ
 		bool m_isActive;
-
 
 };

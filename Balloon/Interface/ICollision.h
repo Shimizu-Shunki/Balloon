@@ -1,9 +1,9 @@
 #pragma once
-#include "Interface/IComponent.h"
-#include "Game/Collider/Collider.h"
+#include "Interface/IObject.h"
 
-class IComponent;
-class Collider;
+
+class IObject;
+
 
 class ICollision
 {
@@ -19,20 +19,17 @@ class ICollision
 		当たっている時（相手のオブジェクト）*/
 
 public:
-	// 当たり判定を取得する
-	virtual const std::vector<std::unique_ptr<Collider>>& GetColliders() const = 0;
-
 	// 衝突があった時
-	virtual void OnCollisionEnter(IComponent* object) {};
+	virtual void OnCollisionEnter(IObject* object) = 0;
 	// 衝突している時
-	virtual void OnCollisionStay(IComponent* object) {};
+	virtual void OnCollisionStay(IObject* object) = 0;
 	// オブジェクトと離れたとき
-	virtual void OnCollisionExit(IComponent* object) {};
+	virtual void OnCollisionExit(IObject* object) = 0;
 
 	// 衝突があった時（トリガー）
-	virtual void OnTriggerEnter(IComponent* object) {};
+	virtual void OnTriggerEnter(IObject* object) = 0;
 	// 衝突している時（トリガー）
-	virtual void OnTriggerStay(IComponent* object) {};
+	virtual void OnTriggerStay(IObject* object) = 0;
 	// オブジェクトと離れたとき（トリガー）
-	virtual void OnTriggerExit(IComponent* object) {};
+	virtual void OnTriggerExit(IObject* object) = 0;
 };

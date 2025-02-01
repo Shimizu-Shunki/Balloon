@@ -7,6 +7,17 @@
 #include "Framework/DeviceResources.h"
 #include "Framework/StepTimer.h"
 #include "Framework/Graphics.h"
+#include "Framework/Resources.h"
+#include "Framework/CommonResources.h"
+#include "Framework/CameraManager.h"
+#include "Framework/RenderManager.h"
+#include "Framework/AudioManager.h"
+#include "Game/Sky/SkySphere.h"
+#include "Framework/Tween/TweenManager.h"
+
+class SceneManager;
+class InputManager;
+
 
 
 // D3D11デバイスを生成しゲームループを提供するゲームクラス
@@ -57,17 +68,62 @@ private:
     // ウィンドウサイズに依存したリソースを生成する
     void CreateWindowSizeDependentResources();
 
+
 private:
     // ウィンドウハンドル
     HWND            m_hWnd;
     // タイマー
     DX::StepTimer   m_timer;
 
+    // デバイス
+    ID3D11Device1* m_device;
+    // コンテキスト
+    ID3D11DeviceContext1* m_context;
+
+
     // デバイスリソース
-    DX::DeviceResources* m_deviceResources;
+    std::unique_ptr<DX::DeviceResources> m_deviceResources;
     // フルスクリーン
     BOOL m_full_screen;
+   
+    // 共有リソース
+    CommonResources* m_commonResources;
+    // リソース
+    Resources* m_resources;
+    //  コモンステート
+    std::unique_ptr<DirectX::CommonStates>  m_commonStates;
 
-    // グラフィックス
-    Graphics* m_graphics;
+    // スカイスフィア
+    std::unique_ptr<SkySphere> m_skySphere;
+
+    // 管理クラス
+    // シーンマネージャー
+    SceneManager* m_sceneManager;
+    // 入力マネージャー
+    InputManager* m_inputManager;
+    // カメラマネージャー
+    CameraManager* m_cameraManager;
+    // 描画マネージャー
+    RenderManager* m_renderManager;
+    // オーディオマネージャー
+    AudioManager* m_audioManager;
+    // Tweenマネージャー
+    TweenManager* m_tweenManager;
+
+
+
+    // デバッグの時のみ作成
+#ifdef _DEBUG
+    // ベーシックエフェクト
+    std::unique_ptr<DirectX::BasicEffect> m_basicEffect;
+    // プリミティブバッチ
+    std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> m_primitiveBatch;
+    // 入力レイアウト
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+
+    //	スプライトバッチ
+    std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
+    //	スプライトフォント
+    std::unique_ptr<DirectX::SpriteFont>  m_spriteFont;
+#endif
 };

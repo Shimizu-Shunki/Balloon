@@ -1,34 +1,27 @@
-#include "pch.h"
+#include "Framework/pch.h"
 #include "Framework/AudioManager.h"
 #include "Framework/Sounds.h"
 #include <Audio.h>
-#include <chrono>
-
-std::unique_ptr<AudioManager> AudioManager::m_audioManager = nullptr;
-
-// オーディオマネージャーのインスタンスを作成する
-AudioManager* const AudioManager::GetInstance()
-{
-	if (m_audioManager == nullptr)
-	{
-		// オーディオマネージャーのインスタンスを生成する
-		m_audioManager.reset(new AudioManager());
-	}
-	// オーディオマネージャーのインスタンスを返す
-	return m_audioManager.get();
-}
 
 // コンストラクタ
 AudioManager::AudioManager()
 	:
+	m_audioEngine{},
+	m_waveBank{},
+	m_bgms{},
+	m_currentBGM{},
 	m_masterVolume{},
 	m_seVolume{},
 	m_bgmVolume{},
-	m_stepTimer{}
+	m_fadeTime{},
+	m_currentValue{},
+	m_fadeElapsedTime{},
+	m_startValueme{},
+	m_endValueme{}
 {
 	m_isActive = false;
 	m_isSE = false;
-	m_timer = 0.0f;
+	m_seTimer = 0.0f;
 }
 
 // デストラクタ
@@ -89,13 +82,13 @@ void AudioManager::Update(DX::StepTimer const& timer)
 		}
 	}
 
-
+	// SEが再生されたら0.3秒後停止する
 	if (m_isSE)
 	{
-		m_timer += float(timer.GetElapsedSeconds());
-		if (m_timer >= 0.3f)
+		m_seTimer += float(timer.GetElapsedSeconds());
+		if (m_seTimer >= 0.3f)
 		{
-			m_timer = 0.0f;
+			m_seTimer = 0.0f;
 			m_soundEffectInstanceSE->Stop();
 			m_isSE = false;
 		}
@@ -104,29 +97,27 @@ void AudioManager::Update(DX::StepTimer const& timer)
 	// BGMのフェード処理
 	if (!m_isActive) return;
 
-	// 1に達するまでの増加量
-	const float increment = m_bgmVolume / (m_fadeTime / float(m_stepTimer.GetElapsedSeconds()));
+	// 経過時間を更新
+	m_fadeElapsedTime += (float)timer.GetElapsedSeconds();
 
-
-	m_currentValue =  + increment * (end - start);
-
-	// 現在のボリュームを更新
-	m_currentValue += increment;
-
+	// 線形補間を使用して音量を更新
+	float t = m_fadeElapsedTime / m_fadeTime; // 0.0f～1.0f の範囲
+	t = std::min(t, 1.0f); // tが1を超えないように制限
+	
+	// 現在の音量を更新
+	m_currentValue = m_startValueme + t * (m_endValueme - m_startValueme);
 	// 音量設定
 	m_currentBGM->SetVolume(m_currentValue);
 	
-
-
 	// フェードが終了したら
-	if (m_currentValue > m_bgmVolume) {
-		m_currentValue = m_bgmVolume;
+	if (m_currentValue >= m_endValueme) {
+		m_currentValue = m_endValueme;
 		// 最終音量を設定
-		m_currentBGM->SetVolume(m_bgmVolume);
-		// 現在の音量を初期化
-		m_currentValue = 0.0f;
-		// フェード時間を初期化
-		m_fadeTime = 0.0f;
+		m_currentBGM->SetVolume(m_currentValue);
+
+		// 音量が0になった時はBGMを停止する
+		m_currentBGM->Stop(true);
+
 		// フェードを非アクティブ
 		m_isActive = false;
 	}
@@ -138,10 +129,7 @@ void AudioManager::PlayFadeInBgm(XACT_WAVEBANK_SOUNDS bgmName, float fadeTime)
 	if (m_isActive) return;
 
 	// 今のBGMを停止する
-	if (m_currentBGM)
-	{
-		m_currentBGM->Stop(true);
-	}
+	if (m_currentBGM) m_currentBGM->Stop(true);
 
 	// 新しいBGMを再生する
 	m_bgms.at(bgmName)->Play(true);
@@ -150,52 +138,37 @@ void AudioManager::PlayFadeInBgm(XACT_WAVEBANK_SOUNDS bgmName, float fadeTime)
 	// 新しいBGMの音量を0にする
 	m_currentBGM->SetVolume(0.0f);
 
+	// フェード時間を設定
+	m_fadeTime = fadeTime;
+	// スタート音量設定
+	m_startValueme = 0.0f;
+	// 終了音量設定
+	m_endValueme = m_bgmVolume;
+	// 現在の音量を初期化
+	m_currentValue = 0.0f;
+	m_fadeElapsedTime = 0.0f;
+
 	// フェードをアクティブにする
 	m_isActive = true;
 }
 
 void AudioManager::StopFadeOutBgm( float fadeTime)
 {
-	// 音量を現在の音量～0にフェードする
-	fadeFuture = std::async(std::launch::async, [this, fadeTime]()
-	{
-		// フェード中はスキップ
-		if (m_isActive) return;
+	// フェード中はスキップ
+	if (m_isActive) return;
 
-		// フェード中にする
-		m_isActive = true;
-		// 現在の数値
-		float currentValue = m_bgmVolume;
+	// フェード時間を設定
+	m_fadeTime = fadeTime;
+	// スタート音量設定
+	m_startValueme = m_bgmVolume;
+	// 終了音量設定
+	m_endValueme = 0.0f;
+	// 現在の音量を初期化
+	m_currentValue = 0.0f;
+	m_fadeElapsedTime = 0.0f;
 
-		while (currentValue > 0)
-		{
-			if (!m_isActive) break;
-
-			// 1に達するまでの増加量
-			const float increment = m_bgmVolume / (fadeTime / float(m_stepTimer.GetElapsedSeconds()));
-
-			currentValue -= increment;
-
-			// 音量設定
-			m_currentBGM->SetVolume(currentValue);
-
-			if (currentValue < 0) {
-				// 音量
-				m_currentBGM->SetVolume(0.0f);
-				// 音を止める
-				m_currentBGM->Stop(true);
-				// nullptrにする
-				m_currentBGM = nullptr;
-			}
-
-			// フレーム待機 (16ms → 60FPS相当)
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		}
-
-		// フェード中にする
-		m_isActive = false;
-
-	});
+	// フェードをアクティブにする
+	m_isActive = true;
 }
 
 // SEを再生させる
@@ -220,7 +193,7 @@ void AudioManager::SetSeVolume(const float& volume)
 	// SE音量を設定
 	m_seVolume = volume;
 	// サウンドエフェクトに音量を設定する
-
+	m_soundEffectInstanceSE->SetVolume(m_seVolume);
 }
 
 // BGM音量を設定
@@ -229,5 +202,5 @@ void AudioManager::SetBgmVolume(const float& volume)
 	// BGM音量を設定
 	m_bgmVolume = volume;
 	// サウンドエフェクトに音量を設定する
-
+	m_currentBGM->SetVolume(m_bgmVolume);
 }

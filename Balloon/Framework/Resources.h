@@ -4,10 +4,13 @@
 #include "Model.h"
 #include "Graphics.h"
 
+class CommonResources;
+
 // Resourcesクラスを定義する
 class Resources
 {
 public:
+	// モデルを取得する
 	// プレイヤー　頭モデルを取得する
 	DirectX::Model* GetPlayerHeadModel() { return m_playerHeadModel.get(); }
 	// プレイヤー　体モデルを取得する
@@ -28,6 +31,25 @@ public:
 
 	// スカイスフィアを取得する
 	DirectX::Model* GetSkySphere() { return m_skySphere.get(); }
+
+	// テクスチャを取得する
+	// タイトルロゴを取得する
+	ID3D11ShaderResourceView* GetTitleLogo() { return m_titleLogo.Get(); }
+	// スタートテキストを取得する
+	ID3D11ShaderResourceView* GetStartText() { return m_startText.Get(); }
+	// ジャンプフレーム
+	ID3D11ShaderResourceView* GetJampFrame() { return m_jampFrame.Get(); }
+	// ジャンプメモリ
+	ID3D11ShaderResourceView* GetJampMemori() { return m_jampMemori.Get(); }
+	// タイムフレーム
+	ID3D11ShaderResourceView* GetTimeFrame() { return m_timeFrame.Get(); }
+	// タイムゲージ
+	ID3D11ShaderResourceView* GetTimeGage() { return m_timeGage.Get(); }
+	// ナンバーズ
+	ID3D11ShaderResourceView* GetNumbers() { return m_numbers.Get(); }
+	// ルール画像
+	ID3D11ShaderResourceView* GetRuleTexture() { return m_ruleTexture.Get(); }
+
 
 public:
 	Resources(Resources&&) = default;
@@ -59,10 +81,12 @@ private:
 private:
 	// リソース
 	static std::unique_ptr<Resources> m_resources;
-	// グラフィックス
-	Graphics* m_graphics = Graphics::GetInstance();
+	// 共有リソース
+	CommonResources* m_commonResources;
 	// デバイス
-	ID3D11Device* m_device = m_graphics->GetDeviceResources()->GetD3DDevice();
+	ID3D11Device* m_device;
+	// エフェクトファクトリー
+	std::unique_ptr<DirectX::EffectFactory> m_effectFactory;
 
 
 	// プレイヤー　頭モデル
@@ -85,6 +109,29 @@ private:
 
 	// スカイスフィアモデル
 	std::unique_ptr<DirectX::Model> m_skySphere;
+
+	// テクスチャ
+	
+	// タイトルシーン
+	// タイトルロゴ
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_titleLogo;
+	// スタートテキスト
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_startText;
+
+	// プレイシーン
+	// ジャンプフレーム
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_jampFrame;
+	// ジャンプメモリ
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_jampMemori;
+	// タイムフレーム
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_timeFrame;
+	// タイムゲージ
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_timeGage;
+	// ナンバーズ
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_numbers;
+
+	// ルール画像
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_ruleTexture;
 };
 
 #endif		// RESOURCES_DEFINED

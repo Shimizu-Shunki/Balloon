@@ -1,25 +1,20 @@
-#include "pch.h"
-#include "Game/Player/Player.h"
-#include "Game/Player/Character.h"
-#include "Framework/CollisionManager.h"
-#include "Game/Balloon/Balloon.h"
-#include "Framework/InputManager.h"
-#include "Game/Player/Enemy.h"
-#include "Game/Collider/Collider.h"
-#include "Game/Player/Hand.h"
-#include "Game/Player/Jump.h"
+#include "Framework/pch.h"
+#include "Game/Player/Header/Player.h"
+#include "Framework/CommonResources.h"
+
+// 子オブジェクト
+#include "Game/Player/Header/Body.h"
 
 
-Player::Player(ICamera* camera,IComponent* parent, const int balloonIndex, const DirectX::SimpleMath::Vector3& initialPosition, const float& initialAngle)
+
+Player::Player(ICamera* camera, IObject* parent)
 	:
 	m_parent(parent),
-	m_balloonIndex(balloonIndex),
-	m_initialPosition(initialPosition),
-	m_initialAngle(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Up, initialAngle))
+	m_camera(camera),
+	m_transform{}
 {
-	
-	m_inputManager = InputManager::GetInstance();
-	m_camera = camera;
+	// インスタンスを取得する
+	m_commonResources = CommonResources::GetInstance();
 }
 
 Player::~Player()
@@ -34,237 +29,98 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
+	// プレイヤーモデルはなし
+	m_model = nullptr;
 
-	m_isKinematic = false;
+	m_transform = std::make_unique<Transform>();
 
-	// オブジェクトIDを設定
-	m_objectId = ObjectID::PLAYER;
+	// 位置を初期化
+	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
+	// 回転角を初期化
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
+		DirectX::SimpleMath::Vector3::Up,DirectX::XMConvertToRadians(180.0f)
+	));
+	// スケールを初期化
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.1f);
 
-	// 現在の座標を初期化
-	m_currentPosition = m_initialPosition;
-	// 現在の回転を初期化
-	m_rotationTurretAngle = m_initialAngle;
-	// 大きさを初期化
-	m_scale = DirectX::SimpleMath::Vector3::One;
+	// トランスフォームを親に設定
+	m_transform->SetParent(nullptr);
+	// 親のTransformに自分自身を子供に設定
+	//m_parent->GetTransform()->SetChild(m_transform.get());
 
-	// ジャンプ処理作成
-	m_jump = std::make_unique<Jump>();
-	m_jump->Initialize();
-
+	// ボディをアタッチ
+	this->Attach(std::make_unique<Body>(this), ObjectID::PLAYER);
+	// 風船をアタッチ　
 	
-	// キャラクターをアタッチする
-	this->Attach(std::make_unique<Character>());
-	// 風船の初期座標
-	DirectX::SimpleMath::Vector3 initPosition = { 0.0f,1.0f,0.0f };
-	// 風船の数に応じて生成する
-	for (int i = 0; i < m_balloonIndex; i++)
-	{
-		// 風船をアタッチする
-		this->Attach(std::make_unique<Balloon>(this,initPosition,DirectX::XMConvertToRadians(20.0f * static_cast<float>(i) - 20.0f) ));
-	}
-
-	// 手をアタッチ
-	this->Attach(std::make_unique<Hand>());
-
-	// 当たり判定生成
-	std::unique_ptr<Collider> collider = std::make_unique<Collider>();
-	collider->Initialize<DirectX::BoundingBox>(DirectX::SimpleMath::Vector3::Up * 0.5f, DirectX::SimpleMath::Vector3::One / 2.0f);
-
-	// 格納
-	m_colliders.push_back(std::move(collider));
-
-	collider = std::make_unique<Collider>();
-	collider->Initialize<DirectX::BoundingSphere>(DirectX::SimpleMath::Vector3::Up * 2.0f, DirectX::SimpleMath::Vector3::One / 2.0f , true);
-
-	// 格納
-	m_colliders.push_back(std::move(collider));
 }
 
-void Player::Update(const float elapsedTime, const DirectX::SimpleMath::Vector3& position, const DirectX::SimpleMath::Quaternion& angle)
+void Player::Update()
 {
 	// 入力に基づく方向ベクトルを取得
-	DirectX::SimpleMath::Vector3 movementDirection = this->GetMovementDirection(m_camera->GetRotation());
+	DirectX::SimpleMath::Vector3 movementDirection = this->GetMovementDirection(DirectX::SimpleMath::Quaternion::Identity);
 
-	if (movementDirection.LengthSquared() > 0.0f)
+	movementDirection *= (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+
+	m_transform->SetLocalPosition(m_transform->GetLocalPosition() += movementDirection);
+
+	// 子供を更新する
+	for (const auto& childObject : m_childs)
 	{
-		// 入力がある場合：加速を適用
-		m_velocity += movementDirection * 20.0f * elapsedTime;
-
-		// 摩擦を弱める
-		m_velocity.x *= 0.95f; // 入力があるときの摩擦
-		m_velocity.z *= 0.95f; // 入力があるときの摩擦
-	}
-	else
-	{
-		// 入力がない場合：摩擦を強める
-		m_velocity.x *= 0.85f; // 入力がないときの摩擦
-		m_velocity.z *= 0.85f; // 入力がないときの摩擦
-	}
-
-	// 重力が有効でキネマティック出ない時
-	if (m_isGravity && !m_isKinematic)
-	{
-		// 重力数値
-		m_gravity = ( - 9.81f + 2.0f * m_balloonIndex) * elapsedTime;
-		// 重力を速度に加算
-		m_velocity.y = m_velocity.y + m_gravity;
-	}
-
-	// ジャンプ処理
-	if (m_inputManager->GetKeyboardTracker()->IsKeyPressed(DirectX::Keyboard::Space))
-	{
-		m_velocity.y += m_jump->TryJump(elapsedTime);
-	}
-
-	m_jump->Update(elapsedTime);
-	// 座標に速度を加算する
-	m_currentPosition += m_velocity * elapsedTime;
-
-	// 当たり判定の更新
-	for (auto& collider : m_colliders)
-	{
-		collider->Update(m_currentPosition);
-	}
-
-
-	// 風船を更新する
-	for (auto& child : m_child)
-	{
-		// 風船を更新する
-		child->Update(elapsedTime, m_currentPosition, m_rotationTurretAngle);
+		childObject->Update();
 	}
 }
 
-// 描画処理
-void Player::Render()
+void Player::Finalize() {}
+
+
+void Player::Attach(std::unique_ptr<IObject> turretParts , IObject::ObjectID objectId)
 {
-
-	// this->DebugImguiRender();
-	m_jump->Render();
-	m_jump->DebugRender();
-	// 当たり判定デバッグ描画
-	// 当たり判定の更新
-	for (auto& collider : m_colliders)
-	{
-		//collider->DebugRender();
-	}
-
-	// 子オブジェクトを描画する
-	for (auto& childes : m_child)
-	{
-		// 子オブジェクトを描画する
-		childes->Render();
-	}
-}
-
-void Player::Attach(std::unique_ptr<IComponent> turretParts)
-{
-	// 砲塔部品を追加する
-	turretParts->Initialize(IComponent::ObjectID::BALLOON, true);
-	//m_collisionManager->Attach(turretParts.get());
-	m_child.emplace_back(std::move(turretParts));
-}
-
-void Player::OnCollisionEnter(IComponent* component)
-{
-	m_gravity = 0.0f;
-	m_velocity.y = 0.0f;
-	m_isGravity = false;
+	// パーツの初期化
+	turretParts->Initialize(objectId, true);
+	// 子供に登録
+	m_childs.emplace_back(std::move(turretParts));
 }
 
 
-
-void Player::OnCollisionStay(IComponent* component)
+void Player::Detach(std::unique_ptr<IObject> turretParts)
 {
 
 }
 
-void Player::OnCollisionExit(IComponent* component)
-{
-	m_isGravity = true;
-}
-
-void Player::OnTriggerEnter(IComponent* component)
-{
-	// プレイヤーが当たった時
- 	if (component->GetObjectID() == ObjectID::ENEMY)
-	{
-		this->BalloonDetach();
-	}
-
-	
-}
-
-//void Player::OnTriggerStay(IComponent* component)
-//{
-//
-//}
-//
-//void Player::OnTriggerExit(IComponent* component)
-//{
-//
-//}
-
-
-
-void Player::RecoverJump()
-{
-	// ジャンプが行われたとき
-	if (m_jumpIndex != 10)
-	{
-		// ジャンプ回数の回復
-
-	}
-}
-
-
-
-
-void Player::Detach(std::unique_ptr<IComponent> turretParts)
-{
-
-}
-
-void Player::Finalize()
-{
-
-}
-
-void Player::BalloonDetach()
-{
-	// バルーンを非表示にする
-	// bool true false 無敵状態を作る
-	// すべての風船がない場合　ある程度の速度で踏むと死ぬ　落ちる
-	if (m_balloonIndex != 0)
-	{
-		m_child[m_balloonIndex - 1]->SetIsActive(false);
-		m_balloonIndex--;
-	}
-}
+void Player::OnCollisionEnter(IObject* object) { (void)object; }
+void Player::OnCollisionStay(IObject* object)  { (void)object; }
+void Player::OnCollisionExit(IObject* object)  { (void)object; }
+void Player::OnTriggerEnter(IObject* object)   { (void)object; }
+void Player::OnTriggerStay(IObject* object)    { (void)object; }
+void Player::OnTriggerExit(IObject* object)    { (void)object; }
+											   
 
 // 移動方向を取得する
 DirectX::SimpleMath::Vector3 Player::GetMovementDirection(const DirectX::SimpleMath::Quaternion& angle)
 {
+	// キーボードステート
+	DirectX::Keyboard::State key = m_commonResources->GetInputManager()->GetKeyboardState();
+
 	// 方向
 	DirectX::SimpleMath::Vector3 direction = DirectX::SimpleMath::Vector3::Zero;
 
 	// 上キー
-	if (m_inputManager->GetKeyboardState().W)
+	if (key.W)
 	{
 		direction += DirectX::SimpleMath::Vector3::Forward;
 	}
 	// 下キー
-	if (m_inputManager->GetKeyboardState().S)
+	if (key.S)
 	{
 		direction += DirectX::SimpleMath::Vector3::Backward;
 	}
 	// 右キー
-	if (m_inputManager->GetKeyboardState().D)
+	if (key.D)
 	{
 		direction += DirectX::SimpleMath::Vector3::Right;
 	}
 	// 左キー
-	if (m_inputManager->GetKeyboardState().A)
+	if (key.A)
 	{
 		direction += DirectX::SimpleMath::Vector3::Left;
 	}
@@ -279,42 +135,4 @@ DirectX::SimpleMath::Vector3 Player::GetMovementDirection(const DirectX::SimpleM
 	direction.Normalize();
 
 	return direction;
-}
-
-void Player::DebugImguiRender()
-{
-	// 親の情報を表示
-	ImGui::Begin("Hierarchy");
-
-	if (ImGui::TreeNode("Player")) {
-		RenderComponent(this);  // プレイヤー自身の情報を表示
-
-		// 子要素を再帰的に描画
-		for (const auto& child : m_child) {
-			if (ImGui::TreeNode(child.get(), "Child")) {
-				RenderComponent(child.get());
-				ImGui::TreePop();
-			}
-		}
-		ImGui::TreePop();
-	}
-
-	ImGui::End();
-	
-}
-
-void Player::RenderComponent(IComponent* component)
-{
-	// 親の情報を描画
-	float position[3] = { component->GetPosition().x, component->GetPosition().y, component->GetPosition().z };
-	float scale[3] = { component->GetScale().x, component->GetScale().y, component->GetScale().z };
-
-	ImGui::Text("Position");
-	ImGui::InputFloat3("##Position", position);
-	ImGui::Text("Scale");
-	ImGui::InputFloat3("##Scale", scale);
-
-	// 値を反映
-	component->SetPosition({ position[0], position[1], position[2] });
-	component->SetScale({ scale[0], scale[1], scale[2] });
 }

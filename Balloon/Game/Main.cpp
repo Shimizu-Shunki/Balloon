@@ -49,8 +49,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(hr))
         return 1;
 
-    // ゲームクラスのインスタンスを生成する
-    g_game = std::make_unique<Game>();
+   
 
     // フルスクリーン対応
     static bool s_fullscreen = false;
@@ -70,6 +69,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     else {
         s_fullscreen = false;
     }
+
+    // ゲームクラスのインスタンスを生成する
+    g_game = std::make_unique<Game>();
 
     // クラスを登録しウィンドウを生成する
     {

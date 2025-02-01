@@ -6,7 +6,15 @@
 
 class InputManager
 {
-private:
+public:
+	using Keys = DirectX::Keyboard::Keys;
+
+	enum class MouseButtons
+	{
+		LEFT,		//	左
+		RIGHT,		//	右
+		MIDDLE,		//	ホイール
+	};
 	
 		
 public:
