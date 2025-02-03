@@ -7,14 +7,12 @@
 /// </summary>
 const std::vector<D3D11_INPUT_ELEMENT_DESC> SpriteMaterial::DEFAULT_INPUT_LAYOUT =
 {
-	// セマンティクス名  インデックス    フォーマット  入力スロット オフセット  データ種別  インスタンスステップ率
-	{ "SV_Position", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0,                                                                                D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "NORMAL",      0, DXGI_FORMAT_R32G32B32_FLOAT,    0, sizeof(DirectX::SimpleMath::Vector4),                                             D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TANGENT",     0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3),      D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "COLOR",       0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + 
-														   sizeof(DirectX::SimpleMath::Vector4),                                             D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT,       0, sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) +
-														   sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector4),      D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	// セマンティック名 インデックス フォーマット                          入力スロット オフセット データ種別                     インスタンスステップ率
+		{ "SV_Position",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  0,                                                   D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 position
+		{ "NORMAL",    0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4),                D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 rotate
+		{ "TEXCOORD",  0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 scale
+		{ "TEXCOORD",  1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 rect
+		{ "COLOR",     0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector4), D3D11_INPUT_PER_VERTEX_DATA, 0 } // float4 color};
 };
 
 /// <summary>
@@ -25,8 +23,27 @@ SpriteMaterial::SpriteMaterial(ID3D11Device1* device, ID3D11DeviceContext1* cont
 	m_device = device;
 	m_context = context;
 
+	m_ruleTexture = nullptr;
+
 		// コモンステートの作成
 	m_states = std::make_unique<DirectX::CommonStates>(m_device);
+
+	// シェーダーにデータを渡すためのバーテックスバッファの作成
+	D3D11_BUFFER_DESC desc = {};
+	ZeroMemory(&desc, sizeof(desc));
+	desc.ByteWidth = sizeof(VertexBuffer);
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = 0;
+	device->CreateBuffer(&desc, nullptr, &m_vBuffer);
+
+	// ブレンドステートの作成
+	this->CreateBlendState();
+	// 深度ステンシルステートの作成
+	this->CreateDepthStencilState();
+	// ラスタライザーステートの作成
+	this->CreateRasterizerState();
+
 }
 
 /// <summary>
@@ -49,8 +66,8 @@ void SpriteMaterial::LoadVertexShader(const wchar_t* path , std::vector<D3D11_IN
 		m_device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_vertexShader.ReleaseAndGetAddressOf())
 	);
 	//	インプットレイアウトの作成
-	m_device->CreateInputLayout(&inputLayout[0],
-		static_cast<UINT>(inputLayout.size()),
+	m_device->CreateInputLayout(&DEFAULT_INPUT_LAYOUT[0],
+		static_cast<UINT>(DEFAULT_INPUT_LAYOUT.size()),
 		blob.data(), blob.size(),
 		m_inputLayout.GetAddressOf());
 }
@@ -119,15 +136,17 @@ void SpriteMaterial::Begin()
 {
 	// 頂点バッファのデータを更新
 	m_context->UpdateSubresource(m_vBuffer.Get(), 0, NULL, &m_vertexBuffer, 0, 0);
-	// 定数バッファのデータを更新
-	m_context->UpdateSubresource(m_cBuffer.Get(), 0, NULL, &m_constBuffer, 0, 0);
-
-	// 定数バッファをシェーダーに設定
-	ID3D11Buffer* cb[1] = { m_cBuffer.Get() };
-	m_context->VSSetConstantBuffers(0, 1, cb);
-	m_context->GSSetConstantBuffers(0, 1, cb);
-	m_context->PSSetConstantBuffers(0, 1, cb);
-
+	
+	// 定数バッファを設定する
+	for (const auto& buffer : m_cBuffers)
+	{
+		// 定数バッファをシェーダーに設定
+		ID3D11Buffer* cb[1] = { buffer.Get() };
+		m_context->VSSetConstantBuffers(0, 1, cb);
+		m_context->GSSetConstantBuffers(0, 1, cb);
+		m_context->PSSetConstantBuffers(0, 1, cb);
+	}
+	
 	// サンプラーステートをピクセルシェーダーに設定
 	ID3D11SamplerState* sampler[1] = { m_states->LinearWrap() };
 	m_context->PSSetSamplers(0, 1, sampler);
@@ -157,7 +176,9 @@ void SpriteMaterial::Begin()
 
 	// ピクセルシェーダーにテクスチャリソースを設定
 	m_context->PSSetShaderResources(0, 1, &m_texture);
-	m_context->PSSetShaderResources(1, 1, &m_ruleTexture);
+
+	if(m_ruleTexture != nullptr)
+		m_context->PSSetShaderResources(1, 1, &m_ruleTexture);
 }
 /// <summary>
 /// シェーダーの解放
@@ -168,4 +189,53 @@ void SpriteMaterial::End()
 	m_context->VSSetShader(nullptr, nullptr, 0);
 	m_context->GSSetShader(nullptr, nullptr, 0);
 	m_context->PSSetShader(nullptr, nullptr, 0);
+}
+
+// ブレンドステートの作成
+void SpriteMaterial::CreateBlendState()
+{
+	D3D11_BLEND_DESC blendDesc = {};
+	blendDesc.AlphaToCoverageEnable = FALSE;  // カバレッジをアルファに基づいて有効化する
+	blendDesc.IndependentBlendEnable = FALSE; // 複数のレンダーターゲットを独立して設定する
+
+	D3D11_RENDER_TARGET_BLEND_DESC rtBlendDesc = {};
+	rtBlendDesc.BlendEnable = TRUE;              // ブレンドを有効化
+	rtBlendDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;        // ソースのアルファ
+	rtBlendDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;    // 逆アルファ
+	rtBlendDesc.BlendOp = D3D11_BLEND_OP_ADD;           // 加算ブレンド
+	rtBlendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;              // アルファ値のソース
+	rtBlendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;             // アルファ値のデスティネーション
+	rtBlendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;           // アルファ値の加算
+	rtBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL; // RGBA全てを有効
+
+	blendDesc.RenderTarget[0] = rtBlendDesc;
+
+	// カスタムブレンドステートを作成
+
+	m_device->CreateBlendState(&blendDesc, &m_blendState);
+}
+
+// 深度ステンシルステートの作成
+void SpriteMaterial::CreateDepthStencilState()
+{
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
+	depthStencilDesc.DepthEnable = TRUE;                          // 深度テストを有効化
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 深度バッファの書き込みを有効化
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;      // 深度テスト条件 (小さい場合のみ描画)
+	depthStencilDesc.StencilEnable = FALSE;                       // ステンシルテストを無効化
+
+	// 深度ステンシルステートを作成
+	m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+}
+
+// ラスタライザーステートの作成
+void SpriteMaterial::CreateRasterizerState()
+{
+	D3D11_RASTERIZER_DESC rasterDesc = {};
+	rasterDesc.FillMode = D3D11_FILL_SOLID;      // 塗りつぶし (または D3D11_FILL_WIREFRAME)
+	rasterDesc.CullMode = D3D11_CULL_NONE;       // カリングなし (または D3D11_CULL_FRONT / D3D11_CULL_BACK)
+	rasterDesc.FrontCounterClockwise = FALSE;    // 時計回りの頂点順序を表面として認識
+	rasterDesc.DepthClipEnable = TRUE;           // 深度クリッピングを有効化
+	// ラスタライザーステートの作成
+	m_device->CreateRasterizerState(&rasterDesc, &m_rasterizerState);
 }

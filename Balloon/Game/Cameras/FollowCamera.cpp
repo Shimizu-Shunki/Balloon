@@ -1,19 +1,14 @@
-#include "pch.h"
-#include "Game/Camera/FollowCamera.h"
-#include "Game/Camera/FollowCamera.h"
-#include "Framework/Graphics.h"
+#include "Framework/pch.h"
+#include "Game/Cameras/FollowCamera.h"
 
-FollowCamera::FollowCamera(DirectX::SimpleMath::Vector3 distance)
+FollowCamera::FollowCamera(Transform* target, DirectX::SimpleMath::Vector3 distance)
 	:
+	m_targetTransform(target),
 	m_distance(distance),
-	m_position{},
-	m_targetPosition{},
-	m_rotation{},
+	m_transform{},
 	m_up{},
 	m_view{}
 {
-	// グラフィックのインスタンスを取得する
-	m_graphics = Graphics::GetInstance();
 }
 
 FollowCamera::~FollowCamera()
@@ -24,50 +19,49 @@ FollowCamera::~FollowCamera()
 void FollowCamera::Initialize(
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Vector3& targetPosition,
-	const DirectX::SimpleMath::Quaternion& rotation)
+	const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager)
 {
-	// 座標を設定する
-	m_position = position;
-	// ターゲット座標を設定する
-	m_targetPosition = targetPosition;
-	// 回転角を設定する
-	m_rotation = rotation;
+	// カメラマネージャーのインスタンスを取得する
+	m_cameraManager = cameraManager;
+
+	// Transformを作成
+	m_transform = std::make_unique<Transform>();
+
+	// 初期化
+	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
+
 	// 頭の向きを設定する
 	m_up = DirectX::SimpleMath::Vector3::Up;
 
 	// 固定カメラのため初期化の時点のみビュー行列を作成する
-	this->CalculateViewMatrix();
+	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
 }
 
-void FollowCamera::Update(const float& deltaTime)
+void FollowCamera::Update()
 {
-	// ターゲットの座標を設定
-	m_targetObjectPosition = m_targetObject->GetPosition();
-	// ターゲットの回転角を設定
-	m_rotation = m_targetObject->GetAngle();
-	// 固定カメラのため初期化の時点のみビュー行列を作成する
-	this->CalculateViewMatrix();
+	// ビュー行列を更新
+	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
 }
 
-void FollowCamera::CalculateViewMatrix()
+DirectX::SimpleMath::Matrix FollowCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得
-	DirectX::SimpleMath::Vector3 position = m_targetObjectPosition;
+	DirectX::SimpleMath::Vector3 position = m_targetTransform->GetLocalPosition();
 
 	// 現在の角度に基づいてカメラの距離を変換し、カメラの位置を計算
-	DirectX::SimpleMath::Vector3 camera_position =
-		DirectX::SimpleMath::Vector3::Transform(m_distance, m_rotation);
+	DirectX::SimpleMath::Vector3 CameraPosition =
+		DirectX::SimpleMath::Vector3::Transform(m_distance, m_targetTransform->GetLocalRotation());
 
 	// 視点 (カメラの位置)
-	//m_position = position + camera_position;
+	m_transform->SetLocalPosition(position + CameraPosition);
 
 	// 注視点 (カメラが見る目標の位置) - プレイヤーの位置
-	m_targetPosition = position;
-	// カメラの頭
-	m_up = DirectX::SimpleMath::Vector3::Up;
+	m_transform->SetLocalScale(position);
 
 	// ビュー行列を作成
-	m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_position, m_targetPosition, m_up);
-	// ビュー行列を設定
-	m_graphics->SetViewMatrix(m_view);
+	m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_transform->GetLocalPosition(), m_transform->GetLocalScale(), m_up);
+
+	return m_view;
 }

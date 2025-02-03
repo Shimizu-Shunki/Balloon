@@ -1,5 +1,6 @@
 #pragma once
 #include "Game/Material/SpriteMaterial.h"
+#include "Interface/ISprite.h"
 #include <unordered_map>
 
 // 全てのモデル、UIの描画を行うクラス
@@ -28,6 +29,9 @@ public:
 	DirectX::SimpleMath::Matrix GetProjectionMatrix() const { return m_projectionMatrix; }
 	// 描画用モデルを設定
 	void AddModel(RenderManager::RenderableObject model) { m_pendingRenderableObjects.push_back(model); }
+	// スプライトを追加
+	void AddSprite(ISprite* sprite) { m_pendingSprite.push_back(sprite); }
+
 	// スカイスフィアを登録する
 	void SetSkySphereObject(RenderManager::RenderableObject object) { m_skySphere = object; }
 
@@ -69,9 +73,9 @@ private:
 	CameraManager* m_cameraManager;
 
 	// 2Dのマテリアルを格納
-	std::vector<SpriteMaterial*> m_spriteMaterials;
+	std::vector<ISprite*> m_sprite;
 	// 2D マテリアルの準備段階データ
-	std::vector<SpriteMaterial*> m_pendingSpriteMaterials;
+	std::vector<ISprite*> m_pendingSprite;
 
 
 	// スカイスフィア

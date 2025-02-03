@@ -29,9 +29,6 @@ void StateMachine::Update()
 
 void StateMachine::Start()
 {
-	// 経過時間
-	float elapsedTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
-
 	// 初期ステートのスタート処理
 	for (const auto& stateController : m_controllers)
 	{

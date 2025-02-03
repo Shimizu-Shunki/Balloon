@@ -3,7 +3,7 @@
 
 class CommonResources;
 class ICamera;
-
+class Transform;
 
 class CameraManager
 {
@@ -35,7 +35,7 @@ public:
 
 public:
 	// カメラの更新処理
-	void Update(const float& deltaTime);
+	void Update();
 
 	// カメラを追加
 	void Attach(std::unique_ptr<ICamera> camera);
@@ -43,7 +43,7 @@ public:
 	void Detach();
 
 	// カメラフェード処理
-	void Fade(const float& deltaTime);
+	void Fade();
 
 	// カメラを切り替える
 	void ChageCamera(int index);
@@ -60,21 +60,12 @@ private:
 
 	// カメラを切り替え中かどうか
 	bool m_isFadeActive;
-
-	// 現在のカメラの座標
-	DirectX::SimpleMath::Vector3 m_currentPosition;
-	// 現在のカメラのターゲット座標
-	DirectX::SimpleMath::Vector3 m_currentTargetPosition;
-	// 次のカメラの座標
-	DirectX::SimpleMath::Vector3 m_nextPosition;
-	// 次のカメラのターゲット座標
-	DirectX::SimpleMath::Vector3 m_nextTargetPosition;
-
 	// フェード時間
 	float m_fadeTime;
 
+	// 仮想Transform（補間用）
+	std::unique_ptr<Transform> m_transform;
+
 	// ビュー行列
 	DirectX::SimpleMath::Matrix m_viewMatrix;
-
-
 };

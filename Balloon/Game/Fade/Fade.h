@@ -4,26 +4,39 @@
 #include "Game/Material/Buffers.h"
 #include "Framework/SceneManager.h"
 #include "Framework/Resources.h"
+#include "Interface/ISprite.h"
+
+#include "Game/Scenes/Header/PlayScene.h"
 
 class CommonResources;
 
-class Fade
+class Fade : ISprite
 {
 public:
 
 	bool GetIsActive() const { return m_isActive; }
+	
+	Transform* GetTransform() const override { return m_transform.get(); }
+
+	SpriteMaterial* GetSpriteMaterial() const override { return m_spriteMaterial.get(); }
 
 public:
 
 	// コンストラクタ
 	Fade();
 	// デストラクタ
-	~Fade();
+	~Fade() override = default;
+
+	void Initialize() override;
 
 	// 更新処理
 	void Update();
 
 public:
+
+	void Begin() override { m_spriteMaterial->Begin(); }
+
+	void End() override { m_spriteMaterial->End(); }
 
 	// フェードイン処理
 	void FadeIN(float duration);
@@ -54,19 +67,22 @@ public:
 		m_isActive = true;
 	}
 
-	// 描画する
-	void Render();
+	
 
 	private:
 
 		// 共有リソース
 		CommonResources* m_commonResources;
 
+		std::unique_ptr<Transform> m_transform;
+
 		// コンテキスト
 		ID3D11DeviceContext1* m_context;
 
 		// バッファ
 		ConstBuffer m_constBuffer;
+		// 頂点バッファ
+		VertexBuffer m_vertexBuffer;
 		
 		// 画像サイズ
 		int m_textureSizeW, m_textureSizeH;

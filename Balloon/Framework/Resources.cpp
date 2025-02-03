@@ -75,5 +75,5 @@ void Resources::LoadResource()
 		m_device, L"Resources\\Textures\\numberx128.png", nullptr, m_numbers.ReleaseAndGetAddressOf());
 	// ƒ‹[ƒ‹‰æ‘œ
 	DirectX::CreateWICTextureFromFile(
-		m_device, L"Resources\\Textures\\132.png", nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
+		m_device, L"Resources\\Textures\\200.png", nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
 }

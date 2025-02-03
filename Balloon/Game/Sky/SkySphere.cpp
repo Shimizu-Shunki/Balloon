@@ -36,7 +36,7 @@ void SkySphere::Initialize()
 	m_transform->SetParent(nullptr);
 
 	// À•W‰Šú‰»
-	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Up * 140.0f);
 	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
 	m_transform->SetLocalScale({ 2.0f, 1.5f, 2.0f });
 

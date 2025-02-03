@@ -2,12 +2,15 @@
 #include "Interface/IScene.h"
 
 
+
 class CommonResources;
 class StateMachine;
 class RenderManager;
 class IObject;
 class Transform;
 class DebugCamera;
+class TitleLogo;
+class Fade;
 
 
 class TitleScene: public IScene
@@ -38,5 +41,13 @@ private:
 	// ステートマシーン
 	std::unique_ptr<StateMachine> m_stateMachine;
 
+	// フェード処理
+	std::unique_ptr<Fade> m_fade;
+
+	// タイトルロゴ
+	std::unique_ptr<TitleLogo> m_titleLogo;
+
+	// プレイヤー
+	std::unique_ptr<IObject> m_player;
 
 };

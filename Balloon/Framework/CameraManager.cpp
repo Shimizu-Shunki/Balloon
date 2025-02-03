@@ -2,6 +2,8 @@
 #include "Framework/CameraManager.h"
 #include "Framework/CommonResources.h"
 #include "Interface/ICamera.h"
+#include "Game/Transform/Transform.h"
+#include "Framework/Tween/Tween.h"
 
 CameraManager::CameraManager()
 {
@@ -9,6 +11,9 @@ CameraManager::CameraManager()
 	m_cameraIndex = 0;
 	m_isFadeActive = false;
 	m_fadeTime = 0.0f;
+
+	m_transform = std::make_unique<Transform>();
+
 }
 
 
@@ -19,18 +24,21 @@ void CameraManager::Attach(std::unique_ptr<ICamera> camera)
 	m_cameras.push_back(std::move(camera));
 }
 
-void CameraManager::Update(const float& deltaTime)
+void CameraManager::Update()
 {
 	// カメラを切り替える処理
-	this->Fade(deltaTime);
+	this->Fade();
 
 	// カメラを切り替えている時はカメラの更新をストップ
 	if (m_isFadeActive) return;
 
 	// カメラの更新処理
-	m_cameras[m_cameraIndex]->Update(deltaTime);
-	// ビュー行列を作成
-	m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+	//if (m_cameras[m_cameraIndex] != nullptr)
+	//{
+	//	m_cameras[m_cameraIndex]->Update();
+	//	// ビュー行列を作成
+	//	m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+	//}
 }
 
 void CameraManager::Detach()
@@ -44,14 +52,16 @@ void CameraManager::ChageCamera(int index)
 	m_isFadeActive = true;
 
 	// 現在のカメラの座標情報を保存
-	m_currentPosition = m_cameras[m_cameraIndex]->GetPosition();
-	// 現在のカメラのターゲット座標情報を保存
-	m_currentTargetPosition = m_cameras[m_cameraIndex]->GetTargetPosition();
+	m_transform->SetLocalPosition(m_cameras[m_cameraIndex]->GetTransform()->GetLocalPosition());
+	// 現在のカメラのターゲットを保存
+	m_transform->SetLocalScale(m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale());
 
-	// 次のカメラの座標情報を保存
-	m_nextPosition = m_cameras[index]->GetPosition();
-	// 次のカメラのターゲット座標情報を保存
-	m_nextTargetPosition = m_cameras[index]->GetTargetPosition();
+	// Tweenを起動
+	m_transform->GetTween()->DOMove(m_cameras[index]->GetTransform()->GetLocalPosition(), 2.0f);
+	m_transform->GetTween()->DOScale(m_cameras[index]->GetTransform()->GetLocalScale(), 2.0f).OnComplete([this] {
+		// フェードが終わったらカメラのビュー行列を作成する
+		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+	});
 
 	// 次のカメラの番号を設定
 	m_cameraIndex = index;
@@ -59,33 +69,16 @@ void CameraManager::ChageCamera(int index)
 	m_fadeTime = 0.0f;
 }
 
-void CameraManager::Fade(const float& deltaTime)
+void CameraManager::Fade()
 {
 	// カメラ切り替え中出なければ更新しない
 	if (!m_isFadeActive) return;
 
-	// フェード時間を更新する
-	m_fadeTime += deltaTime;
-
-	// 現在のカメラと次のカメラを補間する
-	DirectX::SimpleMath::Vector3 resultPosition = 
-		DirectX::SimpleMath::Vector3::Lerp(m_currentPosition, m_nextPosition,m_fadeTime);
-	// 現在のターゲットと次のターゲットを補間する
-	DirectX::SimpleMath::Vector3 resultTargetPosition =
-		DirectX::SimpleMath::Vector3::Lerp(m_currentTargetPosition, m_nextTargetPosition, m_fadeTime);
-
 	// ビュー行列を更新する
 	m_viewMatrix =
 		DirectX::SimpleMath::Matrix::CreateLookAt(
-			resultPosition, resultTargetPosition, DirectX::SimpleMath::Vector3::Up
-	);
+			m_transform->GetLocalPosition(), m_transform->GetLocalScale(), DirectX::SimpleMath::Vector3::Up
+	);	
 
-	if (m_fadeTime <= 1.0f) return;
-
-	// フェードし終わったら非アクティブにする
-	m_isFadeActive = false;
-	// フェードが終わったらカメラのビュー行列を作成する
-	m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
-
-
+	m_commonResources->GetCameraManager()->SetViewMatrix(m_viewMatrix);
 }

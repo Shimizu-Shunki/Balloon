@@ -3,6 +3,10 @@
 
 class SpriteMaterial
 {
+public:
+	// 頂点バッファを設定する
+	void SetVertexBuffer(const VertexBuffer& vertexBuffer) { m_vertexBuffer = vertexBuffer; }
+
 private:
 	//	インプットレイアウト
 	static const std::vector<D3D11_INPUT_ELEMENT_DESC> DEFAULT_INPUT_LAYOUT;
@@ -25,6 +29,32 @@ public:
 	void LoadPixelShader(const wchar_t* path);
 	
 	// 定数バッファの追加
+	template <typename T>
+	void SetConstBuffer()
+	{
+		Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+
+		// シェーダーにデータを渡すためのコンスタントバッファ生成
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(T);
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		m_device->CreateBuffer(&bd, nullptr, &buffer);
+
+		// バッファを更新
+		m_cBuffers.push_back(std::move(buffer));
+	}
+
+	// バッファを更新する
+	template <typename T>
+	void UpdateConstBuffer(T buffer,int index)
+	{
+		// 定数バッファのデータを更新
+		m_context->UpdateSubresource(m_cBuffers[index].Get(), 0, NULL, &buffer, 0, 0);
+	}
+
 
 	// テクスチャのロード
 	void LoadTexture(ID3D11ShaderResourceView* texture, int& width, int& height);
@@ -56,8 +86,7 @@ private:
 	VertexBuffer m_vertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_vBuffer;
 	// 定数バッファ
-	ConstBuffer m_constBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> m_cBuffer;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_cBuffers;
 
 	// テクスチャ
 	ID3D11ShaderResourceView* m_texture;

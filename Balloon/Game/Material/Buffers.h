@@ -4,12 +4,13 @@
 // UIの共通頂点バッファ
 struct VertexBuffer
 {
-	DirectX::SimpleMath::Vector4 position;
-	DirectX::SimpleMath::Vector3 normal;
-	DirectX::SimpleMath::Vector4 tangent;
-	DirectX::SimpleMath::Vector4 color;
-	DirectX::SimpleMath::Vector2 textureCoordinate;
+    DirectX::SimpleMath::Vector4 position;          // 位置
+    DirectX::SimpleMath::Vector3 rotate;            // 回転
+    DirectX::SimpleMath::Vector3 scale;           // スケール
+	DirectX::SimpleMath::Vector4 rect;
+    DirectX::SimpleMath::Vector4 color;             // 頂点カラー
 };
+
 // UIの共通定数バッファ
 struct ConstBuffer
 {

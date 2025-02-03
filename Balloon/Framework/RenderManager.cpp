@@ -6,8 +6,8 @@
 
 RenderManager::RenderManager()
 	:
-	m_spriteMaterials{},
-	m_pendingSpriteMaterials{},
+	m_sprite{},
+	m_pendingSprite{},
 	m_skySphere{},
 	m_renderableObjects{},
 	m_pendingRenderableObjects{}
@@ -48,8 +48,11 @@ void RenderManager::CommitPendingDrawables()
 	m_renderableObjects.clear();
 	// 次のオブジェクトを格納する
 	m_renderableObjects = m_pendingRenderableObjects;
-	// 準備段階の格納場所をクリアする
-	//m_pendingRenderableObjects.clear();
+
+	// 現在のスプライトを削除する
+	m_sprite.clear();
+	// 次のスプライトを格納する
+	m_sprite = m_pendingSprite;
 }
 
 void RenderManager::Render()
@@ -88,4 +91,21 @@ void RenderManager::Render()
 			m_cameraManager->GetViewMatrix(), m_projectionMatrix
 		);
 	}
+
+	// スプライトの描画
+	for (const auto& sprite : m_sprite)
+	{
+		if (sprite != nullptr)
+		{
+			// マテリアルの適応
+			sprite->Begin();
+			// 描画
+			m_context->Draw(1, 0);
+			// マテリアルの解放
+			sprite->End();
+		}
+			
+			
+	}
+
 }

@@ -3,8 +3,12 @@
 #include "Framework/SceneManager.h"
 #include "Interface/IScene.h"
 #include "Game/Scenes/Header/PlayScene.h"
+#include "Game/Scenes/Header/TitleScene.h"
+#include "Game/Scenes/Header/PlayScene.h"
 
 SceneManager::SceneManager()
+	:
+	m_nextScene{}
 {
 	m_commonResources = CommonResources::GetInstance();
 }
@@ -12,7 +16,7 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<PlayScene>();
+	m_currentScene = std::make_unique<TitleScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
 

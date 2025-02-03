@@ -18,52 +18,78 @@ Fade::Fade()
     m_endProgress{},
     m_future{}
 {
-    // 共有リソースのインスタンスを取得する
     m_commonResources = CommonResources::GetInstance();
-    // コンテキストを取得する
-    m_context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
+}
 
-	// フェード用のスプライトを作成
-	m_spriteMaterial = std::make_unique<SpriteMaterial>(
-        m_commonResources->GetDeviceResources()->GetD3DDevice(),
-        m_commonResources->GetDeviceResources()->GetD3DDeviceContext());
+void Fade::Initialize()
+{
+    
+    auto commonResources = CommonResources::GetInstance();
+
+    commonResources->GetRenderManager()->AddSprite(this);
+
+    // Transformの作成
+    m_transform = std::make_unique<Transform>();
+
+    // マテリアルの作成
+    m_spriteMaterial = std::make_unique<SpriteMaterial>(
+        commonResources->GetDeviceResources()->GetD3DDevice(), commonResources->GetDeviceResources()->GetD3DDeviceContext());
+
+    // 定数バッファを設定
+    m_spriteMaterial->SetConstBuffer<ConstBuffer>();
 
     // シェーダーをロードする
-    // 頂点シェーダー
-    m_spriteMaterial->LoadVertexShader(L"Resources\\Shaders\\cso\\UI_VS.cso");
-    // ジオメトリシェーダー
-    m_spriteMaterial->LoadGeometryShader(L"Resources\\Shaders\\cso\\UI_GS.cso");
-    // ピクセルシェーダー
-    m_spriteMaterial->LoadPixelShader(L"Resources\\Shaders\\cso\\UI_PS.cso");
+    m_spriteMaterial->LoadVertexShader(L"Resources/Shaders/cso/UI_VS.cso");
+    m_spriteMaterial->LoadGeometryShader(L"Resources/Shaders/cso/UI_GS.cso");
+    m_spriteMaterial->LoadPixelShader(L"Resources/Shaders/cso/UI_PS.cso");
 
-    // テクスチャをロードする
-    m_spriteMaterial->LoadTexture(m_commonResources->GetResources()->GetTitleLogo(), m_textureSizeW, m_textureSizeH);
-    // ルール画像をロード
-    m_spriteMaterial->LoadRuleTexture(m_commonResources->GetResources()->GetTitleLogo());
+    int width, height;
 
-    // バッファの初期化
-    m_constBuffer.windowSize = { (float)m_textureSizeW,(float)m_textureSizeH };
-    // 真っ黒のテクスチャとして利用するため無効化する
+    // 画像をロード
+    m_spriteMaterial->LoadTexture(commonResources->GetResources()->GetTitleLogo(), width, height);
+
+    m_spriteMaterial->LoadRuleTexture(commonResources->GetResources()->GetRuleTexture());
+
+    m_constBuffer.windowSize = { 1280.0f,720.0f };
+    m_constBuffer.textureSize = { (float)width,(float)height };
     m_constBuffer.useTexture = 0;
-    // ルール画像を使用する
     m_constBuffer.useRuleTexture = 1;
-    // ルール反転しない
+    m_constBuffer.ruleProgress = 0.0f;
     m_constBuffer.ruleInverse = 0;
-    // ルール画像の進行度初期化
-    m_constBuffer.ruleProgress = 0;
+
+    m_transform->SetLocalPosition({ 1280.0f / 2.0f, 720.0f / 2.0f,0.0f });
+
+    m_vertexBuffer.position = DirectX::SimpleMath::Vector4(
+        m_transform->GetLocalPosition().x,
+        m_transform->GetLocalPosition().y,
+        m_transform->GetLocalPosition().z,
+        1.0f
+    );
+    m_vertexBuffer.scale = DirectX::SimpleMath::Vector3::One;
+
+    m_vertexBuffer.color = DirectX::SimpleMath::Vector4::One;
+
+    m_vertexBuffer.rect = { 0.0f , 0.0f , (float)width,(float)height };
+
+    m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
+
+    // 定数バッファの更新をする
+    m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
+
+    m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
+
+    m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);    
 }
 
-// デストラクタ
-Fade::~Fade()
-{
 
-}
 
 // 更新処理
 void Fade::Update()
 {
     // フレーム
     float elapseTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+
+    if (!m_isActive) return;
 
     // 経過時間を更新
     m_curentTime += elapseTime;
@@ -98,6 +124,8 @@ void Fade::Update()
         // フェードを非アクティブ
         m_isActive = false;
     }
+
+    m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
 }
 
 // フェードイン処理
@@ -121,16 +149,4 @@ void Fade::FadeIN(float duration)
 
     // フェード処理をアクティブにする
     m_isActive = true;
-}
-
-
-void Fade::Render()
-{
-    if (!m_isActive) return;
-    // 描画準備
-    m_spriteMaterial->Begin();
-    // 描画
-    m_context->Draw(1, 0);
-    // 描画終了処理
-    m_spriteMaterial->End();
 }

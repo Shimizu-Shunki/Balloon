@@ -10,6 +10,7 @@
 //#include "Scenes/PlayScene/PlayScene.h"
 //#include "Scenes/ResultScene/ResultScene.h"
 //#include "Scenes/HomeScene/HomeScene.h"
+#include "Game/Scenes/Header/PlayScene.h"
 
 class IScene;
 class CommonResources;
@@ -23,9 +24,7 @@ public:
 	void CheckChageScene();
 
 public:
-	void ChageSceneMove(std::unique_ptr<IScene> scene) { m_nextScene = std::move(scene); }
-
-
+	
 	// シーンを非同期で準備
 	template <typename T>
 	void PrepareScene() {
@@ -33,7 +32,7 @@ public:
 		m_future = std::async(std::launch::async, [this]() {
 
 			// シーンの作成と初期化
-			auto newScene = std::make_unique<T>(this);
+			auto newScene = std::make_unique<T>();
 			newScene->Initialize(); 
 		});
 	}
@@ -43,9 +42,11 @@ public:
 	void NextSceneLoade()
 	{
 		// 次のシーンを作成
-		m_nextScene = std::make_unique<T>(this);
+		std::unique_ptr<IScene> newScene = std::make_unique<PlayScene>();
+		newScene->Initialize();
 		// 次のシーンを初期化する
-		m_nextScene->Initialize();
+		m_nextScene = std::move(newScene);
+		
 	}
 
 private:

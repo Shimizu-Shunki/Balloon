@@ -77,6 +77,12 @@
     <Filter Include="Framework\StateMachine">
       <UniqueIdentifier>{3c7a1f66-ea55-4dc8-91b7-b7b4411cdeaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Balloon">
+      <UniqueIdentifier>{ff57a862-c4b6-4314-bb5e-8d4f34146a19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{944b7e86-e303-4b8a-b08d-4ae0017a15e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -236,6 +242,24 @@
     <ClInclude Include="Framework\StateMachine\Transition.h">
       <Filter>Framework\StateMachine</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Cameras\FixedCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\FollowCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Balloon\Balloon.h">
+      <Filter>Game\Balloon</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ISprite.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleLogo.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Material\SeaMaterial.h">
+      <Filter>Game\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -353,6 +377,21 @@
     </ClCompile>
     <ClCompile Include="Framework\StateMachine\Transition.cpp">
       <Filter>Framework\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\FixedCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\FollowCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Balloon\Balloon.cpp">
+      <Filter>Game\Balloon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TitleLogo.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Material\SeaMaterial.cpp">
+      <Filter>Game\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

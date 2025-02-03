@@ -7,6 +7,7 @@
 
 #include "Framework/SceneManager.h"
 #include "Framework/InputManager.h"
+#include "Game/Material/SeaMaterial.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -129,6 +130,10 @@ void Game::Initialize(HWND window, int width, int height)
     m_skySphere = std::make_unique<SkySphere>();
     m_skySphere->Initialize();
 
+    // 海の作成
+    m_seaMaterial = std::make_unique<SeaMaterial>();
+    m_seaMaterial->Initialize();
+
     // デバッグの時のみ作成
 #ifdef _DEBUG
 
@@ -190,6 +195,8 @@ void Game::Update(DX::StepTimer const& timer)
     m_skySphere->Update();
     // Tweenマネージャーの更新処理
     m_tweenManager->Update();
+    // カメラの更新
+    m_cameraManager->Update();
     // シーンの更新処理
     m_sceneManager->Update(timer);
 }
@@ -210,6 +217,8 @@ void Game::Render()
 
     // シーンの描画処理
     m_sceneManager->Render();
+
+    m_seaMaterial->Render();
 
     //  新フレームの開始（メインループの一番上に記述）
     ImGui_ImplDX11_NewFrame();
