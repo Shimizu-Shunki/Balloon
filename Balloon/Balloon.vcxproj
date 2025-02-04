@@ -182,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="Framework\AudioManager.h" />
     <ClInclude Include="Framework\CameraManager.h" />
+    <ClInclude Include="Framework\CollisionManager.h" />
     <ClInclude Include="Framework\CommonResources.h" />
     <ClInclude Include="Framework\DeviceResources.h" />
     <ClInclude Include="Framework\Easing.h" />
@@ -205,6 +206,8 @@
     <ClInclude Include="Game\Cameras\DebugCamera.h" />
     <ClInclude Include="Game\Cameras\FixedCamera.h" />
     <ClInclude Include="Game\Cameras\FollowCamera.h" />
+    <ClInclude Include="Game\Colliders\BoxCollider.h" />
+    <ClInclude Include="Game\Colliders\SphereCollider.h" />
     <ClInclude Include="Game\Fade\Fade.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Material\Buffers.h" />
@@ -221,6 +224,10 @@
     <ClInclude Include="Game\Scenes\Header\ResultScene.h" />
     <ClInclude Include="Game\Scenes\Header\TitleScene.h" />
     <ClInclude Include="Game\Sky\SkySphere.h" />
+    <ClInclude Include="Game\States\Fade\FadeInState.h" />
+    <ClInclude Include="Game\States\Fade\FadeOutState.h" />
+    <ClInclude Include="Game\States\PlayScene\PlayMainState.h" />
+    <ClInclude Include="Game\States\TitleScene\TitleMainState.h" />
     <ClInclude Include="Game\Transform\Transform.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -232,6 +239,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interface\ICamera.h" />
+    <ClInclude Include="Interface\ICollider.h" />
     <ClInclude Include="Interface\ICollision.h" />
     <ClInclude Include="Interface\IObject.h" />
     <ClInclude Include="Interface\IComposite.h" />
@@ -243,6 +251,7 @@
   <ItemGroup>
     <ClCompile Include="Framework\AudioManager.cpp" />
     <ClCompile Include="Framework\CameraManager.cpp" />
+    <ClCompile Include="Framework\CollisionManager.cpp" />
     <ClCompile Include="Framework\DeviceResources.cpp" />
     <ClCompile Include="Framework\InputManager.cpp" />
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp" />
@@ -261,6 +270,8 @@
     <ClCompile Include="Game\Cameras\DebugCamera.cpp" />
     <ClCompile Include="Game\Cameras\FixedCamera.cpp" />
     <ClCompile Include="Game\Cameras\FollowCamera.cpp" />
+    <ClCompile Include="Game\Colliders\BoxCollider.cpp" />
+    <ClCompile Include="Game\Colliders\SphereCollider.cpp" />
     <ClCompile Include="Game\Fade\Fade.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\Main.cpp" />
@@ -277,6 +288,10 @@
     <ClCompile Include="Game\Scenes\Source\ResultScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp" />
     <ClCompile Include="Game\Sky\SkySphere.cpp" />
+    <ClCompile Include="Game\States\Fade\FadeInState.cpp" />
+    <ClCompile Include="Game\States\Fade\FadeOutState.cpp" />
+    <ClCompile Include="Game\States\PlayScene\PlayMainState.cpp" />
+    <ClCompile Include="Game\States\TitleScene\TitleMainState.cpp" />
     <ClCompile Include="Game\Transform\Transform.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="imgui\imgui.cpp">

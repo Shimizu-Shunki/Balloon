@@ -20,7 +20,7 @@ void Transform::Update()
 
 	// 親のワールド行列をかける
 	if(m_parent != nullptr)
-	m_worldMatrix *= m_parent->GetWorldMatrix();
+	m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 
 	// 子供の行列計算を行う
 	for (auto& child : m_childs)

@@ -6,6 +6,9 @@ class CommonResources;
 class IObject;
 class Transform;
 class DebugCamera;
+class StateMachine;
+class Fade;
+
 
 
 class PlayScene : public IScene
@@ -29,9 +32,19 @@ public:
 	void Finalize() override;
 
 private:
+	// ステートコントローラーの作成
+	void CreateStateStateController();
+
+private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
+
+	// ステートマシーン
+	std::unique_ptr<StateMachine> m_stateMachine;
+
+	// フェード処理
+	std::unique_ptr<Fade> m_fade;
 
 	// オブジェクトのルート
 	std::vector<std::unique_ptr<IObject>> m_rootObject;

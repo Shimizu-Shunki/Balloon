@@ -8,6 +8,7 @@
 #include "Framework/SceneManager.h"
 #include "Framework/InputManager.h"
 #include "Game/Material/SeaMaterial.h"
+#include "Framework/CollisionManager.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -100,6 +101,10 @@ void Game::Initialize(HWND window, int width, int height)
     // シーンマネージャーの生成
     m_sceneManager = SceneManager::GetInstance();
     m_commonResources->SetSceneManager(m_sceneManager);
+    // 当たり判定マネージャーの生成
+    m_collisionManager = CollisionManager::GetInstance();
+    m_collisionManager->Initialize();
+    m_commonResources->SetCollisionManager(m_collisionManager);
 
     m_sceneManager->Initialize();
 
@@ -133,6 +138,8 @@ void Game::Initialize(HWND window, int width, int height)
     // 海の作成
     m_seaMaterial = std::make_unique<SeaMaterial>();
     m_seaMaterial->Initialize();
+
+    
 
     // デバッグの時のみ作成
 #ifdef _DEBUG
@@ -187,6 +194,7 @@ void Game::Tick()
 // ワールドを更新する
 void Game::Update(DX::StepTimer const& timer)
 {
+    m_sceneManager->CheckChageScene();
     // 入力マネージャーの更新処理
     m_inputManager->Update();
     // オーディオマネージャーの更新処理
@@ -215,10 +223,12 @@ void Game::Render()
     // バックバッファをクリアする
     Clear();
 
+    m_seaMaterial->Render();
+
     // シーンの描画処理
     m_sceneManager->Render();
 
-    m_seaMaterial->Render();
+  
 
     //  新フレームの開始（メインループの一番上に記述）
     ImGui_ImplDX11_NewFrame();

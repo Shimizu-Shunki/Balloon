@@ -34,6 +34,13 @@ public:
 	void Finalize() override;
 
 private:
+	// ステートコントローラーの作成
+	void CreateStateStateController();
+	// カメラの作成
+	void CreateCamera();
+
+
+private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;

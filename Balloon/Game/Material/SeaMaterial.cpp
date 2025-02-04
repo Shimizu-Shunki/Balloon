@@ -157,7 +157,7 @@ void SeaMaterial::Render()
 	// 入力レイアウトを設定
 	context->IASetInputLayout(m_inputLayout.Get());
 
-	// プリミティブトポロジーを設定 (ポイントリスト)
+	// プリミティブトポロジーを設定
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
 
 	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);

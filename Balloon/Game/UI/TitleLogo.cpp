@@ -60,13 +60,14 @@ void TitleLogo::Initialize()
 	m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
 
 	// 定数バッファの更新をする
-	m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
+	// m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 
 	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
 
-	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f).SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
+	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f)
+		.SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
 }
 
 

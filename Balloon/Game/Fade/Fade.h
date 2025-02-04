@@ -47,9 +47,6 @@ public:
 		// フェード処理中なら true を返す
 		if (m_isActive) return;
 
-		// 次のシーンの初期化を非同期で実行
-		m_sceneManager->NextSceneLoade<T>();
-
 		// フェード時間を設定
 		m_duration = duration;
 

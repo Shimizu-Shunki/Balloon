@@ -34,6 +34,8 @@ public:
 			// シーンの作成と初期化
 			auto newScene = std::make_unique<T>();
 			newScene->Initialize(); 
+			// 次のシーンを以降
+			m_nextScene = std::move(newScene);
 		});
 	}
 

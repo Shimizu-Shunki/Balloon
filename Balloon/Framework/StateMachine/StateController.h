@@ -33,7 +33,7 @@ public:
         m_parameters.emplace(parameterName,condition);
     }
     // トランジションを追加する
-    void AddTransition(IState* state, IState* toState, std::string parameterName, Parameters::ParameterValue condition);
+    void AddTransition(std::string stateName, std::string toStateName, std::string parameterName, Parameters::ParameterValue condition);
     // パラメータを設定する
     void SetParameter(std::string parameterName, Parameters::ParameterValue condition);
    
@@ -42,6 +42,9 @@ private:
     void ChageState(IState* nextState);
 
 public:
+
+    // ステートを設定
+    void SetDeffultState(std::string stateName);
 
     // コンストラクタ
     StateController(bool mapMode = false);

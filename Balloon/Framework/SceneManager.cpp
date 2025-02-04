@@ -58,6 +58,8 @@ void SceneManager::CheckChageScene()
 		m_currentScene = std::move(m_nextScene);
 		// 次のシーンスタート処理
 		m_currentScene->Start();
+
+		m_commonResources->GetRenderManager()->CommitPendingDrawables();
 		// フラグを解除する
 		m_isChange = false;
 	}

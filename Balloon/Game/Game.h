@@ -18,6 +18,7 @@
 class SceneManager;
 class InputManager;
 class SeaMaterial;
+class CollisionManager;
 
 
 // D3D11デバイスを生成しゲームループを提供するゲームクラス
@@ -109,6 +110,8 @@ private:
     AudioManager* m_audioManager;
     // Tweenマネージャー
     TweenManager* m_tweenManager;
+    // 当たり判定マネージャー
+    CollisionManager* m_collisionManager;
 
     // 海
     std::unique_ptr<SeaMaterial> m_seaMaterial;

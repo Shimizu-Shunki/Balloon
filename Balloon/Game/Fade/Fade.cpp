@@ -28,6 +28,8 @@ void Fade::Initialize()
 
     commonResources->GetRenderManager()->AddSprite(this);
 
+    m_sceneManager = commonResources->GetSceneManager();
+
     // Transformの作成
     m_transform = std::make_unique<Transform>();
 
@@ -74,7 +76,7 @@ void Fade::Initialize()
     m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
 
     // 定数バッファの更新をする
-    m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
+    //m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
 
     m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 

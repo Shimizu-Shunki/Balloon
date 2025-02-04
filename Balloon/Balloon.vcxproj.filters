@@ -83,6 +83,27 @@
     <Filter Include="Game\UI">
       <UniqueIdentifier>{944b7e86-e303-4b8a-b08d-4ae0017a15e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\States">
+      <UniqueIdentifier>{721111ed-fe89-4e89-875e-2bf7abb3c4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\Fade">
+      <UniqueIdentifier>{e07b3d3e-9967-4415-870f-c24d4b71378e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\TitleScene">
+      <UniqueIdentifier>{1628e3fd-e099-489f-8326-ef46396b7565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\PlayScene">
+      <UniqueIdentifier>{57841faf-9f3a-4bde-8aa5-95432189e085}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\ResultScene">
+      <UniqueIdentifier>{50a2e3ee-af09-4907-a671-25721e9b380f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Colliders">
+      <UniqueIdentifier>{7464da57-1d6c-432d-bc20-ee1b6d02505d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Cloud">
+      <UniqueIdentifier>{a3f00bd1-3af6-412d-9694-cda9902b3cad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -260,6 +281,30 @@
     <ClInclude Include="Game\Material\SeaMaterial.h">
       <Filter>Game\Material</Filter>
     </ClInclude>
+    <ClInclude Include="Game\States\Fade\FadeInState.h">
+      <Filter>Game\States\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Fade\FadeOutState.h">
+      <Filter>Game\States\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\TitleScene\TitleMainState.h">
+      <Filter>Game\States\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\PlayScene\PlayMainState.h">
+      <Filter>Game\States\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ICollider.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colliders\BoxCollider.h">
+      <Filter>Game\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colliders\SphereCollider.h">
+      <Filter>Game\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\CollisionManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -392,6 +437,27 @@
     </ClCompile>
     <ClCompile Include="Game\Material\SeaMaterial.cpp">
       <Filter>Game\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Fade\FadeInState.cpp">
+      <Filter>Game\States\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Fade\FadeOutState.cpp">
+      <Filter>Game\States\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\TitleScene\TitleMainState.cpp">
+      <Filter>Game\States\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\PlayScene\PlayMainState.cpp">
+      <Filter>Game\States\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Colliders\BoxCollider.cpp">
+      <Filter>Game\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Colliders\SphereCollider.cpp">
+      <Filter>Game\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\CollisionManager.cpp">
+      <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

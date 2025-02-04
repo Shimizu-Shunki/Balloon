@@ -18,6 +18,7 @@
 #include "Framework/Resources.h"
 #include "Framework/RenderManager.h"
 #include "Framework/CameraManager.h"
+#include "Framework/CollisionManager.h"
 
 class CommonResources
 {
@@ -50,6 +51,9 @@ public:
 	// カメラマネージャー
 	void SetCameraManager(CameraManager* cameraManager) { m_cameraManager = cameraManager; }
 	CameraManager* GetCameraManager() { return m_cameraManager; }
+	// 当たり判定マネージャー
+	void SetCollisionManager(CollisionManager* collisionManager) { m_collisionManager = collisionManager; }
+	CollisionManager* GetCollisionManager() { return m_collisionManager; }
 
 	// スクリーンサイズ
 	void GetScreenSize(int& width, int& height) const { width = m_screenW; height = m_screenH; }
@@ -113,6 +117,8 @@ private:
 	RenderManager* m_renderManager;
 	// カメラマネージャー
 	CameraManager* m_cameraManager;
+	// 当たり判定マネージャー
+	CollisionManager* m_collisionManager;
 
 	// スクリーンサイズ
 	int m_screenW, m_screenH;

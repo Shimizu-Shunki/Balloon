@@ -39,6 +39,12 @@ bool Tween::Update(float deltaTime)
     // 遅延がある場合は待機
     if (m_elapsed < m_delay) return false; 
 
+    // Transformが途中で破棄されたらTweenを停止する
+    if (m_transform == nullptr)
+    {
+        this->Stop();
+    }
+
     // アニメーションの進行度を計算（0.0 ～ 1.0 に正規化）
     float t = (m_elapsed - m_delay) / m_duration;
     // t を 1.0 にクランプ（補間の上限を超えないようにする）

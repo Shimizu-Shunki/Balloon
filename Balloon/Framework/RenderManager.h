@@ -2,6 +2,7 @@
 #include "Game/Material/SpriteMaterial.h"
 #include "Interface/ISprite.h"
 #include <unordered_map>
+#include <shared_mutex>
 
 // 全てのモデル、UIの描画を行うクラス
 
@@ -87,4 +88,6 @@ private:
 
 	// プロジェクション行列
 	DirectX::SimpleMath::Matrix m_projectionMatrix;
+
+	std::shared_mutex m_mutex;  // 読み書きロック
 };

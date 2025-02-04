@@ -8,6 +8,7 @@
 
 class CommonResources;
 class IComposite;
+class ICollider;
 
 
 
@@ -94,6 +95,8 @@ private:
 
 	// •¨—“I”’l
 
+	// “–‚½‚è”»’è
+	std::unique_ptr<ICollider> m_boxCollider;
 
 	// ƒJƒƒ‰
 	ICamera* m_camera;

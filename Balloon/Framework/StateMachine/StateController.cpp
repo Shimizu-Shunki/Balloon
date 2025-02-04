@@ -14,10 +14,18 @@ StateController::StateController(bool mapMode)
 }
 
 // マップモード
-void StateController::AddTransition(IState* state, IState* toState, std::string parameterName, Parameters::ParameterValue condition)
+void StateController::AddTransition(std::string stateName, std::string toStateName, std::string parameterName, Parameters::ParameterValue condition)
 {
-	// トランジションを追加する
-	m_transitions[state].push_back(std::make_unique<Transition>(toState, parameterName, condition));
+	// state
+	auto state = m_states.find(stateName);
+	// toState
+	auto toState = m_states.find(toStateName);
+
+	if (state != m_states.end() && toState != m_states.end())
+	{
+		// トランジションを追加する
+		m_transitions[state->second.get()].push_back(std::make_unique<Transition>(toState->second.get(), parameterName, condition));
+	}
 }
 
 void StateController::SetParameter(std::string parameterName, Parameters::ParameterValue condition)
@@ -64,3 +72,14 @@ void StateController::ChageState(IState* nextState)
 	m_currentState->OnStateEnter(this);
 }
 
+// デフォルトのステートを設定
+void StateController::SetDeffultState(std::string stateName)
+{
+	// state
+	auto state = m_states.find(stateName);
+
+	if (state != m_states.end())
+	{
+		m_currentState = state->second.get();
+	}
+}

@@ -5,6 +5,11 @@
 // 子オブジェクト
 #include "Game/Player/Header/Body.h"
 
+// 当たり判定
+#include "Interface/ICollider.h"
+#include "Game/Colliders/BoxCollider.h"
+#include "Game/Colliders/SphereCollider.h"
+
 
 
 Player::Player(ICamera* camera, IObject* parent)
@@ -50,8 +55,19 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 
 	// ボディをアタッチ
 	this->Attach(std::make_unique<Body>(this), ObjectID::PLAYER);
-	// 風船をアタッチ　
-	
+	// 風船をアタッチ
+
+	// 当たり判定を設定
+	m_boxCollider = std::make_unique<BoxCollider>(ICollider::ColliderType::BOX);
+	m_boxCollider->SetIsActive(true);
+	m_boxCollider->SetIsTrigger(false);
+	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,1.5f / 2.0f,0.0f });
+	m_boxCollider->GetTransform()->SetLocalScale({ 1.0f,1.5f,1.0f });
+	m_boxCollider->GetTransform()->SetParent(m_transform.get());
+	m_transform->SetChild(m_boxCollider->GetTransform());
+
+	// 当たり判定をマネージャーに渡す
+	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
 }
 
 void Player::Update()

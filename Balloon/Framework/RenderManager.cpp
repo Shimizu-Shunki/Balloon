@@ -53,6 +53,9 @@ void RenderManager::CommitPendingDrawables()
 	m_sprite.clear();
 	// 次のスプライトを格納する
 	m_sprite = m_pendingSprite;
+
+	m_pendingSprite.clear();
+	m_pendingRenderableObjects.clear();
 }
 
 void RenderManager::Render()
@@ -61,6 +64,7 @@ void RenderManager::Render()
 	if (!m_skySphere.model) {
 		throw std::runtime_error("m_skySphere.model is nullptr!");
 	}
+
 
 	// モデルのエフェクト情報を更新する
 	m_skySphere.model->UpdateEffects([](DirectX::IEffect* effect)
@@ -104,8 +108,5 @@ void RenderManager::Render()
 			// マテリアルの解放
 			sprite->End();
 		}
-			
-			
 	}
-
 }
