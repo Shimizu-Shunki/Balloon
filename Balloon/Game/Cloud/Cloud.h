@@ -1,18 +1,17 @@
 #pragma once
 
-#include "Interface/IComposite.h"
+#include "Interface/ILeaf.h"
 #include "Interface/IObject.h"
 #include "Framework/Graphics.h"
 
 #include <Interface/ICamera.h>
 
 class CommonResources;
-class PhysicsBody;
-class IComposite;
 class ICollider;
 
 
-class Player : public IComposite
+
+class Cloud : public ILeaf
 {
 public:
 	// オブジェクトがアクティブかどうかを取得する
@@ -32,9 +31,9 @@ public:
 public:
 	// コンストラクタ
 	// カメラの情報、親のオブジェクト
-	Player(ICamera* camera, IObject* parent);
+	Cloud(ICamera* camera, IObject* parent);
 	// デストラクタ
-	~Player();
+	~Cloud();
 
 public:
 	// 初期化処理
@@ -45,45 +44,25 @@ public:
 	void Finalize() override;
 
 	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override;
+	void OnCollisionEnter(IObject* object) override { (void)object; };
 	// 衝突している時
-	void OnCollisionStay(IObject* object) override;
+	void OnCollisionStay(IObject* object)  override { (void)object; };
 	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override;
+	void OnCollisionExit(IObject* object)  override { (void)object; };
 
 	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override;
+	void OnTriggerEnter(IObject* object)   override { (void)object; };
 	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override;
+	void OnTriggerStay(IObject* object)    override { (void)object; };
 	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override;
-
-	// 部品を追加する
-	void Attach(std::unique_ptr<IObject> turretParts, IObject::ObjectID objectId) override;
-	// 部品を削除する
-	void Detach(std::unique_ptr<IObject> turretPart) override;
-
-
-public:
-
-	void BalloonDetach();
-
-private:
-	// 移動処理
-	DirectX::SimpleMath::Vector3 GetMovementDirection(const DirectX::SimpleMath::Quaternion& angle);
-	// ジャンプ処理
-	//void Jump(const float& elapsedTime);
-	// ジャンプ回数回復処理
-	void RecoverJump();
-
+	void OnTriggerExit(IObject* object)    override { (void)object; };
 
 private:
 	// 共有リソース
 	CommonResources* m_commonResources;
 	// 親のオブジェクト
 	IObject* m_parent;
-	// 子供のオブジェクト
-	std::vector<std::unique_ptr<IObject>> m_childs;
+
 
 	// オブジェクトID
 	IObject::ObjectID m_objectId;
@@ -92,9 +71,6 @@ private:
 
 	// Transform 全てのオブジェクトが持つ
 	std::unique_ptr<Transform> m_transform;
-
-	// 物理的数値
-	std::unique_ptr<PhysicsBody> m_physicsBody;
 
 	// 当たり判定
 	std::unique_ptr<ICollider> m_boxCollider;

@@ -9,6 +9,9 @@
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
+// 物理挙動
+#include "Game/PhysicsBody/PhysicsBody.h"
+
 
 
 
@@ -68,6 +71,14 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 
 	// 当たり判定をマネージャーに渡す
 	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
+
+	// 物理挙動を作成と設定
+	m_physicsBody = std::make_unique<PhysicsBody>(this);
+	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
+	m_physicsBody->SetIsActive(true);
+	m_physicsBody->SetMass(30.0f);
+	m_physicsBody->SetUseGravity(false);
+	
 }
 
 void Player::Update()
@@ -75,9 +86,9 @@ void Player::Update()
 	// 入力に基づく方向ベクトルを取得
 	DirectX::SimpleMath::Vector3 movementDirection = this->GetMovementDirection(DirectX::SimpleMath::Quaternion::Identity);
 
-	movementDirection *= (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+	m_physicsBody->SetFoce(movementDirection * 500.0f);
 
-	m_transform->SetLocalPosition(m_transform->GetLocalPosition() += movementDirection);
+	m_physicsBody->Update();
 
 	// 子供を更新する
 	for (const auto& childObject : m_childs)

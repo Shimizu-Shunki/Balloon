@@ -3,7 +3,7 @@
 #include "Game/Material/Buffers.h"
 
 
-class TitleLogo : public ISprite
+class Keys : public ISprite
 {
 public:
 	// Transformを取得する
@@ -14,9 +14,9 @@ public:
 public:
 
 	// コンストラクタ
-	TitleLogo();
+	Keys();
 	// デストラクタ
-	~TitleLogo() override = default;
+	~Keys() override = default;
 
 	// 初期化
 	void Initialize();

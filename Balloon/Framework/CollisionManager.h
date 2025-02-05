@@ -6,6 +6,7 @@
 #include "Interface/IObject.h"
 
 class CommonResources;
+class PhysicsBody;
 
 
 class CollisionManager
@@ -58,6 +59,9 @@ public:
 	void CheckCollision();
 	// アタッチ
 	void Attach(IObject* object, ICollider* collider);
+	// リジットボディをアタッチ
+	void PhysicsAttach(IObject* object, PhysicsBody* physics);
+
 	// スタート処理
 	void Start();
 
@@ -79,9 +83,13 @@ private:
 
 	// 準備段階オブジェクト
 	std::unordered_map<IObject*, std::vector<ICollider*>> m_pendingObjects;
-
 	// 判定を保存する
 	std::unordered_map<CollisionPair, bool, CollisionPairHash> m_collisionStates;
+
+	// リジットボディを準備段階
+	std::unordered_map<IObject*, PhysicsBody*> m_pendingPhysics;
+	// リジットボディ保存
+	std::unordered_map<IObject*, PhysicsBody*> m_physics;
 
 	// デバッグの時のみ作成
 #ifdef _DEBUG

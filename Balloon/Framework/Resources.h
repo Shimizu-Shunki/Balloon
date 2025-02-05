@@ -39,6 +39,8 @@ public:
 	ID3D11ShaderResourceView* GetStartText() { return m_startText.Get(); }
 	// ジャンプフレーム
 	ID3D11ShaderResourceView* GetJampFrame() { return m_jampFrame.Get(); }
+	// スペースキー
+	ID3D11ShaderResourceView* GetSpaceKey() { return m_spaceKey.Get(); }
 	// ジャンプメモリ
 	ID3D11ShaderResourceView* GetJampMemori() { return m_jampMemori.Get(); }
 	// タイムフレーム
@@ -49,6 +51,7 @@ public:
 	ID3D11ShaderResourceView* GetNumbers() { return m_numbers.Get(); }
 	// ルール画像
 	ID3D11ShaderResourceView* GetRuleTexture() { return m_ruleTexture.Get(); }
+
 
 
 public:
@@ -73,7 +76,8 @@ private:
 		m_playerRightFootModel{},
 		m_playerLeftFootModel{},
 		m_balloonModel{},
-		m_cloudModel{}
+		m_cloudModel{},
+		m_spaceKey{}
 	{
 		
 	}
@@ -117,6 +121,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_titleLogo;
 	// スタートテキスト
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_startText;
+	// スペースキー
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_spaceKey;
 
 	// プレイシーン
 	// ジャンプフレーム

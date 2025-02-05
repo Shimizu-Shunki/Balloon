@@ -43,7 +43,7 @@ void TitleLogo::Initialize()
 	m_constBuffer.ruleProgress = 0.0f;
 	m_constBuffer.ruleInverse = 0;
 
-	m_transform->SetLocalPosition({ 1280.0f / 3.5f, 720.0f / 3.0f,0.0f });
+	m_transform->SetLocalPosition({ 1280.0f / 4.0f, 720.0f / 3.0f,0.0f });
 
 	m_vertexBuffer.position = DirectX::SimpleMath::Vector4(
 		m_transform->GetLocalPosition().x,
@@ -60,7 +60,7 @@ void TitleLogo::Initialize()
 	m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
 
 	// 定数バッファの更新をする
-	// 
+	// m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 
@@ -73,10 +73,7 @@ void TitleLogo::Initialize()
 
 void TitleLogo::Update()
 {
-	m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
-
 	m_vertexBuffer.scale = m_transform->GetLocalScale();
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
-	
 }

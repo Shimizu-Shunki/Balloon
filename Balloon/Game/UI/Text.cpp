@@ -1,16 +1,16 @@
 #include "Framework/pch.h"
-#include "Game/UI/TitleLogo.h"
+#include "Game/UI/Text.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Tween/Tween.h"
 
-TitleLogo::TitleLogo()
+Text::Text()
 {
 	
 
 }
 
 
-void TitleLogo::Initialize()
+void Text::Initialize()
 {
 	auto commonResources = CommonResources::GetInstance();
 
@@ -34,7 +34,7 @@ void TitleLogo::Initialize()
 	int width, height;
 
 	// 画像をロード
-	m_spriteMaterial->LoadTexture(commonResources->GetResources()->GetTitleLogo(), width, height);
+	m_spriteMaterial->LoadTexture(commonResources->GetResources()->GetStartText(), width, height);
 
 	m_constBuffer.windowSize = { 1280.0f,720.0f };
 	m_constBuffer.textureSize = { (float)width,(float)height };
@@ -43,7 +43,7 @@ void TitleLogo::Initialize()
 	m_constBuffer.ruleProgress = 0.0f;
 	m_constBuffer.ruleInverse = 0;
 
-	m_transform->SetLocalPosition({ 1280.0f / 3.5f, 720.0f / 3.0f,0.0f });
+	m_transform->SetLocalPosition({ 1280.0f / 3.5f + 40.0f, 720.0f / 3.0f + 160.0f ,0.0f });
 
 	m_vertexBuffer.position = DirectX::SimpleMath::Vector4(
 		m_transform->GetLocalPosition().x,
@@ -59,24 +59,19 @@ void TitleLogo::Initialize()
 
 	m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
 
-	// 定数バッファの更新をする
-	// 
-
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 
 	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
 
-	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f)
+	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.4f, 1.0f)
 		.SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
 }
 
 
-void TitleLogo::Update()
+void Text::Update()
 {
 	m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
-
 	m_vertexBuffer.scale = m_transform->GetLocalScale();
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
-	
 }

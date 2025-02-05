@@ -8,6 +8,7 @@ class ISprite
 public:
 	// Transform‚ğæ“¾‚·‚é
 	virtual Transform* GetTransform() const = 0;
+
 	// ƒ}ƒeƒŠƒAƒ‹‚ğæ“¾‚·‚é
 	virtual SpriteMaterial* GetSpriteMaterial() const = 0;
 

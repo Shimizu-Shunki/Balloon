@@ -13,9 +13,14 @@
 #include "Game/Fade/Fade.h"
 
 #include "Game/Cameras/DebugCamera.h"
-#include "Game/UI/TitleLogo.h"
+
 #include "Framework/Tween/Tween.h"
 #include "Game/Scenes/Header/PlayScene.h"
+
+// UI
+#include "Game/UI/TitleLogo.h"
+#include "Game/UI/Text.h"
+#include "Game/UI/Keys.h"
 
 // ステート
 #include "Game/States/Fade/FadeInState.h"
@@ -38,12 +43,7 @@ void TitleScene::Initialize()
 	// カメラの作成
 	this->CreateCamera();
 
-	// UI
-	// タイトルロゴ
-	m_titleLogo = std::make_unique<TitleLogo>();
-	m_titleLogo->Initialize();
-	// スペースキー
-	// スタートテキスト
+	
 
 	// オブジェクト
 	m_player = std::make_unique<Player>(nullptr, nullptr);
@@ -55,6 +55,17 @@ void TitleScene::Initialize()
 	);
 	// プレイヤーのTweenを起動
 	m_player->GetTransform()->GetTween()->DORotationY(120.0f, 1.5f).SetDelay(4.0f).SetEase(Tween::EasingType::EaseInSine);
+
+	// UI
+	// タイトルロゴ
+	m_titleLogo = std::make_unique<TitleLogo>();
+	m_titleLogo->Initialize();
+	// スペースキー
+	m_text = std::make_unique<Text>();
+	m_text->Initialize();
+	// スタートテキスト
+	m_spaceKey = std::make_unique<Keys>();
+	m_spaceKey->Initialize();
 
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
@@ -84,6 +95,8 @@ void TitleScene::Update()
 	m_fade->Update();
 
 	m_titleLogo->Update();
+	m_text->Update();
+	m_spaceKey->Update();
 
 	m_player->GetTransform()->Update();
 }

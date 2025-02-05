@@ -57,6 +57,9 @@ void Resources::LoadResource()
 	// スタートテキスト
 	DirectX::CreateWICTextureFromFile(
 		m_device, L"Resources\\Textures\\StartText.png", nullptr, m_startText.ReleaseAndGetAddressOf());
+	// スペースキー
+	DirectX::CreateWICTextureFromFile(
+		m_device, L"Resources\\Textures\\SpaceKey.png", nullptr, m_spaceKey.ReleaseAndGetAddressOf());
 
 	// ジャンプフレーム
 	DirectX::CreateWICTextureFromFile(

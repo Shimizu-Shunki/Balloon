@@ -166,14 +166,22 @@ void CollisionManager::Attach(IObject* object, ICollider* collider)
 	m_pendingObjects[object].push_back(collider);
 }
 
+void CollisionManager::PhysicsAttach(IObject* object, PhysicsBody* physics)
+{
+	m_pendingPhysics[object] = physics;
+}
+
 void CollisionManager::Start()
 {
 	// 現在のオブジェクトを削除
 	m_objects.clear();
+	m_physics.clear();
 	// 以降
 	m_objects = m_pendingObjects;
+	m_physics = m_pendingPhysics;
 	// リセット
 	m_pendingObjects.clear();
+	m_pendingPhysics.clear();
 	m_collisionStates.clear();
 }
 
@@ -188,15 +196,6 @@ bool CollisionManager::CircleCollisionCheck(const DirectX::SimpleMath::Vector3& 
 	// 円の大きさを設定
 	sphere1.Radius = 4.0f;
 	sphere2.Radius = 4.0f;
-
-	//// プリミティブ描画を開始する
-	//m_graphics->DrawPrimitiveBegin(m_graphics->GetViewMatrix(), m_graphics->GetProjectionMatrix());
-	//// 境界ボックスを描画する
-	//DX::Draw(m_graphics->GetPrimitiveBatch(), sphere1, DirectX::Colors::Red);
-	//DX::Draw(m_graphics->GetPrimitiveBatch(), sphere2, DirectX::Colors::Red);
-	//// プリミティブ描画を終了する
-	//m_graphics->DrawPrimitiveEnd();
-
 
 		// デバッグ描画
 #ifdef _DEBUG

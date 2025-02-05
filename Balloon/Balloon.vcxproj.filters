@@ -104,6 +104,9 @@
     <Filter Include="Game\Cloud">
       <UniqueIdentifier>{a3f00bd1-3af6-412d-9694-cda9902b3cad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Jump">
+      <UniqueIdentifier>{89d20c1f-075f-4d41-abe4-26ad4b96f5de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -305,6 +308,27 @@
     <ClInclude Include="Framework\CollisionManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Cloud\Cloud.h">
+      <Filter>Game\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\Keys.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\Text.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\JumpFrame.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\JumpMemory.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Jump\Jump.h">
+      <Filter>Game\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PhysicsBody\PhysicsBody.h">
+      <Filter>Game\PhysicsBody</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -458,6 +482,27 @@
     </ClCompile>
     <ClCompile Include="Framework\CollisionManager.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cloud\Cloud.cpp">
+      <Filter>Game\Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\Keys.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\Text.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\JumpFrame.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\JumpMemory.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Jump\Jump.cpp">
+      <Filter>Game\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp">
+      <Filter>Game\PhysicsBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

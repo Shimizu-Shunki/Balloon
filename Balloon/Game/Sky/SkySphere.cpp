@@ -36,9 +36,9 @@ void SkySphere::Initialize()
 	m_transform->SetParent(nullptr);
 
 	// 座標初期化
-	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Up * 140.0f);
+	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Up * 250.0f);
 	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
-	m_transform->SetLocalScale({ 2.0f, 1.5f, 2.0f });
+	m_transform->SetLocalScale({ 5.0f, 3.5f, 5.0f });
 
 	// スカイスフィアをRenderManagerに登録する
 	m_commonResources->GetRenderManager()->SetSkySphereObject({ m_transform.get(),m_model });

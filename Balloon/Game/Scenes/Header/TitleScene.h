@@ -11,6 +11,8 @@ class Transform;
 class DebugCamera;
 class TitleLogo;
 class Fade;
+class Text;
+class Keys;
 
 
 class TitleScene: public IScene
@@ -53,6 +55,10 @@ private:
 
 	// タイトルロゴ
 	std::unique_ptr<TitleLogo> m_titleLogo;
+	// テキスト
+	std::unique_ptr<Text> m_text;
+	// スペースキー
+	std::unique_ptr<Keys> m_spaceKey;
 
 	// プレイヤー
 	std::unique_ptr<IObject> m_player;

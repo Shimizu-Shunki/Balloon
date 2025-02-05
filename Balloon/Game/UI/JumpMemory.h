@@ -3,7 +3,7 @@
 #include "Game/Material/Buffers.h"
 
 
-class TitleLogo : public ISprite
+class JumpMemory : public ISprite
 {
 public:
 	// Transformを取得する
@@ -14,9 +14,9 @@ public:
 public:
 
 	// コンストラクタ
-	TitleLogo();
+	JumpMemory();
 	// デストラクタ
-	~TitleLogo() override = default;
+	~JumpMemory() override = default;
 
 	// 初期化
 	void Initialize();
@@ -31,13 +31,12 @@ private:
 
 	// Transform
 	std::unique_ptr<Transform> m_transform;
+
 	// マテリアル
 	std::unique_ptr<SpriteMaterial> m_spriteMaterial;
 
 	// 頂点バッファ
 	VertexBuffer m_vertexBuffer;
-
 	// 定数バッファ
 	ConstBuffer m_constBuffer;
-
 };
