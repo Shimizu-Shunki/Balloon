@@ -12,7 +12,9 @@ const float SkySphere::ROTATION_SPEED = 1.5f;
 SkySphere::SkySphere()
 	:
 	m_model{},
-	m_transform{}
+	m_transform{},
+	m_targetTransform{},
+	m_commonResources{}
 {
 	// インスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
@@ -24,9 +26,6 @@ SkySphere::SkySphere()
 /// </summary>
 void SkySphere::Initialize()
 {
-	// コンテキスト
-	m_context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
-
 	// モデルを取得する 「スカイスフィア」
 	m_model = m_commonResources->GetResources()->GetSkySphere();
 	// Transformを作成する
@@ -58,6 +57,10 @@ void SkySphere::Update()
 		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
 			DirectX::SimpleMath::Vector3::Up, DirectX::XMConvertToRadians(ROTATION_SPEED * elapsedTime))
 	);
+
+	// ターゲットが適応している場合座標をターゲットの座標にする
+	if (m_targetTransform != nullptr)
+		m_transform->SetLocalPosition(m_targetTransform->GetLocalPosition());
 
 	// Transform更新
 	m_transform->Update();

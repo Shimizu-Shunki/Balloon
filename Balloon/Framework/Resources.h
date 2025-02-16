@@ -1,6 +1,4 @@
 #pragma once
-#ifndef RESOURCES_DEFINED
-#define RESOURCES_DEFINED
 #include "Model.h"
 #include "Graphics.h"
 
@@ -9,6 +7,12 @@ class CommonResources;
 // Resourcesクラスを定義する
 class Resources
 {
+public:
+	//	UIインプットレイアウト
+	static const std::vector<D3D11_INPUT_ELEMENT_DESC> UI_INPUT_LAYOUT;
+	//	海インプットレイアウト
+	static const std::vector<D3D11_INPUT_ELEMENT_DESC> SEA_INPUT_LAYOUT;
+
 public:
 	// モデルを取得する
 	// プレイヤー　頭モデルを取得する
@@ -51,6 +55,30 @@ public:
 	ID3D11ShaderResourceView* GetNumbers() { return m_numbers.Get(); }
 	// ルール画像
 	ID3D11ShaderResourceView* GetRuleTexture() { return m_ruleTexture.Get(); }
+	// 海画像
+	ID3D11ShaderResourceView* GetSeaTexture() { return m_SeaTexture.Get(); }
+
+
+	// シェーダーを取得する
+	// UI インプットレイアウトを取得する
+	ID3D11InputLayout* GetUIinputLayout() { return m_UIinputLayout.Get(); }
+	// UI 頂点シェーダーを取得
+	ID3D11VertexShader*   GetUI_VS() { return m_UI_VS.Get(); }
+	// UI ジオメトリシェーダーを取得
+	ID3D11GeometryShader* GetUI_GS() { return m_UI_GS.Get(); }
+	// UI ピクセルシェーダーを取得
+	ID3D11PixelShader*    GetUI_PS() { return m_UI_PS.Get(); }
+
+	// 海 インプットレイアウトを取得
+	ID3D11InputLayout* GetSeaInputLayout() { return m_SeaInputLayout.Get(); }
+	// 海 頂点シェーダーを取得
+	ID3D11VertexShader* GetSeaVS() { return m_SeaVS.Get(); }
+	// 海 ジオメトリシェーダーを取得
+	ID3D11HullShader*   GetSeaHS() { return m_SeaHS.Get(); }
+	// 海 ジオメトリシェーダーを取得
+	ID3D11DomainShader* GetSeaDS() { return m_SeaDS.Get(); }
+	// 海 ピクセルシェーダーを取得
+	ID3D11PixelShader*  GetSeaPS() { return m_SeaPS.Get(); }
 
 
 
@@ -77,7 +105,23 @@ private:
 		m_playerLeftFootModel{},
 		m_balloonModel{},
 		m_cloudModel{},
-		m_spaceKey{}
+		m_spaceKey{},
+		m_jampFrame{},
+		m_jampMemori{},
+		m_timeFrame{},
+		m_timeGage{},
+		m_numbers{},
+		m_ruleTexture{},
+		m_SeaTexture{},
+		m_UIinputLayout{},
+		m_UI_VS{},
+		m_UI_GS{},
+		m_UI_PS{},
+		m_SeaInputLayout{},
+		m_SeaVS{},
+		m_SeaHS{},
+		m_SeaDS{},
+		m_SeaPS{}
 	{
 		
 	}
@@ -138,6 +182,31 @@ private:
 
 	// ルール画像
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_ruleTexture;
-};
 
-#endif		// RESOURCES_DEFINED
+	// 海画像
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SeaTexture;
+
+	// シェーダー
+	// 入力レイアウト
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_UIinputLayout;
+
+	// UI 頂点シェーダー
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_UI_VS;
+	// UI ジオメトリシェーダー
+	Microsoft::WRL::ComPtr<ID3D11GeometryShader> m_UI_GS;
+	// UI ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_UI_PS;
+
+	// 入力レイアウト
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_SeaInputLayout;
+
+	// 海 頂点シェーダー
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_SeaVS;
+	// 海 ハルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11HullShader> m_SeaHS;
+	// 海 ドメインシェーダー
+	Microsoft::WRL::ComPtr<ID3D11DomainShader> m_SeaDS;
+	// 海 ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_SeaPS;
+
+};

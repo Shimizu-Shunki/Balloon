@@ -24,6 +24,13 @@ public:
 	DirectX::SimpleMath::Vector3 GetVelocity() const { return m_velocity; }
 	// 力を設定する
 	void SetFoce(const DirectX::SimpleMath::Vector3& foce) { m_force = foce; }
+	// 力を取得する
+	DirectX::SimpleMath::Vector3 GetFoce() const { return m_force; }
+
+	// キネマティックを設定する
+	void SetIsKinematic(bool kinematic) { m_isKinematic = kinematic; }
+	// キネマティックを取得する
+	bool GetIsKinematic() { return m_isKinematic; }
 
 public:
 	// コンストラクタ
@@ -44,6 +51,8 @@ private:
 	// オブジェクト
 	IObject* m_object;
 
+	// キネマティック
+	bool m_isKinematic;
 	// アクティブ設定
 	bool m_isActive;
 	// 質量

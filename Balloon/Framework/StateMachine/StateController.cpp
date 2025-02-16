@@ -1,20 +1,30 @@
 #include "Framework/pch.h"
 #include "Framework/StateMachine/StateMachine.h"
 #include "Framework/StateMachine/StateController.h"
-#include "Framework/StateMachine/Parameters.h"
 #include "Framework/StateMachine/Transition.h"
 #include "Interface/IState.h"
 
 
-// コンストラクタ
-StateController::StateController(bool mapMode)
+/// <summary>
+/// コンストラクタ
+/// </summary>
+StateController::StateController()
 	:
-	m_useMap(mapMode)
+	m_states{},
+	m_parameters{},
+	m_transitions{},
+	m_currentState{}
 {
 }
 
-// マップモード
-void StateController::AddTransition(std::string stateName, std::string toStateName, std::string parameterName, Parameters::ParameterValue condition)
+/// <summary>
+/// 指定された2つのステート間にトランジションを追加する
+/// </summary>
+/// <param name="stateName">元のステートの名前</param>
+/// <param name="toStateName">遷移先のステートの名前</param>
+/// <param name="parameterName">トランジションの条件となるパラメータの名前</param>
+/// <param name="condition">トランジションの条件</param>
+void StateController::AddTransition(std::string stateName, std::string toStateName, std::string parameterName, ParameterValue condition)
 {
 	// state
 	auto state = m_states.find(stateName);
@@ -28,13 +38,21 @@ void StateController::AddTransition(std::string stateName, std::string toStateNa
 	}
 }
 
-void StateController::SetParameter(std::string parameterName, Parameters::ParameterValue condition)
+/// <summary>
+/// 指定されたパラメータに値を設定する
+/// </summary>
+/// <param name="parameterName">設定するパラメータの名前</param>
+/// <param name="condition">パラメータに設定する値</param>
+void StateController::SetParameter(std::string parameterName, ParameterValue condition)
 {
 	if (m_parameters.find(parameterName) != m_parameters.end()) {
 		m_parameters[parameterName] = condition;
 	}
 }
 
+/// <summary>
+/// トランジションの更新
+/// </summary>
 void StateController::CheckTransitions()
 {
 	auto it = m_transitions.find(m_currentState);
@@ -60,7 +78,10 @@ void StateController::CheckTransitions()
 	}
 }
 
-
+/// <summary>
+/// ステートを切り替える
+/// </summary>
+/// <param name="nextState">次のステート</param>
 void StateController::ChageState(IState* nextState)
 {
 	// 現在のステートの終了処理を行う
@@ -72,7 +93,10 @@ void StateController::ChageState(IState* nextState)
 	m_currentState->OnStateEnter(this);
 }
 
-// デフォルトのステートを設定
+/// <summary>
+/// デフォルトのステートを設定
+/// </summary>
+/// <param name="stateName">ステートの名前</param>
 void StateController::SetDeffultState(std::string stateName)
 {
 	// state

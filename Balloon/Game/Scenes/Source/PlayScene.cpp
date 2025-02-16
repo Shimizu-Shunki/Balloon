@@ -11,8 +11,13 @@
 #include "Game/Cameras/DebugCamera.h"
 
 #include "Game/Fade/Fade.h"
-
+#include "Game/Jump/Jump.h"
 #include "Framework/CollisionManager.h"
+
+#include "Game/Cameras/TPSCamera.h"
+
+// オブジェクト
+#include "Game/Cloud/Cloud.h"
 
 // ステート
 #include "Framework/StateMachine/StateController.h"
@@ -51,7 +56,56 @@ void PlayScene::Initialize()
 
 	// プレイヤーのTransformを子供として設定
 	m_rootTransform->SetChild(m_rootObject[0]->GetTransform());
+	m_rootObject[0]->GetTransform()->SetLocalPosition({ 0.0f , 11.0f,0.0f });
 
+	
+
+	// 雲の作成
+	std::unique_ptr<IObject> cloud = std::make_unique<Cloud>(nullptr);
+	cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	cloud->GetTransform()->SetLocalPosition({ 0.0f , 10.0f,0.0f });
+	m_rootTransform->SetChild(cloud->GetTransform());
+	// ルートに渡す
+	m_rootObject.push_back(std::move(cloud));
+
+	cloud = std::make_unique<Cloud>(nullptr);
+	cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	cloud->GetTransform()->SetLocalPosition({ -20.0f , 8.0f,20.0f });
+	m_rootTransform->SetChild(cloud->GetTransform());
+	// ルートに渡す
+	m_rootObject.push_back(std::move(cloud));
+
+	cloud = std::make_unique<Cloud>(nullptr);
+	cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	cloud->GetTransform()->SetLocalPosition({ 20.0f , 8.0f, 20.0f });
+	m_rootTransform->SetChild(cloud->GetTransform());
+	// ルートに渡す
+	m_rootObject.push_back(std::move(cloud));
+
+	cloud = std::make_unique<Cloud>(nullptr);
+	cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	cloud->GetTransform()->SetLocalPosition({ -20.0f , 8.0f,-20.0f });
+	m_rootTransform->SetChild(cloud->GetTransform());
+	// ルートに渡す
+	m_rootObject.push_back(std::move(cloud));
+
+	cloud = std::make_unique<Cloud>(nullptr);
+	cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	cloud->GetTransform()->SetLocalPosition({ 20.0f , 8.0f,-20.0f });
+	m_rootTransform->SetChild(cloud->GetTransform());
+	// ルートに渡す
+	m_rootObject.push_back(std::move(cloud));
+
+	// カメラの作成
+	// カメラ1
+	/* m_camera = std::make_unique<TPSCamera>(m_rootObject[0].get());
+	m_camera->Initialize({ -1.51f,10.44f,-11.57f }, { 0.0f,0.0f,0.0f },
+		DirectX::SimpleMath::Quaternion::Identity, m_commonResources->GetCameraManager());*/
+
+	// カメラをマネージャーに設定
+	//m_commonResources->GetCameraManager()->Attach(std::move(camera));
+
+	//m_commonResources->GetCameraManager()->ChageCamera(2);
 
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
@@ -65,7 +119,7 @@ void PlayScene::Start()
 {
 	m_stateMachine->Start();
 	// BGMを再生
-	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
+	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
 
 	m_commonResources->GetCollisionManager()->Start();
 }
@@ -74,7 +128,13 @@ void PlayScene::Update()
 {
 	m_stateMachine->Update();
 
-	m_rootObject[0]->Update();
+	//m_camera->Update();
+
+
+	for (const auto& object : m_rootObject)
+	{
+		object->Update();
+	}
 
 	m_rootTransform->Update();
 
@@ -105,7 +165,7 @@ void PlayScene::CreateStateStateController()
 	m_stateMachine = std::make_unique<StateMachine>();
 
 	// ステートコントローラーの作成
-	auto stateController = std::make_unique<StateController>(true);
+	auto stateController = std::make_unique<StateController>();
 
 	// パラメーターの追加
 	stateController->AddParameters("FadeIN", false);

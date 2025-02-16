@@ -1,15 +1,9 @@
+// 海の表現を行うマテリアル
+
 #include "Framework/pch.h"
 #include "Game/Material/SeaMaterial.h"
 #include "Framework/CommonResources.h"
 #include <Framework/Microsoft/ReadData.h>
-///	<summary>
-///	インプットレイアウト
-///	</summary>
-const std::vector<D3D11_INPUT_ELEMENT_DESC> SeaMaterial::INPUT_LAYOUT =
-{
-	{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT,    0, sizeof(DirectX::SimpleMath::Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-};
 
 
 SeaMaterial::SeaMaterial()
@@ -28,46 +22,20 @@ void SeaMaterial::Initialize()
 	auto device = m_commonResources->GetDeviceResources()->GetD3DDevice();
 	auto context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
 
-	//	プリミティブバッチの作成
-	m_batch = std::make_unique<DirectX::DX11::PrimitiveBatch<DirectX::VertexPositionTexture>>(context);
+	
 
 	m_states = std::make_unique<DirectX::DX11::CommonStates>(device);
 
-	DirectX::CreateWICTextureFromFile(
-		device, L"Resources\\Textures\\water5.png", nullptr, m_texture.ReleaseAndGetAddressOf());
+	m_texture = m_commonResources->GetResources()->GetSeaTexture();
 
-	// シェーダを読み込むためのblob
-	std::vector<uint8_t> blob;
 
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(L"Resources/Shaders/cso/Sea_VS.cso");
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_vertexShader.ReleaseAndGetAddressOf())
-	);
+	// シェーダを取得する
+	m_vertexShader = m_commonResources->GetResources()->GetSeaVS();
+	m_hullShader   = m_commonResources->GetResources()->GetSeaHS();
+	m_domainShader = m_commonResources->GetResources()->GetSeaDS();
+	m_pixelShader  = m_commonResources->GetResources()->GetSeaPS();
 
-	//	インプットレイアウトの作成
-	device->CreateInputLayout(&INPUT_LAYOUT[0],
-		static_cast<UINT>(INPUT_LAYOUT.size()),
-		blob.data(), blob.size(),
-		m_inputLayout.GetAddressOf());
-
-	// ハルシェーダーをロードする
-	blob = DX::ReadData(L"Resources/Shaders/cso/Sea_HS.cso");
-	DX::ThrowIfFailed(
-		device->CreateHullShader(blob.data(), blob.size(), nullptr, m_hullShader.ReleaseAndGetAddressOf())
-	);
-
-	// ドメインシェーダをロードする
-	blob = DX::ReadData(L"Resources/Shaders/cso/Sea_DS.cso");
-	DX::ThrowIfFailed(
-		device->CreateDomainShader(blob.data(), blob.size(), nullptr, m_domainShader.ReleaseAndGetAddressOf())
-	);
-
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(L"Resources/Shaders/cso/Sea_PS.cso");
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_pixelShader.ReleaseAndGetAddressOf())
-	);
+	m_inputLayout = m_commonResources->GetResources()->GetSeaInputLayout();
 
 	// ブレンドステートの作成
 	CreateBlendState(device, context);
@@ -89,7 +57,7 @@ void SeaMaterial::Initialize()
 	DirectX::VertexPositionTexture vertex[4] =
 	{
 		{ DirectX::XMFLOAT3(-5.0f,  0.0f,  5.0f),  DirectX::XMFLOAT2(0.0f, 0.0f) }, // 左上
-		{ DirectX::XMFLOAT3(5.0f,   0.0f,  5.0f), DirectX::XMFLOAT2(1.0f, 0.0f) }, // 右上
+		{ DirectX::XMFLOAT3(5.0f,   0.0f,  5.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },  // 右上
 		{ DirectX::XMFLOAT3(5.0f,   0.0f, -5.0f),  DirectX::XMFLOAT2(1.0f, 1.0f) }, // 右下
 		{ DirectX::XMFLOAT3(-5.0f,  0.0f, -5.0f),  DirectX::XMFLOAT2(0.0f, 1.0f) }  // 左下
 	};
@@ -143,7 +111,7 @@ void SeaMaterial::Render()
 			//	シェーダーに渡す追加のバッファを作成する。(ConstBuffer）
 			ConstBuffer cbuff;
 			cbuff.matView = m_commonResources->GetCameraManager()->GetViewMatrix().Transpose();
-			cbuff.matProj = m_commonResources->GetRenderManager()->GetProjectionMatrix().Transpose();
+			cbuff.matProj = m_commonResources->GetCameraManager()->GetProjectionMatrix().Transpose();
 			cbuff.matWorld = world.Transpose();
 			cbuff.Diffuse = DirectX::SimpleMath::Vector4(1, 1, 1, 1);
 			cbuff.TessellationFactor = DirectX::SimpleMath::Vector4(m_index, m_time, angle, 0.0f);
@@ -176,7 +144,7 @@ void SeaMaterial::Render()
 
 
 			// 入力レイアウトを設定
-			context->IASetInputLayout(m_inputLayout.Get());
+			context->IASetInputLayout(m_inputLayout);
 
 			// プリミティブトポロジーを設定
 			context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
@@ -191,13 +159,13 @@ void SeaMaterial::Render()
 			context->RSSetState(m_rasterizerState.Get());
 
 			//	シェーダをセットする
-			context->VSSetShader(m_vertexShader.Get(), nullptr, 0);
-			context->HSSetShader(m_hullShader.Get(), nullptr, 0);
-			context->DSSetShader(m_domainShader.Get(), nullptr, 0);
-			context->PSSetShader(m_pixelShader.Get(), nullptr, 0);
+			context->VSSetShader(m_vertexShader,nullptr, 0);
+			context->HSSetShader(m_hullShader,  nullptr, 0);
+			context->DSSetShader(m_domainShader,nullptr, 0);
+			context->PSSetShader(m_pixelShader, nullptr, 0);
 
 			// ピクセルシェーダーにテクスチャリソースを設定
-			context->PSSetShaderResources(0, 1, m_texture.GetAddressOf());
+			context->PSSetShaderResources(0, 1, &m_texture);
 
 			// 描画コール
 			context->Draw(4, 0);

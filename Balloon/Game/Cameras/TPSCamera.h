@@ -1,38 +1,26 @@
 #pragma once
-#include <Interface/IComponent.h>
+#include "Framework/CommonResources.h"
 #include "Interface/ICamera.h"
 
-class Graphics;
+
 class InputManager;
+class IObject;
+class Transform;
 
 class TPSCamera : public ICamera
 {
 
 public :
 	// SET
-	// カメラ座標を設定する
-	void SetPosition(const DirectX::SimpleMath::Vector3& position) override { m_position = position; }
-	// ターゲット座標を設定する
-	void SetTargetPosition(const DirectX::SimpleMath::Vector3& targetPosition) override { m_targetPosition = targetPosition; }
-	// 回転角を設定する
-	void SetRotation(const DirectX::SimpleMath::Quaternion& rotation) override { m_currentRotation = rotation; }
+	// Transformを取得する
+	Transform* GetTransform() const override { return m_transform.get(); }
 
-	void SetTargetObject(IComponent* object) { m_targetObject = object; }
-
-
-	// GET
-	// カメラ座標を取得する
-	DirectX::SimpleMath::Vector3 GetPosition() const override { return m_position; }
-	// ターゲット座標を取得する
-	DirectX::SimpleMath::Vector3 GetTargetPosition() const override { return m_targetPosition; }
-	// 回転角を取得する
-	DirectX::SimpleMath::Quaternion GetRotation() const override { return m_currentRotation; }
-	// ビュー行列を取得する
-	DirectX::SimpleMath::Matrix GetViewMatrinx() const override { return m_view; }
-
+public:
+	// ビュー行列を設定する
+	DirectX::SimpleMath::Matrix CalculateViewMatrix() override;
 public :
 	// コンストラクタ
-	TPSCamera();
+	TPSCamera(IObject* object);
 	// デストラクタ
 	~TPSCamera();
 
@@ -41,11 +29,10 @@ public :
 	void Initialize(
 		const DirectX::SimpleMath::Vector3& position,
 		const DirectX::SimpleMath::Vector3& targetPosition,
-		const DirectX::SimpleMath::Quaternion& rotation);
+		const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager);
 	// 更新処理
-	void Update(const float& deltaTime);
-	// ビュー行列計算処理
-	void CalculateViewMatrix();
+	void Update();
+
 
 private:
 
@@ -54,7 +41,14 @@ private:
 	// インプットマネージャー
 	InputManager* m_inputManager;
 	// 追跡するオブジェクト
-	IComponent* m_targetObject;
+	IObject* m_targetObject;
+
+	std::unique_ptr<Transform> m_transform;
+
+	// カメラマネージャー
+	CameraManager* m_cameraManager;
+	
+
 	// 座標
 	DirectX::SimpleMath::Vector3 m_position;
 	// 初期回転角

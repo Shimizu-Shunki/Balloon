@@ -13,8 +13,6 @@ public:
     void SetLocalRotation(const DirectX::SimpleMath::Quaternion& localRotation) { m_localRotation = localRotation; }
     // ローカルスケールを設定
     void SetLocalScale(const DirectX::SimpleMath::Vector3& localScale) { m_localScale = localScale; }
-	
-
     // 取得
     // ローカル座標を設定
     DirectX::SimpleMath::Vector3 GetLocalPosition() const { return m_localPosition; }
@@ -23,9 +21,10 @@ public:
     // ローカルスケールを設定
     DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_localScale; }
 
-
 	// ワールド行列を取得する
 	DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_worldMatrix; }
+
+
 
     // ワールド座標を取得
     DirectX::SimpleMath::Vector3 GetWorldPosition() const
@@ -73,7 +72,7 @@ public:
     }
 
     // 親を設定
-    void SetParent(Transform* parent) { m_parent = parent; }
+    void SetParent(Transform* parent);
     // 子供を設定
     void SetChild(Transform* child) { m_childs.push_back(child); }
 
@@ -89,6 +88,12 @@ public:
     ~Transform() = default;
 
 public:
+    // 初期化
+    void Initialize(
+        DirectX::SimpleMath::Vector3 position ,
+        DirectX::SimpleMath::Quaternion rotation,
+        DirectX::SimpleMath::Vector3 scale
+        );
     // 更新処理
     void Update();
 
@@ -101,6 +106,13 @@ private:
 	Transform* m_parent;
 	// 子のTransform
 	std::vector<Transform*> m_childs;
+
+    // ワールド座標
+    DirectX::SimpleMath::Vector3 m_position;
+    // ワールド回転角
+    DirectX::SimpleMath::Quaternion m_rotation;
+    // ワールドスケール
+    DirectX::SimpleMath::Vector3 m_scale;
 
 	// ローカル座標
 	DirectX::SimpleMath::Vector3 m_localPosition;

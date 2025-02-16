@@ -9,6 +9,7 @@
 
 StateMachine::StateMachine()
 {
+	// 共有リソースのインスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
 }
 

@@ -60,11 +60,10 @@ void AudioManager::Initialize()
 		(m_audioEngine.get(), L"Resources/Sounds/BGM.xwb");
 
 	// BGMをマップに登録する
-	m_bgms.insert(BgmMap::value_type(XACT_WAVEBANK_SOUNDS_TITLESCENE, m_waveBank->CreateInstance(XACT_WAVEBANK_SOUNDS_TITLESCENE)));
-	m_bgms.insert(BgmMap::value_type(XACT_WAVEBANK_SOUNDS_SELECTSCENE, m_waveBank->CreateInstance(XACT_WAVEBANK_SOUNDS_SELECTSCENE)));
-	m_bgms.insert(BgmMap::value_type(XACT_WAVEBANK_SOUNDS_PLAYSCENE, m_waveBank->CreateInstance(XACT_WAVEBANK_SOUNDS_PLAYSCENE)));
-	m_bgms.insert(BgmMap::value_type(XACT_WAVEBANK_SOUNDS_GAMECLEARSCENE, m_waveBank->CreateInstance(XACT_WAVEBANK_SOUNDS_GAMECLEARSCENE)));
-	m_bgms.insert(BgmMap::value_type(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, m_waveBank->CreateInstance(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE)));
+	for (int i = 0; i < XACT_WAVEBANK_SOUNDS_ENTRY_COUNT; i++)
+	{
+		m_bgms.insert(BgmMap::value_type((XACT_WAVEBANK_SOUNDS)i, m_waveBank->CreateInstance((XACT_WAVEBANK_SOUNDS)i)));
+	}
 
 	// インスタンスの初期化
 	m_currentBGM = nullptr;

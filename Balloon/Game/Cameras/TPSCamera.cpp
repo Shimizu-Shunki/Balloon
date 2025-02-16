@@ -1,11 +1,12 @@
-#include "pch.h"
-#include "Game/Camera/TPSCamera.h"
+#include "Framework/pch.h"
+#include "Game/Cameras/TPSCamera.h"
+#include <Mouse.h>
 
-#include "Framework/Graphics.h"
 #include "Framework/InputManager.h"
 
-TPSCamera::TPSCamera()
+TPSCamera::TPSCamera(IObject* object)
 	:
+	m_targetObject(object),
 	m_position{},
 	m_initialRotation{},
 	m_currentRotation{},
@@ -18,8 +19,7 @@ TPSCamera::TPSCamera()
 	m_pitch{},
 	m_yaw{}
 {
-	// グラフィックスのインスタンスを取得する
-	m_graphics = Graphics::GetInstance();
+	
 	// インプットマネージャーのインスタンスを取得する
 	m_inputManager = InputManager::GetInstance();
 }
@@ -34,7 +34,7 @@ TPSCamera::~TPSCamera()
 void TPSCamera::Initialize(
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Vector3& targetPosition,
-	const DirectX::SimpleMath::Quaternion& rotation)
+	const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager)
 {
 	// ターゲットからの距離
 	m_distance = { 0.0f,5.0f, 7.0f };
@@ -53,11 +53,13 @@ void TPSCamera::Initialize(
 	DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_RELATIVE);
 }
 
-void TPSCamera::Update(const float& deltaTime)
+void TPSCamera::Update()
 {
-	m_targetObjectPosition = m_targetObject->GetPosition();
+	m_targetObjectPosition = m_targetObject->GetTransform()->GetLocalPosition();
 
-	if (m_inputManager->GetMouseState().positionMode == DirectX::Mouse::MODE_RELATIVE)
+	const DirectX::Mouse::State& mouseState = m_inputManager->GetMouse()->GetState();
+
+	if (mouseState.positionMode == DirectX::Mouse::MODE_RELATIVE)
 	{
 		// マウスの横方向の動きに基づいてヨー角を更新
 		m_yaw   -= m_inputManager->GetMouseTracker()->GetLastState().x * m_sensitivity;
@@ -71,16 +73,16 @@ void TPSCamera::Update(const float& deltaTime)
 	}
 
 	// 固定カメラのため初期化の時点のみビュー行列を作成する
-	this->CalculateViewMatrix();
+	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
 
 #ifdef _DEBUG
 	// マウスモードを絶対モード
-	if (m_inputManager->GetKeyboardTracker()->IsKeyPressed(DirectX::Keyboard::X))
+	if (m_inputManager->OnKeyDown(InputManager::Keys::W))
 	{
 		DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_ABSOLUTE);
 	}
 	// マウスモードを総体モード
-	if (m_inputManager->GetKeyboardTracker()->IsKeyPressed(DirectX::Keyboard::Z))
+	if (m_inputManager->OnKeyDown(InputManager::Keys::Z))
 	{
 		DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_RELATIVE);
 	}
@@ -88,7 +90,7 @@ void TPSCamera::Update(const float& deltaTime)
 }
 
 // ビュー行列を計算する
-void TPSCamera::CalculateViewMatrix()
+DirectX::SimpleMath::Matrix  TPSCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得
 	DirectX::SimpleMath::Vector3 position = m_targetObjectPosition;
@@ -108,5 +110,5 @@ void TPSCamera::CalculateViewMatrix()
 	// ビュー行列を作成
 	m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_position, m_targetPosition, m_up);
 	// ビュー行列を設定
-	m_graphics->SetViewMatrix(m_view);
+	return m_view;
 }

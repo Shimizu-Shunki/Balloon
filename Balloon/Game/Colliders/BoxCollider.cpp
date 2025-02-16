@@ -34,20 +34,20 @@ bool BoxCollider::DetectCollision(ICollider* collider)
 		case ICollider::ColliderType::BOX:
 			
 			box1.Center = m_transform->GetWorldPosition();
-			box1.Extents = m_transform->GetLocalScale() / 2.0f;
+			box1.Extents = m_transform->GetWorldScale() / 2.0f;
 
 			box2.Center = collider->GetTransform()->GetWorldPosition();
-			box2.Extents = collider->GetTransform()->GetLocalScale() / 2.0f;
+			box2.Extents = collider->GetTransform()->GetWorldScale() / 2.0f;
 			// ”»’è‚ğs‚¤
 			return box1.Intersects(box2);
 			break;
 		case ICollider::ColliderType::SPHERE:
 
 			box.Center = m_transform->GetWorldPosition();
-			box.Extents = m_transform->GetLocalScale() / 2.0f;
+			box.Extents = m_transform->GetWorldScale() / 2.0f;
 
 			sphere.Center = collider->GetTransform()->GetWorldPosition();
-			sphere.Radius = collider->GetTransform()->GetLocalScale().x;
+			sphere.Radius = collider->GetTransform()->GetWorldScale().x;
 			// ”»’è‚ğs‚¤
 			return box.Intersects(sphere);
 			break;

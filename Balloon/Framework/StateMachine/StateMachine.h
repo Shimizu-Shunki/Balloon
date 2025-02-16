@@ -14,14 +14,18 @@ public:
 	{
 		m_controllers.push_back(std::move(controller));
 	}
+
+public:
+	// コンストラクタ
+	StateMachine();
+	// デストラクタ
+	~StateMachine() = default;
 	
-	// 初期化処理
 	// 更新処理
 	void Update();
-
+	// 初期処理
 	void Start();
 
-	StateMachine();
 
 private:
 	// 共有リソース

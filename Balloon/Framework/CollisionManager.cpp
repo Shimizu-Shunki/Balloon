@@ -2,9 +2,11 @@
 #include "Framework/CommonResources.h"
 #include "Framework/CollisionManager.h"
 // オブジェクト
+#include "Game/PhysicsBody/PhysicsBody.h"
 #include "Interface/IObject.h"
 
 // コライダー
+#include "Framework/Collider/AABB.h"
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
@@ -69,7 +71,7 @@ void CollisionManager::CheckCollision()
 		for (const auto& [object2, colliders2] : m_objects) // キーを取得
 		{
             // 同じオブジェクト同士の判定をスキップ
-            //if (object1 == object2) continue;
+            if (object1 == object2) continue;
 
 			// 円で大まかに判定を行い衝突していない場合はスキップ
 			if (!this->CircleCollisionCheck(object1->GetTransform()->GetWorldPosition(),
@@ -123,14 +125,26 @@ void CollisionManager::DetectCollisions(IObject* object1, IObject* object2,IColl
 		// 衝突していないことを保存
 		m_collisionStates[pair] = false;
 
+		PhysicsBody* body1 = m_physics[object1];
+		PhysicsBody* body2 = m_physics[object2];
+
+		if (body1 != nullptr && !body1->GetIsKinematic())
+			body1->SetUseGravity(true);
+		if(body2 != nullptr && !body2->GetIsKinematic())
+			body2->SetUseGravity(true);
 		return;
 	}
 
 	// お互いがトリガー同士じゃない場合押し戻し処理を行う
 	if (!collider1->GetIsTrigger() == !collider2->GetIsTrigger())
 	{
+		PhysicsBody* body1 = m_physics[object1];
+		PhysicsBody* body2 = m_physics[object2];
+
 		// 押し戻し処理
-		// AABB::PushBack(object1, collider.get(), object2, collider2.get());
+		AABB::PushBack(
+			object1, collider1, body1,
+			object2, collider2, body2);
 	}
 
 
@@ -194,8 +208,8 @@ bool CollisionManager::CircleCollisionCheck(const DirectX::SimpleMath::Vector3& 
 	sphere1.Center = pos1;
 	sphere2.Center = pos2;
 	// 円の大きさを設定
-	sphere1.Radius = 4.0f;
-	sphere2.Radius = 4.0f;
+	sphere1.Radius = 7.0f;
+	sphere2.Radius = 7.0f;
 
 		// デバッグ描画
 #ifdef _DEBUG
@@ -203,7 +217,7 @@ bool CollisionManager::CircleCollisionCheck(const DirectX::SimpleMath::Vector3& 
 	// ビュー行列を設定する
 	m_basicEffect->SetView(m_commonResources->GetCameraManager()->GetViewMatrix());
 	// プロジェクション行列を設定する
-	m_basicEffect->SetProjection(m_commonResources->GetRenderManager()->GetProjectionMatrix());
+	m_basicEffect->SetProjection(m_commonResources->GetCameraManager()->GetProjectionMatrix());
 	// ワールド行列を設定する
 	m_basicEffect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
 	// コンテキストを設定する
@@ -240,18 +254,18 @@ void CollisionManager::Render()
 					if (col1->GetColliderType() == ICollider::ColliderType::BOX)
 					{
 						box.Center = col1->GetTransform()->GetWorldPosition();
-						box.Extents = col1->GetTransform()->GetLocalScale() / 2.0f;
+						box.Extents = col1->GetTransform()->GetWorldScale() / 2.0f;
 					}
 					else
 					{
 						sphere.Center = col1->GetTransform()->GetWorldPosition();
-						sphere.Radius = col1->GetTransform()->GetLocalScale().x;
+						sphere.Radius = col1->GetTransform()->GetWorldScale().x;
 					}
 
 					// ビュー行列を設定する
 					m_basicEffect->SetView(m_commonResources->GetCameraManager()->GetViewMatrix());
 					// プロジェクション行列を設定する
-					m_basicEffect->SetProjection(m_commonResources->GetRenderManager()->GetProjectionMatrix());
+					m_basicEffect->SetProjection(m_commonResources->GetCameraManager()->GetProjectionMatrix());
 					// ワールド行列を設定する
 					m_basicEffect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
 					// コンテキストを設定する

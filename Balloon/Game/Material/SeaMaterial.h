@@ -38,28 +38,24 @@ private:
 
 
 private:
-	//	関数
-	static const std::vector<D3D11_INPUT_ELEMENT_DESC> INPUT_LAYOUT;
 
 	CommonResources* m_commonResources;
 
 	// 頂点シェーダー
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_vertexShader;
+	ID3D11VertexShader* m_vertexShader;
 	// ハルシェーダー
-	Microsoft::WRL::ComPtr<ID3D11HullShader> m_hullShader;
+	ID3D11HullShader* m_hullShader;
 	// ドメインシェーダー
-	Microsoft::WRL::ComPtr<ID3D11DomainShader> m_domainShader;
+	ID3D11DomainShader* m_domainShader;
 	// ピクセルシェーダー
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pixelShader;
+	ID3D11PixelShader* m_pixelShader;
 
 	// 定数バッファ用のバッファオブジェクト
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer;
 
 	// 入力レイアウト
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+	ID3D11InputLayout* m_inputLayout;
 
-	//	プリミティブバッチ
-	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionTexture>> m_batch;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer>	m_CBuffer;
 
@@ -76,7 +72,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rasterizerState;
 
 	// テクスチャ
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
+	ID3D11ShaderResourceView* m_texture;
 
 	float m_time;
 

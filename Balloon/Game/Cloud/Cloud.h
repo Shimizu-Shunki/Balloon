@@ -8,7 +8,7 @@
 
 class CommonResources;
 class ICollider;
-
+class PhysicsBody;
 
 
 class Cloud : public ILeaf
@@ -31,7 +31,7 @@ public:
 public:
 	// コンストラクタ
 	// カメラの情報、親のオブジェクト
-	Cloud(ICamera* camera, IObject* parent);
+	Cloud(IObject* parent);
 	// デストラクタ
 	~Cloud();
 
@@ -75,8 +75,8 @@ private:
 	// 当たり判定
 	std::unique_ptr<ICollider> m_boxCollider;
 
-	// カメラ
-	ICamera* m_camera;
+	// 物理挙動
+	std::unique_ptr<PhysicsBody> m_physicsBody;
 
 	// 3Dモデル
 	DirectX::Model* m_model;

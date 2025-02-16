@@ -16,7 +16,7 @@ private:
 	//	コンストラクタ
 	TweenManager();
 	// デストラクタ
-	~TweenManager();
+	~TweenManager() = default;
 public:
 	TweenManager(const TweenManager&) = delete;             // コピー禁止
 	TweenManager& operator=(const TweenManager&) = delete;  // コピー代入禁止

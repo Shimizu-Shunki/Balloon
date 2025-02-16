@@ -86,7 +86,8 @@ void Game::Initialize(HWND window, int width, int height)
     // Tweenマネージャーのインスタンスを取得する
     m_tweenManager = TweenManager::GetInstance();
     // インプットマネージャーのインスタンスを取得する
-    m_inputManager = InputManager::CrateInstance(window);
+    m_inputManager = InputManager::GetInstance();
+    m_inputManager->GetMouse()->SetWindow(window);
     m_commonResources->SetInputManager(m_inputManager);
     // カメラマネージャーの生成
     m_cameraManager = CameraManager::GetInstance();
@@ -138,8 +139,6 @@ void Game::Initialize(HWND window, int width, int height)
     // 海の作成
     m_seaMaterial = std::make_unique<SeaMaterial>();
     m_seaMaterial->Initialize();
-
-    
 
     // デバッグの時のみ作成
 #ifdef _DEBUG
@@ -206,7 +205,7 @@ void Game::Update(DX::StepTimer const& timer)
     // カメラの更新
     m_cameraManager->Update();
     // シーンの更新処理
-    m_sceneManager->Update(timer);
+    m_sceneManager->Update();
 }
 #pragma endregion
 

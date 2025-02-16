@@ -5,12 +5,13 @@
 // 当たり判定
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
+// 物理挙動
+#include "Game/PhysicsBody/PhysicsBody.h"
 
 
-Cloud::Cloud(ICamera* camera, IObject* parent)
+Cloud::Cloud(IObject* parent)
 	:
 	m_parent(parent),
-	m_camera(camera),
 	m_transform{}
 {
 	// インスタンスを取得する
@@ -36,11 +37,11 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_transform = std::make_unique<Transform>();
 
 	// 位置を初期化
-	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
+	m_transform->SetLocalPosition({ 0.0f,-1.0f,0.0f });
 	// 回転角を初期化
 	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
 	// スケールを初期化
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.1f);
+	m_transform->SetLocalScale({1.0f,0.3f,1.0f});
 
 	// トランスフォームを親に設定
 	m_transform->SetParent(nullptr);
@@ -49,8 +50,8 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_boxCollider = std::make_unique<BoxCollider>(ICollider::ColliderType::BOX);
 	m_boxCollider->SetIsActive(true);
 	m_boxCollider->SetIsTrigger(false);
-	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,1.5f / 2.0f,0.0f });
-	m_boxCollider->GetTransform()->SetLocalScale({ 3.0f,1.5f,3.0f });
+	m_boxCollider->GetTransform()->SetLocalPosition({ 1.5f,1.5f / 2.0f - 1.0f,0.0f });
+	m_boxCollider->GetTransform()->SetLocalScale({ 10.0f,1.5f,10.0f });
 	m_boxCollider->GetTransform()->SetParent(m_transform.get());
 	m_transform->SetChild(m_boxCollider->GetTransform());
 
@@ -58,6 +59,14 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_commonResources->GetRenderManager()->AddModel({ m_transform.get(),m_model });
 	// 当たり判定をマネージャーに渡す
 	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
+
+	// 物理挙動を作成と設定
+	m_physicsBody = std::make_unique<PhysicsBody>(this);
+	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
+	m_physicsBody->SetIsActive(true);
+	m_physicsBody->SetMass(10.0f);
+	m_physicsBody->SetUseGravity(false);
+	m_physicsBody->SetIsKinematic(true);
 }
 
 void Cloud::Update()

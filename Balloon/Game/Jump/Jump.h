@@ -1,9 +1,14 @@
 #pragma once
+#include "Game/UI/JumpMemory.h"
+#include "Game/UI/JumpFrame.h"
+#include "Interface/ISprite.h"
+
 
 class JumpFrame;
 class JumpMemory;
 class CommonResources;
 class IObject;
+class PhysicsBody;
 
 class Jump
 {
@@ -12,7 +17,7 @@ private:
 	const int MAX_JUMPS = 10;
 public:
 	// コンストラクタ
-	Jump(IObject* object);
+	Jump(PhysicsBody* physicBody);
 	// デストラクタ
 	~Jump() = default;
 
@@ -33,6 +38,8 @@ private:
 	// 対象オブジェクト
 	IObject* m_object;
 
+	PhysicsBody* m_physicBody;
+
 	// 現在のジャンプ回数
 	int currentJumps;
 	// クールダウン時間（秒）
@@ -45,7 +52,7 @@ private:
 	bool isCooldown;
 
 	// ジャンプフレーム
-	std::unique_ptr<JumpFrame> m_jumpFrame;
+	std::unique_ptr<ISprite> m_jumpFrame;
 	// ジャンプメモリ
-	std::unique_ptr<JumpMemory> m_jumpMemory;
+	std::unique_ptr<ISprite> m_jumpMemory;
 };

@@ -4,13 +4,15 @@
 
 // 子オブジェクト
 #include "Game/Player/Header/Body.h"
-
+#include "Game/Balloon/Balloon.h"
 // 当たり判定
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
 // 物理挙動
 #include "Game/PhysicsBody/PhysicsBody.h"
+
+#include "Game/Jump/Jump.h"
 
 
 
@@ -45,29 +47,42 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	// 位置を初期化
 	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
 	// 回転角を初期化
-	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
-		DirectX::SimpleMath::Vector3::Up,DirectX::XMConvertToRadians(180.0f)
-	));
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
+	
 	// スケールを初期化
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.1f);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
 
 	// トランスフォームを親に設定
-	m_transform->SetParent(nullptr);
+	/*m_transform->SetParent(nullptr);*/
 	// 親のTransformに自分自身を子供に設定
 	//m_parent->GetTransform()->SetChild(m_transform.get());
+	
 
 	// ボディをアタッチ
 	this->Attach(std::make_unique<Body>(this), ObjectID::PLAYER);
+	
 	// 風船をアタッチ
+	for (int i = 0; i < 3; i++)
+	{
+		std::unique_ptr<IObject> balloon = std::make_unique<Balloon>(this,-20.0f + 20.0f * i);
+		balloon->Initialize(ObjectID::BALLOON , true);
+
+		m_childs.emplace_back(std::move(balloon));
+	}
+
+	
 
 	// 当たり判定を設定
 	m_boxCollider = std::make_unique<BoxCollider>(ICollider::ColliderType::BOX);
 	m_boxCollider->SetIsActive(true);
 	m_boxCollider->SetIsTrigger(false);
-	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,1.5f / 2.0f,0.0f });
-	m_boxCollider->GetTransform()->SetLocalScale({ 1.0f,1.5f,1.0f });
+	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,0.75 * 10.0f,0.0f });
+	m_boxCollider->GetTransform()->SetLocalScale({ 1.0f * 10.0f,1.5f * 10.0f ,1.0f * 10.0f });
 	m_boxCollider->GetTransform()->SetParent(m_transform.get());
 	m_transform->SetChild(m_boxCollider->GetTransform());
+
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.1f);
+	
 
 	// 当たり判定をマネージャーに渡す
 	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
@@ -76,9 +91,19 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	m_physicsBody = std::make_unique<PhysicsBody>(this);
 	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
 	m_physicsBody->SetIsActive(true);
-	m_physicsBody->SetMass(30.0f);
-	m_physicsBody->SetUseGravity(false);
+	m_physicsBody->SetMass(5.0f);
+	m_physicsBody->SetUseGravity(true);
+	m_physicsBody->SetIsKinematic(false);
+
+	// ジャンプ処理
+	m_jump = std::make_unique<Jump>(m_physicsBody.get());
+	m_jump->Initialize();
+
 	
+	
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
+		DirectX::SimpleMath::Vector3::Up, DirectX::XMConvertToRadians(180.0f)
+	));
 }
 
 void Player::Update()
@@ -86,8 +111,11 @@ void Player::Update()
 	// 入力に基づく方向ベクトルを取得
 	DirectX::SimpleMath::Vector3 movementDirection = this->GetMovementDirection(DirectX::SimpleMath::Quaternion::Identity);
 
-	m_physicsBody->SetFoce(movementDirection * 500.0f);
-
+	m_physicsBody->SetFoce(m_physicsBody->GetFoce() + movementDirection * 100.0f);
+	
+	
+	
+	m_jump->Update();
 	m_physicsBody->Update();
 
 	// 子供を更新する
@@ -126,28 +154,28 @@ void Player::OnTriggerExit(IObject* object)    { (void)object; }
 DirectX::SimpleMath::Vector3 Player::GetMovementDirection(const DirectX::SimpleMath::Quaternion& angle)
 {
 	// キーボードステート
-	DirectX::Keyboard::State key = m_commonResources->GetInputManager()->GetKeyboardState();
+	InputManager* input = m_commonResources->GetInputManager();
 
 	// 方向
 	DirectX::SimpleMath::Vector3 direction = DirectX::SimpleMath::Vector3::Zero;
 
 	// 上キー
-	if (key.W)
+	if (input->OnKey(InputManager::Keys::W))
 	{
 		direction += DirectX::SimpleMath::Vector3::Forward;
 	}
 	// 下キー
-	if (key.S)
+	if (input->OnKey(InputManager::Keys::S))
 	{
 		direction += DirectX::SimpleMath::Vector3::Backward;
 	}
 	// 右キー
-	if (key.D)
+	if (input->OnKey(InputManager::Keys::D))
 	{
 		direction += DirectX::SimpleMath::Vector3::Right;
 	}
 	// 左キー
-	if (key.A)
+	if (input->OnKey(InputManager::Keys::A))
 	{
 		direction += DirectX::SimpleMath::Vector3::Left;
 	}

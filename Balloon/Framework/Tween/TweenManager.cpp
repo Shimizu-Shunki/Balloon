@@ -2,7 +2,9 @@
 #include "Framework/Tween/TweenManager.h"
 #include "Framework/CommonResources.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 TweenManager::TweenManager()
 {
     // 共有リソースを取得する
@@ -15,11 +17,6 @@ TweenManager::TweenManager()
     }
 }
 
-// デストラクタ
-TweenManager::~TweenManager()
-{
-
-}
 
 /// <summary>
 /// Tweenを取得する

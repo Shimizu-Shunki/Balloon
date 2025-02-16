@@ -34,15 +34,18 @@ void Balloon::Initialize(ObjectID objectID, const bool& active)
 	m_transform = std::make_unique<Transform>();
 
 	// 位置を初期化
-	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
+	m_transform->SetLocalPosition({ 0.0f,0.5f,-0.2f });
 	// 回転角を初期化
 	m_transform->SetLocalRotation(
 		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
 			DirectX::SimpleMath::Vector3::Forward,DirectX::XMConvertToRadians(m_angle)
+		) * 
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
+			DirectX::SimpleMath::Vector3::UnitX, DirectX::XMConvertToRadians(-20.0f)
 		)
 	);
 	// スケールを初期化
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.03f);
 
 	// トランスフォームを親に設定
 	m_transform->SetParent(m_parent->GetTransform());
@@ -59,7 +62,7 @@ void Balloon::Initialize(ObjectID objectID, const bool& active)
 void Balloon::Update()
 {
 
-
+	m_transform->SetLocalPosition({ 0.0f,0.5f,0.2f });
 }
 
 void Balloon::Finalize() {}

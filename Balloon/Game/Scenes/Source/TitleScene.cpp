@@ -43,8 +43,6 @@ void TitleScene::Initialize()
 	// カメラの作成
 	this->CreateCamera();
 
-	
-
 	// オブジェクト
 	m_player = std::make_unique<Player>(nullptr, nullptr);
 	m_player->Initialize(IObject::ObjectID::PLAYER,true);
@@ -80,9 +78,9 @@ void TitleScene::Start()
 	// ステートマシンスタート処理
 	m_stateMachine->Start();
 	// BGMを再生
-	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
+	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
 	// カメラを切り替える
-	m_commonResources->GetCameraManager()->ChageCamera(1);
+	m_commonResources->GetCameraManager()->SwitchActiveCamera(1);
 
 	m_commonResources->GetCollisionManager()->Start();
 }
@@ -122,7 +120,7 @@ void TitleScene::CreateStateStateController()
 	m_stateMachine = std::make_unique<StateMachine>();
 
 	// ステートコントローラーの作成
-	auto stateController = std::make_unique<StateController>(true);
+	auto stateController = std::make_unique<StateController>();
 
 	// パラメーターの追加
 	stateController->AddParameters("FadeIN", false);

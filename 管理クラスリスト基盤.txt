@@ -1,0 +1,36 @@
+// シーンを管理するクラス
+SceneManager
+
+// オーディオを管理するクラス
+AudioManager
+
+// カメラを管理するクラス
+CameraManager
+
+// 描画を管理するクラス
+RenderManager
+
+// 当たり判定を管理するクラス
+CollisionManager
+
+// ステートマシン
+StateMachine
+StateController
+Transition
+
+// 便利ツール
+TweenManager
+Tween
+
+// ヘルパークラス
+Easing.h
+Sounds.h
+
+
+// ゲームの元となる基盤
+
+ボイド
+敵AI
+投げれるオブジェクト
+キャラクターアニメーション
+

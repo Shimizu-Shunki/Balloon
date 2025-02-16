@@ -22,27 +22,10 @@ RenderManager::RenderManager()
 	m_commonStates = commonResources->GetCommonStates();
 	// カメラ管理クラス
 	m_cameraManager = commonResources->GetCameraManager();
-
-	int width, height;
-	commonResources->GetScreenSize(width, height);
-
-	// プロジェクション行列作成
-	m_projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(
-		DirectX::XMConvertToRadians(45.0f),
-		(float)width / (float)height,
-		0.1f,
-		1000.0f
-	);
 }
 
 
-void RenderManager::RegisterPendingDrawables()
-{
-
-}
-
-
-void RenderManager::CommitPendingDrawables()
+void RenderManager::SwitchRenderbleObjects()
 {
 	// 現在のオブジェクトを削除する
 	m_renderableObjects.clear();
@@ -65,6 +48,11 @@ void RenderManager::Render()
 		throw std::runtime_error("m_skySphere.model is nullptr!");
 	}
 
+	// プロジェクション行列を取得する
+	const DirectX::SimpleMath::Matrix& projectionMatrix = m_cameraManager->GetProjectionMatrix();
+	// ビュー行列を取得する
+	const DirectX::SimpleMath::Matrix& viewMatrix       = m_cameraManager->GetViewMatrix();
+
 
 	// モデルのエフェクト情報を更新する
 	m_skySphere.model->UpdateEffects([](DirectX::IEffect* effect)
@@ -84,7 +72,7 @@ void RenderManager::Render()
 	});
 	// スカイスフィアを描画する
 	m_skySphere.model->Draw(m_context, *m_commonStates, m_skySphere.transform->GetWorldMatrix(),
-		m_cameraManager->GetViewMatrix(), m_projectionMatrix);
+		viewMatrix, projectionMatrix);
 
 
 	// モデルの描画
@@ -92,7 +80,7 @@ void RenderManager::Render()
 	{
 		if(model.model != nullptr)
 		model.model->Draw(m_context, *m_commonStates, model.transform->GetWorldMatrix(),
-			m_cameraManager->GetViewMatrix(), m_projectionMatrix
+			viewMatrix, projectionMatrix
 		);
 	}
 

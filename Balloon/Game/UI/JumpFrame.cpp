@@ -51,7 +51,7 @@ void JumpFrame::Initialize()
 		m_transform->GetLocalPosition().z,
 		1.0f
 	);
-	m_vertexBuffer.scale = DirectX::SimpleMath::Vector3::Zero;
+	m_vertexBuffer.scale = DirectX::SimpleMath::Vector3::One;
 
 	m_vertexBuffer.color = DirectX::SimpleMath::Vector4::One;
 
@@ -62,13 +62,13 @@ void JumpFrame::Initialize()
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
 }
 
 
 void JumpFrame::Update()
 {
-	m_vertexBuffer.scale = m_transform->GetLocalScale();
+	m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
 
 	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
 }

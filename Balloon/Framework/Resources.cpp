@@ -1,8 +1,24 @@
 #include "Framework/pch.h"
 #include "Framework/Resources.h"
 #include "Framework/CommonResources.h"
+#include "Microsoft/ReadData.h"
 
 std::unique_ptr<Resources> Resources::m_resources = nullptr;
+
+const std::vector<D3D11_INPUT_ELEMENT_DESC> Resources::UI_INPUT_LAYOUT =
+{ 
+   // セマンティック名 インデックス フォーマット         入力スロット    オフセット                                                                                                                                         データ種別        インスタンスステップ率
+		{ "SV_Position",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  0,                                                                                                                                                         D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 position
+		{ "NORMAL",     0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4),                                                                                                                      D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 rotate
+		{ "TEXCOORD" ,  0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3),                                                                               D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 scale
+		{ "TEXCOORD" ,  1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3),                                        D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 rect
+		{ "COLOR",      0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector4), D3D11_INPUT_PER_VERTEX_DATA, 0 }  // float4 color
+};
+const std::vector<D3D11_INPUT_ELEMENT_DESC> Resources::SEA_INPUT_LAYOUT =
+{
+	{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                                    D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT,    0, sizeof(DirectX::SimpleMath::Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
 
 // Resourcesクラスのインスタンスを取得する
 Resources* const Resources::GetInstance()
@@ -79,4 +95,62 @@ void Resources::LoadResource()
 	// ルール画像
 	DirectX::CreateWICTextureFromFile(
 		m_device, L"Resources\\Textures\\200.png", nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
+
+	// 海画像
+	DirectX::CreateWICTextureFromFile(
+		m_device, L"Resources\\Textures\\water5.png", nullptr, m_SeaTexture.ReleaseAndGetAddressOf());
+
+	// シェーダー
+	std::vector<uint8_t> blob;
+	// 頂点シェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\UI_VS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_UI_VS.ReleaseAndGetAddressOf())
+	);
+	//	インプットレイアウトの作成
+	m_device->CreateInputLayout(&UI_INPUT_LAYOUT[0],
+		static_cast<UINT>(UI_INPUT_LAYOUT.size()),
+		blob.data(), blob.size(),
+		m_UIinputLayout.GetAddressOf());
+
+	// ジオメトリシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\UI_GS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateGeometryShader(blob.data(), blob.size(), nullptr, m_UI_GS.ReleaseAndGetAddressOf())
+	);
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\UI_PS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_UI_PS.ReleaseAndGetAddressOf())
+	);
+
+	// 頂点シェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\Sea_VS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_SeaVS.ReleaseAndGetAddressOf())
+	);
+
+	//	インプットレイアウトの作成
+	m_device->CreateInputLayout(&SEA_INPUT_LAYOUT[0],
+		static_cast<UINT>(SEA_INPUT_LAYOUT.size()),
+		blob.data(), blob.size(),
+		m_SeaInputLayout.GetAddressOf());
+
+	// ハルシェーダーをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\Sea_HS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateHullShader(blob.data(), blob.size(), nullptr, m_SeaHS.ReleaseAndGetAddressOf())
+	);
+
+	// ドメインシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\Sea_DS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateDomainShader(blob.data(), blob.size(), nullptr, m_SeaDS.ReleaseAndGetAddressOf())
+	);
+
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\Sea_PS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_SeaPS.ReleaseAndGetAddressOf())
+	);
 }

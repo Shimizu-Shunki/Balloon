@@ -107,6 +107,9 @@
     <Filter Include="Game\Jump">
       <UniqueIdentifier>{89d20c1f-075f-4d41-abe4-26ad4b96f5de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Collider">
+      <UniqueIdentifier>{2907ef1c-616d-4153-b791-cc4632831464}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -329,6 +332,12 @@
     <ClInclude Include="Game\PhysicsBody\PhysicsBody.h">
       <Filter>Game\PhysicsBody</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Collider\AABB.h">
+      <Filter>Framework\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\TPSCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -503,6 +512,12 @@
     </ClCompile>
     <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp">
       <Filter>Game\PhysicsBody</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Collider\AABB.cpp">
+      <Filter>Framework\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\TPSCamera.cpp">
+      <Filter>Game\Cameras</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

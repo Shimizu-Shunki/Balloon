@@ -5,25 +5,51 @@
 #include "Game/Transform/Transform.h"
 #include "Framework/Tween/Tween.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 CameraManager::CameraManager()
+	:
+	m_cameraIndex{},
+	m_cameras{},
+	m_pendingCameras{},
+	m_viewMatrix{},
+	m_projectionMatrix{},
+	m_isFadeActive{},
+	m_transform{}
 {
-	m_commonResources = CommonResources::GetInstance();
-	m_cameraIndex = 0;
+	// 初期化
+	m_cameraIndex  = 0;
 	m_isFadeActive = false;
-	m_fadeTime = 0.0f;
-
+	// Transformの作成
 	m_transform = std::make_unique<Transform>();
 
+	// プロジェクション行列作成
+	m_projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(
+		DirectX::XMConvertToRadians(45.0f),
+		SCREEN_W / SCREEN_H,
+		0.1f,
+		1000.0f
+	);
 }
 
 
-
-void CameraManager::Attach(std::unique_ptr<ICamera> camera)
+/// <summary>
+/// カメラを追加する
+/// </summary>
+/// <param name="camera">追加するカメラ</param>
+ICamera* CameraManager::Attach(std::unique_ptr<ICamera> camera)
 {
 	// カメラを追加する
-	m_cameras.push_back(std::move(camera));
-}
+	m_pendingCameras.push_back(std::move(camera));
 
+	// 現在のカメラを設定を行うため返す
+	return camera.get();
+
+}
+/// <summary>
+/// 更新処理
+/// </summary>
 void CameraManager::Update()
 {
 	// カメラを切り替える処理
@@ -33,12 +59,12 @@ void CameraManager::Update()
 	if (m_isFadeActive) return;
 
 	// カメラの更新処理
-	//if (m_cameras[m_cameraIndex] != nullptr)
-	//{
-	//	m_cameras[m_cameraIndex]->Update();
-	//	// ビュー行列を作成
-	//	m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
-	//}
+	if (m_cameras[m_cameraIndex] != nullptr)
+	{
+		m_cameras[m_cameraIndex]->Update();
+		// ビュー行列を作成
+		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+	}
 }
 
 void CameraManager::Detach()
@@ -46,7 +72,26 @@ void CameraManager::Detach()
 
 }
 
-void CameraManager::ChageCamera(int index)
+/// <summary>
+/// 全てのカメラを準備段階のものに切り替える
+/// </summary>
+void CameraManager::SwitchCameras()
+{
+	// 現在のカメラを削除
+	m_cameras.clear();
+	// カメラを更新
+	m_cameras = std::move(m_pendingCameras);
+	// 準備段階の配列をクリアする
+	m_pendingCameras.clear();
+	// 値を初期化
+	m_cameraIndex = 0;
+}
+
+/// <summary>
+/// 指定されたインデックスのカメラに切り替える
+/// </summary>
+/// <param name="index">切り替え先のカメラのインデックス</param>
+void CameraManager::SwitchActiveCamera(int index)
 {
 	// カメラを切り替え中にする
 	m_isFadeActive = true;
@@ -57,18 +102,46 @@ void CameraManager::ChageCamera(int index)
 	m_transform->SetLocalScale(m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale());
 
 	// Tweenを起動
-	m_transform->GetTween()->DOMove(m_cameras[index]->GetTransform()->GetLocalPosition(), 2.0f);
-	m_transform->GetTween()->DOScale(m_cameras[index]->GetTransform()->GetLocalScale(), 2.0f).OnComplete([this] {
+	m_transform->GetTween()->DOMove(m_cameras[index]->GetTransform()->GetLocalPosition(),0.0f);
+	m_transform->GetTween()->DOScale(m_cameras[index]->GetTransform()->GetLocalScale(), 0.0f).OnComplete([this] {
 		// フェードが終わったらカメラのビュー行列を作成する
 		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
 	});
 
 	// 次のカメラの番号を設定
 	m_cameraIndex = index;
-	// フェードタイムをリセット
-	m_fadeTime = 0.0f;
+}
+/// <summary>
+/// 指定されたインデックスのカメラにフェード付きで切り替える
+/// </summary>
+/// <param name="index">切り替え先のカメラのインデックス</param>
+/// <param name="fadeTime">カメラ切り替えのフェード時間（秒）</param>
+/// <param name="easingType">フェードアニメーションのイージングタイプ</param>
+void CameraManager::SwitchActiveCamera(int index, float fadeTime, Tween::EasingType easingType)
+{
+	// カメラを切り替え中にする
+	m_isFadeActive = true;
+
+	// 現在のカメラの座標情報を保存
+	m_transform->SetLocalPosition(m_cameras[m_cameraIndex]->GetTransform()->GetLocalPosition());
+	// 現在のカメラのターゲットを保存
+	m_transform->SetLocalScale(m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale());
+
+	// Tweenを起動
+	m_transform->GetTween()->DOMove(m_cameras[index]->GetTransform()->GetLocalPosition(), fadeTime).SetEase(easingType);
+	m_transform->GetTween()->DOScale(m_cameras[index]->GetTransform()->GetLocalScale(), fadeTime).SetEase(easingType)
+		.OnComplete([this] {
+		// フェードが終わったらカメラのビュー行列を作成する
+		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+		});
+
+	// 次のカメラの番号を設定
+	m_cameraIndex = index;
 }
 
+/// <summary>
+/// フェード中のビュー行列を作成
+/// </summary>
 void CameraManager::Fade()
 {
 	// カメラ切り替え中出なければ更新しない
@@ -79,6 +152,4 @@ void CameraManager::Fade()
 		DirectX::SimpleMath::Matrix::CreateLookAt(
 			m_transform->GetLocalPosition(), m_transform->GetLocalScale(), DirectX::SimpleMath::Vector3::Up
 	);	
-
-	m_commonResources->GetCameraManager()->SetViewMatrix(m_viewMatrix);
 }

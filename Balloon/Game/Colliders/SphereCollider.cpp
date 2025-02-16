@@ -35,13 +35,13 @@ bool SphereCollider::DetectCollision(ICollider* collider)
 			// ワールド座標をセンターとする
 			sphere.Center = m_transform->GetWorldPosition();
 			// 半径をTransformのX成分に設定
-			sphere.Radius = m_transform->GetLocalScale().x;
+			sphere.Radius = m_transform->GetWorldScale().x;
 
 			
 			// ワールド行列をセンターとする
 			box.Center = collider->GetTransform()->GetWorldPosition();
 			// 大きさをTransformのX成分とする
-			box.Extents = collider->GetTransform()->GetLocalScale() / 2.0f;
+			box.Extents = collider->GetTransform()->GetWorldScale() / 2.0f;
 
 			// 判定を行う
 			return sphere.Intersects(box);
@@ -52,12 +52,12 @@ bool SphereCollider::DetectCollision(ICollider* collider)
 			// ワールド座標をセンターとする
 			sphere.Center = m_transform->GetWorldPosition();
 			// 半径をTransformのX成分に設定
-			sphere.Radius = m_transform->GetLocalScale().x;
+			sphere.Radius = m_transform->GetWorldScale().x;
 
 			// ワールド座標をセンターとする
 			sphere2.Center = collider->GetTransform()->GetWorldPosition();
 			// 半径をTransformのX成分に設定
-			sphere2.Radius = collider->GetTransform()->GetLocalScale().x;
+			sphere2.Radius = collider->GetTransform()->GetWorldScale().x;
 
 			// 判定を行う
 			return sphere.Intersects(sphere2);

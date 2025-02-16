@@ -26,8 +26,6 @@ public:
 
 
 public:
-	// プロジェクション行列を取得する
-	DirectX::SimpleMath::Matrix GetProjectionMatrix() const { return m_projectionMatrix; }
 	// 描画用モデルを設定
 	void AddModel(RenderManager::RenderableObject model) { m_pendingRenderableObjects.push_back(model); }
 	// スプライトを追加
@@ -37,10 +35,8 @@ public:
 	void SetSkySphereObject(RenderManager::RenderableObject object) { m_skySphere = object; }
 
 public:
-	// 描画準備登録
-	void RegisterPendingDrawables();
 	// 描画用格納庫に移動する
-	void CommitPendingDrawables();
+	void SwitchRenderbleObjects();
 
 private:
 	//	コンストラクタ
@@ -85,9 +81,6 @@ private:
 	std::vector<RenderableObject> m_renderableObjects;
 	// 3D モデルの準備段階データ
 	std::vector<RenderableObject> m_pendingRenderableObjects;
-
-	// プロジェクション行列
-	DirectX::SimpleMath::Matrix m_projectionMatrix;
 
 	std::shared_mutex m_mutex;  // 読み書きロック
 };

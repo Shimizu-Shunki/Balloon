@@ -10,6 +10,7 @@ class CommonResources;
 class PhysicsBody;
 class IComposite;
 class ICollider;
+class Jump;
 
 
 class Player : public IComposite
@@ -106,4 +107,6 @@ private:
 	DirectX::Model* m_model;
 	// •—‘D‚Ì”
 	int m_balloonIndex;
+
+	std::unique_ptr<Jump> m_jump;
 };

@@ -6,6 +6,9 @@
 #include <iostream>
 #include <thread>
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Tween::Tween()
     :
     m_transform(nullptr),
@@ -30,6 +33,11 @@ Tween::Tween()
 
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
+/// <param name="deltaTime"></param>
+/// <returns></returns>
 bool Tween::Update(float deltaTime)
 {
     // 進行中ではないときはスキップ
@@ -137,7 +145,12 @@ bool Tween::Update(float deltaTime)
     return m_isActive;
 }
 
-
+/// <summary>
+/// イージンの適応
+/// </summary>
+/// <param name="type"></param>
+/// <param name="t"></param>
+/// <returns></returns>
 float Tween::EasingFunction(EasingType type, float t)
 {
     using namespace easing;

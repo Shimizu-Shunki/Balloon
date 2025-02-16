@@ -10,7 +10,8 @@ PhysicsBody::PhysicsBody(IObject* object)
     m_acceleration(DirectX::SimpleMath::Vector3::Zero),
     m_force(DirectX::SimpleMath::Vector3::Zero),
     m_gravity(-9.8f),
-    m_useGravity(true)
+    m_useGravity(true),
+    m_isKinematic(false)
 {
     m_commonResources = CommonResources::GetInstance();
 }
@@ -35,19 +36,16 @@ void PhysicsBody::Update()
     // 速度を更新
     m_velocity += m_acceleration * elapsedTime;
 
-    // 仮の新しい位置
-    DirectX::SimpleMath::Vector3 newPosition = m_object->GetTransform()->GetLocalPosition() + m_velocity * elapsedTime;
+   
 
     // **地面との衝突処理**
-    if (m_isColliding)
+    if (!m_useGravity)
     {
-        newPosition.y = 0.0f;  // 地面より下に行かない
-
         // **垂直方向の速度を0にする（反発なし）**
-        m_velocity.y = 0.0f;
+        //m_velocity.y = 0.0f;
 
         // **動摩擦を適用（X・Z 方向の速度を減衰）**
-        float frictionCoefficient = 0.8f; // 摩擦係数（0～1、小さいほど滑る）
+        float frictionCoefficient = 0.9f; // 摩擦係数（0～1、小さいほど滑る）
         m_velocity.x *= frictionCoefficient;
         m_velocity.z *= frictionCoefficient;
 
@@ -55,6 +53,20 @@ void PhysicsBody::Update()
         if (std::abs(m_velocity.x) < 0.01f) m_velocity.x = 0.0f;
         if (std::abs(m_velocity.z) < 0.01f) m_velocity.z = 0.0f;
     }
+    else
+    {
+        // **動摩擦を適用（X・Z 方向の速度を減衰）**
+        float frictionCoefficient = 0.95f; // 摩擦係数（0～1、小さいほど滑る）
+        m_velocity.x *= frictionCoefficient;
+        m_velocity.z *= frictionCoefficient;
+
+        // **静止摩擦を適用（十分遅いなら停止）**
+        if (std::abs(m_velocity.x) < 0.01f) m_velocity.x = 0.0f;
+        if (std::abs(m_velocity.z) < 0.01f) m_velocity.z = 0.0f;
+    }
+
+    // 仮の新しい位置
+    DirectX::SimpleMath::Vector3 newPosition = m_object->GetTransform()->GetLocalPosition() + m_velocity * elapsedTime;
 
     // 位置を更新
     m_object->GetTransform()->SetLocalPosition(newPosition);

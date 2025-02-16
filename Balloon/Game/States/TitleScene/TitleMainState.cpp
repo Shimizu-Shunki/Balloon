@@ -26,7 +26,7 @@ void TitleMainState::OnStateEnter(StateController* stateController)
 void TitleMainState::OnStateUpdate(StateController* stateController, const float& deltaTime)
 {
 	// スペースを入力したらプレイシーンへ以降
-	if (m_inputManager->GetKeyboardTracker()->IsKeyPressed(DirectX::Keyboard::Space))
+	if (m_inputManager->OnKeyDown(InputManager::Keys::Space))
 	{
 		// パラメーターの変更
 		stateController->SetParameter("FadeOUT", true);

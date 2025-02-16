@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface/IScene.h"
+#include "Interface/ICamera.h"
 
 
 class CommonResources;
@@ -8,6 +9,7 @@ class Transform;
 class DebugCamera;
 class StateMachine;
 class Fade;
+class Jump;
 
 
 
@@ -52,4 +54,6 @@ private:
 	std::unique_ptr<Transform> m_rootTransform;
 	// デバッグカメラで実装
 	std::unique_ptr<DebugCamera> m_debugCamera;
+
+	std::unique_ptr<ICamera>  m_camera;
 };

@@ -32,25 +32,10 @@ public:
 		m_future = std::async(std::launch::async, [this]() {
 
 			// シーンの作成と初期化
-			auto newScene = std::make_unique<T>();
-			newScene->Initialize(); 
-			// 次のシーンを以降
-			m_nextScene = std::move(newScene);
+			m_nextScene = std::make_unique<T>();
+			m_nextScene->Initialize();
 		});
 	}
-
-
-	template <typename T>
-	void NextSceneLoade()
-	{
-		// 次のシーンを作成
-		std::unique_ptr<IScene> newScene = std::make_unique<PlayScene>();
-		newScene->Initialize();
-		// 次のシーンを初期化する
-		m_nextScene = std::move(newScene);
-		
-	}
-
 private:
 	//	コンストラクタ
 	SceneManager();
@@ -70,11 +55,10 @@ public:
 	}
 
 public:
-
 	// 初期化処理
 	void Initialize();
 	// 更新処理
-	void Update(DX::StepTimer const& timer);
+	void Update();
 	// 描画処理
 	void Render();
 	// 終了処理
@@ -83,7 +67,6 @@ private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
-
 	// シーン
 	std::unique_ptr<IScene> m_currentScene;
 	// 次のシーン
