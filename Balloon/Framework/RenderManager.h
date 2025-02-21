@@ -61,6 +61,17 @@ public:
 	// 描画処理
 	void Render();
 
+	// 2D描画
+	void SpriteRender();
+
+private:
+	// ブレンドステートの作成
+	void CreateSpriteBlendState();
+	// 深度ステンシルステートの作成
+	void CreateSpriteDepthStencilState();
+	// ラスタライザーステートの作成
+	void CreateSpriteRasterizerState();
+
 
 private:
 	ID3D11Device* m_device;
@@ -69,10 +80,24 @@ private:
 
 	CameraManager* m_cameraManager;
 
+	// ブレンドステート
+	Microsoft::WRL::ComPtr<ID3D11BlendState> m_spriteBlendState;
+	// 深度ステンシルステート
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_spriteDepthStencilState;
+	// ラスタライザーステート
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_spriteRasterizerState;
+	//	コモンステート
+	std::unique_ptr<DirectX::CommonStates> m_states;
+	// 入力レイアウト
+	ID3D11InputLayout* m_spriteInputLayout;
+
 	// 2Dのマテリアルを格納
 	std::vector<ISprite*> m_sprite;
 	// 2D マテリアルの準備段階データ
 	std::vector<ISprite*> m_pendingSprite;
+
+
+
 
 
 	// スカイスフィア

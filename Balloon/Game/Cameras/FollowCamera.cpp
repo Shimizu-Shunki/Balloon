@@ -1,6 +1,11 @@
 #include "Framework/pch.h"
 #include "Game/Cameras/FollowCamera.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="target">追従対象となるオブジェクトの Transform ポインタ</param>
+/// <param name="distance">ターゲットとの相対的な位置（オフセット距離）</param>
 FollowCamera::FollowCamera(Transform* target, DirectX::SimpleMath::Vector3 distance)
 	:
 	m_targetTransform(target),
@@ -11,19 +16,11 @@ FollowCamera::FollowCamera(Transform* target, DirectX::SimpleMath::Vector3 dista
 {
 }
 
-FollowCamera::~FollowCamera()
+/// <summary>
+/// 初期化処理
+/// </summary>
+void FollowCamera::Initialize()
 {
-
-}
-
-void FollowCamera::Initialize(
-	const DirectX::SimpleMath::Vector3& position,
-	const DirectX::SimpleMath::Vector3& targetPosition,
-	const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager)
-{
-	// カメラマネージャーのインスタンスを取得する
-	m_cameraManager = cameraManager;
-
 	// Transformを作成
 	m_transform = std::make_unique<Transform>();
 
@@ -35,16 +32,23 @@ void FollowCamera::Initialize(
 	// 頭の向きを設定する
 	m_up = DirectX::SimpleMath::Vector3::Up;
 
-	// 固定カメラのため初期化の時点のみビュー行列を作成する
-	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
+	// ビュー行列を作成
+	this->CalculateViewMatrix();
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void FollowCamera::Update()
 {
 	// ビュー行列を更新
-	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
+	this->CalculateViewMatrix();
 }
 
+/// <summary>
+/// ビュー行列を作成
+/// </summary>
+/// <returns>ビュー行列</returns>
 DirectX::SimpleMath::Matrix FollowCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得

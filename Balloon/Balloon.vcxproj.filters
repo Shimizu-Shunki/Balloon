@@ -110,6 +110,9 @@
     <Filter Include="Framework\Collider">
       <UniqueIdentifier>{2907ef1c-616d-4153-b791-cc4632831464}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{76723879-8aec-4e32-a297-006ecd3e0a48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -338,6 +341,18 @@
     <ClInclude Include="Game\Cameras\TPSCamera.h">
       <Filter>Game\Cameras</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Enemy\Enemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\TPSKeyCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\GameClearScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\GameOverScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -518,6 +533,18 @@
     </ClCompile>
     <ClCompile Include="Game\Cameras\TPSCamera.cpp">
       <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Enemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\TPSKeyCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\GameClearScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\GameOverScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

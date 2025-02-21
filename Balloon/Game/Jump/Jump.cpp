@@ -39,6 +39,9 @@ void Jump::Update()
         this->TryJump();
     }
 
+    m_jumpFrame->Update();
+    m_jumpMemory->Update();
+
     // クールタイム処理中
     if (isCooldown) {
         elapsedTimeSinceLastJump += elapsedTime;
@@ -63,6 +66,7 @@ void Jump::Update()
             elapsedTimeSinceLastJump = 0.0f;
         }
     }
+
 }
 
 float Jump::TryJump()

@@ -55,6 +55,11 @@ void Resources::LoadResource()
 	// プレイヤー　左足モデルをロードする
 	m_playerLeftFootModel = DirectX::Model::CreateFromCMO(m_device, L"Resources\\Models\\PlayerModels\\LeftFoot.cmo", *m_effectFactory);
 
+	// リソースディレクトリを設定
+	m_effectFactory->SetDirectory(L"Resources\\Models\\EnemyModel");
+	// 敵　頭モデルをロードする
+	m_enemyHeadModel = DirectX::Model::CreateFromCMO(m_device, L"Resources\\Models\\EnemyModel\\EnemyFace.cmo", *m_effectFactory);
+
 	// リソースディレクトリを設定する
 	m_effectFactory->SetDirectory(L"Resources\\Models");
 	// プレイヤー　風船モデルをロードする

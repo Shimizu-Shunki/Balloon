@@ -3,9 +3,18 @@
 
 class InputManager;
 class Transform;
+class PhysicsBody;
 
-class TPSCamera : public ICamera
+class TPSKeyCamera : public ICamera
 {
+private:
+	// 基本のピッチ角 (45度)
+	const float BASE_PITCH =  -DirectX::XM_PIDIV4; //  -45度
+	const float MIN_PITCH  = -DirectX::XM_PIDIV4; // -45度
+	const float MAX_PITCH  =  DirectX::XM_PIDIV4; //  45度
+
+	// プレイヤーの速度Yを考慮したピッチ計算
+	const float PITCH_OFFSET_FACTOR = 0.5f; // 速度の影響度 (調整可能)
 
 public :
 	// Transformを取得する
@@ -19,9 +28,9 @@ public:
 	DirectX::SimpleMath::Matrix CalculateViewMatrix() override;
 public :
 	// コンストラクタ
-	TPSCamera(Transform* targetTransform , DirectX::SimpleMath::Vector3 distance);
+	TPSKeyCamera(Transform* targetTransform ,PhysicsBody* targetPhysicsBody, DirectX::SimpleMath::Vector3 distance);
 	// デストラクタ
-	~TPSCamera() override = default;
+	~TPSKeyCamera() override = default;
 
 	
 	// 初期化処理
@@ -30,9 +39,6 @@ public :
 	void Update() override;
 
 private:
-	// インプットマネージャー
-	InputManager* m_inputManager;
-
 	// Trasform
 	std::unique_ptr<Transform> m_transform;
 	// 頭の向き
@@ -42,6 +48,9 @@ private:
 
 	// 追跡するTransform
 	Transform* m_targetTransform;
+	// 追跡する物理挙動
+	PhysicsBody* m_targetPhysicsBody;
+
 	// 初期回転角
 	DirectX::SimpleMath::Quaternion m_initialRotation;
 

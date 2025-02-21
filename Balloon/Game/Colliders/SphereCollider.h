@@ -28,7 +28,7 @@ public:
 
 public:
 	// コンストラクタ
-	SphereCollider(ICollider::ColliderType type);
+	SphereCollider();
 	// デストラクタ
 	~SphereCollider() override = default;
 

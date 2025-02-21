@@ -74,6 +74,8 @@ void Game::Initialize(HWND window, int width, int height)
     // スクリーンサイズを設定
     m_commonResources->SetScreenSize(width, height);
 
+    
+
 
 // 管理者達の生成========================================================
 
@@ -107,6 +109,15 @@ void Game::Initialize(HWND window, int width, int height)
     m_collisionManager->Initialize();
     m_commonResources->SetCollisionManager(m_collisionManager);
 
+    // スカイスフィアを生成と初期化
+    m_skySphere = std::make_unique<SkySphere>();
+    m_skySphere->Initialize();
+    m_commonResources->SetSkySphere(m_skySphere.get());
+
+    // 海の作成
+    m_seaMaterial = std::make_unique<SeaMaterial>();
+    m_seaMaterial->Initialize();
+
     m_sceneManager->Initialize();
 
 // ImGuiの初期化========================================================
@@ -131,14 +142,6 @@ void Game::Initialize(HWND window, int width, int height)
     ID3D11Device* device = m_deviceResources->GetD3DDevice();
     ID3D11DeviceContext* context = m_deviceResources->GetD3DDeviceContext();
     ImGui_ImplDX11_Init(device, context);
-
-    // スカイスフィアを生成と初期化
-    m_skySphere = std::make_unique<SkySphere>();
-    m_skySphere->Initialize();
-
-    // 海の作成
-    m_seaMaterial = std::make_unique<SeaMaterial>();
-    m_seaMaterial->Initialize();
 
     // デバッグの時のみ作成
 #ifdef _DEBUG

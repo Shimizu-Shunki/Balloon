@@ -1,38 +1,46 @@
 #include "Framework/pch.h"
 #include "Game/Player/Header/Player.h"
 #include "Framework/CommonResources.h"
-
-// 子オブジェクト
+#include "Game/Cameras/TPSKeyCamera.h"
+#include "Interface/ICamera.h"
 #include "Game/Player/Header/Body.h"
 #include "Game/Balloon/Balloon.h"
-// 当たり判定
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
-// 物理挙動
 #include "Game/PhysicsBody/PhysicsBody.h"
-
 #include "Game/Jump/Jump.h"
 
-
-
-
-Player::Player(ICamera* camera, IObject* parent)
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="parent">親オブジェクト</param>
+Player::Player(IObject* parent)
 	:
 	m_parent(parent),
-	m_camera(camera),
-	m_transform{}
+	m_childs{},
+	m_objectId{},
+	m_isActive{},
+	m_transform{},
+	m_physicsBody{},
+	m_boxCollider{},
+	m_sphereCollider{},
+	m_model{},
+	m_balloonIndex{},
+	m_jump{}
 {
 	// インスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
+	// Transformを生成
+	m_transform = std::make_unique<Transform>();
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
 }
 
-Player::~Player()
-{
-
-}
-
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ設定</param>
 void Player::Initialize(ObjectID objectID, const bool& active)
 {
 	// オブジェクトIDを設定
@@ -42,70 +50,53 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	// プレイヤーモデルはなし
 	m_model = nullptr;
 
-	m_transform = std::make_unique<Transform>();
-
-	// 位置を初期化
-	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
-	// 回転角を初期化
-	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
-	
-	// スケールを初期化
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
-
-	// トランスフォームを親に設定
-	/*m_transform->SetParent(nullptr);*/
-	// 親のTransformに自分自身を子供に設定
-	//m_parent->GetTransform()->SetChild(m_transform.get());
-	
-
-	// ボディをアタッチ
-	this->Attach(std::make_unique<Body>(this), ObjectID::PLAYER);
-	
-	// 風船をアタッチ
-	for (int i = 0; i < 3; i++)
-	{
-		std::unique_ptr<IObject> balloon = std::make_unique<Balloon>(this,-20.0f + 20.0f * i);
-		balloon->Initialize(ObjectID::BALLOON , true);
-
-		m_childs.emplace_back(std::move(balloon));
-	}
+	// 子オブジェクトを生成
+	this->CreateChildObjects();
+	// 当たり判定を生成
+	this->CreateCollider();
+	// 物理挙動を生成
+	this->CreatePhysicsBody();
 
 	
-
-	// 当たり判定を設定
-	m_boxCollider = std::make_unique<BoxCollider>(ICollider::ColliderType::BOX);
-	m_boxCollider->SetIsActive(true);
-	m_boxCollider->SetIsTrigger(false);
-	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,0.75 * 10.0f,0.0f });
-	m_boxCollider->GetTransform()->SetLocalScale({ 1.0f * 10.0f,1.5f * 10.0f ,1.0f * 10.0f });
-	m_boxCollider->GetTransform()->SetParent(m_transform.get());
-	m_transform->SetChild(m_boxCollider->GetTransform());
-
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.1f);
-	
-
-	// 当たり判定をマネージャーに渡す
-	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
-
-	// 物理挙動を作成と設定
-	m_physicsBody = std::make_unique<PhysicsBody>(this);
-	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
-	m_physicsBody->SetIsActive(true);
-	m_physicsBody->SetMass(5.0f);
-	m_physicsBody->SetUseGravity(true);
-	m_physicsBody->SetIsKinematic(false);
-
 	// ジャンプ処理
 	m_jump = std::make_unique<Jump>(m_physicsBody.get());
 	m_jump->Initialize();
 
-	
-	
-	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
-		DirectX::SimpleMath::Vector3::Up, DirectX::XMConvertToRadians(180.0f)
-	));
+	//// TPSカメラを生成
+	//std::unique_ptr<ICamera> camera = std::make_unique<TPSKeyCamera>(
+	//	m_transform.get(), m_physicsBody.get(), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 10.0f));
+	//// カメラを初期化
+	//camera->Initialize();
+	//// カメラをマネージャーに設定
+	//m_commonResources->GetCameraManager()->Attach(std::move(camera));
+
+	// スカイスフィアにTransformを渡す
+	m_commonResources->GetSkySphere()->SetTargetTransform(m_transform.get());
 }
 
+/// <summary>
+/// Transformを初期化
+/// </summary>
+/// <param name="position">初期座標</param>
+/// <param name="rotation">初期回転</param>
+/// <param name="scale">初期スケール</param>
+void Player::InitialTransform(
+	DirectX::SimpleMath::Vector3 position,
+	DirectX::SimpleMath::Quaternion rotation,
+	DirectX::SimpleMath::Vector3 scale
+)
+{
+	// 位置を初期化
+	m_transform->SetLocalPosition(position);
+	// 回転角を初期化
+	m_transform->SetLocalRotation(rotation);
+	// スケールを初期化
+	m_transform->SetLocalScale(scale);
+}
+
+/// <summary>
+/// 更新処理
+/// </summary>
 void Player::Update()
 {
 	// 入力に基づく方向ベクトルを取得
@@ -113,30 +104,53 @@ void Player::Update()
 
 	m_physicsBody->SetFoce(m_physicsBody->GetFoce() + movementDirection * 100.0f);
 	
-	
-	
 	m_jump->Update();
 	m_physicsBody->Update();
 
-	// 子供を更新する
-	for (const auto& childObject : m_childs)
+	// 子供オブジェクトを生成
+	for (const auto& object : m_childs)
 	{
-		childObject->Update();
+		object->Update();
 	}
 }
 
-void Player::Finalize() {}
-
-
-void Player::Attach(std::unique_ptr<IObject> turretParts , IObject::ObjectID objectId)
+/// <summary>
+/// 終了処理
+/// </summary>
+void Player::Finalize() 
 {
-	// パーツの初期化
-	turretParts->Initialize(objectId, true);
-	// 子供に登録
-	m_childs.emplace_back(std::move(turretParts));
+	// スカイスフィアのターゲットのTransformを解除
+	m_commonResources->GetSkySphere()->SetTargetTransform(nullptr);
 }
 
 
+/// <summary>
+/// アタッチ
+/// </summary>
+/// <param name="object">オブジェクト</param>
+/// <param name="objectId">オブジェクトID</param>
+/// <param name="position">初期座標</param>
+/// <param name="rotation">初期回転</param>
+/// <param name="scale">初期スケール</param>
+void Player::Attach(std::unique_ptr<IObject> object, IObject::ObjectID objectId,
+	DirectX::SimpleMath::Vector3 position,
+	DirectX::SimpleMath::Quaternion rotation,
+	DirectX::SimpleMath::Vector3 scale
+)
+{
+	// オブジェクトの初期化
+	object->Initialize(objectId, true);
+	// オブジェクトのTransformを初期化
+	object->InitialTransform(position, rotation, scale);
+
+	// 子供に登録
+	m_childs.emplace_back(std::move(object));
+}
+
+/// <summary>
+/// デタッチ
+/// </summary>
+/// <param name="turretParts">オブジェクト</param>
 void Player::Detach(std::unique_ptr<IObject> turretParts)
 {
 
@@ -148,6 +162,75 @@ void Player::OnCollisionExit(IObject* object)  { (void)object; }
 void Player::OnTriggerEnter(IObject* object)   { (void)object; }
 void Player::OnTriggerStay(IObject* object)    { (void)object; }
 void Player::OnTriggerExit(IObject* object)    { (void)object; }
+
+/// <summary>
+/// 子オブジェクトを生成
+/// </summary>
+void Player::CreateChildObjects()
+{
+	// 体オブジェクトを生成
+	this->Attach(std::make_unique<Body>(this), ObjectID::PLAYER_BODY);
+
+	// 風船の数を設定
+	m_balloonIndex = 3;
+
+	// 風船を生成
+	for (int i = 0; i < m_balloonIndex; i++)
+	{
+		this->Attach(std::make_unique<Balloon>(this), ObjectID::BALLOON,
+			DirectX::SimpleMath::Vector3( 0.0f,3.0f,-0.2f ),
+			DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
+				DirectX::SimpleMath::Vector3::Forward,DirectX::XMConvertToRadians(-20.0f + 20.0f * i)) *
+			DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
+				DirectX::SimpleMath::Vector3::UnitX, DirectX::XMConvertToRadians(-20.0f)
+			),
+			DirectX::SimpleMath::Vector3::One * 0.03f
+			);
+	}
+}
+
+/// <summary>
+/// 当たり判定を作成
+/// </summary>
+void Player::CreateCollider()
+{
+	// BoxCollider
+	// 体用の当たり判定
+	m_boxCollider = std::make_unique<BoxCollider>();                                           // 当たり判定を生成
+	m_boxCollider->SetIsActive(true);                                                          // アクティブ設定
+	m_boxCollider->SetIsTrigger(false);                                                        // トリガー設定
+	m_boxCollider->GetTransform()->SetLocalPosition({ 0.0f,0.75 * 10.0f,0.0f });               // 座標設定
+	m_boxCollider->GetTransform()->SetLocalScale({ 1.0f * 10.0f,1.5f * 10.0f ,1.0f * 10.0f }); // スケール設定
+	m_boxCollider->GetTransform()->SetParent(m_transform.get());                               // 親のTransformを設定
+	// SphereCollider
+	// 風船用の当たり判定を設定
+	m_sphereCollider = std::make_unique<SphereCollider>();                                     // 当たり判定を生成
+	m_sphereCollider->SetIsActive(true);                                                       // アクティブ設定
+	m_sphereCollider->SetIsTrigger(true);                                                      // トリガー設定
+	m_sphereCollider->GetTransform()->SetLocalPosition({ 0.0f,2.0f * 10.0f,-0.6f * 10.0f });   // 座標を設定
+	m_sphereCollider->GetTransform()->SetLocalScale({ 0.4f * 10.0f,0.0f ,0.0f });              // スケール設定
+	m_sphereCollider->GetTransform()->SetParent(m_transform.get());                            // 親のTransformを設定
+
+	// 当たり判定をマネージャーに渡す
+	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
+	m_commonResources->GetCollisionManager()->Attach(this, m_sphereCollider.get());
+}
+
+/// <summary>
+/// 物理挙動を作成
+/// </summary>
+void Player::CreatePhysicsBody()
+{
+	// 物理挙動を作成と設定
+	m_physicsBody = std::make_unique<PhysicsBody>(this); // 物理挙動を生成
+	m_physicsBody->SetIsActive(true);                    // アクティブ設定
+	m_physicsBody->SetMass(5.0f);                        // 質量を設定
+	m_physicsBody->SetUseGravity(true);                  // 重力設定
+	m_physicsBody->SetIsKinematic(false);                // キネマティック設定
+
+	// 当たり判定に物理挙動制御を渡す
+	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
+}
 											   
 
 // 移動方向を取得する
@@ -159,29 +242,33 @@ DirectX::SimpleMath::Vector3 Player::GetMovementDirection(const DirectX::SimpleM
 	// 方向
 	DirectX::SimpleMath::Vector3 direction = DirectX::SimpleMath::Vector3::Zero;
 
+	DirectX::SimpleMath::Quaternion rotation = DirectX::SimpleMath::Quaternion::Identity;
+
 	// 上キー
-	if (input->OnKey(InputManager::Keys::W))
-	{
-		direction += DirectX::SimpleMath::Vector3::Forward;
-	}
-	// 下キー
-	if (input->OnKey(InputManager::Keys::S))
+	if (input->OnKey(InputManager::Keys::Up))
 	{
 		direction += DirectX::SimpleMath::Vector3::Backward;
 	}
-	// 右キー
-	if (input->OnKey(InputManager::Keys::D))
+	// 下キー
+	if (input->OnKey(InputManager::Keys::Down))
 	{
-		direction += DirectX::SimpleMath::Vector3::Right;
+		direction += DirectX::SimpleMath::Vector3::Forward;
+	}
+	// 右キー
+	if (input->OnKey(InputManager::Keys::Right))
+	{
+		rotation *= DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(-2.0f));
 	}
 	// 左キー
-	if (input->OnKey(InputManager::Keys::A))
+	if (input->OnKey(InputManager::Keys::Left))
 	{
-		direction += DirectX::SimpleMath::Vector3::Left;
+		rotation *= DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(2.0f));
 	}
 
+	m_transform->SetLocalRotation(m_transform->GetLocalRotation() * rotation);
+
 	// プレイヤーの回転角（クォータニオン）に基づいて方向を回転させる
-	direction = DirectX::SimpleMath::Vector3::Transform(direction, angle);
+	direction = DirectX::SimpleMath::Vector3::Transform(direction, m_transform->GetLocalRotation());
 
 	// Y成分をゼロにして水平面に制限
 	direction.y = 0.0f;

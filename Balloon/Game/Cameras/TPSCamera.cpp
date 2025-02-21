@@ -4,43 +4,36 @@
 
 #include "Framework/InputManager.h"
 
-TPSCamera::TPSCamera(IObject* object)
+TPSCamera::TPSCamera(Transform* targetTransform, DirectX::SimpleMath::Vector3 distance)
 	:
-	m_targetObject(object),
-	m_position{},
+	m_targetTransform(targetTransform),
+	m_distance(distance),
 	m_initialRotation{},
-	m_currentRotation{},
-	m_targetPosition{},
 	m_up{},
-	m_distance{},
-	m_targetObjectPosition{},
 	m_view{},
 	m_sensitivity{},
 	m_pitch{},
 	m_yaw{}
 {
-	
 	// インプットマネージャーのインスタンスを取得する
 	m_inputManager = InputManager::GetInstance();
 }
 
-
-TPSCamera::~TPSCamera()
+void TPSCamera::Initialize()
 {
-
-}
-
-
-void TPSCamera::Initialize(
-	const DirectX::SimpleMath::Vector3& position,
-	const DirectX::SimpleMath::Vector3& targetPosition,
-	const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager)
-{
-	// ターゲットからの距離
-	m_distance = { 0.0f,5.0f, 7.0f };
+	// Transformを作成
+	m_transform = std::make_unique<Transform>();
 
 	// 初期化
-	m_yaw = 0.0f;
+	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
+
+	// 頭の向きを設定する
+	m_up = DirectX::SimpleMath::Vector3::Up;
+
+	// 初期化
+	m_yaw   = 0.0f;
 	m_pitch = 0.0f;
 
 	// 感度を設定
@@ -50,13 +43,13 @@ void TPSCamera::Initialize(
 	m_initialRotation = DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(
 		DirectX::SimpleMath::Vector3::UnitX, DirectX::XMConvertToRadians(0.78f));
 
+	// マウスを相対モードにする
 	DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_RELATIVE);
 }
 
 void TPSCamera::Update()
 {
-	m_targetObjectPosition = m_targetObject->GetTransform()->GetLocalPosition();
-
+	// マウスステート
 	const DirectX::Mouse::State& mouseState = m_inputManager->GetMouse()->GetState();
 
 	if (mouseState.positionMode == DirectX::Mouse::MODE_RELATIVE)
@@ -66,14 +59,20 @@ void TPSCamera::Update()
 		// マウスの縦方向の動きに基づいてピッチ角を更新
 		m_pitch -= m_inputManager->GetMouseTracker()->GetLastState().y * m_sensitivity;
 
+		// ピッチ角の制限: -90度から90度
+		const float pitchLimit = DirectX::XM_PIDIV2 - 0.01f; // 90度 - マージン
+		m_pitch = std::clamp(m_pitch, -pitchLimit, pitchLimit);
+
 		// ヨー角とピッチ角に基づいてクォータニオンを作成し、現在の角度を更新
 		DirectX::SimpleMath::Quaternion rotation =
 			DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, 0);
-		m_currentRotation = m_initialRotation * rotation;
+
+		// 回転を更新
+		m_transform->SetLocalRotation(m_initialRotation * rotation);
 	}
 
-	// 固定カメラのため初期化の時点のみビュー行列を作成する
-	m_cameraManager->SetViewMatrix(this->CalculateViewMatrix());
+	// ビュー行列を作成
+	this->CalculateViewMatrix();
 
 #ifdef _DEBUG
 	// マウスモードを絶対モード
@@ -93,22 +92,21 @@ void TPSCamera::Update()
 DirectX::SimpleMath::Matrix  TPSCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得
-	DirectX::SimpleMath::Vector3 position = m_targetObjectPosition;
+	DirectX::SimpleMath::Vector3 position = m_targetTransform->GetLocalPosition();
 
 	// 現在の角度に基づいてカメラの距離を変換し、カメラの位置を計算
-	DirectX::SimpleMath::Vector3 camera_position =
-		DirectX::SimpleMath::Vector3::Transform(m_distance, m_currentRotation);
+	DirectX::SimpleMath::Vector3 CameraPosition =
+		DirectX::SimpleMath::Vector3::Transform(m_distance, m_transform->GetLocalRotation());
 
 	// 視点 (カメラの位置)
-	m_position = position + camera_position;
-
+	m_transform->SetLocalPosition(position + CameraPosition);
 	// 注視点 (カメラが見る目標の位置) - プレイヤーの位置
-	m_targetPosition = position;
-	// カメラの頭
-	m_up = DirectX::SimpleMath::Vector3::Up;
-
+	m_transform->SetLocalScale(position);
+	
 	// ビュー行列を作成
-	m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_position, m_targetPosition, m_up);
+	m_view = DirectX::SimpleMath::Matrix::CreateLookAt(
+		m_transform->GetLocalPosition(), m_transform->GetLocalScale(), m_up);
+
 	// ビュー行列を設定
 	return m_view;
 }

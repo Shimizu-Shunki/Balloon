@@ -3,86 +3,75 @@
 #include "Framework/CommonResources.h"
 
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="parent">親オブジェクト</param>
 RightFoot::RightFoot(IObject* parent)
 	:
 	m_parent(parent),
 	m_transform{},
-	m_childs{},
 	m_objectId{},
 	m_isActive{},
 	m_model{}
 {
-	// インスタンスを取得する
-	m_commonResources = CommonResources::GetInstance();
+	// Transformを生成
+	m_transform = std::make_unique<Transform>();
 }
 
-RightFoot::~RightFoot()
-{
-
-}
-
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active"></param>
 void RightFoot::Initialize(ObjectID objectID, const bool& active)
 {
+	// 共有リソース
+	CommonResources* commonResources = CommonResources::GetInstance();
+
 	// オブジェクトIDを設定
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
 	// モデルを取得
-	m_model = m_commonResources->GetResources()->GetPlayerRightFootModel();
-
-	m_transform = std::make_unique<Transform>();
-
-	// 位置を初期化
-	m_transform->SetLocalPosition({ 0.0f,0.0f,0.0f });
-	// 回転角を初期化
-	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
-	// スケールを初期化
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
-
-	// トランスフォームを親に設定
-	m_transform->SetParent(m_parent->GetTransform());
-	// 親のTransformに自分自身を子供に設定
-	m_parent->GetTransform()->SetChild(m_transform.get());
+	m_model = commonResources->GetResources()->GetPlayerRightFootModel();
 
 	// 描画管理クラスにTransformとモデルを設定
-	m_commonResources->GetRenderManager()->AddModel({
+	commonResources->GetRenderManager()->AddModel({
 		m_transform.get(),
 		m_model
 	});
-
 }
 
-void RightFoot::Update()
+/// <summary>
+/// Transformを初期化
+/// </summary>
+/// <param name="position">初期座標</param>
+/// <param name="rotation">初期回転</param>
+/// <param name="scale">初期スケール</param>
+void RightFoot::InitialTransform(
+	DirectX::SimpleMath::Vector3 position,
+	DirectX::SimpleMath::Quaternion rotation,
+	DirectX::SimpleMath::Vector3 scale
+)
 {
-	// 子供を更新する
-	for (const auto& childObject : m_childs)
-	{
-		childObject->Update();
-	}
+	// 位置を初期化
+	m_transform->SetLocalPosition(position);
+	// 回転角を初期化
+	m_transform->SetLocalRotation(rotation);
+	// スケールを初期化
+	m_transform->SetLocalScale(scale);
+
+	// トランスフォームを親に設定
+	m_transform->SetParent(m_parent->GetTransform());
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
+void RightFoot::Update() {}
+
+/// <summary>
+/// 終了処理
+/// </summary>
 void RightFoot::Finalize() {}
-
-
-void RightFoot::Attach(std::unique_ptr<IObject> turretParts, IObject::ObjectID objectId)
-{
-	// パーツの初期化
-	turretParts->Initialize(objectId, true);
-	// 子供に登録
-	m_childs.emplace_back(std::move(turretParts));
-}
-
-
-void RightFoot::Detach(std::unique_ptr<IObject> turretParts)
-{
-
-}
-
-void RightFoot::OnCollisionEnter(IObject* object) { (void)object; }
-void RightFoot::OnCollisionStay(IObject* object) { (void)object; }
-void RightFoot::OnCollisionExit(IObject* object) { (void)object; }
-void RightFoot::OnTriggerEnter(IObject* object) { (void)object; }
-void RightFoot::OnTriggerStay(IObject* object) { (void)object; }
-void RightFoot::OnTriggerExit(IObject* object) { (void)object; }

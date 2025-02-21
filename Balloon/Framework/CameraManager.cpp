@@ -59,11 +59,12 @@ void CameraManager::Update()
 	if (m_isFadeActive) return;
 
 	// カメラの更新処理
-	if (m_cameras[m_cameraIndex] != nullptr)
+	if (m_cameraIndex != -1)
 	{
 		m_cameras[m_cameraIndex]->Update();
 		// ビュー行列を作成
-		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+		//m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+		m_viewMatrix = m_cameras[m_cameraIndex]->GetViewMatrix();
 	}
 }
 
@@ -84,7 +85,10 @@ void CameraManager::SwitchCameras()
 	// 準備段階の配列をクリアする
 	m_pendingCameras.clear();
 	// 値を初期化
-	m_cameraIndex = 0;
+	if (m_cameras.size() == 0)
+		m_cameraIndex = -1;
+	else
+		m_cameraIndex = 0;
 }
 
 /// <summary>
@@ -133,6 +137,8 @@ void CameraManager::SwitchActiveCamera(int index, float fadeTime, Tween::EasingT
 		.OnComplete([this] {
 		// フェードが終わったらカメラのビュー行列を作成する
 		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
+		// フェードを非アクティブにする
+		m_isFadeActive = false;
 		});
 
 	// 次のカメラの番号を設定

@@ -208,9 +208,11 @@
     <ClInclude Include="Game\Cameras\FixedCamera.h" />
     <ClInclude Include="Game\Cameras\FollowCamera.h" />
     <ClInclude Include="Game\Cameras\TPSCamera.h" />
+    <ClInclude Include="Game\Cameras\TPSKeyCamera.h" />
     <ClInclude Include="Game\Cloud\Cloud.h" />
     <ClInclude Include="Game\Colliders\BoxCollider.h" />
     <ClInclude Include="Game\Colliders\SphereCollider.h" />
+    <ClInclude Include="Game\Enemy\Enemy.h" />
     <ClInclude Include="Game\Fade\Fade.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Jump\Jump.h" />
@@ -225,6 +227,8 @@
     <ClInclude Include="Game\Player\Header\Player.h" />
     <ClInclude Include="Game\Player\Header\RightArm.h" />
     <ClInclude Include="Game\Player\Header\RightFoot.h" />
+    <ClInclude Include="Game\Scenes\Header\GameClearScene.h" />
+    <ClInclude Include="Game\Scenes\Header\GameOverScene.h" />
     <ClInclude Include="Game\Scenes\Header\PlayScene.h" />
     <ClInclude Include="Game\Scenes\Header\ResultScene.h" />
     <ClInclude Include="Game\Scenes\Header\TitleScene.h" />
@@ -281,9 +285,11 @@
     <ClCompile Include="Game\Cameras\FixedCamera.cpp" />
     <ClCompile Include="Game\Cameras\FollowCamera.cpp" />
     <ClCompile Include="Game\Cameras\TPSCamera.cpp" />
+    <ClCompile Include="Game\Cameras\TPSKeyCamera.cpp" />
     <ClCompile Include="Game\Cloud\Cloud.cpp" />
     <ClCompile Include="Game\Colliders\BoxCollider.cpp" />
     <ClCompile Include="Game\Colliders\SphereCollider.cpp" />
+    <ClCompile Include="Game\Enemy\Enemy.cpp" />
     <ClCompile Include="Game\Fade\Fade.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\Jump\Jump.cpp" />
@@ -298,6 +304,8 @@
     <ClCompile Include="Game\Player\Source\Player.cpp" />
     <ClCompile Include="Game\Player\Source\RightArm.cpp" />
     <ClCompile Include="Game\Player\Source\RightFoot.cpp" />
+    <ClCompile Include="Game\Scenes\Source\GameClearScene.cpp" />
+    <ClCompile Include="Game\Scenes\Source\GameOverScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\PlayScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\ResultScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp" />

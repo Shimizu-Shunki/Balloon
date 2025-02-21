@@ -30,11 +30,11 @@ public:
 
 private:
 	// ブレンドステートの作成
-	void CreateBlendState(ID3D11Device1* device, ID3D11DeviceContext1* context);
+	void CreateBlendState(ID3D11Device1* device);
 	// 深度ステンシルステートの作成
-	void CreateDepthStencilState(ID3D11Device1* device, ID3D11DeviceContext1* context);
+	void CreateDepthStencilState(ID3D11Device1* device);
 	// ラスタライザーステートの作成
-	void CreateRasterizerState(ID3D11Device1* device, ID3D11DeviceContext1* context);
+	void CreateRasterizerState(ID3D11Device1* device);
 
 
 private:

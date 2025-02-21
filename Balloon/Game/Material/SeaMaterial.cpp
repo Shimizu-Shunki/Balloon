@@ -20,10 +20,7 @@ SeaMaterial::~SeaMaterial()
 void SeaMaterial::Initialize()
 {
 	auto device = m_commonResources->GetDeviceResources()->GetD3DDevice();
-	auto context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
-
 	
-
 	m_states = std::make_unique<DirectX::DX11::CommonStates>(device);
 
 	m_texture = m_commonResources->GetResources()->GetSeaTexture();
@@ -38,11 +35,11 @@ void SeaMaterial::Initialize()
 	m_inputLayout = m_commonResources->GetResources()->GetSeaInputLayout();
 
 	// ブレンドステートの作成
-	CreateBlendState(device, context);
+	CreateBlendState(device);
 	// 深度ステンシルステートの作成
-	CreateDepthStencilState(device, context);
+	CreateDepthStencilState(device);
 	// ラスタライザーステートの作成
-	CreateRasterizerState(device, context);
+	CreateRasterizerState(device);
 
 	//	シェーダーにデータを渡すためのコンスタントバッファ生成
 	D3D11_BUFFER_DESC bd;
@@ -180,7 +177,7 @@ void SeaMaterial::Render()
 }
 
 // ブレンドステートの作成
-void SeaMaterial::CreateBlendState(ID3D11Device1* device, ID3D11DeviceContext1* context)
+void SeaMaterial::CreateBlendState(ID3D11Device1* device)
 {
 	D3D11_BLEND_DESC blendDesc = {};
 	blendDesc.AlphaToCoverageEnable = FALSE;  // カバレッジをアルファに基づいて有効化する
@@ -204,7 +201,7 @@ void SeaMaterial::CreateBlendState(ID3D11Device1* device, ID3D11DeviceContext1* 
 }
 
 // 深度ステンシルステートの作成
-void SeaMaterial::CreateDepthStencilState(ID3D11Device1* device, ID3D11DeviceContext1* context)
+void SeaMaterial::CreateDepthStencilState(ID3D11Device1* device)
 {
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
 	depthStencilDesc.DepthEnable = TRUE;                          // 深度テストを有効化
@@ -217,7 +214,7 @@ void SeaMaterial::CreateDepthStencilState(ID3D11Device1* device, ID3D11DeviceCon
 }
 
 // ラスタライザーステートの作成
-void SeaMaterial::CreateRasterizerState(ID3D11Device1* device, ID3D11DeviceContext1* context)
+void SeaMaterial::CreateRasterizerState(ID3D11Device1* device)
 {
 	D3D11_RASTERIZER_DESC rasterDesc = {};
 	rasterDesc.FillMode = D3D11_FILL_SOLID;      // 塗りつぶし (または D3D11_FILL_WIREFRAME)D3D11_FILL_SOLID

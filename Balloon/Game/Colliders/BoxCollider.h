@@ -28,7 +28,7 @@ public:
 
 public:
 	// コンストラクタ
-	BoxCollider(ICollider::ColliderType type);
+	BoxCollider();
 	// デストラクタ
 	~BoxCollider() override = default;
 

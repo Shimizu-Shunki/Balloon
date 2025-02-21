@@ -9,32 +9,23 @@ class FixedCamera : public ICamera
 public:
 	// Transformを取得する
 	Transform* GetTransform() const override { return m_transform.get(); }
+	// ビュー行列を取得する
+	DirectX::SimpleMath::Matrix GetViewMatrix() const { return m_view; }
 
-public:
 	// ビュー行列を設定する
 	DirectX::SimpleMath::Matrix CalculateViewMatrix() override;
 public:
 	// コンストラクタ
-	FixedCamera();
-
+	FixedCamera(const DirectX::SimpleMath::Vector3& position , const DirectX::SimpleMath::Quaternion& rotation);
 	// デストラクタ
-	~FixedCamera() override;
-
-public:
+	~FixedCamera() override = default;
 
 	// 初期化処理
-	void Initialize(
-		const DirectX::SimpleMath::Vector3& position,
-		const DirectX::SimpleMath::Vector3& targetPosition,
-		const DirectX::SimpleMath::Quaternion& rotation, CameraManager* cameraManager) override;
+	void Initialize() override;
 	// 更新処理
 	void Update() override;
 
 private:
-
-	// カメラマネージャー
-	CameraManager* m_cameraManager;
-
 	// Transform Scaleをターゲットとして見る
 	std::unique_ptr<Transform> m_transform;
 	// 頭の向き
@@ -42,5 +33,4 @@ private:
 
 	// ビュー行列
 	DirectX::SimpleMath::Matrix m_view;
-	
 };

@@ -1,15 +1,8 @@
 #pragma once
-
-#include "Interface/IComposite.h"
 #include "Interface/ILeaf.h"
 #include "Interface/IObject.h"
-#include "Framework/Graphics.h"
 
-#include <Interface/ICamera.h>
-
-class CommonResources;
 class IComposite;
-
 
 // 風船　子オブジェクトはなし
 class Balloon : public ILeaf
@@ -26,44 +19,45 @@ public:
 
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
-	// 物理的数値
-	// 当たり判定
 
 public:
 	// コンストラクタ
 	// カメラの情報、親のオブジェクト
-	Balloon(IObject* parent , float angle);
+	Balloon(IObject* parent);
 	// デストラクタ
-	~Balloon();
+	~Balloon() override = default;
 
 public:
 	// 初期化処理
 	void Initialize(ObjectID objectID, const bool& active) override;
+	// Transformの初期化
+	void InitialTransform(
+		DirectX::SimpleMath::Vector3 position,
+		DirectX::SimpleMath::Quaternion rotation,
+		DirectX::SimpleMath::Vector3 scale
+	) override;
 	// 更新処理
 	void Update() override;
 	// 終了処理
 	void Finalize() override;
 
 	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override;
+	void OnCollisionEnter(IObject* object) override { (void)object; };
 	// 衝突している時
-	void OnCollisionStay(IObject* object) override;
+	void OnCollisionStay(IObject* object) override  { (void)object; };
 	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override;
+	void OnCollisionExit(IObject* object) override  { (void)object; };
 
 	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override;
+	void OnTriggerEnter(IObject* object) override   { (void)object; };
 	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override;
+	void OnTriggerStay(IObject* object) override    { (void)object; };
 	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override;
+	void OnTriggerExit(IObject* object) override    { (void)object; };
 
 private:
-	// 共有リソース
-	CommonResources* m_commonResources;
 	// 親のオブジェクト
 	IObject* m_parent;
-	
 	// オブジェクトID
 	IObject::ObjectID m_objectId;
 	// オブジェクトアクティブ
@@ -71,12 +65,6 @@ private:
 
 	// Transform 全てのオブジェクトが持つ
 	std::unique_ptr<Transform> m_transform;
-
-	// 物理的数値
-
 	// 3Dモデル
 	DirectX::Model* m_model;
-
-	// 回転角
-	float m_angle;
 };

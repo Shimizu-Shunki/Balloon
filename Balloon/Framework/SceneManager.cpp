@@ -74,6 +74,8 @@ void SceneManager::CheckChageScene()
 	// シーン切り替えフラグがオンの場合
 	if (m_isChange)
 	{
+		// 前のシーンの終了処理を行う
+		m_currentScene->Finalize();
 		// 前のシーンを削除する
 		m_currentScene.reset();
 		// 次のシーンを入れる

@@ -44,13 +44,14 @@ void TitleScene::Initialize()
 	this->CreateCamera();
 
 	// オブジェクト
-	m_player = std::make_unique<Player>(nullptr, nullptr);
-	m_player->Initialize(IObject::ObjectID::PLAYER,true);
-
-	// プレイヤーの初期回転角を設定
-	m_player->GetTransform()->SetLocalRotation(
-		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(0.0f))
+	m_player = std::make_unique<Player>(nullptr);
+	m_player->Initialize(IObject::ObjectID::PLAYER , true);
+	m_player->InitialTransform(
+		DirectX::SimpleMath::Vector3::Zero,
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3::One * 0.1f
 	);
+
 	// プレイヤーのTweenを起動
 	m_player->GetTransform()->GetTween()->DORotationY(120.0f, 1.5f).SetDelay(4.0f).SetEase(Tween::EasingType::EaseInSine);
 
@@ -70,7 +71,7 @@ void TitleScene::Initialize()
 	m_fade->Initialize();
 
 	// ステートコントローラーの作成
-	this->CreateStateStateController();
+	this->CreateStateController();
 }
 
 void TitleScene::Start()
@@ -80,7 +81,7 @@ void TitleScene::Start()
 	// BGMを再生
 	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
 	// カメラを切り替える
-	m_commonResources->GetCameraManager()->SwitchActiveCamera(1);
+	m_commonResources->GetCameraManager()->SwitchActiveCamera(1 , 3.0f , Tween::EasingType::EaseInBack);
 
 	m_commonResources->GetCollisionManager()->Start();
 }
@@ -114,7 +115,7 @@ void TitleScene::Finalize()
 
 }
 
-void TitleScene::CreateStateStateController()
+void TitleScene::CreateStateController()
 {
 	// ステートマシーンの作成
 	m_stateMachine = std::make_unique<StateMachine>();
@@ -142,23 +143,26 @@ void TitleScene::CreateStateStateController()
 	m_stateMachine->AddController(std::move(stateController));
 }
 
+/// <summary>
+/// カメラを作成する
+/// </summary>
 void TitleScene::CreateCamera()
 {
 	// カメラの作成
 	// カメラ1
-	std::unique_ptr<ICamera> camera = std::make_unique<FixedCamera>();
-	camera->Initialize({ -1.51f,10.44f,-11.57f }, { 0.0f,0.0f,0.0f },
-		DirectX::SimpleMath::Quaternion::Identity, m_commonResources->GetCameraManager());
+	std::unique_ptr<ICamera> camera = std::make_unique<FixedCamera>(
+		DirectX::SimpleMath::Vector3{ -1.51f,10.44f,-11.57f },
+		DirectX::SimpleMath::Quaternion::Identity);
+	camera->Initialize();
 
 	// カメラをマネージャーに設定
 	m_commonResources->GetCameraManager()->Attach(std::move(camera));
 
 	// カメラ2
-	camera = std::make_unique<FixedCamera>();
-	camera->Initialize({ 1.5f,1.19f,-2.0f }, { 0.0f,0.0f,0.0f },
-		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(-20.0f)),
-		m_commonResources->GetCameraManager());
-
+	camera = std::make_unique<FixedCamera>(
+		DirectX::SimpleMath::Vector3{ 1.5f , 1.19f , -2.0f },
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(-20.0f)));
+	camera->Initialize();
 	// カメラをマネージャーに設定
 	m_commonResources->GetCameraManager()->Attach(std::move(camera));
 }

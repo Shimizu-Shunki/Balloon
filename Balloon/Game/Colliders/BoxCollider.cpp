@@ -2,10 +2,10 @@
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Transform/Transform.h"
 
-BoxCollider::BoxCollider(ICollider::ColliderType type)
+BoxCollider::BoxCollider()
 {
 	// コライダータイプ
-	m_colliderType = type;
+	m_colliderType = ICollider::ColliderType::BOX;
 	// 状態
 	m_isActive = true;
 	// トリガー

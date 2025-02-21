@@ -2,10 +2,10 @@
 #include "Game/Colliders/SphereCollider.h"
 #include "Game/Transform/Transform.h"
 
-SphereCollider::SphereCollider(ICollider::ColliderType type)
+SphereCollider::SphereCollider()
 {
 	// コライダータイプ
-	m_colliderType = type;
+	m_colliderType = ICollider::ColliderType::SPHERE;
 	// 状態
 	m_isActive = true;
 	// トリガー

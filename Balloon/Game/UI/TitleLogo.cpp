@@ -26,15 +26,15 @@ void TitleLogo::Initialize()
 	// 定数バッファを設定
 	m_spriteMaterial->SetConstBuffer<ConstBuffer>();
 
-	// シェーダーをロードする
-	m_spriteMaterial->LoadVertexShader(L"Resources/Shaders/cso/UI_VS.cso");
-	m_spriteMaterial->LoadGeometryShader(L"Resources/Shaders/cso/UI_GS.cso");
-	m_spriteMaterial->LoadPixelShader(L"Resources/Shaders/cso/UI_PS.cso");
+	// シェーダーを設定
+	m_spriteMaterial->SetVertexShader  (commonResources->GetResources()->GetUI_VS());
+	m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetUI_GS());
+	m_spriteMaterial->SetPixelShader   (commonResources->GetResources()->GetUI_PS());
 
 	int width, height;
 
 	// 画像をロード
-	m_spriteMaterial->LoadTexture(commonResources->GetResources()->GetTitleLogo(), width, height);
+	m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTitleLogo(), width, height);
 
 	m_constBuffer.windowSize = { 1280.0f,720.0f };
 	m_constBuffer.textureSize = { (float)width,(float)height };

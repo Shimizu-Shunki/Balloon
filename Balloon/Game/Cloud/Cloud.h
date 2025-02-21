@@ -1,15 +1,9 @@
 #pragma once
-
 #include "Interface/ILeaf.h"
 #include "Interface/IObject.h"
-#include "Framework/Graphics.h"
 
-#include <Interface/ICamera.h>
-
-class CommonResources;
 class ICollider;
 class PhysicsBody;
-
 
 class Cloud : public ILeaf
 {
@@ -25,19 +19,23 @@ public:
 
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
-	// 物理的数値
-	// 当たり判定
 	
 public:
 	// コンストラクタ
 	// カメラの情報、親のオブジェクト
 	Cloud(IObject* parent);
 	// デストラクタ
-	~Cloud();
+	~Cloud() override = default;
 
 public:
 	// 初期化処理
 	void Initialize(ObjectID objectID, const bool& active) override;
+	// Transformの初期化
+	void InitialTransform(
+		DirectX::SimpleMath::Vector3 position,
+		DirectX::SimpleMath::Quaternion rotation,
+		DirectX::SimpleMath::Vector3 scale
+	) override;
 	// 更新処理
 	void Update() override;
 	// 終了処理
@@ -58,11 +56,8 @@ public:
 	void OnTriggerExit(IObject* object)    override { (void)object; };
 
 private:
-	// 共有リソース
-	CommonResources* m_commonResources;
 	// 親のオブジェクト
 	IObject* m_parent;
-
 
 	// オブジェクトID
 	IObject::ObjectID m_objectId;
@@ -71,10 +66,8 @@ private:
 
 	// Transform 全てのオブジェクトが持つ
 	std::unique_ptr<Transform> m_transform;
-
 	// 当たり判定
 	std::unique_ptr<ICollider> m_boxCollider;
-
 	// 物理挙動
 	std::unique_ptr<PhysicsBody> m_physicsBody;
 

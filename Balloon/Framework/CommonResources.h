@@ -19,6 +19,7 @@
 #include "Framework/RenderManager.h"
 #include "Framework/CameraManager.h"
 #include "Framework/CollisionManager.h"
+#include "Game/Sky/SkySphere.h"
 
 class CommonResources
 {
@@ -54,6 +55,9 @@ public:
 	// 当たり判定マネージャー
 	void SetCollisionManager(CollisionManager* collisionManager) { m_collisionManager = collisionManager; }
 	CollisionManager* GetCollisionManager() { return m_collisionManager; }
+	// スカイスフィア
+	void SetSkySphere(SkySphere* skySphere) { m_skySphere = skySphere; }
+	SkySphere* GetSkySphere() { return m_skySphere; }
 
 	// スクリーンサイズ
 	void GetScreenSize(int& width, int& height) const { width = m_screenW; height = m_screenH; }
@@ -119,6 +123,9 @@ private:
 	CameraManager* m_cameraManager;
 	// 当たり判定マネージャー
 	CollisionManager* m_collisionManager;
+
+	// スカイスフィア
+	SkySphere* m_skySphere;
 
 	// スクリーンサイズ
 	int m_screenW, m_screenH;

@@ -14,10 +14,11 @@
 #include "Game/Jump/Jump.h"
 #include "Framework/CollisionManager.h"
 
-#include "Game/Cameras/TPSCamera.h"
+#include "Game/Cameras/TPSKeyCamera.h"
 
 // オブジェクト
 #include "Game/Cloud/Cloud.h"
+#include "Game/Enemy/Enemy.h"
 
 // ステート
 #include "Framework/StateMachine/StateController.h"
@@ -45,65 +46,89 @@ void PlayScene::Initialize()
 	m_debugCamera->Initialize(1280, 720);
 
 	// Transformを作成
-	m_rootTransform = std::make_unique<Transform>();
+	m_rootTransform = std::make_unique<Transform>(); 
 
 	// 親がいないのでnullptrを設定
 	m_rootTransform->SetParent(nullptr);
 	// プレイヤーの作成
-	m_rootObject.push_back(std::make_unique<Player>(nullptr,nullptr));
+	m_rootObject.push_back(std::make_unique<Player>(nullptr));
 
 	m_rootObject[0]->Initialize(IObject::ObjectID::PLAYER,true);
+	m_rootObject[0]->InitialTransform(
+		DirectX::SimpleMath::Vector3(0.0f, 11.0f, 0.0f),
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
+		DirectX::SimpleMath::Vector3::One * 0.1f
+	);
+	m_rootObject[0]->GetTransform()->SetParent(m_rootTransform.get());
 
-	// プレイヤーのTransformを子供として設定
-	m_rootTransform->SetChild(m_rootObject[0]->GetTransform());
-	m_rootObject[0]->GetTransform()->SetLocalPosition({ 0.0f , 11.0f,0.0f });
 
-	
+	std::unique_ptr<IObject> enemy = std::make_unique<Enemy>(nullptr);
+	enemy->Initialize(IObject::ObjectID::ENEMY, true);
+	enemy->InitialTransform(
+		DirectX::SimpleMath::Vector3(0.0f, 11.0f, -3.0f),
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
+		DirectX::SimpleMath::Vector3::One * 0.1f
+	);
+	enemy->GetTransform()->SetParent(m_rootTransform.get());
+	m_rootObject.push_back(std::move(enemy));
 
 	// 雲の作成
 	std::unique_ptr<IObject> cloud = std::make_unique<Cloud>(nullptr);
 	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->GetTransform()->SetLocalPosition({ 0.0f , 10.0f,0.0f });
-	m_rootTransform->SetChild(cloud->GetTransform());
+	cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(0.0f, 10.0f, 0.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
+	);
+	cloud->GetTransform()->SetParent(m_rootTransform.get());
 	// ルートに渡す
 	m_rootObject.push_back(std::move(cloud));
 
 	cloud = std::make_unique<Cloud>(nullptr);
 	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->GetTransform()->SetLocalPosition({ -20.0f , 8.0f,20.0f });
-	m_rootTransform->SetChild(cloud->GetTransform());
+	cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(-20.0f, 8.0f, 20.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
+	);
+	cloud->GetTransform()->SetParent(m_rootTransform.get());
 	// ルートに渡す
 	m_rootObject.push_back(std::move(cloud));
 
 	cloud = std::make_unique<Cloud>(nullptr);
 	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->GetTransform()->SetLocalPosition({ 20.0f , 8.0f, 20.0f });
-	m_rootTransform->SetChild(cloud->GetTransform());
+	cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(20.0f, 8.0f, 20.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
+	);
+	cloud->GetTransform()->SetParent(m_rootTransform.get());
 	// ルートに渡す
 	m_rootObject.push_back(std::move(cloud));
 
 	cloud = std::make_unique<Cloud>(nullptr);
 	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->GetTransform()->SetLocalPosition({ -20.0f , 8.0f,-20.0f });
-	m_rootTransform->SetChild(cloud->GetTransform());
+	cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(-20.0f, 8.0f, -20.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
+	);
+	cloud->GetTransform()->SetParent(m_rootTransform.get());
 	// ルートに渡す
 	m_rootObject.push_back(std::move(cloud));
 
 	cloud = std::make_unique<Cloud>(nullptr);
 	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->GetTransform()->SetLocalPosition({ 20.0f , 8.0f,-20.0f });
-	m_rootTransform->SetChild(cloud->GetTransform());
+	cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(20.0f, 8.0f, -20.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
+	);
+	cloud->GetTransform()->SetParent(m_rootTransform.get());
 	// ルートに渡す
 	m_rootObject.push_back(std::move(cloud));
 
-	// カメラの作成
-	// カメラ1
-	/* m_camera = std::make_unique<TPSCamera>(m_rootObject[0].get());
-	m_camera->Initialize({ -1.51f,10.44f,-11.57f }, { 0.0f,0.0f,0.0f },
-		DirectX::SimpleMath::Quaternion::Identity, m_commonResources->GetCameraManager());*/
-
-	// カメラをマネージャーに設定
-	//m_commonResources->GetCameraManager()->Attach(std::move(camera));
+	
 
 	//m_commonResources->GetCameraManager()->ChageCamera(2);
 

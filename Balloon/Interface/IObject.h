@@ -17,7 +17,19 @@ public:
 		OBJECT,
 		CLOUD,
 		PLAYER,
+		PLAYER_BODY,
+		PLAYER_HEAD,
+		PLAYER_LEFT_ARM,
+		PLAYER_RIGHT_ARM,
+		PLAYER_LEFT_FOOT,
+		PLAYER_RIGHT_FOOT,
 		ENEMY,
+		ENEMY_BODY,
+		ENEMY_HEAD,
+		ENEMY_LEFT_ARM,
+		ENEMY_RIGHT_ARM,
+		ENEMY_LEFT_FOOT,
+		ENEMY_RIGHT_FOOT,
 		CHARACTER,
 		BALLOON,
 	};
@@ -41,6 +53,13 @@ public:
 	virtual ~IObject() = default;
 	// èâä˙âªÇ∑ÇÈ
 	virtual void Initialize(ObjectID objectID , const bool &active) = 0;
+	// TransformÇèâä˙âª
+	virtual void InitialTransform(
+		DirectX::SimpleMath::Vector3 position,
+		DirectX::SimpleMath::Quaternion rotation,
+		DirectX::SimpleMath::Vector3 scale
+	) = 0;
+
 	// çXêVÇ∑ÇÈ
 	virtual void Update() = 0;
 	// å„èàóùÇçsÇ§

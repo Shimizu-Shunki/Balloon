@@ -28,6 +28,9 @@ public:
 	// プレイヤー　左足モデルを取得する
 	DirectX::Model* GetPlayerLeftFootModel() { return m_playerLeftFootModel.get(); }
 
+	// 敵　頭モデルを取得する
+	DirectX::Model* GetEnemyHeadModel() { return m_enemyHeadModel.get(); }
+
 	// 風船のモデルを取得する
 	DirectX::Model* GetBalloonModel() { return m_balloonModel.get(); }
 	// 雲のモデルを取得する
@@ -103,6 +106,7 @@ private:
 		m_playerLeftArmModel{},
 		m_playerRightFootModel{},
 		m_playerLeftFootModel{},
+		m_enemyHeadModel{},
 		m_balloonModel{},
 		m_cloudModel{},
 		m_spaceKey{},
@@ -149,6 +153,10 @@ private:
 	std::unique_ptr<DirectX::Model> m_playerRightFootModel;
 	// プレイヤー　左足モデル
 	std::unique_ptr<DirectX::Model> m_playerLeftFootModel;
+
+	// 敵　頭モデル
+	std::unique_ptr<DirectX::Model> m_enemyHeadModel;
+
 
 	// 風船モデル
 	std::unique_ptr<DirectX::Model> m_balloonModel;

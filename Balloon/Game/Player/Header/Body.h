@@ -1,15 +1,8 @@
 #pragma once
-
 #include "Interface/IComposite.h"
 #include "Interface/IObject.h"
-#include "Framework/Graphics.h"
 
-#include <Interface/ICamera.h>
-
-class CommonResources;
 class IComposite;
-
-
 
 class Body : public IComposite
 {
@@ -30,41 +23,48 @@ public:
 
 public:
 	// コンストラクタ
-	// カメラの情報、親のオブジェクト
 	Body(IObject* parent);
 	// デストラクタ
-	~Body();
+	~Body() override = default;
 
 public:
 	// 初期化処理
 	void Initialize(ObjectID objectID, const bool& active) override;
+	// Transformの初期化
+	void InitialTransform(
+		DirectX::SimpleMath::Vector3 position,
+		DirectX::SimpleMath::Quaternion rotation,
+		DirectX::SimpleMath::Vector3 scale
+	) override;
 	// 更新処理
 	void Update() override;
 	// 終了処理
 	void Finalize() override;
 
 	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override;
+	void OnCollisionEnter(IObject* object) override { (void)object; };
 	// 衝突している時
-	void OnCollisionStay(IObject* object) override;
+	void OnCollisionStay(IObject* object) override  { (void)object; };
 	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override;
+	void OnCollisionExit(IObject* object) override  { (void)object; };
 
 	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override;
+	void OnTriggerEnter(IObject* object) override   { (void)object; };
 	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override;
+	void OnTriggerStay(IObject* object) override    { (void)object; };
 	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override;
+	void OnTriggerExit(IObject* object) override    { (void)object; };
 
 	// 部品を追加する
-	void Attach(std::unique_ptr<IObject> turretParts, IObject::ObjectID objectId) override;
+	void Attach(std::unique_ptr<IObject> object, IObject::ObjectID objectId,
+		DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Zero,
+		DirectX::SimpleMath::Quaternion rotation = DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3 scale = DirectX::SimpleMath::Vector3::One
+	) override;
 	// 部品を削除する
 	void Detach(std::unique_ptr<IObject> turretPart) override;
 
 private:
-	// 共有リソース
-	CommonResources* m_commonResources;
 	// 親のオブジェクト
 	IObject* m_parent;
 	// 子供のオブジェクト
@@ -77,15 +77,6 @@ private:
 
 	// Transform 全てのオブジェクトが持つ
 	std::unique_ptr<Transform> m_transform;
-
-	// 物理的数値
-
-
-	// カメラ
-	ICamera* m_camera;
-
 	// 3Dモデル
 	DirectX::Model* m_model;
-	// 風船の数
-	int m_balloonIndex;
 };

@@ -37,7 +37,7 @@ public:
 
 private:
 	// ステートコントローラーの作成
-	void CreateStateStateController();
+	void CreateStateController();
 	// カメラの作成
 	void CreateCamera();
 

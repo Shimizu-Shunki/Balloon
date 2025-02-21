@@ -9,6 +9,10 @@ Transform::Transform()
 {
 	// TweenManagerのインスタンスを取得する
 	m_tweenManager = TweenManager::GetInstance();
+	// ローカル座標系を設定する
+	m_localPosition = DirectX::SimpleMath::Vector3::Zero;
+	m_localRotation = DirectX::SimpleMath::Quaternion::Identity;
+	m_localScale    = DirectX::SimpleMath::Vector3::One;
 }
 
 void Transform::Initialize(
@@ -105,7 +109,7 @@ void Transform::SetParent(Transform* parent)
 	m_parent = parent;
 
 	// 親に自分自身を設定
-	//parent->SetChild(this);
+	parent->SetChild(this);
 }
 
 
