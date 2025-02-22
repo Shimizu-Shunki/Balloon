@@ -62,13 +62,13 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	m_jump = std::make_unique<Jump>(m_physicsBody.get());
 	m_jump->Initialize();
 
-	//// TPSカメラを生成
-	//std::unique_ptr<ICamera> camera = std::make_unique<TPSKeyCamera>(
-	//	m_transform.get(), m_physicsBody.get(), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 10.0f));
-	//// カメラを初期化
-	//camera->Initialize();
-	//// カメラをマネージャーに設定
-	//m_commonResources->GetCameraManager()->Attach(std::move(camera));
+	// TPSカメラを生成
+	std::unique_ptr<ICamera> camera = std::make_unique<TPSKeyCamera>(
+		m_transform.get(), m_physicsBody.get(), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 10.0f));
+	// カメラを初期化
+	camera->Initialize();
+	// カメラをマネージャーに設定
+	m_commonResources->GetCameraManager()->Attach(std::move(camera));
 
 	// スカイスフィアにTransformを渡す
 	m_commonResources->GetSkySphere()->SetTargetTransform(m_transform.get());

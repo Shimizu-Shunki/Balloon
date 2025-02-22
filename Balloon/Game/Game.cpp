@@ -67,16 +67,14 @@ void Game::Initialize(HWND window, int width, int height)
     m_context = m_deviceResources->GetD3DDeviceContext();
 
     // タイマー設定を変更する   
-    m_timer.SetFixedTimeStep(true);
+    //m_timer.SetFixedTimeStep(true);
     // タイマーにターゲット経過秒(60FPS)を設定する
-    m_timer.SetTargetElapsedSeconds(1.0 / 60);
+   // m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
     // スクリーンサイズを設定
     m_commonResources->SetScreenSize(width, height);
 
     
-
-
 // 管理者達の生成========================================================
 
     // リソースをロードする

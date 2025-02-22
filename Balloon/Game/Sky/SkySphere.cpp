@@ -40,7 +40,7 @@ void SkySphere::Initialize()
 	m_transform->SetLocalScale({ 5.0f, 3.5f, 5.0f });
 
 	// スカイスフィアをRenderManagerに登録する
-	m_commonResources->GetRenderManager()->SetSkySphereObject({ m_transform.get(),m_model });
+	m_commonResources->GetRenderManager()->SetSkySphereObject(m_transform.get(),m_model);
 }
 
 /// <summary>
@@ -61,6 +61,8 @@ void SkySphere::Update()
 	// ターゲットが適応している場合座標をターゲットの座標にする
 	if (m_targetTransform != nullptr)
 		m_transform->SetLocalPosition(m_targetTransform->GetLocalPosition());
+	else
+		m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Up * 250.0f);
 
 	// Transform更新
 	m_transform->Update();

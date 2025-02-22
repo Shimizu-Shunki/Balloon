@@ -119,6 +119,11 @@ void Enemy::Update()
 {
 	m_physicsBody->Update();
 
+	if (m_balloonIndex == 0)
+	{
+		m_boxCollider->SetIsActive(false);
+	}
+
 	// 子供を更新する
 	for (const auto& childObject : m_childs)
 	{
@@ -163,6 +168,13 @@ void Enemy::OnTriggerEnter(IObject* object)
 		player->GetPhysicsBody()->SetFoce(
 			player->GetPhysicsBody()->GetFoce() + DirectX::SimpleMath::Vector3::Up * 2000
 		);
+
+		if (m_balloonIndex > 0)
+		{
+			m_childs[m_balloonIndex]->SetIsActive(false);
+			// 風船の数を減らす
+			m_balloonIndex--;
+		}
 	}
 }
 void Enemy::OnTriggerStay(IObject* object)    { (void)object; }

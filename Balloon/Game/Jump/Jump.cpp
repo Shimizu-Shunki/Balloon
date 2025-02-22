@@ -22,12 +22,19 @@ void Jump::Initialize()
     m_jumpMemory = std::make_unique<JumpMemory>();
     m_jumpMemory->Initialize();
 
+    dynamic_cast<JumpMemory*>(m_jumpMemory.get())->GetTexSize(m_texSizeW, m_texSizeH);
+
     // 回復時間初期化
     recoveryRate = 0.5f;
     // クールダウン状態初期化
     isCooldown = false;
-    currentJumps = 10000;
+    currentJumps = 10;
     cooldownTime = 3.0f;
+
+    
+    dynamic_cast<JumpMemory*>(m_jumpMemory.get())->SetRect(DirectX::SimpleMath::Vector4(
+        0.0f , 0.0f, m_texSizeW * (currentJumps / 10.0f) ,m_texSizeH
+    ));
 }
 
 void Jump::Update()
@@ -38,6 +45,24 @@ void Jump::Update()
     {
         this->TryJump();
     }
+
+    dynamic_cast<JumpMemory*>(m_jumpMemory.get())->SetRect(DirectX::SimpleMath::Vector4(
+        0.0f, 0.0f, m_texSizeW * (currentJumps / 10.0f), m_texSizeH
+    ));
+
+    m_jumpMemory->GetTransform()->SetLocalScale(
+        { 0.5f * (currentJumps / 10.0f),
+            0.5f,0.5f
+        }
+    );
+
+    m_jumpMemory->GetTransform()->SetLocalPosition(
+        {
+            1280.0f / 3.6f - (m_texSizeW * (std::abs(currentJumps - 10) / 10.0f) ) * 0.25f,
+            105.0f,
+            200.0f
+        }
+    );
 
     m_jumpFrame->Update();
     m_jumpMemory->Update();

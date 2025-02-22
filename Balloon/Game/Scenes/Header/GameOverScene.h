@@ -3,6 +3,9 @@
 
 
 class CommonResources;
+class FailedText;
+class StateMachine;
+class Fade;
 
 class GameOverScene : public IScene
 {
@@ -28,7 +31,12 @@ private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
+	// ステートマシーン
+	std::unique_ptr<StateMachine> m_stateMachine;
 
+	// フェード処理
+	std::unique_ptr<Fade> m_fade;
 
+	std::unique_ptr<FailedText> m_failedText;
 
 };

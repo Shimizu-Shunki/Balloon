@@ -5,22 +5,14 @@
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
 #include "Framework/Tween/Tween.h"
-
 #include "Game/Player/Header/Player.h"
-
 #include "Game/Cameras/DebugCamera.h"
-
 #include "Game/Fade/Fade.h"
 #include "Game/Jump/Jump.h"
 #include "Framework/CollisionManager.h"
-
 #include "Game/Cameras/TPSKeyCamera.h"
-
-// オブジェクト
 #include "Game/Cloud/Cloud.h"
 #include "Game/Enemy/Enemy.h"
-
-// ステート
 #include "Framework/StateMachine/StateController.h"
 #include "Framework/StateMachine/StateMachine.h"
 #include "Game/States/Fade/FadeInState.h"
@@ -29,6 +21,8 @@
 
 
 PlayScene::PlayScene()
+	:
+	m_enemys{}
 {
 	m_commonResources = CommonResources::GetInstance();
 }
@@ -70,6 +64,18 @@ void PlayScene::Initialize()
 		DirectX::SimpleMath::Vector3::One * 0.1f
 	);
 	enemy->GetTransform()->SetParent(m_rootTransform.get());
+	m_enemys.push_back(dynamic_cast<Enemy*>( enemy.get()));
+	m_rootObject.push_back(std::move(enemy));
+
+	enemy = std::make_unique<Enemy>(nullptr);
+	enemy->Initialize(IObject::ObjectID::ENEMY, true);
+	enemy->InitialTransform(
+		DirectX::SimpleMath::Vector3(-20.0f, 11.0f, 20.0f),
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
+		DirectX::SimpleMath::Vector3::One * 0.1f
+	);
+	enemy->GetTransform()->SetParent(m_rootTransform.get());
+	m_enemys.push_back(dynamic_cast<Enemy*>(enemy.get()));
 	m_rootObject.push_back(std::move(enemy));
 
 	// 雲の作成
@@ -163,8 +169,8 @@ void PlayScene::Update()
 
 	m_rootTransform->Update();
 
-	m_debugCamera->Update();
-	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());
+	/*m_debugCamera->Update();
+	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());*/
 
 	m_fade->Update();
 }
@@ -194,19 +200,21 @@ void PlayScene::CreateStateStateController()
 
 	// パラメーターの追加
 	stateController->AddParameters("FadeIN", false);
-	stateController->AddParameters("FadeOUT", false);
+	stateController->AddParameters("FadeOUT", 0);
 
 	// ステートの追加
 	stateController->AddState<FadeInState>("FadeInState", m_fade.get());
-	stateController->AddState<PlayMainState>("PlayMainState");
-	stateController->AddState<FadeOutState>("FadeOutState", m_fade.get(), FadeOutState::ChageSceneID::TITLE_SCENE);
+	stateController->AddState<PlayMainState>("PlayMainState",dynamic_cast<Player*>(m_rootObject[0].get()),m_enemys);
+	stateController->AddState<FadeOutState>("FadeOutStateClear", m_fade.get(), FadeOutState::ChageSceneID::GAME_CLEAR_SCENE);
+	stateController->AddState<FadeOutState>("FadeOutStateFailed", m_fade.get(), FadeOutState::ChageSceneID::GAME_OVER_SCENE);
 
 	// デフォルトのステートを設定
 	stateController->SetDeffultState("FadeInState");
 
 	// トランジションの追加
 	stateController->AddTransition("FadeInState", "PlayMainState", "FadeIN", true);
-	stateController->AddTransition("PlayMainState", "FadeOutState", "FadeOUT", true);
+	stateController->AddTransition("PlayMainState", "FadeOutStateClear", "FadeOUT", 1);
+	stateController->AddTransition("PlayMainState", "FadeOutStateFailed", "FadeOUT", 2);
 
 	// ステートコントローラーを追加
 	m_stateMachine->AddController(std::move(stateController));

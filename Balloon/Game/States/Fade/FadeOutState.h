@@ -13,7 +13,8 @@ public:
         TITLE_SCENE,
         SELECT_SCENE,
         PLAY_SCENE,
-        RESULT_SCENE,
+        GAME_CLEAR_SCENE,
+        GAME_OVER_SCENE,
     };
 
 public:

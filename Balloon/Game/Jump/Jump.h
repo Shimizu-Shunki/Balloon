@@ -51,6 +51,8 @@ private:
 	// クールダウン中かどうか
 	bool isCooldown;
 
+	float m_texSizeW, m_texSizeH;
+
 	// ジャンプフレーム
 	std::unique_ptr<ISprite> m_jumpFrame;
 	// ジャンプメモリ

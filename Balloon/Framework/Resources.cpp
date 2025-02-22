@@ -100,7 +100,12 @@ void Resources::LoadResource()
 	// ルール画像
 	DirectX::CreateWICTextureFromFile(
 		m_device, L"Resources\\Textures\\200.png", nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
-
+	// ゲームクリアテキスト画像
+	DirectX::CreateWICTextureFromFile(
+		m_device, L"Resources\\Textures\\ClearText.png", nullptr, m_clearText.ReleaseAndGetAddressOf());
+	// ゲームオーバーテキスト画像
+	DirectX::CreateWICTextureFromFile(
+		m_device, L"Resources\\Textures\\FailedText.png", nullptr, m_failedText.ReleaseAndGetAddressOf());
 	// 海画像
 	DirectX::CreateWICTextureFromFile(
 		m_device, L"Resources\\Textures\\water5.png", nullptr, m_SeaTexture.ReleaseAndGetAddressOf());

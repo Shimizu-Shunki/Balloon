@@ -54,7 +54,7 @@ void RenderManager::SwitchRenderbleObjects()
 void RenderManager::Render()
 {
 	// スカイスフィアを描画する スカイスフィアがない場合エラー処理を行い描画を行わない
-	if (!m_skySphere.model) {
+	if (!m_sky) {
 		throw std::runtime_error("m_skySphere.model is nullptr!");
 	}
 
@@ -65,7 +65,7 @@ void RenderManager::Render()
 
 
 	// モデルのエフェクト情報を更新する
-	m_skySphere.model->UpdateEffects([](DirectX::IEffect* effect)
+	m_sky->UpdateEffects([](DirectX::IEffect* effect)
 	{
 		// ベーシックエフェクトを設定する
 		DirectX::DX11::BasicEffect* basicEffect = dynamic_cast<DirectX::DX11::BasicEffect*>(effect);
@@ -81,15 +81,15 @@ void RenderManager::Render()
 		}
 	});
 	// スカイスフィアを描画する
-	m_skySphere.model->Draw(m_context, *m_commonStates, m_skySphere.transform->GetWorldMatrix(),
+	m_sky->Draw(m_context, *m_commonStates, m_skySphere->GetWorldMatrix(),
 		viewMatrix, projectionMatrix);
 
 
 	// モデルの描画
 	for (const auto& model : m_renderableObjects)
 	{
-		if(model.model != nullptr)
-		model.model->Draw(m_context, *m_commonStates, model.transform->GetWorldMatrix(),
+		if(model.model != nullptr && model.object->GetIsActive() )
+		model.model->Draw(m_context, *m_commonStates, model.object->GetTransform()->GetWorldMatrix(),
 			viewMatrix, projectionMatrix
 		);
 	}

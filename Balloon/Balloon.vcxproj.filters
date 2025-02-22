@@ -353,6 +353,12 @@
     <ClInclude Include="Game\Scenes\Header\GameOverScene.h">
       <Filter>Game\Scenes\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Game\UI\ClearText.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\FailedText.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -545,6 +551,12 @@
     </ClCompile>
     <ClCompile Include="Game\Scenes\Source\GameOverScene.cpp">
       <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ClearText.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\FailedText.cpp">
+      <Filter>Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 
 
 class InputManager;
+class Enemy;
+class Player;
 
 class PlayMainState : public IState
 {
@@ -13,7 +15,7 @@ public:
 public:
 
     // コンストラクタ
-    PlayMainState();
+    PlayMainState(Player* player, std::vector<Enemy*> enemys);
     // デストラクタ
     ~PlayMainState() override;
 
@@ -28,4 +30,9 @@ public:
 private:
    // 入力マネージャー
     InputManager* m_inputManager;
+
+    // エネミー
+    std::vector<Enemy*> m_enemys;
+    // プレイヤー
+    Player* m_player;
 };

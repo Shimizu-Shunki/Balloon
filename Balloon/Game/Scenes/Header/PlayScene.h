@@ -10,6 +10,8 @@ class DebugCamera;
 class StateMachine;
 class Fade;
 class Jump;
+class Enemy;
+
 
 
 
@@ -47,6 +49,8 @@ private:
 
 	// フェード処理
 	std::unique_ptr<Fade> m_fade;
+
+	std::vector<Enemy*> m_enemys;
 
 	// オブジェクトのルート
 	std::vector<std::unique_ptr<IObject>> m_rootObject;

@@ -108,7 +108,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Framework/pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -156,7 +156,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Framework/pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
@@ -238,6 +238,8 @@
     <ClInclude Include="Game\States\PlayScene\PlayMainState.h" />
     <ClInclude Include="Game\States\TitleScene\TitleMainState.h" />
     <ClInclude Include="Game\Transform\Transform.h" />
+    <ClInclude Include="Game\UI\ClearText.h" />
+    <ClInclude Include="Game\UI\FailedText.h" />
     <ClInclude Include="Game\UI\JumpFrame.h" />
     <ClInclude Include="Game\UI\JumpMemory.h" />
     <ClInclude Include="Game\UI\Keys.h" />
@@ -270,7 +272,10 @@
     <ClCompile Include="Framework\InputManager.cpp" />
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp" />
     <ClCompile Include="Framework\Microsoft\RenderTexture.cpp" />
-    <ClCompile Include="Framework\pch.cpp" />
+    <ClCompile Include="Framework\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Framework\RenderManager.cpp" />
     <ClCompile Include="Framework\Resources.cpp" />
     <ClCompile Include="Framework\SceneManager.cpp" />
@@ -315,6 +320,8 @@
     <ClCompile Include="Game\States\PlayScene\PlayMainState.cpp" />
     <ClCompile Include="Game\States\TitleScene\TitleMainState.cpp" />
     <ClCompile Include="Game\Transform\Transform.cpp" />
+    <ClCompile Include="Game\UI\ClearText.cpp" />
+    <ClCompile Include="Game\UI\FailedText.cpp" />
     <ClCompile Include="Game\UI\JumpFrame.cpp" />
     <ClCompile Include="Game\UI\JumpMemory.cpp" />
     <ClCompile Include="Game\UI\Keys.cpp" />

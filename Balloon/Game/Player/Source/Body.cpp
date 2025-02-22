@@ -39,7 +39,7 @@ void Body::Initialize(ObjectID objectID, const bool& active)
 	
 	// •`‰æŠÇ—ƒNƒ‰ƒX‚ÉTransform‚Æƒ‚ƒfƒ‹‚ðÝ’è
 	commonResources->GetRenderManager()->AddModel({
-		m_transform.get(),
+		this,
 		m_model
 	});
 

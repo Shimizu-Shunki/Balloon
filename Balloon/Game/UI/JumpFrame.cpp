@@ -44,11 +44,11 @@ void JumpFrame::Initialize()
 
 
 	// 座標設定
-	m_transform->SetLocalPosition({ 300, 100 , 0.0f });
+	m_transform->SetLocalPosition({ 320, 100 , 0.0f });
 	// 回転設定
 	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
 	// スケール設定
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.5f);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * 0.55f);
 
 	// 頂点バッファを設定
 	m_vertexBuffer.position = DirectX::SimpleMath::Vector4(

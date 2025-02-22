@@ -3,6 +3,7 @@
 #include "Interface/ISprite.h"
 #include <unordered_map>
 #include <shared_mutex>
+#include "Interface/IObject.h"
 
 // 全てのモデル、UIの描画を行うクラス
 
@@ -17,7 +18,7 @@ public:
 	struct RenderableObject
 	{
 		// 情報格納されたTransformクラスのポインタ
-		 Transform* transform;
+		IObject* object;
 		// モデル
 		DirectX::Model* model;
 		// マテリアル
@@ -32,7 +33,7 @@ public:
 	void AddSprite(ISprite* sprite) { m_pendingSprite.push_back(sprite); }
 
 	// スカイスフィアを登録する
-	void SetSkySphereObject(RenderManager::RenderableObject object) { m_skySphere = object; }
+	void SetSkySphereObject(Transform* transform, DirectX::Model* model) { m_skySphere = transform; m_sky = model; }
 
 public:
 	// 描画用格納庫に移動する
@@ -101,7 +102,8 @@ private:
 
 
 	// スカイスフィア
-	RenderableObject m_skySphere;
+	Transform* m_skySphere;
+	DirectX::Model* m_sky;
 	// 3D描画に必要な情報格納構造体
 	std::vector<RenderableObject> m_renderableObjects;
 	// 3D モデルの準備段階データ

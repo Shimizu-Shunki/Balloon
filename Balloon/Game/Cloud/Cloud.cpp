@@ -27,7 +27,7 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	// ‰_ƒ‚ƒfƒ‹‚ğæ“¾
 	m_model = commonResources->GetResources()->GetCloudModel();
 	// •`‰æŠÇ—Ò‚É“n‚·
-	commonResources->GetRenderManager()->AddModel({ m_transform.get(),m_model });
+	commonResources->GetRenderManager()->AddModel({ this,m_model });
 
 	// “–‚½‚è”»’è‚ğİ’è
 	m_boxCollider = std::make_unique<BoxCollider>();

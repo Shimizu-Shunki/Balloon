@@ -60,6 +60,10 @@ public:
 	ID3D11ShaderResourceView* GetRuleTexture() { return m_ruleTexture.Get(); }
 	// 海画像
 	ID3D11ShaderResourceView* GetSeaTexture() { return m_SeaTexture.Get(); }
+	// ゲームクリアテキスト
+	ID3D11ShaderResourceView* GetClearTextTexture() { return m_clearText.Get(); }
+	// ゲームオーバーテキスト
+	ID3D11ShaderResourceView* GetFailedTextTexture() { return m_failedText.Get(); }
 
 
 	// シェーダーを取得する
@@ -116,6 +120,8 @@ private:
 		m_timeGage{},
 		m_numbers{},
 		m_ruleTexture{},
+		m_clearText{},
+		m_failedText{},
 		m_SeaTexture{},
 		m_UIinputLayout{},
 		m_UI_VS{},
@@ -190,6 +196,11 @@ private:
 
 	// ルール画像
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_ruleTexture;
+
+	// ゲームクリアテキスト
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_clearText;
+	// ゲームクリアテキスト
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_failedText;
 
 	// 海画像
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SeaTexture;
