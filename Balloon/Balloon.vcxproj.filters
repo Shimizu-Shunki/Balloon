@@ -23,12 +23,6 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{bcbbc88d-a107-45d0-8ecd-152625a8ac39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Sea">
-      <UniqueIdentifier>{1e6b8b51-2e63-4145-83d3-f04f76e7a4d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\UI">
-      <UniqueIdentifier>{834defef-20c9-470b-977c-9ba667d9b63d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{540aedfc-9b0d-4688-8ebb-fc2fab8f3c00}</UniqueIdentifier>
     </Filter>
@@ -112,6 +106,18 @@
     </Filter>
     <Filter Include="Game\Enemy">
       <UniqueIdentifier>{76723879-8aec-4e32-a297-006ecd3e0a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{2e3ebc8d-5cf6-4d62-8ece-7bba1b183bf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Sea">
+      <UniqueIdentifier>{1e6b8b51-2e63-4145-83d3-f04f76e7a4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\UI">
+      <UniqueIdentifier>{834defef-20c9-470b-977c-9ba667d9b63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\ShadowMap">
+      <UniqueIdentifier>{e845cef1-10a3-49a1-80a3-c5efc4042864}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -573,37 +579,43 @@
   <ItemGroup>
     <None Include="Game\packages.config" />
     <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli">
-      <Filter>Resources\Sea</Filter>
+      <Filter>Resources\Shaders\Sea</Filter>
     </None>
     <None Include="Resources\Shaders\hlsl\UI\UI.hlsli">
-      <Filter>Resources\UI</Filter>
-    </None>
-    <None Include="Common.hlsli">
-      <Filter>Resources</Filter>
+      <Filter>Resources\Shaders\UI</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="Resources\Shaders\hlsl\Common.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_DS.hlsl">
-      <Filter>Resources\Sea</Filter>
+      <Filter>Resources\Shaders\Sea</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_HS.hlsl">
-      <Filter>Resources\Sea</Filter>
+      <Filter>Resources\Shaders\Sea</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_PS.hlsl">
-      <Filter>Resources\Sea</Filter>
+      <Filter>Resources\Shaders\Sea</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_VS.hlsl">
-      <Filter>Resources\Sea</Filter>
+      <Filter>Resources\Shaders\Sea</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\UI\UI_GS.hlsl">
-      <Filter>Resources\UI</Filter>
+      <Filter>Resources\Shaders\UI</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\UI\UI_PS.hlsl">
-      <Filter>Resources\UI</Filter>
+      <Filter>Resources\Shaders\UI</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\UI\UI_VS.hlsl">
-      <Filter>Resources\UI</Filter>
+      <Filter>Resources\Shaders\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\ShadowMap\ShadowMap_VS.hlsl">
+      <Filter>Resources\Shaders\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\ShadowMap\ShadowMap_PS.hlsl">
+      <Filter>Resources\Shaders\ShadowMap</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
