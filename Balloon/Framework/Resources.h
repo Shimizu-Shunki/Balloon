@@ -87,8 +87,10 @@ public:
 	// 海 ピクセルシェーダーを取得
 	ID3D11PixelShader*  GetSeaPS() { return m_SeaPS.Get(); }
 
-
-
+	// 影 頂点シェーダーを取得
+	ID3D11VertexShader* GetShadowVS() { return m_ShadowVS.Get(); }
+	// 影 ピクセルシェーダーを取得
+	ID3D11PixelShader* GetShadowPS() { return m_ShadowPS.Get(); }
 public:
 	Resources(Resources&&) = default;
 	Resources& operator= (Resources&&) = default;
@@ -131,7 +133,9 @@ private:
 		m_SeaVS{},
 		m_SeaHS{},
 		m_SeaDS{},
-		m_SeaPS{}
+		m_SeaPS{},
+		m_ShadowVS{},
+		m_ShadowPS{}
 	{
 		
 	}
@@ -227,5 +231,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DomainShader> m_SeaDS;
 	// 海 ピクセルシェーダー
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_SeaPS;
+
+	// 影　頂点シェーダー
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_ShadowVS;
+	// 影　ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_ShadowPS;
 
 };

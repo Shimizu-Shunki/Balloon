@@ -119,6 +119,12 @@
     <Filter Include="Resources\Shaders\ShadowMap">
       <UniqueIdentifier>{e845cef1-10a3-49a1-80a3-c5efc4042864}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ShadowMap">
+      <UniqueIdentifier>{f51dda9e-2189-4082-b1b2-d8ccbeae9fb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Model3D">
+      <UniqueIdentifier>{c26e59b3-dd84-4568-be38-c5bb72f9163e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -365,6 +371,12 @@
     <ClInclude Include="Game\UI\FailedText.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Game\ShadowMap\CascadedShadowMap.h">
+      <Filter>Game\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\DepthStencil.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -564,6 +576,12 @@
     <ClCompile Include="Game\UI\FailedText.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ShadowMap\CascadedShadowMap.cpp">
+      <Filter>Game\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\DepthStencil.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Game\Balloon.ico">
@@ -587,6 +605,9 @@
     <None Include="packages.config" />
     <None Include="Resources\Shaders\hlsl\Common.hlsli">
       <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\Model3D\Model3D.hlsli">
+      <Filter>Resources\Shaders\Model3D</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -616,6 +637,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\ShadowMap\ShadowMap_PS.hlsl">
       <Filter>Resources\Shaders\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_PS.hlsl">
+      <Filter>Resources\Shaders\Model3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_VS.hlsl">
+      <Filter>Resources\Shaders\Model3D</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

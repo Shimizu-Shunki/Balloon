@@ -4,11 +4,13 @@
 #include <unordered_map>
 #include <shared_mutex>
 #include "Interface/IObject.h"
+#include "Game/ShadowMap/CascadedShadowMap.h"
 
 // 全てのモデル、UIの描画を行うクラス
 
 class Transform;
 class CameraManager;
+class CascadedShadowMap;
 
 class RenderManager
 {
@@ -98,7 +100,8 @@ private:
 	std::vector<ISprite*> m_pendingSprite;
 
 
-
+	// カスケードシャドウマップ　まだカスケードされていない
+	std::unique_ptr<CascadedShadowMap> m_shadowMap;
 
 
 	// スカイスフィア

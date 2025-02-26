@@ -1,9 +1,7 @@
 #pragma once
 #include "Interface/IObject.h"
 
-
 class IObject;
-
 
 class ICollision
 {

@@ -163,4 +163,15 @@ void Resources::LoadResource()
 	DX::ThrowIfFailed(
 		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_SeaPS.ReleaseAndGetAddressOf())
 	);
+
+	// 頂点シェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\ShadowMap_VS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_ShadowVS.ReleaseAndGetAddressOf())
+	);
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\ShadowMap_PS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_ShadowPS.ReleaseAndGetAddressOf())
+	);
 }

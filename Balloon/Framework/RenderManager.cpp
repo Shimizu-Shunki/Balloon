@@ -3,6 +3,7 @@
 #include "Framework/CommonResources.h"
 #include "Framework/CameraManager.h"
 #include "Game/Transform/Transform.h"
+#include "Game/ShadowMap/CascadedShadowMap.h"
 
 RenderManager::RenderManager()
 	:
@@ -32,6 +33,9 @@ RenderManager::RenderManager()
 
 	// インプットレイアウトを設定
 	m_spriteInputLayout = commonResources->GetResources()->GetUIinputLayout();
+
+	m_shadowMap = std::make_unique<CascadedShadowMap>();
+	m_shadowMap->Initialize();
 }
 
 
@@ -84,6 +88,15 @@ void RenderManager::Render()
 	m_sky->Draw(m_context, *m_commonStates, m_skySphere->GetWorldMatrix(),
 		viewMatrix, projectionMatrix);
 
+	// 影用描画
+	m_shadowMap->Begin();
+	// モデルの描画
+	for (const auto& model : m_renderableObjects)
+	{
+		if (model.model != nullptr && model.object->GetIsActive())
+			m_shadowMap->Draw(model.model,model.object->GetTransform()->GetWorldMatrix());
+	}
+	m_shadowMap->End();
 
 	// モデルの描画
 	for (const auto& model : m_renderableObjects)
