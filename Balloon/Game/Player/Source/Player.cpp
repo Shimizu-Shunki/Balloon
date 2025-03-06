@@ -75,13 +75,13 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 
 
 	// Tween アニメーションを開始
-	m_transform->GetTween()->DOMove(DirectX::SimpleMath::Vector3::One, 2.0f)  // (1,1,1) の座標へ 2.0秒かけて移動
-		.SetDelay(3.0f)                                                       // 3.0秒の遅延を設定（開始前の待機時間）
-		.SetEase(Tween::EasingType::EaseOutSine)                              // イージング関数を設定
-		.SetLoops(3, Tween::LoopType::Yoyo)                                   // 3回繰り返し (Yoyo = 行ったり来たり)
-		.OnComplete([this] {                                                  // アニメーション完了時のコールバック関数
-		// ここにアニメーション終了後の処理を書く
-		});
+	//m_transform->GetTween()->DOMove(DirectX::SimpleMath::Vector3::One, 2.0f)  // (1,1,1) の座標へ 2.0秒かけて移動
+	//	.SetDelay(3.0f)                                                       // 3.0秒の遅延を設定（開始前の待機時間）
+	//	.SetEase(Tween::EasingType::EaseOutSine)                              // イージング関数を設定
+	//	.SetLoops(3, Tween::LoopType::Yoyo)                                   // 3回繰り返し (Yoyo = 行ったり来たり)
+	//	.OnComplete([this] {                                                  // アニメーション完了時のコールバック関数
+	//	// ここにアニメーション終了後の処理を書く
+	//	});
 
 
 }

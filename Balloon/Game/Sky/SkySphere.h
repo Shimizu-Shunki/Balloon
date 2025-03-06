@@ -36,4 +36,7 @@ private:
 	// ターゲットTransform
 	Transform* m_targetTransform;
 
+	// スカイボックスモデル
+	std::unique_ptr<DirectX::GeometricPrimitive> m_skyboxModel;
+
 };

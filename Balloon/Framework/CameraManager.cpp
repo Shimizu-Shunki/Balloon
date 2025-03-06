@@ -26,10 +26,10 @@ CameraManager::CameraManager()
 
 	// プロジェクション行列作成
 	m_projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(
-		DirectX::XMConvertToRadians(45.0f),
+		DirectX::XMConvertToRadians(60.0f),
 		SCREEN_W / SCREEN_H,
 		0.1f,
-		1000.0f
+		10000.0f
 	);
 }
 

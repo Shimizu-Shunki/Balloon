@@ -53,10 +53,10 @@ void SeaMaterial::Initialize()
 	// 頂点データを定義（4つの制御点）
 	DirectX::VertexPositionTexture vertex[4] =
 	{
-		{ DirectX::XMFLOAT3(-5.0f,  0.0f,  5.0f),  DirectX::XMFLOAT2(0.0f, 0.0f) }, // 左上
-		{ DirectX::XMFLOAT3(5.0f,   0.0f,  5.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },  // 右上
-		{ DirectX::XMFLOAT3(5.0f,   0.0f, -5.0f),  DirectX::XMFLOAT2(1.0f, 1.0f) }, // 右下
-		{ DirectX::XMFLOAT3(-5.0f,  0.0f, -5.0f),  DirectX::XMFLOAT2(0.0f, 1.0f) }  // 左下
+		{ DirectX::XMFLOAT3(-2000.0f, -0.0f,  2000.0f), DirectX::XMFLOAT2(0.0f, 0.0f) }, // 左上
+		{ DirectX::XMFLOAT3( 2000.0f, -0.0f,  2000.0f), DirectX::XMFLOAT2(1.0f, 0.0f) }, // 右上
+		{ DirectX::XMFLOAT3( 2000.0f, -0.0f, -2000.0f), DirectX::XMFLOAT2(1.0f, 1.0f) }, // 右下
+		{ DirectX::XMFLOAT3(-2000.0f, -0.0f, -2000.0f), DirectX::XMFLOAT2(0.0f, 1.0f) }  // 左下
 	};
 
 	// 頂点バッファの説明
@@ -77,103 +77,84 @@ void SeaMaterial::Initialize()
 
 void SeaMaterial::Render()
 {
-	m_time += 0.06f;
+	m_time += 0.006f;
 
-	m_index = 8.0f;
+	m_index = 100.0f;
 
 	ID3D11DeviceContext1* context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
 
-	for (int i = 0; i < 30; i++)
-	{
-		for (int j = 0; j < 30; j++)
-		{
-			DirectX::SimpleMath::Vector3 position;
-			position.z = 600.0f / 2;
-			position.x = -600.0f / 2;
+	DirectX::SimpleMath::Matrix world = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3::Down * 40.0f);
 
-			position.z += -i * 19.0f;
-			position.x += j * 19.0f;
-			
-			float angle = 0.0f;
+	//	シェーダーに渡す追加のバッファを作成する。(ConstBuffer）
+	ConstBuffer cbuff;
+	cbuff.matView = m_commonResources->GetCameraManager()->GetViewMatrix().Transpose();
+	cbuff.matProj = m_commonResources->GetCameraManager()->GetProjectionMatrix().Transpose();
+	cbuff.matWorld = world.Transpose();
+	cbuff.Diffuse = DirectX::SimpleMath::Vector4(1, 1, 1, 1);
+	cbuff.TessellationFactor = DirectX::SimpleMath::Vector4(m_index, m_time, 10.0f, 0.0f);
 
-			if (j % 2 == 1)
-			{
-				angle = -1.0f;
-			}
+	//	受け渡し用バッファの内容更新(ConstBufferからID3D11Bufferへの変換）
+	context->UpdateSubresource(m_CBuffer.Get(), 0, NULL, &cbuff, 0, 0);
 
+	// 入力レイアウトを設定
+	context->IASetInputLayout(m_inputLayout);
 
-			DirectX::SimpleMath::Matrix world = DirectX::SimpleMath::Matrix::CreateScale(2.0f) *
-				DirectX::SimpleMath::Matrix::CreateTranslation((position + DirectX::SimpleMath::Vector3::UnitY * -2.0f));
-
-			//	シェーダーに渡す追加のバッファを作成する。(ConstBuffer）
-			ConstBuffer cbuff;
-			cbuff.matView = m_commonResources->GetCameraManager()->GetViewMatrix().Transpose();
-			cbuff.matProj = m_commonResources->GetCameraManager()->GetProjectionMatrix().Transpose();
-			cbuff.matWorld = world.Transpose();
-			cbuff.Diffuse = DirectX::SimpleMath::Vector4(1, 1, 1, 1);
-			cbuff.TessellationFactor = DirectX::SimpleMath::Vector4(m_index, m_time, angle, 0.0f);
-
-			//	受け渡し用バッファの内容更新(ConstBufferからID3D11Bufferへの変換）
-			context->UpdateSubresource(m_CBuffer.Get(), 0, NULL, &cbuff, 0, 0);
-
-			// 頂点バッファを設定
-			ID3D11Buffer* buffers[] = { m_vertexBuffer.Get() };
-			UINT stride[] = { sizeof(DirectX::VertexPositionTexture) };
-			UINT offset[] = { 0 };
-			context->IASetVertexBuffers(0, 1, buffers, stride, offset);
+	// 頂点バッファを設定
+	ID3D11Buffer* buffers[] = { m_vertexBuffer.Get() };
+	UINT stride[] = { sizeof(DirectX::VertexPositionTexture) };
+	UINT offset[] = { 0 };
+	context->IASetVertexBuffers(0, 1, buffers, stride, offset);
 
 
-			//	シェーダーにバッファを渡す
-			ID3D11Buffer* cb[1] = { m_CBuffer.Get() };
-			context->VSSetConstantBuffers(1, 1, cb);
-			context->HSSetConstantBuffers(1, 1, cb);
-			context->DSSetConstantBuffers(1, 1, cb);
-			context->PSSetConstantBuffers(1, 1, cb);
+	//	シェーダーにバッファを渡す
+	ID3D11Buffer* cb[1] = { m_CBuffer.Get() };
+	context->VSSetConstantBuffers(1, 1, cb);
+	context->HSSetConstantBuffers(1, 1, cb);
+	context->DSSetConstantBuffers(1, 1, cb);
+	context->PSSetConstantBuffers(1, 1, cb);
 
-			// サンプラーステートをピクセルシェーダーに設定
-			ID3D11SamplerState* sampler[1] = { m_states->LinearWrap() };
-			context->PSSetSamplers(0, 1, sampler);
+	// サンプラーステートをピクセルシェーダーに設定
+	ID3D11SamplerState* sampler[1] = { m_states->LinearWrap() };
+	context->PSSetSamplers(0, 1, sampler);
 
-			// ブレンドステートを設定 (半透明描画用)
-			context->OMSetBlendState(m_blendState.Get(), nullptr, 0xFFFFFFFF);
-			// 深度ステンシルステートを設定 (深度バッファの書き込みと参照)
-			//context->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
+	// ブレンドステートを設定 (半透明描画用)
+	context->OMSetBlendState(m_blendState.Get(), nullptr, 0xFFFFFFFF);
+	// 深度ステンシルステートを設定 (深度バッファの書き込みと参照)
+	//context->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
 
 
-			// 入力レイアウトを設定
-			context->IASetInputLayout(m_inputLayout);
+	
 
-			// プリミティブトポロジーを設定
-			context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+	// プリミティブトポロジーを設定
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
 
-			//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-			//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-			//	深度バッファに書き込み参照する
-			context->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+	//	深度バッファに書き込み参照する
+	context->OMSetDepthStencilState(m_states->DepthDefault(), 0);
 
-			// ラスタライザーステートの設定
-			context->RSSetState(m_rasterizerState.Get());
+	// ラスタライザーステートの設定
+	context->RSSetState(m_rasterizerState.Get());
 
-			//	シェーダをセットする
-			context->VSSetShader(m_vertexShader,nullptr, 0);
-			context->HSSetShader(m_hullShader,  nullptr, 0);
-			context->DSSetShader(m_domainShader,nullptr, 0);
-			context->PSSetShader(m_pixelShader, nullptr, 0);
+	//	シェーダをセットする
+	context->VSSetShader(m_vertexShader,nullptr, 0);
+	context->HSSetShader(m_hullShader,  nullptr, 0);
+	context->DSSetShader(m_domainShader,nullptr, 0);
+	context->PSSetShader(m_pixelShader, nullptr, 0);
 
-			// ピクセルシェーダーにテクスチャリソースを設定
-			context->PSSetShaderResources(0, 1, &m_texture);
+	// ピクセルシェーダーにテクスチャリソースを設定
+	context->PSSetShaderResources(0, 1, &m_texture);
 
-			// 描画コール
-			context->Draw(4, 0);
+	// 描画コール
+	context->Draw(4, 0);
 
-			//	シェーダの登録を解除しておく
-			context->VSSetShader(nullptr, nullptr, 0);
-			context->HSSetShader(nullptr, nullptr, 0);
-			context->DSSetShader(nullptr, nullptr, 0);
-			context->PSSetShader(nullptr, nullptr, 0);
-		}
-	}
+	//	シェーダの登録を解除しておく
+	context->VSSetShader(nullptr, nullptr, 0);
+	context->HSSetShader(nullptr, nullptr, 0);
+	context->DSSetShader(nullptr, nullptr, 0);
+	context->PSSetShader(nullptr, nullptr, 0);
+	
 }
 
 // ブレンドステートの作成

@@ -5,6 +5,7 @@
 #include "Game/Scenes/Header/PlayScene.h"
 #include "Game/Scenes/Header/TitleScene.h"
 #include "Game/Scenes/Header/PlayScene.h"
+#include "Game/Scenes/Header/DebugScene.h"
 
 /// <summary>
 /// コンストラクタ
@@ -26,7 +27,7 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<TitleScene>();
+	m_currentScene = std::make_unique<DebugScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
 

@@ -122,8 +122,14 @@
     <Filter Include="Game\ShadowMap">
       <UniqueIdentifier>{f51dda9e-2189-4082-b1b2-d8ccbeae9fb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Shaders\Model3D">
+    <Filter Include="Game\States\Player">
+      <UniqueIdentifier>{1a467aea-ffe7-4c8a-b20b-ed549bf6370f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\PBRLit">
       <UniqueIdentifier>{c26e59b3-dd84-4568-be38-c5bb72f9163e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\SkySphere">
+      <UniqueIdentifier>{712ac026-769b-40cd-a66b-182caa3ce5fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -254,7 +260,7 @@
     <ClInclude Include="Game\Cameras\DebugCamera.h">
       <Filter>Game\Cameras</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scenes\Header\ResultScene.h">
+    <ClInclude Include="Game\Scenes\Header\DebugScene.h">
       <Filter>Game\Scenes\Header</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scenes\Header\TitleScene.h">
@@ -377,6 +383,27 @@
     <ClInclude Include="Framework\DepthStencil.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerIdleState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerJumpState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerRunAirState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerRunGroundState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IMaterial.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Material\PBRLit.h">
+      <Filter>Game\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Sky\SkyBox.h">
+      <Filter>Game\Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -468,7 +495,7 @@
     <ClCompile Include="Game\Cameras\DebugCamera.cpp">
       <Filter>Game\Cameras</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scenes\Source\ResultScene.cpp">
+    <ClCompile Include="Game\Scenes\Source\DebugScene.cpp">
       <Filter>Game\Scenes\Source</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp">
@@ -582,6 +609,24 @@
     <ClCompile Include="Framework\DepthStencil.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerIdleState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerJumpState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerRunAirState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerRunGroundState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Material\PBRLit.cpp">
+      <Filter>Game\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Sky\SkyBox.cpp">
+      <Filter>Game\Sky</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Game\Balloon.ico">
@@ -606,8 +651,14 @@
     <None Include="Resources\Shaders\hlsl\Common.hlsli">
       <Filter>Resources\Shaders</Filter>
     </None>
-    <None Include="Resources\Shaders\hlsl\Model3D\Model3D.hlsli">
-      <Filter>Resources\Shaders\Model3D</Filter>
+    <None Include="Resources\Shaders\hlsl\Model3D\PBRLit.hlsli">
+      <Filter>Resources\Shaders\PBRLit</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\Model3D\Common.hlsli">
+      <Filter>Resources\Shaders\PBRLit</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\SkySphere.hlsli">
+      <Filter>Resources\Shaders\SkySphere</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -638,11 +689,17 @@
     <FxCompile Include="Resources\Shaders\hlsl\ShadowMap\ShadowMap_PS.hlsl">
       <Filter>Resources\Shaders\ShadowMap</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_PS.hlsl">
-      <Filter>Resources\Shaders\Model3D</Filter>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_PS.hlsl">
+      <Filter>Resources\Shaders\PBRLit</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_VS.hlsl">
-      <Filter>Resources\Shaders\Model3D</Filter>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_VS.hlsl">
+      <Filter>Resources\Shaders\PBRLit</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_VS.hlsl">
+      <Filter>Resources\Shaders\SkySphere</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_PS.hlsl">
+      <Filter>Resources\Shaders\SkySphere</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

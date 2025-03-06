@@ -31,3 +31,17 @@ struct DirectionalLightBuffer
 	DirectX::XMVECTOR lightAmbient;			// ライトの環境光
 };
 
+struct PBRLitConstantBuffer
+{
+	DirectX::SimpleMath::Vector4 baseColor; // 基本色
+	float matallic;                         // 金属度
+	float smoothness;                       // 表面の滑らかさ
+	float useBaseMap;                       // ベースカラーテクスチャを使用するか
+	float useNormalMap;                     // 法線マップを使用するか
+};
+
+struct AmbientLightParameters
+{
+	DirectX::SimpleMath::Vector3 ambientLightColor;
+	float ambientLightIntensity;
+};

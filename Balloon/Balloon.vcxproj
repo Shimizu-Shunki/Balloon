@@ -218,6 +218,7 @@
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Jump\Jump.h" />
     <ClInclude Include="Game\Material\Buffers.h" />
+    <ClInclude Include="Game\Material\PBRLit.h" />
     <ClInclude Include="Game\Material\SeaMaterial.h" />
     <ClInclude Include="Game\Material\SpriteMaterial.h" />
     <ClInclude Include="Game\PhysicsBody\PhysicsBody.h" />
@@ -231,12 +232,17 @@
     <ClInclude Include="Game\Scenes\Header\GameClearScene.h" />
     <ClInclude Include="Game\Scenes\Header\GameOverScene.h" />
     <ClInclude Include="Game\Scenes\Header\PlayScene.h" />
-    <ClInclude Include="Game\Scenes\Header\ResultScene.h" />
+    <ClInclude Include="Game\Scenes\Header\DebugScene.h" />
     <ClInclude Include="Game\Scenes\Header\TitleScene.h" />
     <ClInclude Include="Game\ShadowMap\CascadedShadowMap.h" />
+    <ClInclude Include="Game\Sky\SkyBox.h" />
     <ClInclude Include="Game\Sky\SkySphere.h" />
     <ClInclude Include="Game\States\Fade\FadeInState.h" />
     <ClInclude Include="Game\States\Fade\FadeOutState.h" />
+    <ClInclude Include="Game\States\Player\PlayerIdleState.h" />
+    <ClInclude Include="Game\States\Player\PlayerJumpState.h" />
+    <ClInclude Include="Game\States\Player\PlayerRunAirState.h" />
+    <ClInclude Include="Game\States\Player\PlayerRunGroundState.h" />
     <ClInclude Include="Game\States\PlayScene\PlayMainState.h" />
     <ClInclude Include="Game\States\TitleScene\TitleMainState.h" />
     <ClInclude Include="Game\Transform\Transform.h" />
@@ -258,6 +264,7 @@
     <ClInclude Include="Interface\ICamera.h" />
     <ClInclude Include="Interface\ICollider.h" />
     <ClInclude Include="Interface\ICollision.h" />
+    <ClInclude Include="Interface\IMaterial.h" />
     <ClInclude Include="Interface\IObject.h" />
     <ClInclude Include="Interface\IComposite.h" />
     <ClInclude Include="Interface\ILeaf.h" />
@@ -302,6 +309,7 @@
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\Jump\Jump.cpp" />
     <ClCompile Include="Game\Main.cpp" />
+    <ClCompile Include="Game\Material\PBRLit.cpp" />
     <ClCompile Include="Game\Material\SeaMaterial.cpp" />
     <ClCompile Include="Game\Material\SpriteMaterial.cpp" />
     <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp" />
@@ -315,12 +323,17 @@
     <ClCompile Include="Game\Scenes\Source\GameClearScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\GameOverScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\PlayScene.cpp" />
-    <ClCompile Include="Game\Scenes\Source\ResultScene.cpp" />
+    <ClCompile Include="Game\Scenes\Source\DebugScene.cpp" />
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp" />
     <ClCompile Include="Game\ShadowMap\CascadedShadowMap.cpp" />
+    <ClCompile Include="Game\Sky\SkyBox.cpp" />
     <ClCompile Include="Game\Sky\SkySphere.cpp" />
     <ClCompile Include="Game\States\Fade\FadeInState.cpp" />
     <ClCompile Include="Game\States\Fade\FadeOutState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerIdleState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerJumpState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerRunAirState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerRunGroundState.cpp" />
     <ClCompile Include="Game\States\PlayScene\PlayMainState.cpp" />
     <ClCompile Include="Game\States\TitleScene\TitleMainState.cpp" />
     <ClCompile Include="Game\Transform\Transform.cpp" />
@@ -370,12 +383,14 @@
     <None Include="Game\packages.config" />
     <None Include="packages.config" />
     <None Include="Resources\Shaders\hlsl\Common.hlsli" />
-    <None Include="Resources\Shaders\hlsl\Model3D\Model3D.hlsli" />
+    <None Include="Resources\Shaders\hlsl\Model3D\Common.hlsli" />
+    <None Include="Resources\Shaders\hlsl\Model3D\PBRLit.hlsli" />
     <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli" />
+    <None Include="Resources\Shaders\hlsl\SkySphere.hlsli" />
     <None Include="Resources\Shaders\hlsl\UI\UI.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_PS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -385,7 +400,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Model3D_VS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -446,6 +461,26 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\UI\UI_GS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>

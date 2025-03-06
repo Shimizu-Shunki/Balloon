@@ -39,6 +39,12 @@ public:
 	// スカイスフィアを取得する
 	DirectX::Model* GetSkySphere() { return m_skySphere.get(); }
 
+	// デバッグ
+#ifdef _DEBUG
+	// スフィアモデルを取得
+	DirectX::Model* GetSphere() { return m_sphereModel.get(); }
+#endif
+
 	// テクスチャを取得する
 	// タイトルロゴを取得する
 	ID3D11ShaderResourceView* GetTitleLogo() { return m_titleLogo.Get(); }
@@ -91,6 +97,14 @@ public:
 	ID3D11VertexShader* GetShadowVS() { return m_ShadowVS.Get(); }
 	// 影 ピクセルシェーダーを取得
 	ID3D11PixelShader* GetShadowPS() { return m_ShadowPS.Get(); }
+
+	// 物理ベースレンダリング インプットレイアウトを取得
+	ID3D11InputLayout* GetPBRLitInputLayout() { return m_PBRLitInputLayout.Get(); }
+	// 物理ベースレンダリング 頂点シェーダーを取得
+	ID3D11VertexShader* GetPBRLitVS() { return m_PBRLitVS.Get(); }
+	// 物理ベースレンダリング ピクセルシェーダーを取得
+	ID3D11PixelShader* GetPBRLitPS() { return m_PBRLitPS.Get(); }
+
 public:
 	Resources(Resources&&) = default;
 	Resources& operator= (Resources&&) = default;
@@ -232,9 +246,25 @@ private:
 	// 海 ピクセルシェーダー
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_SeaPS;
 
+
+	// 物理ベースレンダリング 入力レイアウト
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_PBRLitInputLayout;
+	// 物理ベースレンダリング 頂点シェーダー
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_PBRLitVS;
+	// 物理ベースレンダリング ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>  m_PBRLitPS;
+
 	// 影　頂点シェーダー
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_ShadowVS;
 	// 影　ピクセルシェーダー
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_ShadowPS;
+
+	// デバッグ
+#ifdef _DEBUG
+
+	// デバッグ用　スフィアモデル
+	std::unique_ptr<DirectX::Model> m_sphereModel;
+
+#endif
 
 };

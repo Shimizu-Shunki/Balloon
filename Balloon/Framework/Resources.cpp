@@ -2,6 +2,7 @@
 #include "Framework/Resources.h"
 #include "Framework/CommonResources.h"
 #include "Microsoft/ReadData.h"
+#include <VertexTypes.h>
 
 std::unique_ptr<Resources> Resources::m_resources = nullptr;
 
@@ -108,7 +109,7 @@ void Resources::LoadResource()
 		m_device, L"Resources\\Textures\\FailedText.png", nullptr, m_failedText.ReleaseAndGetAddressOf());
 	// 海画像
 	DirectX::CreateWICTextureFromFile(
-		m_device, L"Resources\\Textures\\water5.png", nullptr, m_SeaTexture.ReleaseAndGetAddressOf());
+		m_device, L"Resources\\Textures\\Sea.png", nullptr, m_SeaTexture.ReleaseAndGetAddressOf());
 
 	// シェーダー
 	std::vector<uint8_t> blob;
@@ -164,6 +165,7 @@ void Resources::LoadResource()
 		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_SeaPS.ReleaseAndGetAddressOf())
 	);
 
+	// シャドウマップ
 	// 頂点シェーダをロードする
 	blob = DX::ReadData(L"Resources\\Shaders\\cso\\ShadowMap_VS.cso");
 	DX::ThrowIfFailed(
@@ -174,4 +176,31 @@ void Resources::LoadResource()
 	DX::ThrowIfFailed(
 		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_ShadowPS.ReleaseAndGetAddressOf())
 	);
+
+	// 物理ベースレンダリング
+	// 頂点シェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\PBRLit_VS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_PBRLitVS.ReleaseAndGetAddressOf())
+	);
+	//	インプットレイアウトの作成
+	m_device->CreateInputLayout(&DirectX::VertexPositionNormalTangentColorTexture::InputElements[0],
+		static_cast<UINT>(DirectX::VertexPositionNormalTangentColorTexture::InputElementCount),
+		blob.data(), blob.size(),
+		m_PBRLitInputLayout.GetAddressOf());
+
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\PBRLit_PS.cso");
+	DX::ThrowIfFailed(
+		m_device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_PBRLitPS.ReleaseAndGetAddressOf())
+	);
+
+	// デバッグ
+#ifdef _DEBUG
+	// リソースディレクトリを設定する
+	m_effectFactory->SetDirectory(L"Resources\\Models\\PlayerModels");
+	// プレイヤー　風船モデルをロードする
+	m_sphereModel = DirectX::Model::CreateFromCMO(m_device, L"Resources\\Models\\PlayerModels\\Head.cmo", *m_effectFactory);
+#endif
+
 }
