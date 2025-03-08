@@ -77,11 +77,13 @@ void Game::Initialize(HWND window, int width, int height)
     
 // 管理者達の生成========================================================
 
+   
+    m_commonResources->SetCommonStates(m_commonStates.get());
+    m_commonResources->SetStepTimer(&m_timer);
+
     // リソースをロードする
     m_resources->LoadResource();
     m_commonResources->SetResources(m_resources);
-    m_commonResources->SetCommonStates(m_commonStates.get());
-    m_commonResources->SetStepTimer(&m_timer);
 
     // Tweenマネージャーのインスタンスを取得する
     m_tweenManager = TweenManager::GetInstance();
@@ -106,11 +108,6 @@ void Game::Initialize(HWND window, int width, int height)
     m_collisionManager = CollisionManager::GetInstance();
     m_collisionManager->Initialize();
     m_commonResources->SetCollisionManager(m_collisionManager);
-
-    // スカイスフィアを生成と初期化
-    m_skySphere = std::make_unique<SkySphere>();
-    m_skySphere->Initialize();
-    m_commonResources->SetSkySphere(m_skySphere.get());
 
     // 海の作成
     m_seaMaterial = std::make_unique<SeaMaterial>();
@@ -199,8 +196,6 @@ void Game::Update(DX::StepTimer const& timer)
     m_inputManager->Update();
     // オーディオマネージャーの更新処理
     m_audioManager->Update(timer);
-    // スカイスフィアの更新処理
-    m_skySphere->Update();
     // Tweenマネージャーの更新処理
     m_tweenManager->Update();
     // カメラの更新
@@ -289,6 +284,8 @@ void Game::Render()
     // ワールド行列を設定する
     m_basicEffect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
     // コンテキストを設定する
+    // 深度ステンシルの設定（深度テストを有効化）
+    m_context->OMSetDepthStencilState(nullptr, 0); // デフォルトの深度ステートを使用
     m_basicEffect->Apply(m_context);
     // 入力レイアウトを設定する
     m_context->IASetInputLayout(m_inputLayout.Get());

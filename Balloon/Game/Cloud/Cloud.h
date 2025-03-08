@@ -3,6 +3,7 @@
 #include "Interface/IObject.h"
 
 class ICollider;
+class Model3D;
 class PhysicsBody;
 
 class Cloud : public ILeaf
@@ -14,9 +15,6 @@ public:
 	void SetIsActive(bool isActive) { m_isActive = isActive; }
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
-	// モデルを取得する
-	DirectX::Model* GetModel() const override { return m_model; }
-
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
 	
@@ -72,7 +70,7 @@ private:
 	std::unique_ptr<PhysicsBody> m_physicsBody;
 
 	// 3Dモデル
-	DirectX::Model* m_model;
+	std::unique_ptr<Model3D> m_model;
 	// 風船の数
 	int m_balloonIndex;
 };

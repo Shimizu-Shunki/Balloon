@@ -3,9 +3,11 @@
 #include <Framework/Microsoft/RenderTexture.h>
 
 #include "Framework/CommonResources.h"
+#include "Framework/Resources/ShaderResources.h"
 #include "Game/Transform/Transform.h"
 #include "Framework/DepthStencil.h"
 #include "Game/Material/Buffers.h"
+
 
 /// <summary>
 /// コンストラクタ
@@ -37,8 +39,8 @@ void CascadedShadowMap::Initialize()
 	ID3D11Device1* device = m_commonResources->GetDeviceResources()->GetD3DDevice();
 
 	// シェーダーを取得
-	m_shadowVS = m_commonResources->GetResources()->GetShadowVS();
-	m_shadowPS = m_commonResources->GetResources()->GetShadowPS();
+	m_shadowVS = m_commonResources->GetResources()->GetShaderResources()->GetShadowVS();
+	m_shadowPS = m_commonResources->GetResources()->GetShaderResources()->GetShadowPS();
 
 	// シャドウマップの大きさを指定する
 	const RECT rectShadow = { 0 , 0 , (LONG)SHADOWMAP_SIZE , (LONG)SHADOWMAP_SIZE };
@@ -97,11 +99,9 @@ void CascadedShadowMap::Initialize()
 /// </summary>
 /// <param name="model">モデル</param>
 /// <param name="world">ワールド行列</param>
-void CascadedShadowMap::Draw(DirectX::Model* model, DirectX::SimpleMath::Matrix world)
+void CascadedShadowMap::Draw(DirectX::Model* model, ID3D11DeviceContext1* context, DirectX::CommonStates* states,
+	DirectX::SimpleMath::Matrix world)
 {
-	DirectX::DX11::CommonStates* states = m_commonResources->GetCommonStates();
-	ID3D11DeviceContext1*       context = m_commonResources->GetDeviceResources()->GetD3DDeviceContext();
-
 	// 影用モデル描画
 	model->Draw(context, *states, world, m_lightViewMatrix, m_lightProjectionMatrix, false, [&]
 		{

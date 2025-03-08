@@ -2,7 +2,8 @@
 #include "Game/Fade/Fade.h"
 #include "Framework/SceneManager.h"
 #include "Framework/CommonResources.h"
-
+#include "Framework/Resources/ShaderResources.h"
+#include "Framework/Resources/TextureResources.h"
 
 
 // コンストラクタ
@@ -41,16 +42,16 @@ void Fade::Initialize()
     m_spriteMaterial->SetConstBuffer<ConstBuffer>();
 
     // シェーダーを設定
-    m_spriteMaterial->SetVertexShader  (commonResources->GetResources()->GetUI_VS());
-    m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetUI_GS());
-    m_spriteMaterial->SetPixelShader   (commonResources->GetResources()->GetUI_PS());
+    m_spriteMaterial->SetVertexShader(commonResources->GetResources()->GetShaderResources()->GetUI_VS());
+    m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetShaderResources()->GetUI_GS());
+    m_spriteMaterial->SetPixelShader(commonResources->GetResources()->GetShaderResources()->GetUI_PS());
 
     int width, height;
 
     // 画像をロード
-    m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTitleLogo(), width, height);
+    m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
 
-    m_spriteMaterial->SetRuleTexture(commonResources->GetResources()->GetRuleTexture());
+    m_spriteMaterial->SetRuleTexture(commonResources->GetResources()->GetTextureResources()->GetRuleTexture());
 
     m_constBuffer.windowSize = { 1280.0f,720.0f };
     m_constBuffer.textureSize = { (float)width,(float)height };

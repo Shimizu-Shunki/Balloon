@@ -4,6 +4,8 @@
 #include "Game/Material/SeaMaterial.h"
 #include "Framework/CommonResources.h"
 #include <Framework/Microsoft/ReadData.h>
+#include "Framework/Resources/ShaderResources.h"
+#include "Framework/Resources/TextureResources.h"
 
 
 SeaMaterial::SeaMaterial()
@@ -23,16 +25,16 @@ void SeaMaterial::Initialize()
 	
 	m_states = std::make_unique<DirectX::DX11::CommonStates>(device);
 
-	m_texture = m_commonResources->GetResources()->GetSeaTexture();
+	m_texture = m_commonResources->GetResources()->GetTextureResources()->GetSeaTexture();
 
 
 	// シェーダを取得する
-	m_vertexShader = m_commonResources->GetResources()->GetSeaVS();
-	m_hullShader   = m_commonResources->GetResources()->GetSeaHS();
-	m_domainShader = m_commonResources->GetResources()->GetSeaDS();
-	m_pixelShader  = m_commonResources->GetResources()->GetSeaPS();
+	m_vertexShader = m_commonResources->GetResources()->GetShaderResources()->GetSeaVS();
+	m_hullShader   = m_commonResources->GetResources()->GetShaderResources()->GetSeaHS();
+	m_domainShader = m_commonResources->GetResources()->GetShaderResources()->GetSeaDS();
+	m_pixelShader  = m_commonResources->GetResources()->GetShaderResources()->GetSeaPS();
 
-	m_inputLayout = m_commonResources->GetResources()->GetSeaInputLayout();
+	m_inputLayout = m_commonResources->GetResources()->GetShaderResources()->GetSeaInputLayout();
 
 	// ブレンドステートの作成
 	CreateBlendState(device);

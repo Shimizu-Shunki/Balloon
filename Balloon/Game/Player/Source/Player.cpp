@@ -25,7 +25,6 @@ Player::Player(IObject* parent)
 	m_physicsBody{},
 	m_boxCollider{},
 	m_sphereCollider{},
-	m_model{},
 	m_balloonIndex{},
 	m_jump{}
 {
@@ -47,8 +46,7 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
-	// プレイヤーモデルはなし
-	m_model = nullptr;
+
 
 	// 子オブジェクトを生成
 	this->CreateChildObjects();
@@ -63,15 +61,12 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	m_jump->Initialize();
 
 	// TPSカメラを生成
-	std::unique_ptr<ICamera> camera = std::make_unique<TPSKeyCamera>(
-		m_transform.get(), m_physicsBody.get(), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 10.0f));
-	// カメラを初期化
-	camera->Initialize();
+	//std::unique_ptr<ICamera> camera = std::make_unique<TPSKeyCamera>(
+	//	m_transform.get(), m_physicsBody.get(), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 10.0f));
+	//// カメラを初期化
+	//camera->Initialize();
 	// カメラをマネージャーに設定
-	m_commonResources->GetCameraManager()->Attach(std::move(camera));
-
-	// スカイスフィアにTransformを渡す
-	m_commonResources->GetSkySphere()->SetTargetTransform(m_transform.get());
+	//m_commonResources->GetCameraManager()->Attach(std::move(camera));
 
 
 	// Tween アニメーションを開始
@@ -131,8 +126,7 @@ void Player::Update()
 /// </summary>
 void Player::Finalize() 
 {
-	// スカイスフィアのターゲットのTransformを解除
-	m_commonResources->GetSkySphere()->SetTargetTransform(nullptr);
+
 }
 
 

@@ -1,7 +1,9 @@
 #include "Framework/pch.h"
 #include "Game/Player/Header/Head.h"
 #include "Framework/CommonResources.h"
-
+#include "Game/Model3D/Model3D.h"
+#include "Framework/Resources/ModelResources.h"
+#include "Framework/Resources/MaterialResources.h"
 
 /// <summary>
 /// コンストラクタ
@@ -37,17 +39,26 @@ void Head::Initialize(ObjectID objectID, const bool& active)
 	// モデルを取得
 	// プレイヤーモデル
 	if (objectID == ObjectID::PLAYER_HEAD)
-		m_model = commonResources->GetResources()->GetPlayerHeadModel();
+	{
+		// 3Dモデルを準備する
+		m_model = std::make_unique<Model3D>();
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerHeadModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		);
+	}
 	// 敵モデル
 	else
-		m_model = commonResources->GetResources()->GetEnemyHeadModel();
+	{
+		// 3Dモデルを準備する
+		m_model = std::make_unique<Model3D>();
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetEnemyHeadModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		);
+	}
 
+	// 描画マネージャーに渡す
+	commonResources->GetRenderManager()->AddModel(m_model.get());
 
-	// 描画管理クラスにTransformとモデルを設定
-	commonResources->GetRenderManager()->AddModel({
-		this,
-		m_model
-	});
 }
 
 /// <summary>

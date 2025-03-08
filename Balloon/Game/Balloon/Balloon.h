@@ -3,6 +3,7 @@
 #include "Interface/IObject.h"
 
 class IComposite;
+class Model3D;
 
 // 風船　子オブジェクトはなし
 class Balloon : public ILeaf
@@ -14,9 +15,6 @@ public:
 	void SetIsActive(bool isActive) { m_isActive = isActive; }
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
-	// モデルを取得する
-	DirectX::Model* GetModel() const override { return m_model; }
-
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
 
@@ -66,5 +64,5 @@ private:
 	// Transform 全てのオブジェクトが持つ
 	std::unique_ptr<Transform> m_transform;
 	// 3Dモデル
-	DirectX::Model* m_model;
+	std::unique_ptr<Model3D> m_model;
 };

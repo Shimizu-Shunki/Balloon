@@ -45,8 +45,6 @@ public:
 	
 	// オブジェクトのIDを取得する
 	virtual IObject::ObjectID GetObjectID() const = 0;
-	// モデルを取得する
-	virtual DirectX::Model* GetModel() const = 0;
 
 public:
 	// 仮想デストラクタ

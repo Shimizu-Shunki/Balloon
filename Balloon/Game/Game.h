@@ -12,7 +12,6 @@
 #include "Framework/CameraManager.h"
 #include "Framework/RenderManager.h"
 #include "Framework/AudioManager.h"
-#include "Game/Sky/SkySphere.h"
 #include "Framework/Tween/TweenManager.h"
 
 class SceneManager;
@@ -93,9 +92,6 @@ private:
     Resources* m_resources;
     //  コモンステート
     std::unique_ptr<DirectX::CommonStates>  m_commonStates;
-
-    // スカイスフィア
-    std::unique_ptr<SkySphere> m_skySphere;
 
     // 管理クラス
     // シーンマネージャー

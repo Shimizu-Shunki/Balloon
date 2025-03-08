@@ -22,7 +22,7 @@ public:
 	// 更新処理
 	void Update(DirectX::SimpleMath::Matrix view , DirectX::SimpleMath::Matrix projection);
 	// 描画処理
-	void Render();
+	void Render(ID3D11DeviceContext1* context , DirectX::CommonStates* states);
 
 private:
 
@@ -40,4 +40,6 @@ private:
 
 	// 定数バッファ用のバッファオブジェクト
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer;
+
+	float angle;
 };

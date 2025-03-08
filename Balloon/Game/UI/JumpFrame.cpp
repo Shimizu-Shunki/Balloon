@@ -2,6 +2,8 @@
 #include "Game/UI/JumpFrame.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Tween/Tween.h"
+#include "Framework/Resources/ShaderResources.h"
+#include "Framework/Resources/TextureResources.h"
 
 JumpFrame::JumpFrame()
 {
@@ -26,13 +28,13 @@ void JumpFrame::Initialize()
 	m_spriteMaterial->SetConstBuffer<ConstBuffer>();
 
 	// シェーダーを設定
-	m_spriteMaterial->SetVertexShader  (commonResources->GetResources()->GetUI_VS());
-	m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetUI_GS());
-	m_spriteMaterial->SetPixelShader   (commonResources->GetResources()->GetUI_PS());
+	m_spriteMaterial->SetVertexShader(commonResources->GetResources()->GetShaderResources()->GetUI_VS());
+	m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetShaderResources()->GetUI_GS());
+	m_spriteMaterial->SetPixelShader(commonResources->GetResources()->GetShaderResources()->GetUI_PS());
 
 	// 画像を設定
 	int width, height;
-	m_spriteMaterial->SetTexture(commonResources->GetResources()->GetJampFrame(), width, height);
+	m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTextureResources()->GetJampFrame(), width, height);
 
 	// 定数バッファ数値設定
 	m_constBuffer.windowSize     = { 1280.0f , 720.0f };

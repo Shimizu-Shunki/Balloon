@@ -4,14 +4,17 @@
 #include "Framework/CameraManager.h"
 #include "Game/Transform/Transform.h"
 #include "Game/ShadowMap/CascadedShadowMap.h"
+#include "Framework/Resources/ShaderResources.h"
+#include "Game/Model3D/Model3D.h"
+#include "Game/Sky/SkyBox.h"
 
 RenderManager::RenderManager()
 	:
 	m_sprite{},
 	m_pendingSprite{},
-	m_skySphere{},
-	m_renderableObjects{},
-	m_pendingRenderableObjects{}
+	m_skyBox{},
+	m_models{},
+	m_pendingModels{}
 {
 	// 共有リソース
 	auto commonResources = CommonResources::GetInstance();
@@ -32,19 +35,22 @@ RenderManager::RenderManager()
 	this->CreateSpriteRasterizerState();
 
 	// インプットレイアウトを設定
-	m_spriteInputLayout = commonResources->GetResources()->GetUIinputLayout();
+	m_spriteInputLayout = commonResources->GetResources()->GetShaderResources()->GetUIinputLayout();
 
 	m_shadowMap = std::make_unique<CascadedShadowMap>();
 	m_shadowMap->Initialize();
+
+	m_skyBox = std::make_unique<SkyBox>();
+	m_skyBox->Initialize();
 }
 
 
 void RenderManager::SwitchRenderbleObjects()
 {
 	// 現在のオブジェクトを削除する
-	m_renderableObjects.clear();
+	m_models.clear();
 	// 次のオブジェクトを格納する
-	m_renderableObjects = m_pendingRenderableObjects;
+	m_models = m_pendingModels;
 
 	// 現在のスプライトを削除する
 	m_sprite.clear();
@@ -52,59 +58,34 @@ void RenderManager::SwitchRenderbleObjects()
 	m_sprite = m_pendingSprite;
 
 	m_pendingSprite.clear();
-	m_pendingRenderableObjects.clear();
+	m_pendingModels.clear();
 }
 
 void RenderManager::Render()
 {
-	// スカイスフィアを描画する スカイスフィアがない場合エラー処理を行い描画を行わない
-	if (!m_sky) {
-		throw std::runtime_error("m_skySphere.model is nullptr!");
-	}
-
 	// プロジェクション行列を取得する
 	const DirectX::SimpleMath::Matrix& projectionMatrix = m_cameraManager->GetProjectionMatrix();
 	// ビュー行列を取得する
 	const DirectX::SimpleMath::Matrix& viewMatrix       = m_cameraManager->GetViewMatrix();
 
-
-	// モデルのエフェクト情報を更新する
-	m_sky->UpdateEffects([](DirectX::IEffect* effect)
-	{
-		// ベーシックエフェクトを設定する
-		DirectX::DX11::BasicEffect* basicEffect = dynamic_cast<DirectX::DX11::BasicEffect*>(effect);
-		if (basicEffect)
-		{
-			// 個別のライトをすべて無効化する
-			basicEffect->SetLightEnabled(0, false);
-			basicEffect->SetLightEnabled(1, false);
-			basicEffect->SetLightEnabled(2, false);
-
-			// モデルを自発光させる
-			basicEffect->SetEmissiveColor(DirectX::Colors::White);
-		}
-	});
-	// スカイスフィアを描画する
-	m_sky->Draw(m_context, *m_commonStates, m_skySphere->GetWorldMatrix(),
-		viewMatrix, projectionMatrix);
+	m_skyBox->Update(viewMatrix,projectionMatrix);
+	m_skyBox->Render(m_context,m_commonStates);
 
 	// 影用描画
 	m_shadowMap->Begin();
 	// モデルの描画
-	for (const auto& model : m_renderableObjects)
+	for (const auto& model : m_models)
 	{
-		if (model.model != nullptr && model.object->GetIsActive())
-			m_shadowMap->Draw(model.model,model.object->GetTransform()->GetWorldMatrix());
+		if (model->GetIsShadow() && model->GetObject()->GetIsActive())
+			m_shadowMap->Draw(model->GetModel(), m_context, m_commonStates, model->GetObject()->GetTransform()->GetWorldMatrix());
 	}
 	m_shadowMap->End();
 
 	// モデルの描画
-	for (const auto& model : m_renderableObjects)
+	for (const auto& model : m_models)
 	{
-		if(model.model != nullptr && model.object->GetIsActive() )
-		model.model->Draw(m_context, *m_commonStates, model.object->GetTransform()->GetWorldMatrix(),
-			viewMatrix, projectionMatrix
-		);
+		if (model->GetObject()->GetIsActive())
+			model->Render(m_context, m_commonStates, viewMatrix, projectionMatrix, {});
 	}
 
 	// スプライトの描画

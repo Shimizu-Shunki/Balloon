@@ -5,37 +5,24 @@
 #include <shared_mutex>
 #include "Interface/IObject.h"
 #include "Game/ShadowMap/CascadedShadowMap.h"
+#include "Game/Sky/SkyBox.h"
+
 
 // 全てのモデル、UIの描画を行うクラス
 
 class Transform;
 class CameraManager;
 class CascadedShadowMap;
+class Model3D;
+class SkyBox;
 
 class RenderManager
 {
 public:
-	// ワールド行列変換は各クラスで行う
-
-	struct RenderableObject
-	{
-		// 情報格納されたTransformクラスのポインタ
-		IObject* object;
-		// モデル
-		DirectX::Model* model;
-		// マテリアル
-	};
-
-
-
-public:
 	// 描画用モデルを設定
-	void AddModel(RenderManager::RenderableObject model) { m_pendingRenderableObjects.push_back(model); }
+	void AddModel(Model3D* model) { m_pendingModels.push_back(model); }
 	// スプライトを追加
 	void AddSprite(ISprite* sprite) { m_pendingSprite.push_back(sprite); }
-
-	// スカイスフィアを登録する
-	void SetSkySphereObject(Transform* transform, DirectX::Model* model) { m_skySphere = transform; m_sky = model; }
 
 public:
 	// 描画用格納庫に移動する
@@ -77,8 +64,8 @@ private:
 
 
 private:
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_context;
+	ID3D11Device1* m_device;
+	ID3D11DeviceContext1* m_context;
 	DirectX::CommonStates* m_commonStates;
 
 	CameraManager* m_cameraManager;
@@ -103,14 +90,11 @@ private:
 	// カスケードシャドウマップ　まだカスケードされていない
 	std::unique_ptr<CascadedShadowMap> m_shadowMap;
 
+	// スカイボックス
+	std::unique_ptr<SkyBox> m_skyBox;
 
-	// スカイスフィア
-	Transform* m_skySphere;
-	DirectX::Model* m_sky;
-	// 3D描画に必要な情報格納構造体
-	std::vector<RenderableObject> m_renderableObjects;
-	// 3D モデルの準備段階データ
-	std::vector<RenderableObject> m_pendingRenderableObjects;
-
-	std::shared_mutex m_mutex;  // 読み書きロック
+	// モデル
+	std::vector<Model3D*> m_models;
+	// モデル　準備段階データ
+	std::vector<Model3D*> m_pendingModels;
 };

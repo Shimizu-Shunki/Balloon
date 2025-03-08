@@ -59,9 +59,6 @@
     <Filter Include="Game\PhysicsBody">
       <UniqueIdentifier>{ba8948ea-6dee-429f-afe6-dbb85a70202c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Sky">
-      <UniqueIdentifier>{712e36ac-ed4b-4ea7-a550-1146d6c31e66}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Root">
       <UniqueIdentifier>{9b0a90a5-a48f-439a-8365-786985aa311a}</UniqueIdentifier>
     </Filter>
@@ -131,6 +128,27 @@
     <Filter Include="Resources\Shaders\SkySphere">
       <UniqueIdentifier>{712ac026-769b-40cd-a66b-182caa3ce5fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Resources">
+      <UniqueIdentifier>{9067b00d-407f-4d07-97d0-fc171ce47aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Resources\Header">
+      <UniqueIdentifier>{0dcdb869-fe06-4b19-a090-7cc3d4030045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Resources\Source">
+      <UniqueIdentifier>{82e7c75e-4ba8-48b0-855d-a5094c3ad0db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Model3D">
+      <UniqueIdentifier>{a1365b4a-b3b8-439e-b968-29e9ab302f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\Header">
+      <UniqueIdentifier>{a423b41d-2f7e-4e24-b257-bb198516a8af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\Source">
+      <UniqueIdentifier>{94d77a41-c060-4974-bc5d-6930fbf7d7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SkyBox">
+      <UniqueIdentifier>{712e36ac-ed4b-4ea7-a550-1146d6c31e66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -177,9 +195,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\InputManager.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Resources.h">
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\AudioManager.h">
@@ -266,9 +281,6 @@
     <ClInclude Include="Game\Scenes\Header\TitleScene.h">
       <Filter>Game\Scenes\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Sky\SkySphere.h">
-      <Filter>Game\Sky</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Tween\Tween.h">
       <Filter>Framework\Tween</Filter>
     </ClInclude>
@@ -302,9 +314,6 @@
     <ClInclude Include="Interface\ISprite.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\TitleLogo.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Material\SeaMaterial.h">
       <Filter>Game\Material</Filter>
     </ClInclude>
@@ -335,18 +344,6 @@
     <ClInclude Include="Game\Cloud\Cloud.h">
       <Filter>Game\Cloud</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\Keys.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\Text.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\JumpFrame.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\JumpMemory.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Jump\Jump.h">
       <Filter>Game\Jump</Filter>
     </ClInclude>
@@ -370,12 +367,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scenes\Header\GameOverScene.h">
       <Filter>Game\Scenes\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\ClearText.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\FailedText.h">
-      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\ShadowMap\CascadedShadowMap.h">
       <Filter>Game\ShadowMap</Filter>
@@ -402,7 +393,46 @@
       <Filter>Game\Material</Filter>
     </ClInclude>
     <ClInclude Include="Game\Sky\SkyBox.h">
-      <Filter>Game\Sky</Filter>
+      <Filter>Game\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\TextureResources.h">
+      <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources.h">
+      <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\ShaderResources.h">
+      <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\ModelResources.h">
+      <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Model3D\Model3D.h">
+      <Filter>Game\Model3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ClearText.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\FailedText.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\JumpFrame.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\JumpMemory.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\Keys.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\Text.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleLogo.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\MaterialResources.h">
+      <Filter>Framework\Resources\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -442,9 +472,6 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Framework\InputManager.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Resources.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Framework\AudioManager.cpp">
@@ -501,9 +528,6 @@
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp">
       <Filter>Game\Scenes\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Sky\SkySphere.cpp">
-      <Filter>Game\Sky</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Tween\Tween.cpp">
       <Filter>Framework\Tween</Filter>
     </ClCompile>
@@ -530,9 +554,6 @@
     </ClCompile>
     <ClCompile Include="Game\Balloon\Balloon.cpp">
       <Filter>Game\Balloon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\TitleLogo.cpp">
-      <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\Material\SeaMaterial.cpp">
       <Filter>Game\Material</Filter>
@@ -561,18 +582,6 @@
     <ClCompile Include="Game\Cloud\Cloud.cpp">
       <Filter>Game\Cloud</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\Keys.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\Text.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\JumpFrame.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\JumpMemory.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Jump\Jump.cpp">
       <Filter>Game\Jump</Filter>
     </ClCompile>
@@ -597,12 +606,6 @@
     <ClCompile Include="Game\Scenes\Source\GameOverScene.cpp">
       <Filter>Game\Scenes\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ClearText.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\FailedText.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Game\ShadowMap\CascadedShadowMap.cpp">
       <Filter>Game\ShadowMap</Filter>
     </ClCompile>
@@ -625,7 +628,46 @@
       <Filter>Game\Material</Filter>
     </ClCompile>
     <ClCompile Include="Game\Sky\SkyBox.cpp">
-      <Filter>Game\Sky</Filter>
+      <Filter>Game\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources\TextureResources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources\ShaderResources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources\ModelResources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Model3D\Model3D.cpp">
+      <Filter>Game\Model3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ClearText.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\FailedText.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\JumpFrame.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\JumpMemory.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\Keys.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\Text.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TitleLogo.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources\MaterialResources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -657,7 +699,7 @@
     <None Include="Resources\Shaders\hlsl\Model3D\Common.hlsli">
       <Filter>Resources\Shaders\PBRLit</Filter>
     </None>
-    <None Include="Resources\Shaders\hlsl\SkySphere.hlsli">
+    <None Include="Resources\Shaders\hlsl\SkyBox.hlsli">
       <Filter>Resources\Shaders\SkySphere</Filter>
     </None>
   </ItemGroup>
@@ -695,10 +737,10 @@
     <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_VS.hlsl">
       <Filter>Resources\Shaders\PBRLit</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_VS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\SkyBox_VS.hlsl">
       <Filter>Resources\Shaders\SkySphere</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_PS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\SkyBox_PS.hlsl">
       <Filter>Resources\Shaders\SkySphere</Filter>
     </FxCompile>
   </ItemGroup>

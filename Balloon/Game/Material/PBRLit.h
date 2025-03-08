@@ -3,6 +3,7 @@
 #include "Interface/IMaterial.h"
 
 class IMaterial;
+class Resources;
 
 class PBRLit : public IMaterial
 {
@@ -31,7 +32,7 @@ public:
 	// デストラクタ
 	~PBRLit() = default;
 
-	void Initialize();
+	void Initialize(Resources* resources);
 
 	void UpdateConstantBuffer();
 

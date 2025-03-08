@@ -37,7 +37,8 @@ public:
 	// ‰Šú‰»ˆ—
 	void Initialize();
 	// •`‰æˆ—
-	void Draw(DirectX::Model* model , DirectX::SimpleMath::Matrix world);
+	void Draw(DirectX::Model* model ,ID3D11DeviceContext1* context, DirectX::CommonStates* states,
+		DirectX::SimpleMath::Matrix world);
 
 	void Begin();
 	void End();

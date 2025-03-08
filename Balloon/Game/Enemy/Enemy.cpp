@@ -41,8 +41,6 @@ void Enemy::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
-	// プレイヤーモデルはなし
-	m_model = nullptr;
 
 	// 風船の数を設定
 	m_balloonIndex = 3;

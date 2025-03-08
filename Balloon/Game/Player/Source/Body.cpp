@@ -1,6 +1,9 @@
 #include "Framework/pch.h"
 #include "Game/Player/Header/Body.h"
 #include "Framework/CommonResources.h"
+#include "Game/Model3D/Model3D.h"
+#include "Framework/Resources/ModelResources.h"
+#include "Framework/Resources/MaterialResources.h"
 
 // 部品
 #include "Game/Player/Header/Head.h"
@@ -34,14 +37,14 @@ void Body::Initialize(ObjectID objectID, const bool& active)
 	// オブジェクトアクティブを設定
 	m_isActive = active;
 
-	// プレイヤーの体モデルを取得
-	m_model = commonResources->GetResources()->GetPlayerBodyModel();
-	
-	// 描画管理クラスにTransformとモデルを設定
-	commonResources->GetRenderManager()->AddModel({
-		this,
-		m_model
-	});
+	// 3Dモデルを準備する
+	m_model = std::make_unique<Model3D>();
+	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerBodyModel(),
+		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+	);
+
+	// 描画マネージャーに渡す
+	commonResources->GetRenderManager()->AddModel(m_model.get());
 
 	// プレイヤー
 	if (m_objectId == ObjectID::PLAYER_BODY)

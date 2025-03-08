@@ -21,9 +21,6 @@ public:
 	void SetIsActive(bool isActive) { m_isActive = isActive; }
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
-	// モデルを取得する
-	DirectX::Model* GetModel() const override { return m_model; }
-
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
 	// 物理挙動を取得
@@ -104,8 +101,6 @@ private:
 	std::unique_ptr<ICollider> m_boxCollider;
 	std::unique_ptr<ICollider> m_sphereCollider;
 
-	// 3Dモデル
-	DirectX::Model* m_model;
 	// 風船の数
 	int m_balloonIndex;
 

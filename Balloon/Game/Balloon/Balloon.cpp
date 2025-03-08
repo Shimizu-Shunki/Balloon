@@ -1,6 +1,9 @@
 #include "Framework/pch.h"
 #include "Game/Balloon/Balloon.h"
 #include "Framework/CommonResources.h"
+#include "Framework/Resources/ModelResources.h"
+#include "Game/Model3D/Model3D.h"
+#include "Framework/Resources/MaterialResources.h"
 
 /// <summary>
 /// コンストラクタ
@@ -32,14 +35,14 @@ void Balloon::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
-	// モデルを取得
-	m_model = commonResources->GetResources()->GetBalloonModel();
+	// 3Dモデルを準備する
+	m_model = std::make_unique<Model3D>();
+	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetBalloonModel(),
+		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+	);
 
 	// 描画管理クラスにTransformとモデルを設定
-	commonResources->GetRenderManager()->AddModel({
-		this,
-		m_model
-	});
+
 }
 
 /// <summary>

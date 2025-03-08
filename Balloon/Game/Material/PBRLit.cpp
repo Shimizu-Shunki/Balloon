@@ -2,6 +2,7 @@
 #include "Game/Material/PBRLit.h"
 #include "Interface/IMaterial.h"
 #include "Framework/CommonResources.h"
+#include "Framework/Resources/ShaderResources.h"
 
 
 PBRLit::PBRLit()
@@ -9,20 +10,19 @@ PBRLit::PBRLit()
 
 }
 
-void PBRLit::Initialize()
+void PBRLit::Initialize(Resources* resources)
 {
-	auto resources = CommonResources::GetInstance()->GetResources();
 	auto device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
 
 	m_context = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDeviceContext();
 	m_states = CommonResources::GetInstance()->GetCommonStates();
 
 	// 入力レイアウトを設定
-	m_inputLayout = resources->GetPBRLitInputLayout();
+	m_inputLayout = resources->GetShaderResources()->GetPBRLitInputLayout();
 
 	// シェーダーを設定
-	m_vertexShader = resources->GetPBRLitVS();
-	m_pixelShader  = resources->GetPBRLitPS();
+	m_vertexShader = resources->GetShaderResources()->GetPBRLitVS();
+	m_pixelShader  = resources->GetShaderResources()->GetPBRLitPS();
 
 	// 定数バッファ用のバッファオブジェクトを作成する
 	D3D11_BUFFER_DESC bufferDesc{};

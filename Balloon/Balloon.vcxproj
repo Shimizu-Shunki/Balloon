@@ -195,6 +195,10 @@
     <ClInclude Include="Framework\pch.h" />
     <ClInclude Include="Framework\RenderManager.h" />
     <ClInclude Include="Framework\Resources.h" />
+    <ClInclude Include="Framework\Resources\MaterialResources.h" />
+    <ClInclude Include="Framework\Resources\ModelResources.h" />
+    <ClInclude Include="Framework\Resources\ShaderResources.h" />
+    <ClInclude Include="Framework\Resources\TextureResources.h" />
     <ClInclude Include="Framework\SceneManager.h" />
     <ClInclude Include="Framework\Sounds.h" />
     <ClInclude Include="Framework\StateMachine\Parameters.h" />
@@ -221,6 +225,7 @@
     <ClInclude Include="Game\Material\PBRLit.h" />
     <ClInclude Include="Game\Material\SeaMaterial.h" />
     <ClInclude Include="Game\Material\SpriteMaterial.h" />
+    <ClInclude Include="Game\Model3D\Model3D.h" />
     <ClInclude Include="Game\PhysicsBody\PhysicsBody.h" />
     <ClInclude Include="Game\Player\Header\Body.h" />
     <ClInclude Include="Game\Player\Header\Head.h" />
@@ -236,7 +241,6 @@
     <ClInclude Include="Game\Scenes\Header\TitleScene.h" />
     <ClInclude Include="Game\ShadowMap\CascadedShadowMap.h" />
     <ClInclude Include="Game\Sky\SkyBox.h" />
-    <ClInclude Include="Game\Sky\SkySphere.h" />
     <ClInclude Include="Game\States\Fade\FadeInState.h" />
     <ClInclude Include="Game\States\Fade\FadeOutState.h" />
     <ClInclude Include="Game\States\Player\PlayerIdleState.h" />
@@ -288,6 +292,10 @@
     </ClCompile>
     <ClCompile Include="Framework\RenderManager.cpp" />
     <ClCompile Include="Framework\Resources.cpp" />
+    <ClCompile Include="Framework\Resources\MaterialResources.cpp" />
+    <ClCompile Include="Framework\Resources\ModelResources.cpp" />
+    <ClCompile Include="Framework\Resources\ShaderResources.cpp" />
+    <ClCompile Include="Framework\Resources\TextureResources.cpp" />
     <ClCompile Include="Framework\SceneManager.cpp" />
     <ClCompile Include="Framework\StateMachine\Parameters.cpp" />
     <ClCompile Include="Framework\StateMachine\StateController.cpp" />
@@ -312,6 +320,7 @@
     <ClCompile Include="Game\Material\PBRLit.cpp" />
     <ClCompile Include="Game\Material\SeaMaterial.cpp" />
     <ClCompile Include="Game\Material\SpriteMaterial.cpp" />
+    <ClCompile Include="Game\Model3D\Model3D.cpp" />
     <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp" />
     <ClCompile Include="Game\Player\Source\Body.cpp" />
     <ClCompile Include="Game\Player\Source\Head.cpp" />
@@ -327,7 +336,6 @@
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp" />
     <ClCompile Include="Game\ShadowMap\CascadedShadowMap.cpp" />
     <ClCompile Include="Game\Sky\SkyBox.cpp" />
-    <ClCompile Include="Game\Sky\SkySphere.cpp" />
     <ClCompile Include="Game\States\Fade\FadeInState.cpp" />
     <ClCompile Include="Game\States\Fade\FadeOutState.cpp" />
     <ClCompile Include="Game\States\Player\PlayerIdleState.cpp" />
@@ -386,7 +394,7 @@
     <None Include="Resources\Shaders\hlsl\Model3D\Common.hlsli" />
     <None Include="Resources\Shaders\hlsl\Model3D\PBRLit.hlsli" />
     <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli" />
-    <None Include="Resources\Shaders\hlsl\SkySphere.hlsli" />
+    <None Include="Resources\Shaders\hlsl\SkyBox.hlsli" />
     <None Include="Resources\Shaders\hlsl\UI\UI.hlsli" />
   </ItemGroup>
   <ItemGroup>
@@ -462,7 +470,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_PS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\SkyBox_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -472,7 +480,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\SkySphere_VS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\SkyBox_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

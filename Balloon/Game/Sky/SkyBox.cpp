@@ -15,25 +15,25 @@ void SkyBox::Initialize()
 	ID3D11Device1* device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
 
 	// スカイボックス用モデルの作成
-	m_skyboxModel = DirectX::GeometricPrimitive::CreateGeoSphere(context, 2.0f, 3, false);
+	m_skyboxModel = DirectX::GeometricPrimitive::CreateSphere(context, 2.0f, 3, false);
 
 	// シェーダー
 	std::vector<uint8_t> blob;
 	// 頂点シェーダをロードする
-	blob = DX::ReadData(L"Resources\\Shaders\\cso\\SkySphere_VS.cso");
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\SkyBox_VS.cso");
 	DX::ThrowIfFailed(
 		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_skyVertexShader.ReleaseAndGetAddressOf())
 	);
 
 	// ピクセルシェーダをロードする
-	blob = DX::ReadData(L"Resources\\Shaders\\cso\\SkySphere_PS.cso");
+	blob = DX::ReadData(L"Resources\\Shaders\\cso\\SkyBox_PS.cso");
 	DX::ThrowIfFailed(
 		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_skyPixelShader.ReleaseAndGetAddressOf())
 	);
 
 	// スカイマップ
 	DirectX::CreateDDSTextureFromFile(
-		device, L"Resources\\Textures\\Skybox.dds", nullptr, m_cubemap.ReleaseAndGetAddressOf());
+		device, L"Resources\\Textures\\DDS\\CubeMap.dds", nullptr, m_cubemap.ReleaseAndGetAddressOf());
 
 	// 定数バッファ用のバッファオブジェクトを作成する
 	D3D11_BUFFER_DESC bufferDesc{};
@@ -45,15 +45,16 @@ void SkyBox::Initialize()
 		device->CreateBuffer(&bufferDesc, nullptr, m_constantBuffer.ReleaseAndGetAddressOf())
 	);
 
-
+	angle = 0.0f;
 }
 
 void SkyBox::Update(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix projection)
 {
+	angle++;
+
 	// ワールド行列の作成
 	DirectX::SimpleMath::Matrix world =
-		DirectX::SimpleMath::Matrix::CreateRotationY(DirectX::XM_PI) *
-		DirectX::SimpleMath::Matrix::Identity;
+		DirectX::SimpleMath::Matrix::CreateRotationY(DirectX::XMConvertToRadians(angle * 0.01f));
 
 	// GPUが使用するリソースのメモリにCPUからアクセスする際に利用する構造体
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -72,20 +73,14 @@ void SkyBox::Update(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matri
 	context->Unmap(m_constantBuffer.Get(), 0);
 }
 
-void SkyBox::Render()
+void SkyBox::Render(ID3D11DeviceContext1* context, DirectX::CommonStates* states)
 {
-	ID3D11DeviceContext* context = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDeviceContext();
-	DirectX::CommonStates* states = CommonResources::GetInstance()->GetCommonStates();
-
 	// スカイボックスの描画
-	m_skyboxModel->Draw({}, {}, {}, DirectX::Colors::White, nullptr, false, [&]()
+	m_skyboxModel->Draw({}, {}, {}, {}, nullptr, false, [&]()
 		{
-			// インプットレイアウトの設定
-			//context->IASetInputLayout(m_skyInputLayout.Get());
-
 			// シェーダーの設定
 			context->VSSetShader(m_skyVertexShader.Get(), nullptr, 0);
-			context->PSSetShader(m_skyPixelShader.Get(), nullptr, 0);
+			context->PSSetShader(m_skyPixelShader.Get() , nullptr, 0);
 
 			// 定数バッファの設定（共通定数バッファのみ）
 			context->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
