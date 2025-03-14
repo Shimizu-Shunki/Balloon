@@ -13,6 +13,11 @@ public:
     void SetLocalRotation(const DirectX::SimpleMath::Quaternion& localRotation) { m_localRotation = localRotation; }
     // ローカルスケールを設定
     void SetLocalScale(const DirectX::SimpleMath::Vector3& localScale) { m_localScale = localScale; }
+    // Rectを取得する
+    void SetRect(const DirectX::SimpleMath::Vector4& rect) { m_rect = rect; }
+    // カラーを取得する
+    void SetColor(const DirectX::SimpleMath::Vector4& color) { m_color = color; }
+
     // 取得
     // ローカル座標を設定
     DirectX::SimpleMath::Vector3 GetLocalPosition() const { return m_localPosition; }
@@ -20,9 +25,16 @@ public:
     DirectX::SimpleMath::Quaternion GetLocalRotation() const { return m_localRotation; }
     // ローカルスケールを設定
     DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_localScale; }
+    // Rectを取得する
+    DirectX::SimpleMath::Vector4 GetRect() { return m_rect; }
+    // カラーを取得する
+    DirectX::SimpleMath::Vector4 GetColor() { return m_color; }
+
 
 	// ワールド行列を取得する
 	DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_worldMatrix; }
+
+
 
 
 
@@ -120,6 +132,11 @@ private:
 	DirectX::SimpleMath::Quaternion m_localRotation;
 	// ローカルスケール
 	DirectX::SimpleMath::Vector3 m_localScale;
+
+    // Rect
+    DirectX::SimpleMath::Vector4 m_rect;
+    // カラー
+    DirectX::SimpleMath::Vector4 m_color;
 
 	// ワールド行列
 	DirectX::SimpleMath::Matrix m_worldMatrix;

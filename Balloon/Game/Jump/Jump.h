@@ -1,11 +1,7 @@
 #pragma once
-#include "Game/UI/JumpMemory.h"
-#include "Game/UI/JumpFrame.h"
+
 #include "Interface/ISprite.h"
 
-
-class JumpFrame;
-class JumpMemory;
 class CommonResources;
 class IObject;
 class PhysicsBody;
@@ -54,7 +50,7 @@ private:
 	float m_texSizeW, m_texSizeH;
 
 	// ジャンプフレーム
-	std::unique_ptr<ISprite> m_jumpFrame;
+	// std::unique_ptr<ISprite> m_jumpFrame;
 	// ジャンプメモリ
-	std::unique_ptr<ISprite> m_jumpMemory;
+	// std::unique_ptr<ISprite> m_jumpMemory;
 };

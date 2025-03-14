@@ -5,6 +5,11 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
 
+#include "Game/Image/Image.h"
+#include "Game/Material/DefaultUi.h"
+#include "Game/Transform/Transform.h"
+
+
 TitleLogo::TitleLogo()
 {
 	
@@ -12,73 +17,73 @@ TitleLogo::TitleLogo()
 }
 
 
-void TitleLogo::Initialize()
+void TitleLogo::Initialize(ObjectID objectID, const bool& active)
 {
+	// 共有リソース
 	auto commonResources = CommonResources::GetInstance();
+	int width, height;
 
-	commonResources->GetRenderManager()->AddSprite(this);
 
 	// Transformの作成
 	m_transform = std::make_unique<Transform>();
+	// Imageの作成
+	m_image = std::make_unique<Image>();
+	// Materialの作成
+	m_material = std::make_unique<DefaultUi>();
 
-	// マテリアルの作成
-	m_spriteMaterial = std::make_unique<SpriteMaterial>(
-		commonResources->GetDeviceResources()->GetD3DDevice(), commonResources->GetDeviceResources()->GetD3DDeviceContext());
+	// Imageの初期化
+	m_image->Initialize(true, m_material.get(), m_transform.get());
+	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
+	m_image->SetRuleTexture(nullptr);
+	m_image->SetIsActive(true);
 
-	// 定数バッファを設定
-	m_spriteMaterial->SetConstBuffer<ConstBuffer>();
+	// マテリアルを初期化する
+	this->InitialMaterial(width,height);
 
-	// シェーダーを設定
-	m_spriteMaterial->SetVertexShader(commonResources->GetResources()->GetShaderResources()->GetUI_VS());
-	m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetShaderResources()->GetUI_GS());
-	m_spriteMaterial->SetPixelShader(commonResources->GetResources()->GetShaderResources()->GetUI_PS());
-
-	int width, height;
-
-	// 画像をロード
-	m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
-
-	m_constBuffer.windowSize = { 1280.0f,720.0f };
-	m_constBuffer.textureSize = { (float)width,(float)height };
-	m_constBuffer.useTexture = 1;
-	m_constBuffer.useRuleTexture = 0;
-	m_constBuffer.ruleProgress = 0.0f;
-	m_constBuffer.ruleInverse = 0;
-
-	m_transform->SetLocalPosition({ 1280.0f / 3.5f, 720.0f / 3.0f,0.0f });
-
-	m_vertexBuffer.position = DirectX::SimpleMath::Vector4(
-		m_transform->GetLocalPosition().x,
-		m_transform->GetLocalPosition().y,
-		m_transform->GetLocalPosition().z,
-		1.0f
-	);
-	m_vertexBuffer.scale = DirectX::SimpleMath::Vector3::Zero;
-
-	m_vertexBuffer.color = DirectX::SimpleMath::Vector4::One;
-
-	m_vertexBuffer.rect = { 0.0f , 0.0f , (float)width,(float)height };
-
-	m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
-
-	// 定数バッファの更新をする
-	// 
-
-	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
-
+	// Transformの初期化
+	m_transform->SetLocalPosition({ 365.7f , 240.0f , 0.0f });
+	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
 	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetRect({ 0.0f,0.0f,(float)width,(float)height});
+	m_transform->SetColor(DirectX::SimpleMath::Vector4::One);
 
+	// タイトルロゴのアニメーションを設定
 	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f)
 		.SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
+
+	commonResources->GetRenderManager()->AddSprite(m_image.get());
+}
+
+void TitleLogo::InitialTransform(
+	DirectX::SimpleMath::Vector3 position,
+	DirectX::SimpleMath::Quaternion rotation,
+	DirectX::SimpleMath::Vector3 scale
+)
+{
+
+}
+
+
+void TitleLogo::Finalize()
+{
+
 }
 
 
 void TitleLogo::Update()
 {
-	m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
+	//m_material->UpdateConstBuffer();
+}
 
-	m_vertexBuffer.scale = m_transform->GetLocalScale();
+void TitleLogo::InitialMaterial(int width, int height)
+{
+	auto material = dynamic_cast<DefaultUi*>(m_material.get());
 
-	m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
-	
+	material->SetPixelShader(CommonResources::GetInstance()->GetResources()->GetShaderResources()->GetUI_PS());
+	material->SetWindowSize({ 1280.0f,720.0f });
+	material->SetTextureSize({ (float)width, (float)height });
+	material->SetUseTexture(1.0f);
+	material->SetUseRuleTexture(0.0f);
+	material->SetRuleProgress(0.0f);
+	material->SetRuleInverse(0.0f);
 }

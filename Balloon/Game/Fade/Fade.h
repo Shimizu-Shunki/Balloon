@@ -1,42 +1,33 @@
 #pragma once
-#include <future>
-#include "Game/Material/SpriteMaterial.h"
-#include "Game/Material/Buffers.h"
-#include "Framework/SceneManager.h"
-#include "Framework/Resources.h"
-#include "Interface/ISprite.h"
-
-#include "Game/Scenes/Header/PlayScene.h"
+#include "Game/Image/Image.h"
+#include "Game/Material/DefaultUi.h"
 
 class CommonResources;
+class SceneManager;
+class Image;
+class IMaterial;
+class Transform;
+class DefaultUi;
 
-class Fade : ISprite
+class Fade
 {
 public:
 
 	bool GetIsActive() const { return m_isActive; }
 	
-	Transform* GetTransform() const override { return m_transform.get(); }
-
-	SpriteMaterial* GetSpriteMaterial() const override { return m_spriteMaterial.get(); }
+	Transform* GetTransform() const { return m_transform.get(); }
 
 public:
 
 	// コンストラクタ
 	Fade();
 	// デストラクタ
-	~Fade() override = default;
+	~Fade() = default;
 
-	void Initialize() override;
-
+	// 初期化処理
+	void Initialize();
 	// 更新処理
 	void Update();
-
-public:
-
-	void Begin() override { m_spriteMaterial->Begin(); }
-
-	void End() override { m_spriteMaterial->End(); }
 
 	// フェードイン処理
 	void FadeIN(float duration);
@@ -50,10 +41,12 @@ public:
 		// フェード時間を設定
 		m_duration = duration;
 
+		auto material = dynamic_cast<DefaultUi*>(m_material.get());
+
 		// ルール画像の進行度を初期化
-		m_constBuffer.ruleProgress = 0.0f;
+		material->SetRuleProgress(0.0f);
 		// ルール画像の反転をしない
-		m_constBuffer.ruleInverse = 0;
+		material->SetRuleInverse(0.0f);
 
 		// スタート進行度
 		m_startProgress = 0.0f;
@@ -64,42 +57,38 @@ public:
 		m_isActive = true;
 	}
 
-	
+private:
+	// マテリアルの初期化処理
+	void InitialMaterial(int width, int height);
 
-	private:
 
-		// 共有リソース
-		CommonResources* m_commonResources;
 
-		std::unique_ptr<Transform> m_transform;
+private:
 
-		// コンテキスト
-		ID3D11DeviceContext1* m_context;
+	// 共有リソース
+	CommonResources* m_commonResources;
+	// コンテキスト
+	ID3D11DeviceContext1* m_context;
+	// シーンマネージャー
+	SceneManager* m_sceneManager;
 
-		// バッファ
-		ConstBuffer m_constBuffer;
-		// 頂点バッファ
-		VertexBuffer m_vertexBuffer;
-		
-		// 画像サイズ
-		int m_textureSizeW, m_textureSizeH;
+	// トランスフォーム
+	std::unique_ptr<Transform> m_transform;
+	// Image
+	std::unique_ptr<Image> m_image;
+	// マテリアル
+	std::unique_ptr<IMaterial> m_material;
 
-		// シーンマネージャー
-		SceneManager* m_sceneManager;
-		// フェード用マテリアル
-		std::unique_ptr<SpriteMaterial> m_spriteMaterial;
-		// 非同期タスク管理用
-		std::future<void> m_future;
-
-		// フェード時間
-		float m_duration;
-		// ルール画像の現在の進行度
-		float m_curentRuleProgress;
-		// 現在の経過時間
-		float m_curentTime;
-		// スタート　エンド進行度
-		float m_startProgress, m_endProgress;
-		// フェードアクティブ
-		bool m_isActive;
-
+	// テクスチャサイズ
+	int m_textureSizeW, m_textureSizeH;
+	// フェード時間
+	float m_duration;
+	// ルール画像の現在の進行度
+	float m_curentRuleProgress;
+	// 現在の経過時間
+	float m_curentTime;
+	// スタート　エンド進行度
+	float m_startProgress, m_endProgress;
+	// フェードアクティブ
+	bool m_isActive;
 };

@@ -1,12 +1,16 @@
 #include "Framework/pch.h"
 #include "Game/Fade/Fade.h"
-#include "Framework/SceneManager.h"
+#include "Game/Image/Image.h"
+#include "Game/Material/DefaultUi.h"
+
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
 
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Fade::Fade()
 	:
     m_textureSizeW(1280),
@@ -16,83 +20,57 @@ Fade::Fade()
     m_curentRuleProgress{},
     m_curentTime{},
     m_startProgress{},
-    m_endProgress{},
-    m_future{}
+    m_endProgress{}
 {
+    // 共有リソースのインスタンスを取得する
     m_commonResources = CommonResources::GetInstance();
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
 void Fade::Initialize()
 {
-    
-    auto commonResources = CommonResources::GetInstance();
-
-    commonResources->GetRenderManager()->AddSprite(this);
-
-    m_sceneManager = commonResources->GetSceneManager();
+    int width, height;
 
     // Transformの作成
     m_transform = std::make_unique<Transform>();
+    // Imageの作成
+    m_image = std::make_unique<Image>();
+    // Materialの作成
+    m_material = std::make_unique<DefaultUi>();
 
-    // マテリアルの作成
-    m_spriteMaterial = std::make_unique<SpriteMaterial>(
-        commonResources->GetDeviceResources()->GetD3DDevice(), commonResources->GetDeviceResources()->GetD3DDeviceContext());
+    // Imageの初期化
+    m_image->Initialize(true, m_material.get(), m_transform.get());
+    m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
+    m_image->SetRuleTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetRuleTexture());
+    m_image->SetIsActive(true);
 
-    // 定数バッファを設定
-    m_spriteMaterial->SetConstBuffer<ConstBuffer>();
+    m_commonResources->GetRenderManager()->AddSprite(m_image.get());
 
-    // シェーダーを設定
-    m_spriteMaterial->SetVertexShader(commonResources->GetResources()->GetShaderResources()->GetUI_VS());
-    m_spriteMaterial->SetGeometryShader(commonResources->GetResources()->GetShaderResources()->GetUI_GS());
-    m_spriteMaterial->SetPixelShader(commonResources->GetResources()->GetShaderResources()->GetUI_PS());
+    // Transformの初期化
+    m_transform->SetLocalPosition({ 1280.0f / 2.0f , 720.0f / 2.0f , 0.0f });
+    m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
+    m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
+    m_transform->SetRect({ 0.0f,0.0f,(float)width,(float)height });
+    m_transform->SetColor(DirectX::SimpleMath::Vector4::One);
 
-    int width, height;
-
-    // 画像をロード
-    m_spriteMaterial->SetTexture(commonResources->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
-
-    m_spriteMaterial->SetRuleTexture(commonResources->GetResources()->GetTextureResources()->GetRuleTexture());
-
-    m_constBuffer.windowSize = { 1280.0f,720.0f };
-    m_constBuffer.textureSize = { (float)width,(float)height };
-    m_constBuffer.useTexture = 0;
-    m_constBuffer.useRuleTexture = 1;
-    m_constBuffer.ruleProgress = 0.0f;
-    m_constBuffer.ruleInverse = 0;
-
-    m_transform->SetLocalPosition({ 1280.0f / 2.0f, 720.0f / 2.0f,0.0f });
-
-    m_vertexBuffer.position = DirectX::SimpleMath::Vector4(
-        m_transform->GetLocalPosition().x,
-        m_transform->GetLocalPosition().y,
-        m_transform->GetLocalPosition().z,
-        1.0f
-    );
-    m_vertexBuffer.scale = DirectX::SimpleMath::Vector3::One;
-
-    m_vertexBuffer.color = DirectX::SimpleMath::Vector4::One;
-
-    m_vertexBuffer.rect = { 0.0f , 0.0f , (float)width,(float)height };
-
-    m_vertexBuffer.rotate = DirectX::SimpleMath::Vector3::Zero;
-
-    // 定数バッファの更新をする
-    //m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
-
-    m_spriteMaterial->SetVertexBuffer(m_vertexBuffer);
-
-    m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);    
+    // マテリアルを初期化する
+    this->InitialMaterial(width, height);
 }
 
-
-
-// 更新処理
+/// <summary>
+/// 更新処理
+/// </summary>
 void Fade::Update()
 {
     // フレーム
     float elapseTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
 
+    // フェード中で無ければスキップ
     if (!m_isActive) return;
+
+    auto material = dynamic_cast<DefaultUi*>(m_material.get());
 
     // 経過時間を更新
     m_curentTime += elapseTime;
@@ -104,13 +82,13 @@ void Fade::Update()
     // 現在の進行度を更新
     m_curentRuleProgress = m_startProgress + t * (m_endProgress - m_startProgress);
     // 現在の進行度を更新する
-    m_constBuffer.ruleProgress = m_curentRuleProgress;
+    material->SetRuleProgress(m_curentRuleProgress);
 
     // フェードが終了したら
     if (m_curentTime >= 1.0f) {
         m_curentRuleProgress = m_endProgress;
         // 最終音量を設定
-        m_constBuffer.ruleProgress = m_curentRuleProgress;
+        material->SetRuleProgress(m_curentRuleProgress);
 
         // フェードアウトの時
         if (m_endProgress == 1.0f)
@@ -128,10 +106,14 @@ void Fade::Update()
         m_isActive = false;
     }
 
-    m_spriteMaterial->UpdateConstBuffer<ConstBuffer>(m_constBuffer, 0);
+    // 定数バッファの更新
+    material->UpdateConstBuffer();
 }
 
-// フェードイン処理
+/// <summary>
+/// フェードインを行う
+/// </summary>
+/// <param name="duration">秒数</param>
 void Fade::FadeIN(float duration)
 {
     // フェード処理中なら true を返す
@@ -140,10 +122,12 @@ void Fade::FadeIN(float duration)
     // フェード時間を設定
     m_duration = duration;
 
+    auto material = dynamic_cast<DefaultUi*>(m_material.get());
+
     // ルール画像の進行度を初期化
-    m_constBuffer.ruleProgress = 1.0f;
-    // ルール画像の反転をしない
-    m_constBuffer.ruleInverse = 0;
+    material->SetRuleInverse(0.0f);
+    // ルール画像の反転設定
+    material->SetRuleProgress(0.0f);
 
     // スタート進行度
     m_startProgress = 1.0f;
@@ -152,4 +136,26 @@ void Fade::FadeIN(float duration)
 
     // フェード処理をアクティブにする
     m_isActive = true;
+
+    // 定数バッファの更新
+    material->UpdateConstBuffer();
+}
+
+
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャサイズ横</param>
+/// <param name="height">テクスチャサイズ高さ</param>
+void Fade::InitialMaterial(int width, int height)
+{
+    auto material = dynamic_cast<DefaultUi*>(m_material.get());
+
+    material->SetPixelShader(CommonResources::GetInstance()->GetResources()->GetShaderResources()->GetUI_PS());
+    material->SetWindowSize({ 1280.0f,720.0f });
+    material->SetTextureSize({ (float)width, (float)height });
+    material->SetUseTexture(0.0f);
+    material->SetUseRuleTexture(1.0f);
+    material->SetRuleProgress(0.0f);
+    material->SetRuleInverse(0.0f);
 }

@@ -2,9 +2,8 @@
 #include "Framework/Resources/TextureResources.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Resources.h"
-#include <nlohmann/json.hpp>
-#include <nlohmann/json_fwd.hpp>
 #include <unordered_map>
+
 
 
 TextureResources::TextureResources()
@@ -27,7 +26,8 @@ TextureResources::TextureResources()
 	m_woodNormalMap{},
 	m_rockNormalMap{},
 	m_seaNormalMap{},
-	m_cubeMap{}
+	m_cubeMap{},
+	m_eveningCubeMap{}
 {
 
 }
@@ -95,6 +95,14 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Enemy"].c_str(), nullptr, m_enemyTexture.ReleaseAndGetAddressOf());
 
+	if (data.contains("Textures_NormalMaps")) {
+		for (const auto& entry : data["Textures_NormalMaps"]) {
+			for (const auto& [key, value] : entry.items()) {
+				texturePaths[key] = Resources::ConvertToWString(value);
+			}
+		}
+	}
+
 	// 肉 ノーマルマップ
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Meat"].c_str(), nullptr, m_meatNormalMap.ReleaseAndGetAddressOf());
@@ -119,4 +127,8 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// スカイマップ
 	DirectX::CreateDDSTextureFromFile(
 		device, texturePaths["CubeMap"].c_str(), nullptr, m_cubeMap.ReleaseAndGetAddressOf());
+
+	// スカイマップ
+	DirectX::CreateDDSTextureFromFile(
+		device, texturePaths["EveningCubeMap"].c_str(), nullptr, m_eveningCubeMap.ReleaseAndGetAddressOf());
 }

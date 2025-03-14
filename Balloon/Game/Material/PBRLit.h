@@ -34,9 +34,11 @@ public:
 
 	void Initialize(Resources* resources);
 
-	void UpdateConstantBuffer();
+	void BeginMaterial() override;
 
-	void SetMaterial() override;
+	void EndMaterial() override;
+
+	void UpdateConstBuffer() override;
 
 private:
 

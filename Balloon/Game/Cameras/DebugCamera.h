@@ -5,8 +5,6 @@
 #pragma once
 #include <Mouse.h>
 #include <Keyboard.h>
-#include "Framework/Graphics.h"
-
 
 
 	// デバッグ用カメラクラス

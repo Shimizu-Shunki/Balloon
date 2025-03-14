@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: TweenManager.cpp
+// 概要: Tween のインスタンスを管理し、アニメーションの更新処理を行う
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/Tween/TweenManager.h"
 #include "Framework/CommonResources.h"
@@ -53,5 +61,16 @@ void TweenManager::Update()
         {
             tween->Update(elapsedTime);
         }
+    }
+}
+
+/// <summary>
+/// 全てのTweenを停止する
+/// </summary>
+void TweenManager::Stop()
+{
+    for (const auto& tween : tweens)
+    {
+        tween->Stop();
     }
 }

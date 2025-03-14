@@ -39,6 +39,6 @@ void Model3D::Render(ID3D11DeviceContext1* context, DirectX::CommonStates* state
 			context->VSSetConstantBuffers(1, 1, cbuf);
 			context->PSSetConstantBuffers(1, 1, cbuf);
 
-			m_material->SetMaterial();
+			m_material->BeginMaterial();
 		});
 }

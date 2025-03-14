@@ -3,8 +3,6 @@
 #include "Framework/CommonResources.h"
 #include "Framework/Resources.h"
 #include <Framework/Microsoft/ReadData.h>
-#include <nlohmann/json.hpp>
-#include <nlohmann/json_fwd.hpp>
 #include <unordered_map>
 #include "Game/Material/PBRLit.h"
 

@@ -3,15 +3,7 @@
 #include "Game/Scenes/Header/DebugScene.h"
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
-
 #include "Game/Cameras/DebugCamera.h"
-#include <Framework/Microsoft/ReadData.h>
-#include <VertexTypes.h>
-#include "Game/Material/PBRLit.h"
-#include "Game/Sky/SkyBox.h"
-#include "Game/Model3D/Model3D.h"
-#include "Framework/Resources/ModelResources.h"
-#include "Framework/Resources/MaterialResources.h"
 #include "Game/Player/Header/Player.h"
 
 DebugScene::DebugScene()

@@ -3,7 +3,7 @@
 #include "Game/Scenes/Header/GameOverScene.h"
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
-#include "Game/UI/FailedText.h"
+
 #include "Framework/StateMachine/StateMachine.h"
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/States/Fade/FadeOutState.h"
@@ -24,8 +24,8 @@ GameOverScene::~GameOverScene()
 void GameOverScene::Initialize()
 {
 	
-	m_failedText = std::make_unique<FailedText>();
-	m_failedText->Initialize();
+	
+	
 
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
@@ -70,7 +70,7 @@ void GameOverScene::Update()
 {
 	m_stateMachine->Update();
 	m_fade->Update();
-	m_failedText->Update();
+
 
 }
 

@@ -2,8 +2,6 @@
 #include "Framework/Resources.h"
 #include <iostream>
 #include <fstream>
-#include <nlohmann/json.hpp>
-#include <nlohmann/json_fwd.hpp>
 
 #include "Framework/Resources/ModelResources.h"
 #include "Framework/Resources/ShaderResources.h"

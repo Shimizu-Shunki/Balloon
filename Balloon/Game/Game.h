@@ -6,7 +6,6 @@
 
 #include "Framework/DeviceResources.h"
 #include "Framework/StepTimer.h"
-#include "Framework/Graphics.h"
 #include "Framework/Resources.h"
 #include "Framework/CommonResources.h"
 #include "Framework/CameraManager.h"

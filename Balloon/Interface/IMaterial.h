@@ -7,6 +7,10 @@ public:
 	// 仮想デストラクタ
 	virtual ~IMaterial() = default;
 
-	virtual void SetMaterial() = 0;
+	virtual void BeginMaterial() = 0;
+
+	virtual void EndMaterial() = 0;
+
+	virtual void UpdateConstBuffer() = 0;
 	
 };

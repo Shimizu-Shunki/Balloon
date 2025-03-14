@@ -4,6 +4,8 @@
 #include "Game/Scenes/Header/GameClearScene.h"
 #include "Game/Scenes/Header/GameOverScene.h"
 #include "Game/Scenes/Header/TitleScene.h"
+#include "Game/Scenes/Header/PlayScene.h"
+#include "Framework/SceneManager.h"
 
 // コンストラクタ
 FadeOutState::FadeOutState(Fade* fade, const FadeOutState::ChageSceneID& chageSceneID)

@@ -41,7 +41,8 @@ void Balloon::Initialize(ObjectID objectID, const bool& active)
 		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
 	);
 
-	// 描画管理クラスにTransformとモデルを設定
+	// 描画マネージャーに渡す
+	commonResources->GetRenderManager()->AddModel(m_model.get());
 
 }
 

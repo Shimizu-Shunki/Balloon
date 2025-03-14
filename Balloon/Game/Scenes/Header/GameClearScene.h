@@ -3,7 +3,7 @@
 
 
 class CommonResources;
-class ClearText;
+
 class StateMachine;
 class Fade;
 
@@ -37,8 +37,6 @@ private:
 	// フェード処理
 	std::unique_ptr<Fade> m_fade;
 
-	// クリアテキスト
-	std::unique_ptr<ClearText> m_clearText;
 
 
 };

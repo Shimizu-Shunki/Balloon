@@ -1,9 +1,13 @@
+// ============================================
+// 
+// ファイル名: InputManager.h
+// 概要: 入力全般の処理を記述
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/InputManager.h"
-#include <Mouse.h>
-#include <Keyboard.h>
-#include <GamePad.h>
-
 
 /// <summary>
 /// コンストラクタ

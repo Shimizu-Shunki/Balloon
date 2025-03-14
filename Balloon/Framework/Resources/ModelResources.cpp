@@ -3,7 +3,6 @@
 #include "Framework/CommonResources.h"
 #include "Framework/Resources.h"
 #include <Framework/Microsoft/ReadData.h>
-#include <nlohmann/json.hpp>
 #include <unordered_map>
 
 ModelResources::ModelResources()

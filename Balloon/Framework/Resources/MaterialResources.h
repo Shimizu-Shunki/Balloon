@@ -34,5 +34,7 @@ public:
 private:
 	// デフォルトPBRLit
 	std::unique_ptr<IMaterial> m_defaultPBRLit;
+	// UI
+	std::unique_ptr<IMaterial> m_defaultUi;
 
 };

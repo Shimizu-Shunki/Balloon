@@ -1,4 +1,5 @@
 #pragma once
+#include <Model.h>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
 

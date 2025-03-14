@@ -1,10 +1,15 @@
+// ============================================
+// 
+// ファイル名: Tween.h
+// 概要: オブジェクトの移動・回転・スケール変化を補間するアニメーション処理を実装
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/Tween/Tween.h"
 #include "Game/Transform/Transform.h"
 #include "Framework/Easing.h"
-#include <chrono>
-#include <iostream>
-#include <thread>
 
 /// <summary>
 /// コンストラクタ
@@ -197,6 +202,9 @@ void Tween::Play()
     m_elapsed = 0.0f;
 }
 
+/// <summary>
+/// 停止処理
+/// </summary>
 void Tween::Stop()
 {
     // 非アクティブに設定
@@ -221,8 +229,12 @@ void Tween::Stop()
     m_easeType      = Tween::EasingType::Linear;
 }
 
-// 移動
-
+/// <summary>
+/// 指定した座標へ移動するアニメーションを設定する。
+/// </summary>
+/// <param name="end">移動先の座標</param>
+/// <param name="duration">移動にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween &Tween::DOMove(const DirectX::SimpleMath::Vector3& end, float duration)
 {
     m_startPosition = m_transform->GetLocalPosition();
@@ -232,6 +244,12 @@ Tween &Tween::DOMove(const DirectX::SimpleMath::Vector3& end, float duration)
     return *this;
 }
 
+/// <summary>
+/// X軸方向の移動アニメーションを設定する。
+/// </summary>
+/// <param name="endX">X軸の移動先座標</param>
+/// <param name="duration">移動にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOMoveX(float endX, float duration)
 {
     m_startPosition = m_transform->GetLocalPosition();
@@ -241,6 +259,12 @@ Tween& Tween::DOMoveX(float endX, float duration)
     return *this;
 }
 
+/// <summary>
+/// Y軸方向の移動アニメーションを設定する。
+/// </summary>
+/// <param name="endY">Y軸の移動先座標</param>
+/// <param name="duration">移動にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOMoveY(float endY, float duration)
 {
     m_startPosition = m_transform->GetLocalPosition();
@@ -250,6 +274,12 @@ Tween& Tween::DOMoveY(float endY, float duration)
     return *this;
 }
 
+/// <summary>
+/// Z軸方向の移動アニメーションを設定する。
+/// </summary>
+/// <param name="endZ">Z軸の移動先座標</param>
+/// <param name="duration">移動にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOMoveZ(float endZ, float duration)
 {
     m_startPosition = m_transform->GetLocalPosition();
@@ -259,7 +289,12 @@ Tween& Tween::DOMoveZ(float endZ, float duration)
     return *this;
 }
 
-// 回転
+/// <summary>
+/// 指定した回転角度へ回転するアニメーションを設定する。
+/// </summary>
+/// <param name="end">回転の終了角度（度数法）</param>
+/// <param name="duration">回転にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DORotation(const DirectX::SimpleMath::Vector3& end, float duration)
 {
     m_startRotation = m_transform->GetLocalRotation();
@@ -270,6 +305,12 @@ Tween& Tween::DORotation(const DirectX::SimpleMath::Vector3& end, float duration
     return *this;
 }
 
+/// <summary>
+/// X軸の回転アニメーションを設定する。
+/// </summary>
+/// <param name="endX">X軸の回転終了角度（度数法）</param>
+/// <param name="duration">回転にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DORotationX(float endX, float duration)
 {
     m_startRotation = m_transform->GetLocalRotation();
@@ -285,6 +326,12 @@ Tween& Tween::DORotationX(float endX, float duration)
     return *this;
 }
 
+/// <summary>
+/// Y軸の回転アニメーションを設定する。
+/// </summary>
+/// <param name="endY">Y軸の回転終了角度（度数法）</param>
+/// <param name="duration">回転にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DORotationY(float endY, float duration)
 {
     m_startRotation = m_transform->GetLocalRotation();
@@ -299,6 +346,12 @@ Tween& Tween::DORotationY(float endY, float duration)
     return *this;
 }
 
+/// <summary>
+/// Z軸の回転アニメーションを設定する。
+/// </summary>
+/// <param name="endZ">Z軸の回転終了角度（度数法）</param>
+/// <param name="duration">回転にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DORotationZ(float endZ, float duration)
 {
     m_startRotation = m_transform->GetLocalRotation();
@@ -314,7 +367,12 @@ Tween& Tween::DORotationZ(float endZ, float duration)
 }
 
 
-// スケール
+/// <summary>
+/// 指定したスケールへ変更するアニメーションを設定する。
+/// </summary>
+/// <param name="end">スケールの終了値</param>
+/// <param name="duration">スケール変更にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOScale(const DirectX::SimpleMath::Vector3& end, float duration)
 {
     m_startScale = m_transform->GetLocalScale();
@@ -324,6 +382,12 @@ Tween& Tween::DOScale(const DirectX::SimpleMath::Vector3& end, float duration)
     return *this;
 }
 
+/// <summary>
+/// X軸のスケール変更アニメーションを設定する。
+/// </summary>
+/// <param name="endX">X軸のスケール終了値</param>
+/// <param name="duration">スケール変更にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOScaleX(float endX, float duration)
 {
     m_startScale = m_transform->GetLocalScale();
@@ -333,6 +397,12 @@ Tween& Tween::DOScaleX(float endX, float duration)
     return *this;
 }
 
+/// <summary>
+/// Y軸のスケール変更アニメーションを設定する。
+/// </summary>
+/// <param name="endY">Y軸のスケール終了値</param>
+/// <param name="duration">スケール変更にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOScaleY(float endY, float duration)
 {
     m_startScale = m_transform->GetLocalScale();
@@ -342,6 +412,12 @@ Tween& Tween::DOScaleY(float endY, float duration)
     return *this;
 }
 
+/// <summary>
+/// Z軸のスケール変更アニメーションを設定する。
+/// </summary>
+/// <param name="endZ">Z軸のスケール終了値</param>
+/// <param name="duration">スケール変更にかかる時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::DOScaleZ(float endZ, float duration)
 {
     m_startScale = m_transform->GetLocalScale();
@@ -351,14 +427,23 @@ Tween& Tween::DOScaleZ(float endZ, float duration)
     return *this;
 }
 
-
+/// <summary>
+/// イージングの種類を設定する。
+/// </summary>
+/// <param name="ease">イージングの種類</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::SetEase(Tween::EasingType ease)
 {
     m_easeType = ease;
     return *this;
 }
 
-
+/// <summary>
+/// ループ回数とループの種類を設定する。
+/// </summary>
+/// <param name="count">ループ回数</param>
+/// <param name="type">ループの種類</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::SetLoops(int count, Tween::LoopType type)
 {
     m_loopCount = count;
@@ -366,20 +451,33 @@ Tween& Tween::SetLoops(int count, Tween::LoopType type)
     return *this;
 }
 
+/// <summary>
+/// 遅延時間を設定する。
+/// </summary>
+/// <param name="delayTime">遅延時間</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween &Tween::SetDelay(float delayTime)
 {
     m_delay = delayTime;
     return *this;
 }
 
+/// <summary>
+/// アニメーション完了時のコールバックを設定する。
+/// </summary>
+/// <param name="callback">完了時のコールバック関数</param>
+/// <returns>自身のTweenオブジェクト</returns>
 Tween& Tween::OnComplete(Callback callback)
 {
     m_onComplete = callback;
     return *this;
 }
 
-
-
+/// <summary>
+/// 回転ベクトルをクォータニオンに変換する。
+/// </summary>
+/// <param name="rotation">回転を表すベクトル（度数法）</param>
+/// <returns>変換後のクォータニオン</returns>
 DirectX::SimpleMath::Quaternion Tween::ConvertToYawPitchRoll(const DirectX::SimpleMath::Vector3& rotation) {
     return DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(
         DirectX::XMConvertToRadians(rotation.y),
@@ -388,6 +486,11 @@ DirectX::SimpleMath::Quaternion Tween::ConvertToYawPitchRoll(const DirectX::Simp
     );
 }
 
+/// <summary>
+/// ラジアン単位のベクトルを度数（デグリー）に変換する。
+/// </summary>
+/// <param name="radianVec">変換対象のベクトル（ラジアン単位）</param>
+/// <returns>変換後のベクトル（度数法）</returns>
 DirectX::SimpleMath::Vector3 Tween::ConvertToDegrees(const DirectX::SimpleMath::Vector3& radianVec)
 {
     return {
@@ -396,4 +499,3 @@ DirectX::SimpleMath::Vector3 Tween::ConvertToDegrees(const DirectX::SimpleMath::
         DirectX::XMConvertToDegrees(radianVec.z)
     };
 }
-

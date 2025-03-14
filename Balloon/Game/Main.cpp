@@ -53,20 +53,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     // フルスクリーン対応
     static bool s_fullscreen = false;
-    // メッセージボックスの表示（MB_YESNOCANCEL を使用）
-    int result = MessageBox(NULL, L"フルスクリーンにしますか？", L"画面モード設定", MB_YESNOCANCEL | MB_ICONQUESTION);
-
-    // 「×」ボタンが押された場合
-    if (result == IDCANCEL) {
-        // アプリケーションを終了する
-        return 0;
-    }
+    // メッセージボックスの表示
+    int result = MessageBox(NULL, L"フルスクリーンにしますか？", L"画面モード設定", MB_YESNO | MB_ICONQUESTION);
 
     // 「はい」または「いいえ」の選択に応じてフルスクリーン設定
     if (result == IDYES) {
         s_fullscreen = true;
     }
-    else {
+    else{
         s_fullscreen = false;
     }
 

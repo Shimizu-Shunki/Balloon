@@ -1,6 +1,8 @@
 #pragma once
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+#include <DDSTextureLoader.h>
+#include <WICTextureLoader.h>
 
 class TextureResources
 {
@@ -47,6 +49,8 @@ public:
 
 	// キューブマップ
 	ID3D11ShaderResourceView* GetCubeMap() { return m_cubeMap.Get(); }
+	// キューブマップ 夕方
+	ID3D11ShaderResourceView* GetEveningCubeMap() { return m_eveningCubeMap.Get(); }
 
 
 public:
@@ -116,4 +120,6 @@ private:
 
 	// キューブマップ
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_cubeMap;
+	// キューブマップ　夕方
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_eveningCubeMap;
 };

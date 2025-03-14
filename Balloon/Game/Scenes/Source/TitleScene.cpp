@@ -19,8 +19,7 @@
 
 // UI
 #include "Game/UI/TitleLogo.h"
-#include "Game/UI/Text.h"
-#include "Game/UI/Keys.h"
+
 
 // ステート
 #include "Game/States/Fade/FadeInState.h"
@@ -58,13 +57,10 @@ void TitleScene::Initialize()
 	// UI
 	// タイトルロゴ
 	m_titleLogo = std::make_unique<TitleLogo>();
-	m_titleLogo->Initialize();
-	// スペースキー
-	m_text = std::make_unique<Text>();
-	m_text->Initialize();
-	// スタートテキスト
-	m_spaceKey = std::make_unique<Keys>();
-	m_spaceKey->Initialize();
+	m_titleLogo->Initialize(IObject::ObjectID::PLAYER, true);
+
+
+
 
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
@@ -93,9 +89,8 @@ void TitleScene::Update()
 
 	m_fade->Update();
 
-	m_titleLogo->Update();
-	m_text->Update();
-	m_spaceKey->Update();
+
+
 
 	m_player->GetTransform()->Update();
 }

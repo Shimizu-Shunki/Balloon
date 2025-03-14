@@ -1,43 +1,52 @@
 #pragma once
-#include "Interface/ISprite.h"
-#include "Game/Material/Buffers.h"
+#include "Interface/IObject.h"
 
+class IObject;
+class Transform;
+class Image;
+class IMaterial;
 
-class Text : public ISprite
+class Text : public IObject
 {
 public:
-	// Transformを取得する
-	Transform* GetTransform() const { return m_transform.get(); }
-	// マテリアルを取得する
-	SpriteMaterial* GetSpriteMaterial() const { return m_spriteMaterial.get(); }
+	// オブジェクトアクティブを取得する
+	bool GetIsActive() const  override { return m_isActive; }
+	// オブジェクトアクティブを設定する
+	void SetIsActive(bool isActive) { m_isActive = isActive; }
+	// Transformの取得
+	Transform* GetTransform() const override { return m_transform.get(); }
+	// オブジェクトのIDを取得する
+	IObject::ObjectID GetObjectID() const override { return m_objectId; }
+
 
 public:
 
 	// コンストラクタ
 	Text();
 	// デストラクタ
-	~Text() override = default;
+	~Text() = default;
 
-	// 初期化
+	// 初期化処理
 	void Initialize();
 	// 更新処理
 	void Update();
 
-	void Begin() override { m_spriteMaterial->Begin(); }
+private:
 
-	void End() override { m_spriteMaterial->End(); }
+	// マテリアルの初期化処理
+	void InitialMaterial(int width, int height);
 
 private:
 
-	// Transform
+	// アクティブ設定
+	bool m_isActive;
+	// オブジェクトID
+	IObject::ObjectID m_objectId;
+	// トランスフォーム
 	std::unique_ptr<Transform> m_transform;
+
+	// Image
+	std::unique_ptr<Image> m_image;
 	// マテリアル
-	std::unique_ptr<SpriteMaterial> m_spriteMaterial;
-
-	// 頂点バッファ
-	VertexBuffer m_vertexBuffer;
-
-	// 定数バッファ
-	ConstBuffer m_constBuffer;
-
+	std::unique_ptr<IMaterial> m_material;
 };

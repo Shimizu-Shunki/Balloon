@@ -1,19 +1,18 @@
+// ============================================
+// 
+// ファイル名: SceneManager.h
+// 概要: SceneManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
-#include "Interface/IScene.h"
-
 #include <future>
-#include <queue>
-#include "StepTimer.h"
-
-// 各シーンのヘッダーファイル
-//#include "Scenes/TitleScene/TitleScene.h"
-//#include "Scenes/PlayScene/PlayScene.h"
-//#include "Scenes/ResultScene/ResultScene.h"
-//#include "Scenes/HomeScene/HomeScene.h"
-#include "Game/Scenes/Header/PlayScene.h"
+#include "Interface/IScene.h"
 
 class IScene;
 class CommonResources;
+class TweenManager;
 
 class SceneManager
 {
@@ -67,6 +66,9 @@ private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
+	// TweenManager
+	TweenManager* m_tweenManager;
+
 	// シーン
 	std::unique_ptr<IScene> m_currentScene;
 	// 次のシーン

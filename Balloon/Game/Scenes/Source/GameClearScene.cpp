@@ -3,7 +3,6 @@
 #include "Game/Scenes/Header/GameClearScene.h"
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
-#include "Game/UI/ClearText.h"
 #include "Framework/StateMachine/StateMachine.h"
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/States/Fade/FadeOutState.h"
@@ -24,8 +23,8 @@ GameClearScene::~GameClearScene()
 void GameClearScene::Initialize()
 {
 	
-	m_clearText = std::make_unique<ClearText>();
-	m_clearText->Initialize();
+	
+
 
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
@@ -70,7 +69,7 @@ void GameClearScene::Update()
 {
 	m_stateMachine->Update();
 	m_fade->Update();
-	m_clearText->Update();
+	
 
 }
 

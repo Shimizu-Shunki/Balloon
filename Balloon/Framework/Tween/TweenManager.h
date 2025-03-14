@@ -1,7 +1,13 @@
+// ============================================
+// 
+// ファイル名: TweenManager.h
+// 概要: TweenManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
-#include <memory>
 #include "Framework/Tween/Tween.h"
-#include "Framework/StepTimer.h"
 
 class Tween;
 class CommonResources;
@@ -33,6 +39,8 @@ public:
 public:
     // 更新処理
     void Update();
+	// 停止処理
+	void Stop();
 	// 非アクティブのTweenを取得する
 	Tween* GetTween();
 

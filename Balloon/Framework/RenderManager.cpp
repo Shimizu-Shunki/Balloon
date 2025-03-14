@@ -7,6 +7,8 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Game/Model3D/Model3D.h"
 #include "Game/Sky/SkyBox.h"
+#include "Game/Material/Buffers.h"
+#include "Game/Image/Image.h"
 
 RenderManager::RenderManager()
 	:
@@ -27,12 +29,11 @@ RenderManager::RenderManager()
 	// カメラ管理クラス
 	m_cameraManager = commonResources->GetCameraManager();
 
-	// コモンステートの作成
-	m_states = std::make_unique<DirectX::CommonStates>(m_device);
 	// 各ステート作成
 	this->CreateSpriteBlendState();
 	this->CreateSpriteDepthStencilState();
 	this->CreateSpriteRasterizerState();
+	this->CreateSmplerState();
 
 	// インプットレイアウトを設定
 	m_spriteInputLayout = commonResources->GetResources()->GetShaderResources()->GetUIinputLayout();
@@ -42,6 +43,34 @@ RenderManager::RenderManager()
 
 	m_skyBox = std::make_unique<SkyBox>();
 	m_skyBox->Initialize();
+
+	// 定数バッファ用のバッファオブジェクトを作成する
+	// シェーダーにデータを渡すためのコンスタントバッファ生成
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(AmbientLightParameters);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+	m_device->CreateBuffer(&bd, nullptr, &m_ambientLightBuffer);
+	// ライトの
+	AmbientLightParameters ambientLight;
+	ambientLight.ambientLightColor = DirectX::SimpleMath::Vector3(0.8, 0.9, 1.0);
+	ambientLight.ambientLightIntensity = 0.8f;
+	// 定数バッファのデータを更新
+	m_context->UpdateSubresource(m_ambientLightBuffer.Get(), 0, NULL, &ambientLight, 0, 0);
+
+	// シェーダーにデータを渡すためのUIのバーテックスバッファの作成
+	D3D11_BUFFER_DESC desc = {};
+	ZeroMemory(&desc, sizeof(desc));
+	desc.ByteWidth = sizeof(UIVertexBuffer);
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = 0;
+	m_device->CreateBuffer(&desc, nullptr, &m_UIvertexBuffer);
+
+	m_UIvertexShader = commonResources->GetResources()->GetShaderResources()->GetUI_VS();
+	m_UIGeometryShader = commonResources->GetResources()->GetShaderResources()->GetUI_GS();
 }
 
 
@@ -52,10 +81,20 @@ void RenderManager::SwitchRenderbleObjects()
 	// 次のオブジェクトを格納する
 	m_models = m_pendingModels;
 
+	for (auto model : m_models)
+	{
+		model->GetMaterial()->UpdateConstBuffer();
+	}
+
 	// 現在のスプライトを削除する
 	m_sprite.clear();
 	// 次のスプライトを格納する
 	m_sprite = m_pendingSprite;
+
+	for (auto sprite : m_sprite)
+	{
+		sprite->GetMaterial()->UpdateConstBuffer();
+	}
 
 	m_pendingSprite.clear();
 	m_pendingModels.clear();
@@ -85,7 +124,7 @@ void RenderManager::Render()
 	for (const auto& model : m_models)
 	{
 		if (model->GetObject()->GetIsActive())
-			model->Render(m_context, m_commonStates, viewMatrix, projectionMatrix, {});
+			model->Render(m_context, m_commonStates, viewMatrix, projectionMatrix, m_ambientLightBuffer.Get());
 	}
 
 	// スプライトの描画
@@ -95,35 +134,35 @@ void RenderManager::Render()
 
 void RenderManager::SpriteRender()
 {
+	// サンプラーステートをピクセルシェーダーに設定
+	ID3D11SamplerState* sampler[1] = { m_samplerState.Get() };
+	m_context->PSSetSamplers(0, 1, sampler);
+	// ブレンドステートを設定 (半透明描画用)
+	m_context->OMSetBlendState(m_spriteBlendState.Get(), nullptr, 0xFFFFFFFF);
+	// 深度ステンシルステートを設定 (深度バッファの書き込みと参照)
+	//context->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
+	// ラスタライザーステートの設定
+	m_context->RSSetState(m_spriteRasterizerState.Get());
+	// 入力レイアウトを設定
+	m_context->IASetInputLayout(m_spriteInputLayout);
+	// プリミティブトポロジーを設定 (ポイントリスト)
+	m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
 	// スプライトの描画
-	for (const auto& sprite : m_sprite)
+	for (auto sprite : m_sprite)
 	{
-		if (sprite != nullptr)
-		{
-			// マテリアルの適応
-			sprite->Begin();
+		if (sprite == nullptr) break;
 
-			// サンプラーステートをピクセルシェーダーに設定
-			ID3D11SamplerState* sampler[1] = { m_states->LinearWrap() };
-			m_context->PSSetSamplers(0, 1, sampler);
+		auto material = sprite->Render(m_context, m_UIvertexBuffer.Get());
 
-			// ブレンドステートを設定 (半透明描画用)
-			m_context->OMSetBlendState(m_spriteBlendState.Get(), nullptr, 0xFFFFFFFF);
-			// 深度ステンシルステートを設定 (深度バッファの書き込みと参照)
-			//context->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
-			// ラスタライザーステートの設定
-			m_context->RSSetState(m_spriteRasterizerState.Get());
-			// 入力レイアウトを設定
-			m_context->IASetInputLayout(m_spriteInputLayout);
-
-			// プリミティブトポロジーを設定 (ポイントリスト)
-			m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
-			// 描画
-			m_context->Draw(1, 0);
-			// マテリアルの解放
-			sprite->End();
-		}
+		// 頂点シェーダーの設定
+		m_context->VSSetShader(m_UIvertexShader, nullptr, 0);
+		// ジオメトリシェーダーの設定
+		m_context->GSSetShader(m_UIGeometryShader, nullptr, 0);
+		// 描画
+		m_context->Draw(1, 0);
+		// マテリアルの解放
+		material->EndMaterial();
 	}
 }
 
@@ -175,4 +214,20 @@ void RenderManager::CreateSpriteRasterizerState()
 	rasterDesc.DepthClipEnable       = TRUE;     // 深度クリッピングを有効化
 	// ラスタライザーステートの作成
 	m_device->CreateRasterizerState(&rasterDesc, &m_spriteRasterizerState);
+}
+
+void RenderManager::CreateSmplerState()
+{
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;  // 異方性フィルタで高品質
+	samplerDesc.MaxAnisotropy = 16;                 // 最大16倍の異方性フィルタリング
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;  // 繰り返し（U軸）
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;  // 繰り返し（V軸）
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;  // 繰り返し（W軸）
+	samplerDesc.MipLODBias = 0.0f;                  // MIPマップのバイアスなし
+	samplerDesc.MinLOD = 0;                         // 最小LOD
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;         // 最大LOD（フル解像度）
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS; // 比較なし（通常のテクスチャ用）
+
+	m_device->CreateSamplerState(&samplerDesc, m_samplerState.GetAddressOf());
 }

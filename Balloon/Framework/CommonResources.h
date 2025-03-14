@@ -19,6 +19,7 @@
 #include "Framework/RenderManager.h"
 #include "Framework/CameraManager.h"
 #include "Framework/CollisionManager.h"
+#include "Framework/Tween/TweenManager.h"
 
 
 class CommonResources
@@ -56,7 +57,6 @@ public:
 	void SetCollisionManager(CollisionManager* collisionManager) { m_collisionManager = collisionManager; }
 	CollisionManager* GetCollisionManager() { return m_collisionManager; }
 
-
 	// スクリーンサイズ
 	void GetScreenSize(int& width, int& height) const { width = m_screenW; height = m_screenH; }
 	void SetScreenSize(const int& width, const int& height) { m_screenW = width; m_screenH = height; }
@@ -78,6 +78,8 @@ private:
 		m_sceneManager(nullptr),
 		m_resources(nullptr),
 		m_renderManager(nullptr),
+		m_cameraManager(nullptr),
+		m_collisionManager(nullptr),
 		m_screenW(0),
 		m_screenH(0),
 		m_view{},

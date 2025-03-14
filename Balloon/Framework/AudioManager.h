@@ -1,13 +1,13 @@
 #pragma once
 #include <future>
 #include "Sounds.h"
+#include <Audio.h>
+
 
 
 class AudioManager
 {
 public :
-	
-
 	// マスター音量を設定する
 	void SetMasterVolume(const float& volume);
 	// SEの音量を設定する

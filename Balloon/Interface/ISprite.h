@@ -1,26 +1,10 @@
 #pragma once
 #include "Framework/pch.h"
-#include "Game/Transform/Transform.h"
-#include "Game/Material/SpriteMaterial.h"
+#include "Game/Material/Buffers.h"
+#include "Interface/IMaterial.h"
 
-class ISprite
+class ISprite : public IMaterial
 {
 public:
-	// Transformを取得する
-	virtual Transform* GetTransform() const = 0;
-
-	// マテリアルを取得する
-	virtual SpriteMaterial* GetSpriteMaterial() const = 0;
-
-public:
-	virtual ~ISprite() = default;
-
-	// 初期化
-	virtual void Initialize() = 0;
-	// 更新処理
-	virtual void Update() = 0;
-
-	virtual void Begin() = 0;
-
-	virtual void End() = 0;
+	virtual const UIVertexBuffer* GetVertexBuffer() const = 0;
 };

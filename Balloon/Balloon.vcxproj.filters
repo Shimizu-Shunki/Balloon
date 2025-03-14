@@ -149,6 +149,9 @@
     <Filter Include="Game\SkyBox">
       <UniqueIdentifier>{712e36ac-ed4b-4ea7-a550-1146d6c31e66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Image">
+      <UniqueIdentifier>{417ac660-8013-4f33-b0e3-15f645b675c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Microsoft\DebugDraw.h">
@@ -248,7 +251,7 @@
     <ClInclude Include="Game\Fade\Fade.h">
       <Filter>Game\Fade</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Material\SpriteMaterial.h">
+    <ClInclude Include="Game\Material\DefaultUi.h">
       <Filter>Game\Material</Filter>
     </ClInclude>
     <ClInclude Include="Game\Material\Buffers.h">
@@ -410,29 +413,17 @@
     <ClInclude Include="Game\Model3D\Model3D.h">
       <Filter>Game\Model3D</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ClearText.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\FailedText.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\JumpFrame.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\JumpMemory.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\Keys.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Game\UI\Text.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\TitleLogo.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Resources\MaterialResources.h">
       <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Image\Image.h">
+      <Filter>Game\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleLogo.h">
+      <Filter>Game\UI\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -501,7 +492,7 @@
     <ClCompile Include="Game\Fade\Fade.cpp">
       <Filter>Game\Fade</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Material\SpriteMaterial.cpp">
+    <ClCompile Include="Game\Material\DefaultUi.cpp">
       <Filter>Game\Material</Filter>
     </ClCompile>
     <ClCompile Include="Framework\SceneManager.cpp">
@@ -645,21 +636,6 @@
     <ClCompile Include="Game\Model3D\Model3D.cpp">
       <Filter>Game\Model3D</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ClearText.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\FailedText.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\JumpFrame.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\JumpMemory.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\Keys.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\Text.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
@@ -668,6 +644,9 @@
     </ClCompile>
     <ClCompile Include="Framework\Resources\MaterialResources.cpp">
       <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Image\Image.cpp">
+      <Filter>Game\Image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

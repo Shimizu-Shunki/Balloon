@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework/Microsoft/RenderTexture.h"
 #include "Framework/DepthStencil.h"
+#include <Model.h>
 
 // ‘O•ûéŒ¾
 class Transform;

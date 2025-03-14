@@ -1,4 +1,5 @@
 #pragma once
+#include <Model.h>
 
 class IMaterial;
 class IObject;
@@ -12,6 +13,8 @@ public:
 	IObject* GetObject() const { return m_object; }
 	// 影を描画するか
 	bool GetIsShadow() const { return m_isShadow; }
+	// マテリアルを取得する
+	IMaterial* GetMaterial() { return m_material; }
 
 public:
 	// コンストラクタ

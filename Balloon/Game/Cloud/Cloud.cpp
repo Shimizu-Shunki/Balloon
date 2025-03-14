@@ -32,8 +32,8 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetCloudModel(),
 		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
 	);
-	// •`‰æŠÇ—Ò‚É“n‚·
-
+	// •`‰æƒ}ƒl[ƒWƒƒ[‚É“n‚·
+	commonResources->GetRenderManager()->AddModel(m_model.get());
 
 	// “–‚½‚è”»’è‚ğİ’è
 	m_boxCollider = std::make_unique<BoxCollider>();

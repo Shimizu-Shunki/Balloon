@@ -1,8 +1,15 @@
+// ============================================
+// 
+// ファイル名: InputManager.h
+// 概要: InputManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <GamePad.h>
-
 
 class InputManager
 {

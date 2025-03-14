@@ -27,7 +27,6 @@ void SeaMaterial::Initialize()
 
 	m_texture = m_commonResources->GetResources()->GetTextureResources()->GetSeaTexture();
 
-
 	// シェーダを取得する
 	m_vertexShader = m_commonResources->GetResources()->GetShaderResources()->GetSeaVS();
 	m_hullShader   = m_commonResources->GetResources()->GetShaderResources()->GetSeaHS();

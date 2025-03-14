@@ -27,15 +27,15 @@ void PBRLit::Initialize(Resources* resources)
 	// 定数バッファ用のバッファオブジェクトを作成する
 	D3D11_BUFFER_DESC bufferDesc{};
 	bufferDesc.ByteWidth = static_cast<UINT>(sizeof(PBRLitConstantBuffer));	// 16の倍数を指定する
-	bufferDesc.Usage          = D3D11_USAGE_DYNAMIC;
-	bufferDesc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	DX::ThrowIfFailed(
 		device->CreateBuffer(&bufferDesc, nullptr, m_constantBuffer.ReleaseAndGetAddressOf())
 	);
 }
 
-void PBRLit::UpdateConstantBuffer()
+void PBRLit::UpdateConstBuffer()
 {
 	// GPUが使用するリソースのメモリにCPUからアクセスする際に利用する構造体
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -56,7 +56,7 @@ void PBRLit::UpdateConstantBuffer()
 	context->Unmap(m_constantBuffer.Get(), 0);
 }
 
-void PBRLit::SetMaterial()
+void PBRLit::BeginMaterial()
 {
 
 	m_context->IASetInputLayout(m_inputLayout);
@@ -84,4 +84,15 @@ void PBRLit::SetMaterial()
 	ID3D11SamplerState* sampler[] = { m_states->LinearWrap() };
 	m_context->VSSetSamplers(0, 1, sampler);
 	m_context->PSSetSamplers(0, 1, sampler);
+}
+
+void PBRLit::EndMaterial()
+{
+	// シェーダの解放
+	m_context->VSSetShader(nullptr, nullptr, 0);
+	m_context->PSSetShader(nullptr, nullptr, 0);
+	// テクスチャリソースの解放
+	m_context->PSSetShaderResources(0, 1, nullptr);
+	m_context->PSSetShaderResources(1, 1, nullptr);
+	m_context->PSSetShaderResources(2, 1, nullptr);
 }

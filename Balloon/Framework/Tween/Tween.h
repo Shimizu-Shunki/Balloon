@@ -1,5 +1,12 @@
+// ============================================
+// 
+// ファイル名: Tween.h
+// 概要: Tween.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
-#include <SimpleMath.h>
 
 class Transform;
 
@@ -53,12 +60,6 @@ public:
     // Transformを設定する
     void SetTransform(Transform* transform) { m_transform = transform; }
 
-    // デストラクタ
-    ~Tween() = default;
-    // コンストラクタ
-    Tween();
-
-
     // DOMoveメソッド
     Tween& DOMove(const DirectX::SimpleMath::Vector3& end, float duration);
     Tween& DOMoveX(float endX, float duration);
@@ -86,19 +87,23 @@ public:
     // 完了時の処理を設定
     Tween& OnComplete(Callback callback);
 
+    // 再生
     void Play();
-
+    // 停止
     void Stop();
-
     // 更新処理
     bool Update(float deltaTime);
+   
+    // コンストラクタ
+    Tween();
+    // デストラクタ
+    ~Tween() = default;
+
     // イージングの適応
     float EasingFunction(EasingType type, float t);
-
-private:
-
+    // 回転ベクトルをクォータニオンに変換する
     DirectX::SimpleMath::Quaternion ConvertToYawPitchRoll(const DirectX::SimpleMath::Vector3& rotation);
-
+    // ラジアンを度数に変換する
     DirectX::SimpleMath::Vector3 ConvertToDegrees(const DirectX::SimpleMath::Vector3& radianVec);
 
 private:
@@ -140,6 +145,5 @@ private:
 
     // 経過時間
     float m_elapsed;
-    
 };
 
