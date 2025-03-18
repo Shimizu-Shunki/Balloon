@@ -1,5 +1,5 @@
 #include "Framework/pch.h"
-#include "Game/UI/Text.h"
+#include "Game/UI/KeyGuideUI.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Tween/Tween.h"
 #include "Framework/Resources/ShaderResources.h"
@@ -10,19 +10,21 @@
 #include "Game/Transform/Transform.h"
 
 
-Text::Text()
+KeyGuideUI::KeyGuideUI()
 {
 
 
 }
 
 
-void Text::Initialize()
+void KeyGuideUI::Initialize(ObjectID objectID, const bool& active)
 {
+	m_objectId = objectID;
+	m_isActive = active;
+
 	// 共有リソース
 	auto commonResources = CommonResources::GetInstance();
 	int width, height;
-
 
 	// Transformの作成
 	m_transform = std::make_unique<Transform>();
@@ -33,7 +35,7 @@ void Text::Initialize()
 
 	// Imageの初期化
 	m_image->Initialize(true, m_material.get(), m_transform.get());
-	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
+	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetKeyGuide(), width, height);
 	m_image->SetRuleTexture(nullptr);
 	m_image->SetIsActive(true);
 
@@ -41,24 +43,39 @@ void Text::Initialize()
 	this->InitialMaterial(width, height);
 
 	// Transformの初期化
-	m_transform->SetLocalPosition({ 365.7f , 240.0f , 0.0f });
+	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
 	m_transform->SetLocalRotation(DirectX::SimpleMath::Quaternion::Identity);
-	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::Zero);
+	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One);
 	m_transform->SetRect({ 0.0f,0.0f,(float)width,(float)height });
 	m_transform->SetColor(DirectX::SimpleMath::Vector4::One);
 
-	// タイトルロゴのアニメーションを設定
-	m_transform->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f)
-		.SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
+	// 画像を描画マネージャーに追加する
+	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
-
-void Text::Update()
+void KeyGuideUI::InitialTransform(
+	DirectX::SimpleMath::Vector3 position,
+	DirectX::SimpleMath::Quaternion rotation,
+	DirectX::SimpleMath::Vector3 scale
+)
 {
-	//m_material->UpdateConstBuffer();
+	m_transform->SetLocalPosition(position);
+	m_transform->SetLocalRotation(rotation);
+	m_transform->SetLocalScale(scale);
 }
 
-void Text::InitialMaterial(int width, int height)
+
+void KeyGuideUI::Update()
+{
+	// m_material->UpdateConstBuffer();
+}
+
+void KeyGuideUI::Finalize()
+{
+
+}
+
+void KeyGuideUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
 

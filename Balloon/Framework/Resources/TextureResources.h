@@ -22,8 +22,6 @@ public:
 	ID3D11ShaderResourceView* GetTimeFrame() { return m_timeFrame.Get(); }
 	// タイムゲージ
 	ID3D11ShaderResourceView* GetTimeGage() { return m_timeGage.Get(); }
-	// ナンバーズ
-	ID3D11ShaderResourceView* GetNumbers() { return m_numbers.Get(); }
 	// ルール画像
 	ID3D11ShaderResourceView* GetRuleTexture() { return m_ruleTexture.Get(); }
 	// 海画像
@@ -32,6 +30,20 @@ public:
 	ID3D11ShaderResourceView* GetClearTextTexture() { return m_clearText.Get(); }
 	// ゲームオーバーテキスト
 	ID3D11ShaderResourceView* GetFailedTextTexture() { return m_failedText.Get(); }
+	
+	// レディゴー
+	ID3D11ShaderResourceView* GetReadyGoTexture() { return m_readyGo.Get(); }
+	// メニューボタンテキスト
+	ID3D11ShaderResourceView* GetMenuButtonText() { return m_menuButtonText.Get(); }
+	// 番号スプライトシート
+	ID3D11ShaderResourceView* GetNumbers() { return m_numbers.Get(); }
+	// キー操作説明
+	ID3D11ShaderResourceView* GetKeyGuide() { return m_keyGuide.Get(); }
+	// メニューボタンフレーム
+	ID3D11ShaderResourceView* GetMenuButtonFrame() { return m_menuButtonFrame.Get(); }
+	// メニューボタンフレーム2
+	ID3D11ShaderResourceView* GetMenuButtonFrame2() { return m_menuButtonFrame2.Get(); }
+
 
 	// プレイヤー
 	ID3D11ShaderResourceView* GetPlayerTexture() { return m_playerTexture.Get(); }
@@ -90,8 +102,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_timeFrame;
 	// タイムゲージ
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_timeGage;
-	// ナンバーズ
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_numbers;
+	
 
 	// ルール画像
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_ruleTexture;
@@ -103,6 +114,20 @@ private:
 
 	// 海画像
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SeaTexture;
+
+	// レディゴー　
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_readyGo;
+	// メニューボタン
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_menuButtonText;
+	// 数字スプライトシート
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_numbers;
+	// キー操作説明
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_keyGuide;
+	// メニューボタンフレーム
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_menuButtonFrame;
+	// メニューボタンフレーム2
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_menuButtonFrame2;
+
 
 	// プレイヤーテクスチャ
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_playerTexture;

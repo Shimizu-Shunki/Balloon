@@ -291,15 +291,15 @@ void Game::Render()
     m_context->IASetInputLayout(m_inputLayout.Get());
 
     // ƒOƒŠƒbƒh‚ğ•`‰æ
-    m_primitiveBatch->Begin();
-    DX::DrawGrid(m_primitiveBatch.get(),
-        { 10.0f, 0.0f, 0.0f },              // ‰¡²
-        { 0.0f,0.0f,10.0f },                // c²
-        DirectX::SimpleMath::Vector3::Zero, // Œ´“_
-        20,                                 // ‰¡•ªŠ„”
-        20                                  // c•ªŠ„”
-    );
-    m_primitiveBatch->End();
+    //m_primitiveBatch->Begin();
+    //DX::DrawGrid(m_primitiveBatch.get(),
+    //    { 10.0f, 0.0f, 0.0f },              // ‰¡²
+    //    { 0.0f,0.0f,10.0f },                // c²
+    //    DirectX::SimpleMath::Vector3::Zero, // Œ´“_
+    //    20,                                 // ‰¡•ªŠ„”
+    //    20                                  // c•ªŠ„”
+    //);
+    //m_primitiveBatch->End();
 
 
     m_spriteBatch->Begin();

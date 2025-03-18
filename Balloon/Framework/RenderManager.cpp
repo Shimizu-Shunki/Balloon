@@ -151,7 +151,7 @@ void RenderManager::SpriteRender()
 	// スプライトの描画
 	for (auto sprite : m_sprite)
 	{
-		if (sprite == nullptr) break;
+		if (sprite == nullptr || !sprite->GetIsActive()) continue;
 
 		auto material = sprite->Render(m_context, m_UIvertexBuffer.Get());
 

@@ -65,9 +65,6 @@
     <Filter Include="Framework\Tween">
       <UniqueIdentifier>{a2f8b4e3-d5f8-4d5a-9799-cf6a4a38f895}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\StateMachine">
-      <UniqueIdentifier>{3c7a1f66-ea55-4dc8-91b7-b7b4411cdeaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Balloon">
       <UniqueIdentifier>{ff57a862-c4b6-4314-bb5e-8d4f34146a19}</UniqueIdentifier>
     </Filter>
@@ -151,6 +148,9 @@
     </Filter>
     <Filter Include="Game\Image">
       <UniqueIdentifier>{417ac660-8013-4f33-b0e3-15f645b675c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\StateMachine">
+      <UniqueIdentifier>{3c7a1f66-ea55-4dc8-91b7-b7b4411cdeaf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -413,9 +413,6 @@
     <ClInclude Include="Game\Model3D\Model3D.h">
       <Filter>Game\Model3D</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\Text.h">
-      <Filter>Game\UI\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Resources\MaterialResources.h">
       <Filter>Framework\Resources\Header</Filter>
     </ClInclude>
@@ -423,6 +420,27 @@
       <Filter>Game\Image</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\TitleLogo.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\ReadyGoState.h">
+      <Filter>Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ReadyGoUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\StartUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\MenuScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\MenuButtonUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\MenuButtonFrameUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\KeyGuideUI.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -636,9 +654,6 @@
     <ClCompile Include="Game\Model3D\Model3D.cpp">
       <Filter>Game\Model3D</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\Text.cpp">
-      <Filter>Game\UI\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\TitleLogo.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
@@ -647,6 +662,27 @@
     </ClCompile>
     <ClCompile Include="Game\Image\Image.cpp">
       <Filter>Game\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\ReadyGoState.cpp">
+      <Filter>Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ReadyGoUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\StartUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\MenuScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\MenuButtonUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\MenuButtonFrameUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\KeyGuideUI.cpp">
+      <Filter>Game\UI\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

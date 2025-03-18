@@ -4,6 +4,7 @@
 #include "Game/Scenes/Header/GameClearScene.h"
 #include "Game/Scenes/Header/GameOverScene.h"
 #include "Game/Scenes/Header/TitleScene.h"
+#include "Game/Scenes/Header/MenuScene.h"
 #include "Game/Scenes/Header/PlayScene.h"
 #include "Framework/SceneManager.h"
 
@@ -33,6 +34,11 @@ void FadeOutState::OnStateEnter(StateController* stateController)
 			// 次のシーンの初期化を非同期で実行
 			m_sceneManager->PrepareScene<TitleScene>();
 			m_fade->ChangeSceneFadeOUT<TitleScene>(1.0f);
+			break;
+		case FadeOutState::ChageSceneID::MENU_SCENE:
+			// 次のシーンの初期化を非同期で実行
+			m_sceneManager->PrepareScene<MenuScene>();
+			m_fade->ChangeSceneFadeOUT<MenuScene>(1.0f);
 			break;
 		case FadeOutState::ChageSceneID::SELECT_SCENE:
 

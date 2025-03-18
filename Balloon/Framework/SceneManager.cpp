@@ -102,7 +102,7 @@ void SceneManager::CheckChageScene()
 		// 当たり判定を次のシーンの物に切り替える
 		
 		// 前のTweenをすべて停止する
-		m_tweenManager->Stop();
+		// m_tweenManager->Stop();
 
 		// 次のシーンスタート処理
 		m_currentScene->Start();

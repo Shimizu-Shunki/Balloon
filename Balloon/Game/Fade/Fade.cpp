@@ -24,6 +24,8 @@ Fade::Fade()
 {
     // 共有リソースのインスタンスを取得する
     m_commonResources = CommonResources::GetInstance();
+
+    m_sceneManager = CommonResources::GetInstance()->GetSceneManager();
 }
 
 /// <summary>

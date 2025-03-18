@@ -32,6 +32,12 @@ public:
 		ENEMY_RIGHT_FOOT,
 		CHARACTER,
 		BALLOON,
+
+		TitleLogoUI,
+		StartUI,
+		MenuButtonUI,
+		KeyGuideUI,
+		MenuButtonFrameUI,
 	};
 
 public:

@@ -31,7 +31,7 @@ void MaterialResources::Initialize(Resources* resources)
 	defaultPBRLit->SetMatallic(0.3f);
 	defaultPBRLit->SetSmoothness(0.7f);
 	defaultPBRLit->SetUseBaseMap(1.0f);
-	defaultPBRLit->SetUseNormalMap(1.0f);
+	defaultPBRLit->SetUseNormalMap(0.0f);
 
 	// テクスチャを設定
 	defaultPBRLit->SetBaseMap(textureResources->GetPlayerTexture());

@@ -1,28 +1,23 @@
 #pragma once
 #include "Interface/IState.h"
+#include "Framework/SceneManager.h"
 #include "Game/Fade/Fade.h"
+
 
 class Fade;
 class SceneManager;
+class ReadyGoUI;
 
-class FadeOutState : public IState
+class ReadyGoState : public IState
 {
 public:
-    enum class ChageSceneID
-    {
-        TITLE_SCENE,
-        MENU_SCENE,
-        SELECT_SCENE,
-        PLAY_SCENE,
-        GAME_CLEAR_SCENE,
-        GAME_OVER_SCENE,
-    };
 
 public:
+
     // コンストラクタ
-    FadeOutState(Fade* fade, const FadeOutState::ChageSceneID& chageSceneID);
+    ReadyGoState(ReadyGoUI* readyGoUI);
     // デストラクタ
-    ~FadeOutState() override;
+    ~ReadyGoState() override;
 
 public:
     // 初期化処理
@@ -34,12 +29,17 @@ public:
 
 private:
 
+    void ReadyGoSetAnimation();
+
+
+private:
+
     // シーンマネージャー
     SceneManager* m_sceneManager;
-	// フェード処理
-    Fade* m_fade;
+    // ReadyGoのUI
+    ReadyGoUI* m_readyGoUI;
 
-    // シーンID
-    ChageSceneID m_chageSceneId;
-  
+    // 切り替えフラグ
+    bool m_changeFlag;
+
 };

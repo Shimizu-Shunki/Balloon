@@ -1,28 +1,16 @@
 #pragma once
 #include "Interface/IScene.h"
-#include "Game/UI/TitleLogo.h"
-#include "Game/UI/StartUI.h"
-
-
 
 class CommonResources;
-class StateMachine;
-class RenderManager;
-class IObject;
-class Transform;
-class DebugCamera;
-class TitleLogo;
-class StartUI;
-class Fade;
+class InputManager;
 
-
-class TitleScene: public IScene
+class MenuScene : public IScene
 {
 public:
 	// コンストラクタ
-	TitleScene();
+	MenuScene();
 	// デストラクタ
-	~TitleScene();
+	~MenuScene();
 
 public:
 	// 初期化処理
@@ -37,13 +25,6 @@ public:
 	void Finalize() override;
 
 private:
-	// ステートコントローラーの作成
-	void CreateStateController();
-	// カメラの作成
-	void CreateCamera();
-
-	
-
 	template <typename T>
 	T* SearchObject(IObject::ObjectID objectID)
 	{
@@ -59,6 +40,7 @@ private:
 				return castedObject;
 			}
 		}
+
 		return nullptr;
 	}
 
@@ -67,7 +49,7 @@ private:
 	T* Attach(
 		IObject::ObjectID objectId,
 		bool isActive,
-		DirectX::SimpleMath::Vector3 position ,
+		DirectX::SimpleMath::Vector3 position,
 		DirectX::SimpleMath::Quaternion rotation,
 		DirectX::SimpleMath::Vector3 scale,
 		Args&&... args)
@@ -86,26 +68,18 @@ private:
 		return dynamic_cast<T*>(returnObject);
 	}
 
+	void SelectButton();
 
 private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
 
-	// ステートマシーン
-	std::unique_ptr<StateMachine> m_stateMachine;
-
-	// フェード処理
-	std::unique_ptr<Fade> m_fade;
+	InputManager* m_inputManager;
 
 	// UIオブジェクト
 	std::vector<std::unique_ptr<IObject>> m_objects;
 
-	//// タイトルロゴ
-	//std::unique_ptr<TitleLogo> m_titleLogo;
-
-
-	// プレイヤー
-	std::unique_ptr<IObject> m_player;
-
+	// 現在のボタン
+	int m_buttonIndex;
 };

@@ -10,6 +10,7 @@ class Model3D;
 class Player;
 class DebugCamera;
 
+
 class DebugScene : public IScene
 {
 public:
@@ -49,6 +50,8 @@ private:
 
 
 	std::unique_ptr<Player> m_plaeyr;
+
+	
 
 
 };

@@ -6,6 +6,7 @@
 #include "Game/Cameras/DebugCamera.h"
 #include "Game/Player/Header/Player.h"
 
+
 DebugScene::DebugScene()
 {
 	m_commonResources = CommonResources::GetInstance();
@@ -37,6 +38,9 @@ void DebugScene::Initialize()
 	);
 
 	m_plaeyr->GetTransform()->Update();
+
+	
+
 }
 
 void DebugScene::Start()

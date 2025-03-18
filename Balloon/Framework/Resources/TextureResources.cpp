@@ -72,9 +72,6 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// タイムゲージ
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["TimerBar"].c_str(), nullptr, m_timeGage.ReleaseAndGetAddressOf());
-	// ナンバーズ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["numberx128"].c_str(), nullptr, m_numbers.ReleaseAndGetAddressOf());
 	// ルール画像
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Fade"].c_str(), nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
@@ -87,6 +84,29 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// 海画像
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Sea"].c_str(), nullptr, m_SeaTexture.ReleaseAndGetAddressOf());
+
+	// レディゴー
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["ReadyGo"].c_str(), nullptr, m_readyGo.ReleaseAndGetAddressOf());
+	// ナンバーズ
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["Numbers"].c_str(), nullptr, m_numbers.ReleaseAndGetAddressOf());
+	// メニューボタンテキスト
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["MenuButton"].c_str(), nullptr, m_menuButtonText.ReleaseAndGetAddressOf());
+	// キー操作説明
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["KeyGuide"].c_str(), nullptr, m_keyGuide.ReleaseAndGetAddressOf());
+	// キー操作説明
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["MenuButtonFrame"].c_str(), nullptr, m_menuButtonFrame.ReleaseAndGetAddressOf());
+	// キー操作説明
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["MenuButtonFrame2"].c_str(), nullptr, m_menuButtonFrame2.ReleaseAndGetAddressOf());
+
+
+
+
 
 	// プレイヤー画像
 	DirectX::CreateWICTextureFromFile(
@@ -131,4 +151,6 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// スカイマップ
 	DirectX::CreateDDSTextureFromFile(
 		device, texturePaths["EveningCubeMap"].c_str(), nullptr, m_eveningCubeMap.ReleaseAndGetAddressOf());
+
+	texturePaths.clear();
 }
