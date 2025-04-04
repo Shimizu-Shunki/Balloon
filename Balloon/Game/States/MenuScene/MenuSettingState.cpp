@@ -1,11 +1,11 @@
 #include "Framework/pch.h"
-#include "Game/States/Player/PlayerRunAirState.h"
+#include "Game/States/MenuScene/MenuSettingState.h"
 #include "Framework/StateMachine/StateController.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerRunAirState::PlayerRunAirState()
+MenuSettingState::MenuSettingState()
 {
 
 }
@@ -14,7 +14,7 @@ PlayerRunAirState::PlayerRunAirState()
 /// 初期処理
 /// </summary>
 /// <param name="stateController">コントローラー</param>
-void PlayerRunAirState::OnStateEnter(StateController* stateController)
+void MenuSettingState::PreUpdate()
 {
 
 }
@@ -23,7 +23,7 @@ void PlayerRunAirState::OnStateEnter(StateController* stateController)
 /// </summary>
 /// <param name="stateController">コントローラー</param>
 /// <param name="deltaTime">経過時間</param>
-void PlayerRunAirState::OnStateUpdate(StateController* stateController, const float& deltaTime)
+void MenuSettingState::Update(const float& deltaTime)
 {
 
 }
@@ -31,7 +31,7 @@ void PlayerRunAirState::OnStateUpdate(StateController* stateController, const fl
 /// 終了処理
 /// </summary>
 /// <param name="stateController">コントローラー</param>
-void PlayerRunAirState::OnStateExit(StateController* stateController)
+void MenuSettingState::PostUpdate()
 {
 
 }

@@ -150,3 +150,14 @@ void Body::Detach(std::unique_ptr<IObject> turretParts)
 {
 
 }
+
+void Body::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void Body::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
+}

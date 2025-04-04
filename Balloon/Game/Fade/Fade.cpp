@@ -59,6 +59,8 @@ void Fade::Initialize()
 
     // マテリアルを初期化する
     this->InitialMaterial(width, height);
+
+    m_isExitGame = false;
 }
 
 /// <summary>
@@ -95,6 +97,9 @@ void Fade::Update()
         // フェードアウトの時
         if (m_endProgress == 1.0f)
         {
+            if (m_isExitGame)
+                m_sceneManager->SetIsGameExit();
+
             // 次のシーンに遷移する
             m_sceneManager->ChageScene();
         }

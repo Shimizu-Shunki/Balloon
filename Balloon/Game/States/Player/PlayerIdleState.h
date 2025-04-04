@@ -1,7 +1,7 @@
 #pragma once
 #include "Interface/IState.h"
 
-class StateController;
+class Transform;
 
 class PlayerIdleState : public IState
 {
@@ -12,9 +12,14 @@ public:
     ~PlayerIdleState() = default;
 
     // 初期化処理
-    void OnStateEnter(StateController* stateController);
+    void PreUpdate() override;
     // 更新処理
-    void OnStateUpdate(StateController* stateController, const float& deltaTime);
+    void Update(const float& deltaTime) override;
     // 終了処理
-    void OnStateExit(StateController* stateController);
+    void PostUpdate() override;
+
+private:
+
+    // プレイヤーTransform
+    Transform* m_transform;
 };

@@ -201,10 +201,6 @@
     <ClInclude Include="Framework\Resources\TextureResources.h" />
     <ClInclude Include="Framework\SceneManager.h" />
     <ClInclude Include="Framework\Sounds.h" />
-    <ClInclude Include="Framework\StateMachine\Parameters.h" />
-    <ClInclude Include="Framework\StateMachine\StateController.h" />
-    <ClInclude Include="Framework\StateMachine\StateMachine.h" />
-    <ClInclude Include="Framework\StateMachine\Transition.h" />
     <ClInclude Include="Framework\StepTimer.h" />
     <ClInclude Include="Framework\Tween\Tween.h" />
     <ClInclude Include="Framework\Tween\TweenManager.h" />
@@ -221,11 +217,15 @@
     <ClInclude Include="Game\Fade\Fade.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Image\Image.h" />
-    <ClInclude Include="Game\Jump\Jump.h" />
+    <ClInclude Include="Game\Material\BalloonMaterial.h" />
     <ClInclude Include="Game\Material\Buffers.h" />
     <ClInclude Include="Game\Material\PBRLit.h" />
     <ClInclude Include="Game\Material\SeaMaterial.h" />
     <ClInclude Include="Game\Material\DefaultUi.h" />
+    <ClInclude Include="Game\Message\CollisionMessenger.h" />
+    <ClInclude Include="Game\Message\Message.h" />
+    <ClInclude Include="Game\Message\ObjectMessenger.h" />
+    <ClInclude Include="Game\Message\SceneMessenger.h" />
     <ClInclude Include="Game\Model3D\Model3D.h" />
     <ClInclude Include="Game\PhysicsBody\PhysicsBody.h" />
     <ClInclude Include="Game\Player\Header\Body.h" />
@@ -245,19 +245,32 @@
     <ClInclude Include="Game\Sky\SkyBox.h" />
     <ClInclude Include="Game\States\Fade\FadeInState.h" />
     <ClInclude Include="Game\States\Fade\FadeOutState.h" />
+    <ClInclude Include="Game\States\MenuScene\MenuExitState.h" />
+    <ClInclude Include="Game\States\MenuScene\MenuMainState.h" />
+    <ClInclude Include="Game\States\MenuScene\MenuSettingState.h" />
+    <ClInclude Include="Game\States\Player\PlayerAttackState.h" />
     <ClInclude Include="Game\States\Player\PlayerIdleState.h" />
-    <ClInclude Include="Game\States\Player\PlayerJumpState.h" />
-    <ClInclude Include="Game\States\Player\PlayerRunAirState.h" />
-    <ClInclude Include="Game\States\Player\PlayerRunGroundState.h" />
+    <ClInclude Include="Game\States\Player\PlayerRunState.h" />
     <ClInclude Include="Game\States\PlayScene\PlayMainState.h" />
     <ClInclude Include="Game\States\ReadyGoState.h" />
     <ClInclude Include="Game\States\TitleScene\TitleMainState.h" />
     <ClInclude Include="Game\Transform\Transform.h" />
+    <ClInclude Include="Game\UI\BalloonGageUI.h" />
+    <ClInclude Include="Game\UI\BalloonGageFrameUI.h" />
+    <ClInclude Include="Game\UI\HeightMeterUI.h" />
+    <ClInclude Include="Game\UI\HPGageUI.h" />
+    <ClInclude Include="Game\UI\HPGageFrameUI.h" />
     <ClInclude Include="Game\UI\KeyGuideUI.h" />
     <ClInclude Include="Game\UI\MenuButtonFrameUI.h" />
     <ClInclude Include="Game\UI\MenuButtonUI.h" />
+    <ClInclude Include="Game\UI\PlayerIconUI.h" />
+    <ClInclude Include="Game\UI\PlayKeyGuideUI.h" />
     <ClInclude Include="Game\UI\ReadyGoUI.h" />
+    <ClInclude Include="Game\UI\ScoreFrameUI.h" />
+    <ClInclude Include="Game\UI\ScoreUI.h" />
     <ClInclude Include="Game\UI\StartUI.h" />
+    <ClInclude Include="Game\UI\TimeFrameUI.h" />
+    <ClInclude Include="Game\UI\TimerUI.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -269,11 +282,11 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interface\ICamera.h" />
     <ClInclude Include="Interface\ICollider.h" />
-    <ClInclude Include="Interface\ICollision.h" />
     <ClInclude Include="Interface\IMaterial.h" />
     <ClInclude Include="Interface\IObject.h" />
     <ClInclude Include="Interface\IComposite.h" />
     <ClInclude Include="Interface\ILeaf.h" />
+    <ClInclude Include="Interface\IObserver.h" />
     <ClInclude Include="Interface\IScene.h" />
     <ClInclude Include="Interface\ISprite.h" />
     <ClInclude Include="Interface\IState.h" />
@@ -299,10 +312,6 @@
     <ClCompile Include="Framework\Resources\ShaderResources.cpp" />
     <ClCompile Include="Framework\Resources\TextureResources.cpp" />
     <ClCompile Include="Framework\SceneManager.cpp" />
-    <ClCompile Include="Framework\StateMachine\Parameters.cpp" />
-    <ClCompile Include="Framework\StateMachine\StateController.cpp" />
-    <ClCompile Include="Framework\StateMachine\StateMachine.cpp" />
-    <ClCompile Include="Framework\StateMachine\Transition.cpp" />
     <ClCompile Include="Framework\Tween\Tween.cpp" />
     <ClCompile Include="Framework\Tween\TweenManager.cpp" />
     <ClCompile Include="Game\Balloon\Balloon.cpp" />
@@ -318,11 +327,14 @@
     <ClCompile Include="Game\Fade\Fade.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\Image\Image.cpp" />
-    <ClCompile Include="Game\Jump\Jump.cpp" />
     <ClCompile Include="Game\Main.cpp" />
+    <ClCompile Include="Game\Material\BalloonMaterial.cpp" />
     <ClCompile Include="Game\Material\PBRLit.cpp" />
     <ClCompile Include="Game\Material\SeaMaterial.cpp" />
     <ClCompile Include="Game\Material\DefaultUi.cpp" />
+    <ClCompile Include="Game\Message\CollisionMessenger.cpp" />
+    <ClCompile Include="Game\Message\ObjectMessenger.cpp" />
+    <ClCompile Include="Game\Message\SceneMessenger.cpp" />
     <ClCompile Include="Game\Model3D\Model3D.cpp" />
     <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp" />
     <ClCompile Include="Game\Player\Source\Body.cpp" />
@@ -342,19 +354,32 @@
     <ClCompile Include="Game\Sky\SkyBox.cpp" />
     <ClCompile Include="Game\States\Fade\FadeInState.cpp" />
     <ClCompile Include="Game\States\Fade\FadeOutState.cpp" />
+    <ClCompile Include="Game\States\MenuScene\MenuExitState.cpp" />
+    <ClCompile Include="Game\States\MenuScene\MenuMainState.cpp" />
+    <ClCompile Include="Game\States\MenuScene\MenuSettingState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerAttackState.cpp" />
     <ClCompile Include="Game\States\Player\PlayerIdleState.cpp" />
-    <ClCompile Include="Game\States\Player\PlayerJumpState.cpp" />
-    <ClCompile Include="Game\States\Player\PlayerRunAirState.cpp" />
-    <ClCompile Include="Game\States\Player\PlayerRunGroundState.cpp" />
+    <ClCompile Include="Game\States\Player\PlayerRunState.cpp" />
     <ClCompile Include="Game\States\PlayScene\PlayMainState.cpp" />
     <ClCompile Include="Game\States\ReadyGoState.cpp" />
     <ClCompile Include="Game\States\TitleScene\TitleMainState.cpp" />
     <ClCompile Include="Game\Transform\Transform.cpp" />
+    <ClCompile Include="Game\UI\BalloonGageUI.cpp" />
+    <ClCompile Include="Game\UI\BalloonGageFrameUI.cpp" />
+    <ClCompile Include="Game\UI\HeightMeterUI.cpp" />
+    <ClCompile Include="Game\UI\HPGageUI.cpp" />
+    <ClCompile Include="Game\UI\HPGageFrameUI.cpp" />
     <ClCompile Include="Game\UI\KeyGuideUI.cpp" />
     <ClCompile Include="Game\UI\MenuButtonFrameUI.cpp" />
     <ClCompile Include="Game\UI\MenuButtonUI.cpp" />
+    <ClCompile Include="Game\UI\PlayerIconUI.cpp" />
+    <ClCompile Include="Game\UI\PlayKeyGuideUI.cpp" />
     <ClCompile Include="Game\UI\ReadyGoUI.cpp" />
+    <ClCompile Include="Game\UI\ScoreFrameUI.cpp" />
+    <ClCompile Include="Game\UI\ScoreUI.cpp" />
     <ClCompile Include="Game\UI\StartUI.cpp" />
+    <ClCompile Include="Game\UI\TimeFrameUI.cpp" />
+    <ClCompile Include="Game\UI\TimerUI.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -399,9 +424,17 @@
     <None Include="Resources\Shaders\hlsl\Model3D\PBRLit.hlsli" />
     <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli" />
     <None Include="Resources\Shaders\hlsl\SkyBox.hlsli" />
-    <None Include="Resources\Shaders\hlsl\UI\UI.hlsli" />
+    <None Include="Resources\Shaders\hlsl\UI.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Balloon_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Model3D\PBRLit_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -419,6 +452,22 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\NumberUI_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\ScoreUI_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
@@ -494,29 +543,29 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_GS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\UI_GS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_PS.hlsl">
+    <FxCompile Include="Resources\Shaders\hlsl\UI_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_VS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Resources\Shaders\cso\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

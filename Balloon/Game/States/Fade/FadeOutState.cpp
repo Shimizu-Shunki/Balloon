@@ -26,7 +26,7 @@ FadeOutState::~FadeOutState()
 }
 
 // 初期化処理
-void FadeOutState::OnStateEnter(StateController* stateController)
+void FadeOutState::PreUpdate()
 {
 	switch (m_chageSceneId)
 	{
@@ -61,19 +61,24 @@ void FadeOutState::OnStateEnter(StateController* stateController)
 			m_sceneManager->PrepareScene<GameOverScene>();
 			m_fade->ChangeSceneFadeOUT<GameOverScene>(1.0f);
 			break;
+		case FadeOutState::ChageSceneID::EXIT_GAME:
+			// ゲーム終了フェードアウト
+			m_fade->ExitGameFadeOUT(1.0f);
+			break;
 		default:
 			break;
 	}
 }
 
 // 更新処理
-void FadeOutState::OnStateUpdate(StateController* stateController, const float& deltaTime)
+void FadeOutState::Update(const float& deltaTime)
 {
-	
+	// フェードの更新
+	m_fade->Update();
 }
 
 // 終了処理
-void FadeOutState::OnStateExit(StateController* stateController)
+void FadeOutState::PostUpdate()
 {
 
 }

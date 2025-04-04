@@ -16,6 +16,7 @@ public:
         PLAY_SCENE,
         GAME_CLEAR_SCENE,
         GAME_OVER_SCENE,
+        EXIT_GAME,
     };
 
 public:
@@ -26,11 +27,11 @@ public:
 
 public:
     // ‰Šú‰»ˆ—
-    void OnStateEnter(StateController* stateController) override;
+    void PreUpdate() override;
     // XVˆ—
-    void OnStateUpdate(StateController* stateController, const float& deltaTime) override;
+    void Update(const float& deltaTime) override;
     // I—¹ˆ—
-    void OnStateExit(StateController* stateController) override;
+    void PostUpdate() override;
 
 private:
 

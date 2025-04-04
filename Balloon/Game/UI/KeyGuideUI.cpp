@@ -34,10 +34,10 @@ void KeyGuideUI::Initialize(ObjectID objectID, const bool& active)
 	m_material = std::make_unique<DefaultUi>();
 
 	// Image‚Ì‰Šú‰»
-	m_image->Initialize(true, m_material.get(), m_transform.get());
+	m_image->Initialize(active, m_material.get(), m_transform.get());
 	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetKeyGuide(), width, height);
-	m_image->SetRuleTexture(nullptr);
-	m_image->SetIsActive(true);
+	m_image->SetRuleTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetRuleTexture());
+	m_image->SetIsActive(active);
 
 	// ƒ}ƒeƒŠƒAƒ‹‚ð‰Šú‰»‚·‚é
 	this->InitialMaterial(width, height);
@@ -86,4 +86,15 @@ void KeyGuideUI::InitialMaterial(int width, int height)
 	material->SetUseRuleTexture(0.0f);
 	material->SetRuleProgress(0.0f);
 	material->SetRuleInverse(0.0f);
+}
+
+void KeyGuideUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void KeyGuideUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
 }

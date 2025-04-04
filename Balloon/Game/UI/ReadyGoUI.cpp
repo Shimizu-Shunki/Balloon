@@ -23,6 +23,8 @@ void ReadyGoUI::Initialize(ObjectID objectID, const bool& active)
 	auto commonResources = CommonResources::GetInstance();
 	int width, height;
 
+	m_objectId = objectID;
+	m_isActive = active;
 
 	// Transformの作成
 	m_transform = std::make_unique<Transform>();
@@ -32,10 +34,10 @@ void ReadyGoUI::Initialize(ObjectID objectID, const bool& active)
 	m_material = std::make_unique<DefaultUi>();
 
 	// Imageの初期化
-	m_image->Initialize(true, m_material.get(), m_transform.get());
+	m_image->Initialize(active, m_material.get(), m_transform.get());
 	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetReadyGoTexture(), width, height);
-	m_image->SetRuleTexture(nullptr);
-	m_image->SetIsActive(true);
+	m_image->SetRuleTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetRuleTexture());
+	m_image->SetIsActive(active);
 
 	// 二つのテキストのスプライトシートの為高さを再設定
 	height /= 2;
@@ -87,4 +89,15 @@ void ReadyGoUI::InitialMaterial(int width, int height)
 	material->SetUseRuleTexture(0.0f);
 	material->SetRuleProgress(0.0f);
 	material->SetRuleInverse(0.0f);
+}
+
+void ReadyGoUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void ReadyGoUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
 }

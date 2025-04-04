@@ -38,7 +38,7 @@ void Balloon::Initialize(ObjectID objectID, const bool& active)
 	// 3Dモデルを準備する
 	m_model = std::make_unique<Model3D>();
 	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetBalloonModel(),
-		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		commonResources->GetResources()->GetMaterialResources()->GetBalloon(), this
 	);
 
 	// 描画マネージャーに渡す
@@ -78,3 +78,15 @@ void Balloon::Update() {}
 /// 終了処理
 /// </summary>
 void Balloon::Finalize() {}
+
+
+void Balloon::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void Balloon::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
+}

@@ -50,6 +50,7 @@ public:
 private:
 	
 	using BgmMap = std::unordered_map<XACT_WAVEBANK_SOUNDS, std::unique_ptr<DirectX::SoundEffectInstance>>;
+	using SeMap = std::unordered_map<XACT_WAVEBANK_SOUNDS_SE, std::unique_ptr<DirectX::SoundEffectInstance>>;
 
 	// オーディオエンジン
 	std::unique_ptr<DirectX::AudioEngine> m_audioEngine;
@@ -59,6 +60,13 @@ private:
 	BgmMap m_bgms;
 	// BGMのインスタンス
 	DirectX::SoundEffectInstance* m_currentBGM;
+
+	// SEのバンク
+	std::unique_ptr<DirectX::WaveBank> m_waveBankSe;
+	// SEの格納
+	SeMap m_ses;
+	// SEの現在のインスタンス
+	DirectX::SoundEffectInstance* m_currentSE;
 
 	// フェードフラグ
 	bool m_isActive;

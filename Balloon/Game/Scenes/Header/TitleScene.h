@@ -4,15 +4,8 @@
 #include "Game/UI/StartUI.h"
 
 
-
 class CommonResources;
-class StateMachine;
-class RenderManager;
 class IObject;
-class Transform;
-class DebugCamera;
-class TitleLogo;
-class StartUI;
 class Fade;
 
 
@@ -35,6 +28,10 @@ public:
 	void Render() override;
 	// 終了処理
 	void Finalize() override;
+	// シーンのステートを変更する
+	void ChangeState(IState* newState) override;
+	// 当たり判定メッセージを受け取る
+	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
 	// ステートコントローラーの作成
@@ -92,20 +89,18 @@ private:
 	// 共有リソース
 	CommonResources* m_commonResources;
 
-	// ステートマシーン
-	std::unique_ptr<StateMachine> m_stateMachine;
-
 	// フェード処理
 	std::unique_ptr<Fade> m_fade;
-
+	// プレイヤー
+	std::unique_ptr<IObject> m_player;
 	// UIオブジェクト
 	std::vector<std::unique_ptr<IObject>> m_objects;
 
-	//// タイトルロゴ
-	//std::unique_ptr<TitleLogo> m_titleLogo;
-
-
-	// プレイヤー
-	std::unique_ptr<IObject> m_player;
+	// 現在のステート
+	IState* m_currentState;
+	// 各ステート
+	std::unique_ptr<IState> m_fadeInState;
+	std::unique_ptr<IState> m_fadeOutState;
+	std::unique_ptr<IState> m_titleMainState;
 
 };

@@ -30,7 +30,7 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	// 3Dモデルを準備する
 	m_model = std::make_unique<Model3D>();
 	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetCloudModel(),
-		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		commonResources->GetResources()->GetMaterialResources()->GetCloud(), this
 	);
 	// 描画マネージャーに渡す
 	commonResources->GetRenderManager()->AddModel(m_model.get());
@@ -43,7 +43,7 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_boxCollider->GetTransform()->SetLocalScale({ 10.0f,1.5f,10.0f });
 	m_boxCollider->GetTransform()->SetParent(m_transform.get());
 	m_transform->SetChild(m_boxCollider->GetTransform());
-	commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
+
 
 	// 物理挙動を作成と設定
 	m_physicsBody = std::make_unique<PhysicsBody>(this);
@@ -51,7 +51,12 @@ void Cloud::Initialize(ObjectID objectID, const bool& active)
 	m_physicsBody->SetMass(10.0f);
 	m_physicsBody->SetUseGravity(false);
 	m_physicsBody->SetIsKinematic(true);
-	commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
+
+	// 当たり判定マネージャー登録
+	std::vector<ICollider*> colliders;
+	colliders.push_back(m_boxCollider.get());
+	commonResources->GetCollisionManager()->Attach(this, colliders, m_physicsBody.get());
+
 }
 
 /// <summary>
@@ -85,4 +90,16 @@ void Cloud::Update() {}
 /// <summary>
 /// 終了処理
 /// </summary>
-void Cloud::Finalize() {}							
+void Cloud::Finalize() {}			
+
+
+void Cloud::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void Cloud::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
+}

@@ -1,26 +1,21 @@
 #include "Framework/pch.h"
+#include "Game/Scenes/Header/TitleScene.h"
+// フレームワーク
 #include "Framework/CommonResources.h"
 #include "Framework/RenderManager.h"
-#include "Game/Scenes/Header/TitleScene.h"
+#include "Framework/Tween/Tween.h"
+#include "Game/Message/SceneMessenger.h"
+// インターフェース
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
-
+// オブジェクト
 #include "Game/Player/Header/Player.h"
-#include "Framework/StateMachine/StateMachine.h"
-#include "Framework/StateMachine/StateController.h"
-
-#include "Game/Cameras/FixedCamera.h"
 #include "Game/Fade/Fade.h"
-
+// カメラ
+#include "Game/Cameras/FixedCamera.h"
 #include "Game/Cameras/DebugCamera.h"
-
-#include "Framework/Tween/Tween.h"
-#include "Game/Scenes/Header/PlayScene.h"
-
 // UI
 #include "Game/UI/TitleLogo.h"
-
-
 // ステート
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/States/Fade/FadeOutState.h"
@@ -63,7 +58,8 @@ void TitleScene::Initialize()
 	m_fade = std::make_unique<Fade>();
 	m_fade->Initialize();
 
-	
+	SceneMessenger::GetInstance()->Clear();
+	SceneMessenger::GetInstance()->Register(this);
 
 	// ステートコントローラーの作成
 	this->CreateStateController();
@@ -72,10 +68,10 @@ void TitleScene::Initialize()
 void TitleScene::Start()
 {
 	// ステートマシンスタート処理
-	m_stateMachine->Start();
+	m_currentState->PreUpdate();
 
-	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
-	StartUI* startUi = this->SearchObject<StartUI>(IObject::ObjectID::StartUI);
+	Player* player         = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
+	StartUI* startUi       = this->SearchObject<StartUI>(IObject::ObjectID::StartUI);
 	TitleLogo* titleLogoUi = this->SearchObject<TitleLogo>(IObject::ObjectID::TitleLogoUI);
 
 	// プレイヤーのTweenを起動
@@ -87,7 +83,6 @@ void TitleScene::Start()
 	// タイトルロゴのアニメーションを設定
 	titleLogoUi->GetTransform()->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.5f, 1.0f)
 		.SetDelay(4.0f).SetEase(Tween::EasingType::EaseOutBounce);
-
 	// StartUIのTweenを起動
 	startUi->GetTransform()->GetTween()->DOScale(DirectX::SimpleMath::Vector3::One * 0.6f, 1.0f)
 		.SetDelay(4.5f).SetEase(Tween::EasingType::EaseOutBounce);
@@ -103,10 +98,10 @@ void TitleScene::Start()
 
 void TitleScene::Update()
 {
-	// ステートマシンの更新
-	m_stateMachine->Update();
+	const float deltaTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
 
-	m_fade->Update();
+	// 現在のステートを更新
+	m_currentState->Update(deltaTime);
 
 	// オブジェクトの更新処理
 	for (const auto& object : m_objects)
@@ -137,30 +132,12 @@ void TitleScene::Finalize()
 
 void TitleScene::CreateStateController()
 {
-	// ステートマシーンの作成
-	m_stateMachine = std::make_unique<StateMachine>();
-
-	// ステートコントローラーの作成
-	auto stateController = std::make_unique<StateController>();
-
-	// パラメーターの追加
-	stateController->AddParameters("FadeIN", false);
-	stateController->AddParameters("FadeOUT", false);
-
-	// ステートの追加
-	stateController->AddState<FadeInState>("FadeInState", m_fade.get());
-	stateController->AddState<TitleMainState>("TitleMainState");
-	stateController->AddState<FadeOutState>("FadeOutState", m_fade.get(), FadeOutState::ChageSceneID::MENU_SCENE);
-
-	// デフォルトのステートを設定
-	stateController->SetDeffultState("FadeInState");
-
-	// トランジションの追加
-	stateController->AddTransition("FadeInState", "TitleMainState", "FadeIN", true);
-	stateController->AddTransition("TitleMainState", "FadeOutState", "FadeOUT", true);
-
-	// ステートコントローラーを追加
-	m_stateMachine->AddController(std::move(stateController));
+	// ステートの作成
+	m_fadeInState = std::make_unique<FadeInState>(m_fade.get());
+	m_fadeOutState = std::make_unique<FadeOutState>(m_fade.get(), FadeOutState::ChageSceneID::MENU_SCENE);
+	m_titleMainState = std::make_unique<TitleMainState>();
+	// 現在のステートを設定
+	m_currentState = m_fadeInState.get();
 }
 
 /// <summary>
@@ -187,3 +164,29 @@ void TitleScene::CreateCamera()
 	m_commonResources->GetCameraManager()->Attach(std::move(camera));
 }
 
+
+void TitleScene::ChangeState(IState* newState)
+{
+	// 事後処理
+	m_currentState->PostUpdate();
+	// 現在のステートを切り替える
+	m_currentState = newState;
+	// 事前処理
+	m_currentState->PreUpdate();
+}
+
+void TitleScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
+{
+	switch (messageID)
+	{
+		case Message::FADE_IN:
+			break;
+		case Message::FADE_OUT:
+			this->ChangeState(m_fadeOutState.get());
+			break;
+		case Message::MAIN:
+			this->ChangeState(m_titleMainState.get());
+		default:
+			break;
+	}
+}

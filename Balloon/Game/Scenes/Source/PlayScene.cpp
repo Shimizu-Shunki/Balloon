@@ -1,23 +1,43 @@
 #include "Framework/pch.h"
-#include "Framework/CommonResources.h"
-#include "Framework/RenderManager.h"
 #include "Game/Scenes/Header/PlayScene.h"
+#include "Framework/CommonResources.h"
+
+#include "Framework/RenderManager.h"
+#include "Framework/Tween/Tween.h"
+#include "Framework/CollisionManager.h"
+#include "Game/Message/SceneMessenger.h"
+#include "Game/Message/ObjectMessenger.h"
+
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
-#include "Framework/Tween/Tween.h"
+
 #include "Game/Player/Header/Player.h"
-#include "Game/Cameras/DebugCamera.h"
-#include "Game/Fade/Fade.h"
-#include "Game/Jump/Jump.h"
-#include "Framework/CollisionManager.h"
-#include "Game/Cameras/TPSKeyCamera.h"
 #include "Game/Cloud/Cloud.h"
 #include "Game/Enemy/Enemy.h"
-#include "Framework/StateMachine/StateController.h"
-#include "Framework/StateMachine/StateMachine.h"
+#include "Game/Fade/Fade.h"
+
+#include "Game/Cameras/TPSKeyCamera.h"
+#include "Game/Cameras/DebugCamera.h"
+
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/States/Fade/FadeOutState.h"
+#include "Game/States/ReadyGoState.h"
 #include "Game/States/PlayScene/PlayMainState.h"
+
+// UI
+#include "Game/UI/PlayKeyGuideUI.h"
+#include "Game/UI/HeightMeterUI.h"
+#include "Game/UI/PlayerIconUI.h"
+#include "Game/UI/TimeFrameUI.h"
+#include "Game/UI/ScoreFrameUI.h"
+#include "Game/UI/BalloonGageFrameUI.h"
+#include "Game/UI/BalloonGageUI.h"
+#include "Game/UI/HPGageFrameUI.h"
+#include "Game/UI/HPGageUI.h"
+#include "Game/UI/ReadyGoUI.h"
+#include "Game/UI/TimerUI.h"
+#include "Game/UI/ScoreUI.h"
+
 
 
 PlayScene::PlayScene()
@@ -39,147 +59,50 @@ void PlayScene::Initialize()
 	m_debugCamera = std::make_unique<DebugCamera>();
 	m_debugCamera->Initialize(1280, 720);
 
-	// Transformを作成
-	m_rootTransform = std::make_unique<Transform>(); 
-
-	// 親がいないのでnullptrを設定
-	m_rootTransform->SetParent(nullptr);
-	// プレイヤーの作成
-	m_rootObject.push_back(std::make_unique<Player>(nullptr));
-
-	m_rootObject[0]->Initialize(IObject::ObjectID::PLAYER,true);
-	m_rootObject[0]->InitialTransform(
-		DirectX::SimpleMath::Vector3(0.0f, 11.0f, 0.0f),
-		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
-		DirectX::SimpleMath::Vector3::One * 0.1f
-	);
-	m_rootObject[0]->GetTransform()->SetParent(m_rootTransform.get());
-
-
-	std::unique_ptr<IObject> enemy = std::make_unique<Enemy>(nullptr);
-	enemy->Initialize(IObject::ObjectID::ENEMY, true);
-	enemy->InitialTransform(
-		DirectX::SimpleMath::Vector3(0.0f, 11.0f, -3.0f),
-		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
-		DirectX::SimpleMath::Vector3::One * 0.1f
-	);
-	enemy->GetTransform()->SetParent(m_rootTransform.get());
-	m_enemys.push_back(dynamic_cast<Enemy*>( enemy.get()));
-	m_rootObject.push_back(std::move(enemy));
-
-	enemy = std::make_unique<Enemy>(nullptr);
-	enemy->Initialize(IObject::ObjectID::ENEMY, true);
-	enemy->InitialTransform(
-		DirectX::SimpleMath::Vector3(-20.0f, 11.0f, 20.0f),
-		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)),
-		DirectX::SimpleMath::Vector3::One * 0.1f
-	);
-	enemy->GetTransform()->SetParent(m_rootTransform.get());
-	m_enemys.push_back(dynamic_cast<Enemy*>(enemy.get()));
-	m_rootObject.push_back(std::move(enemy));
-
-	// 雲の作成
-	std::unique_ptr<IObject> cloud = std::make_unique<Cloud>(nullptr);
-	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->InitialTransform(
-		DirectX::SimpleMath::Vector3(0.0f, 10.0f, 0.0f),
-		DirectX::SimpleMath::Quaternion::Identity,
-		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
-	);
-	cloud->GetTransform()->SetParent(m_rootTransform.get());
-	// ルートに渡す
-	m_rootObject.push_back(std::move(cloud));
-
-	cloud = std::make_unique<Cloud>(nullptr);
-	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->InitialTransform(
-		DirectX::SimpleMath::Vector3(-20.0f, 8.0f, 20.0f),
-		DirectX::SimpleMath::Quaternion::Identity,
-		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
-	);
-	cloud->GetTransform()->SetParent(m_rootTransform.get());
-	// ルートに渡す
-	m_rootObject.push_back(std::move(cloud));
-
-	cloud = std::make_unique<Cloud>(nullptr);
-	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->InitialTransform(
-		DirectX::SimpleMath::Vector3(20.0f, 8.0f, 20.0f),
-		DirectX::SimpleMath::Quaternion::Identity,
-		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
-	);
-	cloud->GetTransform()->SetParent(m_rootTransform.get());
-	// ルートに渡す
-	m_rootObject.push_back(std::move(cloud));
-
-	cloud = std::make_unique<Cloud>(nullptr);
-	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->InitialTransform(
-		DirectX::SimpleMath::Vector3(-20.0f, 8.0f, -20.0f),
-		DirectX::SimpleMath::Quaternion::Identity,
-		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
-	);
-	cloud->GetTransform()->SetParent(m_rootTransform.get());
-	// ルートに渡す
-	m_rootObject.push_back(std::move(cloud));
-
-	cloud = std::make_unique<Cloud>(nullptr);
-	cloud->Initialize(IObject::ObjectID::CLOUD, true);
-	cloud->InitialTransform(
-		DirectX::SimpleMath::Vector3(20.0f, 8.0f, -20.0f),
-		DirectX::SimpleMath::Quaternion::Identity,
-		DirectX::SimpleMath::Vector3(1.0f, 0.3f, 1.0f)
-	);
-	cloud->GetTransform()->SetParent(m_rootTransform.get());
-	// ルートに渡す
-	m_rootObject.push_back(std::move(cloud));
-
-	
-
-	//m_commonResources->GetCameraManager()->ChageCamera(2);
-
+	// オブジェクトの作成
+	this->CreateObject();
+	// UIの作成
+	this->CreateUI();
 	// フェードの作成
 	m_fade = std::make_unique<Fade>();
 	m_fade->Initialize();
+	// ステートを作成
+	this->CreateState();
 
-	this->CreateStateStateController();
+	ScoreUI* scoreUI = this->SearchObject<ScoreUI>(IObject::ObjectID::SCORE_UI);
+	// メッセンジャーに登録
+	ObjectMessenger::GetInstance()->Register(1, scoreUI);
 
+	//m_commonResources->GetCameraManager()->ChageCamera(2);
 }
 
 void PlayScene::Start()
 {
-	m_stateMachine->Start();
+	// シーンを登録する
+	SceneMessenger::GetInstance()->Clear();
+	SceneMessenger::GetInstance()->Register(this);
+
+	m_currentState->PreUpdate();
+	m_commonResources->GetCollisionManager()->Start();
 	// BGMを再生
 	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
-
-	m_commonResources->GetCollisionManager()->Start();
 }
 
 void PlayScene::Update()
 {
-	m_stateMachine->Update();
+	const float deltaTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
 
-	//m_camera->Update();
+	// 現在のステートを更新
+	m_currentState->Update(deltaTime);
 
-
-	for (const auto& object : m_rootObject)
-	{
-		object->Update();
-	}
-
-	m_rootTransform->Update();
-
-	/*m_debugCamera->Update();
-	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());*/
-
-	m_fade->Update();
+	m_debugCamera->Update();
+	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());
 }
 
 void PlayScene::Render()
 {
 	m_commonResources->GetCollisionManager()->CheckCollision();
 	m_commonResources->GetCollisionManager()->Render();
-
 	//モデルの描画
 	m_commonResources->GetRenderManager()->Render();
 }
@@ -190,32 +113,115 @@ void PlayScene::Finalize()
 
 }
 
-void PlayScene::CreateStateStateController()
+/// <summary>
+/// オブジェクトの作成
+/// </summary>
+void PlayScene::CreateObject()
 {
-	// ステートマシーンの作成
-	m_stateMachine = std::make_unique<StateMachine>();
+	using namespace DirectX::SimpleMath;
 
-	// ステートコントローラーの作成
-	auto stateController = std::make_unique<StateController>();
+	this->Attach<Player>(IObject::ObjectID::PLAYER, true,
+		Vector3::Zero, Quaternion::Identity, Vector3::One * 0.6f,nullptr
+	);
+}
 
-	// パラメーターの追加
-	stateController->AddParameters("FadeIN", false);
-	stateController->AddParameters("FadeOUT", 0);
+/// <summary>
+/// UIを作成
+/// </summary>
+void PlayScene::CreateUI()
+{
+	using namespace DirectX::SimpleMath;
 
-	// ステートの追加
-	stateController->AddState<FadeInState>("FadeInState", m_fade.get());
-	stateController->AddState<PlayMainState>("PlayMainState",dynamic_cast<Player*>(m_rootObject[0].get()),m_enemys);
-	stateController->AddState<FadeOutState>("FadeOutStateClear", m_fade.get(), FadeOutState::ChageSceneID::GAME_CLEAR_SCENE);
-	stateController->AddState<FadeOutState>("FadeOutStateFailed", m_fade.get(), FadeOutState::ChageSceneID::GAME_OVER_SCENE);
+	this->Attach<HeightMeterUI>(IObject::ObjectID::HEIGHT_METER_UI, false,
+		Vector3(1180.0f, 720.0f / 2.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<PlayerIconUI>(IObject::ObjectID::PLAYER_ICON_UI, false,
+		Vector3(1120.0f, 720.0f / 2.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.07f
+	);
+	this->Attach<PlayKeyGuideUI>(IObject::ObjectID::PLAY_SCENE_KEYS_GUIDE_UI, false,
+		Vector3(1020.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<TimeFrameUI>(IObject::ObjectID::TIME_FRAME_UI, false,
+		Vector3(1180.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<ScoreFrameUI>(IObject::ObjectID::SCORE_FRAME_UI, false,
+		Vector3(1180.0f / 8.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<BalloonGageFrameUI>(IObject::ObjectID::BALLOON_GAGE_FRAME_UI, false,
+		Vector3(1020.0f / 7.0f, 555.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<BalloonGageUI>(IObject::ObjectID::BALLOON_GAGE_UI, false,
+		Vector3(1020.0f / 7.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<HPGageFrameUI>(IObject::ObjectID::BALLOON_GAGE_FRAME_UI, false,
+		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<HPGageUI>(IObject::ObjectID::BALLOON_GAGE_UI, false,
+		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<TimerUI>(IObject::ObjectID::TIMER_UI, false,
+		Vector3(1180.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.12f, 0.3f ,0.2f }
+	);
+	this->Attach<ReadyGoUI>(IObject::ObjectID::READY_GO_UI, true,
+		Vector3(1280.0f + 600.0f , 720.0f / 2.0f , 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+	);
+	this->Attach<ScoreUI>(IObject::ObjectID::SCORE_UI, true,
+		Vector3(1180.0f / 8.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.2f, 0.4f ,0.2f }
+	);
+}
 
-	// デフォルトのステートを設定
-	stateController->SetDeffultState("FadeInState");
+/// <summary>
+/// ステートを作成
+/// </summary>
+void PlayScene::CreateState()
+{
+	std::vector<IObject*> objects;
+	for (const auto& object : m_objects)
+	{
+		objects.push_back(object.get());
+	}
+	
+	// ステートの作成
+	m_fadeInState = std::make_unique<FadeInState>(m_fade.get());
+	m_fadeOutState = std::make_unique<FadeOutState>(m_fade.get(), FadeOutState::ChageSceneID::MENU_SCENE);
+	m_countdown = std::make_unique<ReadyGoState>(this->SearchObject<ReadyGoUI>(IObject::ObjectID::READY_GO_UI));
+	m_playMainState = std::make_unique<PlayMainState>(objects);
 
-	// トランジションの追加
-	stateController->AddTransition("FadeInState", "PlayMainState", "FadeIN", true);
-	stateController->AddTransition("PlayMainState", "FadeOutStateClear", "FadeOUT", 1);
-	stateController->AddTransition("PlayMainState", "FadeOutStateFailed", "FadeOUT", 2);
+	// 現在のステートを設定
+	m_currentState = m_fadeInState.get();
+}
 
-	// ステートコントローラーを追加
-	m_stateMachine->AddController(std::move(stateController));
+/// <summary>
+/// ステートを変更する
+/// </summary>
+/// <param name="newState"></param>
+void PlayScene::ChangeState(IState* newState)
+{
+	// 事後処理
+	m_currentState->PostUpdate();
+	// 現在のステートを切り替える
+	m_currentState = newState;
+	// 事前処理
+	m_currentState->PreUpdate();
+}
+
+/// <summary>
+///	メッセージを受け取る
+/// </summary>
+/// <param name="messageID"></param>
+void PlayScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
+{
+	switch (messageID)
+	{
+		case Message::FADE_IN:
+			this->ChangeState(m_countdown.get());
+			break;
+		case Message::FADE_OUT:
+			break;
+		case Message::COUNTDOWN:
+			this->ChangeState(m_playMainState.get());
+			break;
+		default:
+			break;
+	}
 }

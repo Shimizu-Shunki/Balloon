@@ -83,6 +83,18 @@ void ShaderResources::LoadResource(const nlohmann::json& data)
 		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_UI_PS.ReleaseAndGetAddressOf())
 	);
 
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(shaderPaths["NumberUI_PS"].c_str());
+	DX::ThrowIfFailed(
+		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_numberPS.ReleaseAndGetAddressOf())
+	);
+
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(shaderPaths["ScoreUI_PS"].c_str());
+	DX::ThrowIfFailed(
+		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_scorePS.ReleaseAndGetAddressOf())
+	);
+
 	// 頂点シェーダをロードする
 	blob = DX::ReadData(shaderPaths["Sea_VS"].c_str());
 	DX::ThrowIfFailed(
@@ -141,6 +153,12 @@ void ShaderResources::LoadResource(const nlohmann::json& data)
 	blob = DX::ReadData(shaderPaths["PBRLit_PS"].c_str());
 	DX::ThrowIfFailed(
 		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_PBRLitPS.ReleaseAndGetAddressOf())
+	);
+
+	// ピクセルシェーダをロードする
+	blob = DX::ReadData(shaderPaths["Balloon_PS"].c_str());
+	DX::ThrowIfFailed(
+		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_balloonPS.ReleaseAndGetAddressOf())
 	);
 
 	// スカイボックス

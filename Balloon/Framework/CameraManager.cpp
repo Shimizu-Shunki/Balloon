@@ -29,7 +29,7 @@ CameraManager::CameraManager()
 		DirectX::XMConvertToRadians(60.0f),
 		SCREEN_W / SCREEN_H,
 		0.1f,
-		10000.0f
+		100000.0f
 	);
 }
 

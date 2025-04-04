@@ -16,6 +16,13 @@ public:
 	// 質量を取得する
 	float GetMass() { return m_mass; }
 
+	// 重力設定
+	void SetGravity(float gravity) { m_gravity = gravity; }
+	// 重力を取得する
+	float GetGravity() { return m_gravity; }
+
+	void AddForce(const DirectX::SimpleMath::Vector3& foce) { m_externalForce = foce; }
+
 	// 重力を使用するかどうかを設定
 	void SetUseGravity(bool gravity) { m_useGravity = gravity; }
 	// 速度を設定する
@@ -23,9 +30,9 @@ public:
 	// 速度を取得する
 	DirectX::SimpleMath::Vector3 GetVelocity() const { return m_velocity; }
 	// 力を設定する
-	void SetFoce(const DirectX::SimpleMath::Vector3& foce) { m_force = foce; }
+	// void SetFoce(const DirectX::SimpleMath::Vector3& foce) { m_force = foce; }
 	// 力を取得する
-	DirectX::SimpleMath::Vector3 GetFoce() const { return m_force; }
+	// DirectX::SimpleMath::Vector3 GetFoce() const { return m_force; }
 
 	// キネマティックを設定する
 	void SetIsKinematic(bool kinematic) { m_isKinematic = kinematic; }
@@ -68,8 +75,10 @@ private:
 
 	// 速度
 	DirectX::SimpleMath::Vector3 m_velocity;
-	// 力
-	DirectX::SimpleMath::Vector3 m_force;
+	// 常時の重力
+	DirectX::SimpleMath::Vector3 m_gravityForce;
+	// 一時的な外部からのAddForce()
+	DirectX::SimpleMath::Vector3 m_externalForce;
 	// 加速度
 	DirectX::SimpleMath::Vector3 m_acceleration;
 

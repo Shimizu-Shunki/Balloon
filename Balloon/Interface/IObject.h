@@ -4,11 +4,12 @@
 #include "Framework/pch.h"
 #include "Framework/StepTimer.h"
 #include "Interface/ICollision.h"
+#include "Interface/IObserver.h"
 #include "Game/Transform/Transform.h"
 #include <variant>
 
 
-class IObject : public ICollision
+class IObject : public IObserver
 {
 public:
 	enum class ObjectID
@@ -38,6 +39,20 @@ public:
 		MenuButtonUI,
 		KeyGuideUI,
 		MenuButtonFrameUI,
+
+		PLAYER_ICON_UI,
+		PLAY_SCENE_KEYS_GUIDE_UI,
+		TIME_FRAME_UI,
+		SCORE_FRAME_UI,
+		BALLOON_GAGE_FRAME_UI,
+		BALLOON_GAGE_UI,
+		HEIGHT_METER_UI,
+		HP_GAGE_UI,
+		HP_GAGE_FRAME_UI,
+		READY_GO_UI,
+		TIMER_UI,
+		SCORE_UI,
+
 	};
 
 public:

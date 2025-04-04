@@ -4,10 +4,12 @@
 
 
 class CommonResources;
+class ObjectMessenger;
 class PBRLit;
 class SkyBox;
 class Model3D;
 class Player;
+class Cloud;
 class DebugCamera;
 
 
@@ -30,12 +32,16 @@ public:
 	void Render() override;
 	// 終了処理
 	void Finalize() override;
+	// シーンのステートを変更する
+	void ChangeState(IState* newState) override;
+	// 当たり判定メッセージを受け取る
+	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
-
+	ObjectMessenger* m_objectMessenger;
 
 	DirectX::CommonStates* m_commonStates;
 
@@ -44,14 +50,10 @@ private:
 
 
 
-	// ブレンドステート
-	Microsoft::WRL::ComPtr<ID3D11BlendState> m_blendState;
-
-
-
 	std::unique_ptr<Player> m_plaeyr;
 
-	
+	std::unique_ptr<Cloud> m_cloud;
+
 
 
 };

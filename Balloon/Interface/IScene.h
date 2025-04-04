@@ -1,4 +1,7 @@
 #pragma once
+#include "Interface/IState.h"
+#include "Game/Message/Message.h"
+
 
 class IScene
 {
@@ -17,4 +20,10 @@ public:
 	virtual void Render() = 0;
 	// 終了処理
 	virtual void Finalize() = 0;
+
+	// 現在の状態を変更する
+	virtual void ChangeState(IState* newState) = 0;
+
+	// メッセージを受け取る
+	virtual void OnSceneMessegeAccepted(Message::SceneMessageID messageID) = 0;
 };

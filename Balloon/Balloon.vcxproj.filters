@@ -92,9 +92,6 @@
     <Filter Include="Game\Cloud">
       <UniqueIdentifier>{a3f00bd1-3af6-412d-9694-cda9902b3cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Jump">
-      <UniqueIdentifier>{89d20c1f-075f-4d41-abe4-26ad4b96f5de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Collider">
       <UniqueIdentifier>{2907ef1c-616d-4153-b791-cc4632831464}</UniqueIdentifier>
     </Filter>
@@ -149,8 +146,14 @@
     <Filter Include="Game\Image">
       <UniqueIdentifier>{417ac660-8013-4f33-b0e3-15f645b675c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\StateMachine">
-      <UniqueIdentifier>{3c7a1f66-ea55-4dc8-91b7-b7b4411cdeaf}</UniqueIdentifier>
+    <Filter Include="Game\States\MenuScene">
+      <UniqueIdentifier>{a3dae5ca-afb6-40dd-8e66-3a20320356e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Balloon">
+      <UniqueIdentifier>{8dbdd6f5-ac67-4e64-b086-2dc988c72c00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Message">
+      <UniqueIdentifier>{7ec13f20-8d21-499f-be60-7c9d91056dd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +233,6 @@
     <ClInclude Include="Interface\ICamera.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\ICollision.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\IObject.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -293,18 +293,6 @@
     <ClInclude Include="Framework\Easing.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\StateMachine\Parameters.h">
-      <Filter>Framework\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\StateMachine\StateController.h">
-      <Filter>Framework\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\StateMachine\StateMachine.h">
-      <Filter>Framework\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\StateMachine\Transition.h">
-      <Filter>Framework\StateMachine</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Cameras\FixedCamera.h">
       <Filter>Game\Cameras</Filter>
     </ClInclude>
@@ -347,9 +335,6 @@
     <ClInclude Include="Game\Cloud\Cloud.h">
       <Filter>Game\Cloud</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Jump\Jump.h">
-      <Filter>Game\Jump</Filter>
-    </ClInclude>
     <ClInclude Include="Game\PhysicsBody\PhysicsBody.h">
       <Filter>Game\PhysicsBody</Filter>
     </ClInclude>
@@ -378,15 +363,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Game\States\Player\PlayerIdleState.h">
-      <Filter>Game\States\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\States\Player\PlayerJumpState.h">
-      <Filter>Game\States\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\States\Player\PlayerRunAirState.h">
-      <Filter>Game\States\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\States\Player\PlayerRunGroundState.h">
       <Filter>Game\States\Player</Filter>
     </ClInclude>
     <ClInclude Include="Interface\IMaterial.h">
@@ -441,6 +417,72 @@
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\KeyGuideUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\MenuScene\MenuExitState.h">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\MenuScene\MenuMainState.h">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\MenuScene\MenuSettingState.h">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IObserver.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\Message.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\ObjectMessenger.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\SceneMessenger.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\CollisionMessenger.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerAttackState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerRunState.h">
+      <Filter>Game\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\BalloonGageUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\BalloonGageFrameUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\HeightMeterUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\HPGageUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\HPGageFrameUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerIconUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayKeyGuideUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ScoreFrameUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TimeFrameUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Material\BalloonMaterial.h">
+      <Filter>Game\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TimerUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ScoreUI.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -543,18 +585,6 @@
     <ClCompile Include="Framework\Tween\TweenManager.cpp">
       <Filter>Framework\Tween</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\StateMachine\Parameters.cpp">
-      <Filter>Framework\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\StateMachine\StateController.cpp">
-      <Filter>Framework\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\StateMachine\StateMachine.cpp">
-      <Filter>Framework\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\StateMachine\Transition.cpp">
-      <Filter>Framework\StateMachine</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Cameras\FixedCamera.cpp">
       <Filter>Game\Cameras</Filter>
     </ClCompile>
@@ -591,9 +621,6 @@
     <ClCompile Include="Game\Cloud\Cloud.cpp">
       <Filter>Game\Cloud</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Jump\Jump.cpp">
-      <Filter>Game\Jump</Filter>
-    </ClCompile>
     <ClCompile Include="Game\PhysicsBody\PhysicsBody.cpp">
       <Filter>Game\PhysicsBody</Filter>
     </ClCompile>
@@ -622,15 +649,6 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Game\States\Player\PlayerIdleState.cpp">
-      <Filter>Game\States\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\States\Player\PlayerJumpState.cpp">
-      <Filter>Game\States\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\States\Player\PlayerRunAirState.cpp">
-      <Filter>Game\States\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\States\Player\PlayerRunGroundState.cpp">
       <Filter>Game\States\Player</Filter>
     </ClCompile>
     <ClCompile Include="Game\Material\PBRLit.cpp">
@@ -684,6 +702,66 @@
     <ClCompile Include="Game\UI\KeyGuideUI.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Game\States\MenuScene\MenuExitState.cpp">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\MenuScene\MenuMainState.cpp">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\MenuScene\MenuSettingState.cpp">
+      <Filter>Game\States\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Message\ObjectMessenger.cpp">
+      <Filter>Game\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Message\SceneMessenger.cpp">
+      <Filter>Game\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Message\CollisionMessenger.cpp">
+      <Filter>Game\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerAttackState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerRunState.cpp">
+      <Filter>Game\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\BalloonGageFrameUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\BalloonGageUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\HeightMeterUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\HPGageFrameUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\HPGageUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerIconUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayKeyGuideUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ScoreFrameUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TimeFrameUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Material\BalloonMaterial.cpp">
+      <Filter>Game\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TimerUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ScoreUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Game\Balloon.ico">
@@ -701,9 +779,6 @@
     <None Include="Resources\Shaders\hlsl\Sea\Sea.hlsli">
       <Filter>Resources\Shaders\Sea</Filter>
     </None>
-    <None Include="Resources\Shaders\hlsl\UI\UI.hlsli">
-      <Filter>Resources\Shaders\UI</Filter>
-    </None>
     <None Include="packages.config" />
     <None Include="Resources\Shaders\hlsl\Common.hlsli">
       <Filter>Resources\Shaders</Filter>
@@ -716,6 +791,9 @@
     </None>
     <None Include="Resources\Shaders\hlsl\SkyBox.hlsli">
       <Filter>Resources\Shaders\SkySphere</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\UI.hlsli">
+      <Filter>Resources\Shaders\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -730,15 +808,6 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Sea\Sea_VS.hlsl">
       <Filter>Resources\Shaders\Sea</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_GS.hlsl">
-      <Filter>Resources\Shaders\UI</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_PS.hlsl">
-      <Filter>Resources\Shaders\UI</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\hlsl\UI\UI_VS.hlsl">
-      <Filter>Resources\Shaders\UI</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\ShadowMap\ShadowMap_VS.hlsl">
       <Filter>Resources\Shaders\ShadowMap</Filter>
@@ -757,6 +826,24 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\SkyBox_PS.hlsl">
       <Filter>Resources\Shaders\SkySphere</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Model3D\Balloon_PS.hlsl">
+      <Filter>Resources\Shaders\Balloon</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\NumberUI_PS.hlsl">
+      <Filter>Resources\Shaders\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI_GS.hlsl">
+      <Filter>Resources\Shaders\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI_PS.hlsl">
+      <Filter>Resources\Shaders\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\UI_VS.hlsl">
+      <Filter>Resources\Shaders\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\ScoreUI_PS.hlsl">
+      <Filter>Resources\Shaders\UI</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

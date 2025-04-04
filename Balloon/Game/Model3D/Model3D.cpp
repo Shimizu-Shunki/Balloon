@@ -39,6 +39,9 @@ void Model3D::Render(ID3D11DeviceContext1* context, DirectX::CommonStates* state
 			context->VSSetConstantBuffers(1, 1, cbuf);
 			context->PSSetConstantBuffers(1, 1, cbuf);
 
+			// ブレンドステートを設定 (半透明描画用)
+			context->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFF);
+
 			m_material->BeginMaterial();
 		});
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface/IObject.h"
+#include "Game/Image/Image.h"
 
 class IObject;
 class Transform;
@@ -33,7 +34,10 @@ public:
 	// オブジェクトアクティブを取得する
 	bool GetIsActive() const  override { return m_isActive; }
 	// オブジェクトアクティブを設定する
-	void SetIsActive(bool isActive) { m_isActive = isActive; }
+	void SetIsActive(bool isActive) {
+		m_isActive = isActive;
+		m_image->SetIsActive(isActive);
+	}
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
 	// オブジェクトのIDを取得する
@@ -61,19 +65,10 @@ public:
 	// 終了処理
 	void Finalize() override;
 
-	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override { (void)object; };
-	// 衝突している時
-	void OnCollisionStay(IObject* object) override { (void)object; };
-	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override { (void)object; };
-
-	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override { (void)object; };
-	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override { (void)object; };
-	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override { (void)object; };
+	// オブジェクトメッセージを受け取る
+	void OnObjectMessegeAccepted(Message::ObjectMessageID messageID) override;
+	// 当たり判定メッセージを受け取る
+	void OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender) override;
 
 
 	void SetIsButtonActive(bool buttonActive);

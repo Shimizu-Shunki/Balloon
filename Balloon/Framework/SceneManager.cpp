@@ -10,6 +10,7 @@
 #include "Framework/SceneManager.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Tween/TweenManager.h"
+#include "Game/Game.h"
 
 // 各シーン
 #include "Game/Scenes/Header/PlayScene.h"
@@ -39,7 +40,7 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<TitleScene>();
+	m_currentScene = std::make_unique<PlayScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
 
@@ -52,6 +53,7 @@ void SceneManager::Initialize()
 	m_currentScene->Start();
 
 	m_isChange = false;
+	m_isExitGame = false;
 }
 
 /// <summary>
@@ -82,8 +84,14 @@ void SceneManager::Finalize()
 /// <summary>
 /// シーン切り替え
 /// </summary>
-void SceneManager::CheckChageScene()
+bool SceneManager::CheckChageScene()
 {
+	// ゲーム終了の場合
+	if (m_isExitGame)
+	{
+		return false;
+	}
+
 	// シーン切り替えフラグがオンの場合
 	if (m_isChange)
 	{
@@ -110,4 +118,6 @@ void SceneManager::CheckChageScene()
 		// フラグを解除する
 		m_isChange = false;
 	}
+
+	return true;
 }

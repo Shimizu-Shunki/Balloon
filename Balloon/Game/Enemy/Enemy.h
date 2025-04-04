@@ -43,19 +43,10 @@ public:
 	// 終了処理
 	void Finalize() override;
 
-	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override;
-	// 衝突している時
-	void OnCollisionStay(IObject* object) override;
-	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override;
-
-	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override;
-	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override;
-	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override;
+	// オブジェクトメッセージを受け取る
+	void OnObjectMessegeAccepted(Message::ObjectMessageID messageID) override;
+	// 当たり判定メッセージを受け取る
+	void OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender) override;
 
 	// 部品を追加する
 	void Attach(std::unique_ptr<IObject> object, IObject::ObjectID objectId,

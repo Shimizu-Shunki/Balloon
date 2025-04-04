@@ -1,15 +1,17 @@
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
+#include "Game/Message/ObjectMessenger.h"
 #include "Game/Scenes/Header/DebugScene.h"
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
 #include "Game/Cameras/DebugCamera.h"
 #include "Game/Player/Header/Player.h"
-
+#include "Game/Cloud/Cloud.h"
 
 DebugScene::DebugScene()
 {
 	m_commonResources = CommonResources::GetInstance();
+	m_objectMessenger = ObjectMessenger::GetInstance();
 }
 
 
@@ -37,15 +39,23 @@ void DebugScene::Initialize()
 		DirectX::SimpleMath::Vector3::One * 0.1f
 	);
 
-	m_plaeyr->GetTransform()->Update();
+	m_cloud = std::make_unique<Cloud>(nullptr);
+	m_cloud->Initialize(IObject::ObjectID::CLOUD, true);
+	m_cloud->InitialTransform(
+		DirectX::SimpleMath::Vector3(-3.0f, -6.0f, 0.0f),
+		DirectX::SimpleMath::Quaternion::Identity,
+		DirectX::SimpleMath::Vector3(1.3f, 1.0f, 1.3f)
+	);
 
-	
-
+	m_objectMessenger->Register(0, m_plaeyr.get());
+	m_objectMessenger->Register(1, m_cloud.get());
 }
 
 void DebugScene::Start()
 {
 	// BGM‚ðÄ¶‚·‚é
+
+	m_commonResources->GetCollisionManager()->Start();
 }
 
 void DebugScene::Update()
@@ -54,20 +64,45 @@ void DebugScene::Update()
 	m_debugCamera->Update();
 
 	m_plaeyr->Update();
-	
 
+	m_cloud->Update();
+	
+	m_plaeyr->GetTransform()->Update();
+	m_cloud->GetTransform()->Update();
 	
 }
 
 void DebugScene::Render()
 {
 	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());
-	m_commonResources->GetRenderManager()->Render();
+
+	m_commonResources->GetCollisionManager()->CheckCollision();
+	m_commonResources->GetCollisionManager()->Render();
+
+	m_commonResources->GetRenderManager()->Render(); 
 }
 
 
 void DebugScene::Finalize()
 {
 
+}
+
+void DebugScene::ChangeState(IState* newState)
+{
+
+}
+
+void DebugScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
+{
+	switch (messageID)
+	{
+		case Message::FADE_IN:
+			break;
+		case Message::FADE_OUT:
+			break;
+		default:
+			break;
+	}
 }
 

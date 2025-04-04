@@ -78,3 +78,15 @@ void RightFoot::Update() {}
 /// I—¹ˆ—
 /// </summary>
 void RightFoot::Finalize() {}
+
+
+void RightFoot::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void RightFoot::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
+}

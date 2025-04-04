@@ -7,6 +7,7 @@
 class InputManager;
 class Enemy;
 class Player;
+class IObject;
 
 class PlayMainState : public IState
 {
@@ -15,24 +16,22 @@ public:
 public:
 
     // コンストラクタ
-    PlayMainState(Player* player, std::vector<Enemy*> enemys);
+    PlayMainState(std::vector<IObject*> objects);
     // デストラクタ
     ~PlayMainState() override;
 
 public:
     // 初期化処理
-    void OnStateEnter(StateController* stateController) override;
+    void PreUpdate() override;
     // 更新処理
-    void OnStateUpdate(StateController* stateController, const float& deltaTime) override;
+    void Update(const float& deltaTime) override;
     // 終了処理
-    void OnStateExit(StateController* stateController) override;
+    void PostUpdate() override;
 
 private:
    // 入力マネージャー
-    InputManager* m_inputManager;
+   InputManager* m_inputManager;
 
-    // エネミー
-    std::vector<Enemy*> m_enemys;
-    // プレイヤー
-    Player* m_player;
+   // オブジェクト
+   std::vector<IObject*> m_objects;
 };

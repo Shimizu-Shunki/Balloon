@@ -8,7 +8,8 @@ PhysicsBody::PhysicsBody(IObject* object)
     m_mass(1.0f),
     m_velocity(DirectX::SimpleMath::Vector3::Zero),
     m_acceleration(DirectX::SimpleMath::Vector3::Zero),
-    m_force(DirectX::SimpleMath::Vector3::Zero),
+    m_gravityForce(DirectX::SimpleMath::Vector3::Zero),
+    m_externalForce(DirectX::SimpleMath::Vector3::Zero),
     m_gravity(-9.8f),
     m_useGravity(true),
     m_isKinematic(false)
@@ -27,16 +28,18 @@ void PhysicsBody::Update()
     // 重力の適用
     if (m_useGravity)
     {
-        m_force.y += m_mass * m_gravity;
+        m_gravityForce.y += m_mass * m_gravity;
     }
 
+    DirectX::SimpleMath::Vector3 totalForce = m_gravityForce + m_externalForce;
     // 加速度 = 力 / 質量
-    m_acceleration = m_force / m_mass;
+    m_acceleration = totalForce / m_mass;
 
     // 速度を更新
     m_velocity += m_acceleration * elapsedTime;
 
-   
+    // 毎フレームリセット（瞬間的な力だから）
+    m_externalForce = DirectX::SimpleMath::Vector3::Zero; 
 
     // **地面との衝突処理**
     if (!m_useGravity)
@@ -72,5 +75,5 @@ void PhysicsBody::Update()
     m_object->GetTransform()->SetLocalPosition(newPosition);
 
     // 力をリセット
-    m_force = DirectX::SimpleMath::Vector3::Zero;
+    m_gravityForce = DirectX::SimpleMath::Vector3::Zero;
 }

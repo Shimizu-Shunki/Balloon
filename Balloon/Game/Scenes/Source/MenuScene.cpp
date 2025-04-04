@@ -1,11 +1,22 @@
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Game/Scenes/Header/MenuScene.h"
+#include "Game/Message/SceneMessenger.h"
+
+#include "Game/Fade/Fade.h"
 
 #include "Game/UI/MenuButtonUI.h"
 #include "Game/UI/TitleLogo.h"
 #include "Game/UI/KeyGuideUI.h"
 #include "Game/UI/MenuButtonFrameUI.h"
+
+
+#include "Game/States/Fade/FadeInState.h"
+#include "Game/States/Fade/FadeOutState.h"
+#include "Game/States/MenuScene/MenuMainState.h"
+#include "Game/States/MenuScene/MenuSettingState.h"
+#include "Game/States/MenuScene/MenuExitState.h"
+
 
 
 MenuScene::MenuScene()
@@ -43,6 +54,8 @@ void MenuScene::Initialize()
 			static_cast<MenuButtonFrameUI::ButtonType>(i), true);
 	}
 
+
+
 	// タイトルロゴの追加
 	this->Attach<TitleLogo>(IObject::ObjectID::TitleLogoUI, true,
 		{ 1280.0f / 2.0f , 180.0f , 0.0f },
@@ -54,24 +67,35 @@ void MenuScene::Initialize()
 		DirectX::SimpleMath::Quaternion::Identity,
 		DirectX::SimpleMath::Vector3::One * 0.5f);
 
+	// フェードの作成
+	m_fade = std::make_unique<Fade>();
+	m_fade->Initialize();
+
+	this->CreateStateStateController();
+
 	m_buttonIndex = 0;
+
+	
 }
 
 void MenuScene::Start()
 {
 	// BGMを再生する
 
-	// Tweenの設定
-	for (int i = 0; i < 3; i++)
-	{
-		m_objects[i]->GetTransform()->GetTween()->DOMoveY(360.0f + i * 100.0f, 1.5f).SetDelay(i * 0.5f).SetEase(Tween::EasingType::EaseOutBounce);
-		m_objects[i + 3]->GetTransform()->GetTween()->DOMoveY(365.0f + i * 100.0f, 1.5f).SetDelay(i * 0.5f).SetEase(Tween::EasingType::EaseOutBounce);
-	}
+	SceneMessenger::GetInstance()->Clear();
+	SceneMessenger::GetInstance()->Register(this);
+
+	m_currentState->PreUpdate();
 }
 
 void MenuScene::Update()
 {
-	this->SelectButton();
+	// this->SelectButton();
+	float deltaTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+	
+	m_currentState->Update(deltaTime);
+
+	m_fade->Update();
 }
 
 void MenuScene::Render()
@@ -129,3 +153,47 @@ void MenuScene::SelectButton()
 	}
 }
 
+
+void MenuScene::CreateStateStateController()
+{
+	// ステートの作成
+	m_fadeInState = std::make_unique<FadeInState>(m_fade.get());
+	m_fadeOutState = std::make_unique<FadeOutState>(m_fade.get(), FadeOutState::ChageSceneID::PLAY_SCENE);
+
+	std::vector<IObject*> objects;
+	for (int i = 0; i < 6; i++)
+	{
+		objects.push_back(m_objects[i].get());
+	}
+	m_menuMainState = std::make_unique<MenuMainState>(objects);
+
+	// 現在のステートを設定
+	m_currentState = m_fadeInState.get();
+}
+
+
+void MenuScene::ChangeState(IState* newState)
+{
+	// 事後処理
+	m_currentState->PostUpdate();
+	// 現在のステートを切り替える
+	m_currentState = newState;
+	// 事前処理
+	m_currentState->PreUpdate();
+}
+
+void MenuScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
+{
+	switch (messageID)
+	{
+		case Message::FADE_IN:
+			break;
+		case Message::FADE_OUT:
+			this->ChangeState(m_fadeOutState.get());
+			break;
+		case Message::MAIN:
+			this->ChangeState(m_menuMainState.get());
+		default:
+			break;
+	}
+}

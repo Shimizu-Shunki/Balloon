@@ -49,11 +49,13 @@ IMaterial* Image::Render(ID3D11DeviceContext1* context,ID3D11Buffer* vertexBuffe
 	// マテリアルを適応
 	m_material->BeginMaterial();
 
-	// ピクセルシェーダーにテクスチャリソースを設定
 	context->PSSetShaderResources(0, 1, &m_texture);
-	// ピクセルシェーダーにルール画像を設定
-	if (m_ruleTexture != nullptr)
+
+	if (m_ruleTexture != nullptr) {
 		context->PSSetShaderResources(1, 1, &m_ruleTexture);
+	}
+
+
 
 	return m_material;
 }

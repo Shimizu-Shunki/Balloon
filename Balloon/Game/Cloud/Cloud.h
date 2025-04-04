@@ -39,19 +39,10 @@ public:
 	// 終了処理
 	void Finalize() override;
 
-	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override { (void)object; };
-	// 衝突している時
-	void OnCollisionStay(IObject* object)  override { (void)object; };
-	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object)  override { (void)object; };
-
-	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object)   override { (void)object; };
-	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object)    override { (void)object; };
-	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object)    override { (void)object; };
+	// オブジェクトメッセージを受け取る
+	void OnObjectMessegeAccepted(Message::ObjectMessageID messageID) override;
+	// 当たり判定メッセージを受け取る
+	void OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender) override;
 
 private:
 	// 親のオブジェクト

@@ -93,3 +93,13 @@ void Head::Update() {}
 /// </summary>
 void Head::Finalize() {}
 
+void Head::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void Head::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
+}

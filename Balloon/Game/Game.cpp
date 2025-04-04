@@ -10,6 +10,10 @@
 #include "Game/Material/SeaMaterial.h"
 #include "Framework/CollisionManager.h"
 
+#include "Game/Message/ObjectMessenger.h"
+#include "Game/Message/CollisionMessenger.h"
+#include "Game/Message/SceneMessenger.h"
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -109,6 +113,11 @@ void Game::Initialize(HWND window, int width, int height)
     m_collisionManager->Initialize();
     m_commonResources->SetCollisionManager(m_collisionManager);
 
+    // メッセンジャー
+    m_objectMessenger = ObjectMessenger::GetInstance();
+    m_collisionMessenger = CollisionMessenger::GetInstance();
+    m_sceneMessenger = SceneMessenger::GetInstance();
+
     // 海の作成
     m_seaMaterial = std::make_unique<SeaMaterial>();
     m_seaMaterial->Initialize();
@@ -191,7 +200,10 @@ void Game::Tick()
 // ワールドを更新する
 void Game::Update(DX::StepTimer const& timer)
 {
-    m_sceneManager->CheckChageScene();
+    if (!m_sceneManager->CheckChageScene())
+    {
+        ExitGame();
+    }
     // 入力マネージャーの更新処理
     m_inputManager->Update();
     // オーディオマネージャーの更新処理
@@ -291,15 +303,15 @@ void Game::Render()
     m_context->IASetInputLayout(m_inputLayout.Get());
 
     // グリッドを描画
-    //m_primitiveBatch->Begin();
-    //DX::DrawGrid(m_primitiveBatch.get(),
-    //    { 10.0f, 0.0f, 0.0f },              // 横軸
-    //    { 0.0f,0.0f,10.0f },                // 縦軸
-    //    DirectX::SimpleMath::Vector3::Zero, // 原点
-    //    20,                                 // 横分割数
-    //    20                                  // 縦分割数
-    //);
-    //m_primitiveBatch->End();
+    m_primitiveBatch->Begin();
+    DX::DrawGrid(m_primitiveBatch.get(),
+        { 5.0f, 0.0f, 0.0f },              // 横軸
+        { 0.0f,0.0f,5.0f },                // 縦軸
+        DirectX::SimpleMath::Vector3::Zero, // 原点
+        10,                                 // 横分割数
+        10                                  // 縦分割数
+    );
+    m_primitiveBatch->End();
 
 
     m_spriteBatch->Begin();

@@ -20,6 +20,10 @@ public:
 	ID3D11GeometryShader* GetUI_GS()      { return m_UI_GS.Get(); }
 	// UI ピクセルシェーダーを取得
 	ID3D11PixelShader* GetUI_PS()         { return m_UI_PS.Get(); }
+	// UIナンバー ピクセルシェーダーを取得
+	ID3D11PixelShader* GetNumberPS() { return m_numberPS.Get(); }
+	// UIスコアナンバー ピクセルシェーダーを取得
+	ID3D11PixelShader* GetScorePS() { return m_scorePS.Get(); }
 
 	// 海 インプットレイアウトを取得
 	ID3D11InputLayout* GetSeaInputLayout() { return m_SeaInputLayout.Get(); }
@@ -38,6 +42,8 @@ public:
 	ID3D11VertexShader* GetPBRLitVS()         { return m_PBRLitVS.Get(); }
 	// 物理ベースレンダリング ピクセルシェーダーを取得
 	ID3D11PixelShader* GetPBRLitPS()          { return m_PBRLitPS.Get(); }
+	// 風船 ピクセルシェーダーを取得
+	ID3D11PixelShader* GetBalloonPS() { return m_balloonPS.Get(); }
 
 	// 影 頂点シェーダーを取得
 	ID3D11VertexShader* GetShadowVS() { return m_ShadowVS.Get(); }
@@ -79,6 +85,11 @@ private:
 	// ピクセルシェーダー
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>    m_UI_PS;
 
+	// ナンバー　ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>    m_numberPS;
+	// ナンバー　ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>    m_scorePS;
+
 	// 海
 	// 入力レイアウト
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>    m_SeaInputLayout;
@@ -98,6 +109,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>   m_PBRLitVS;
 	// ピクセルシェーダー
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>    m_PBRLitPS;
+
+	// 風船ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>    m_balloonPS;
 
 	// 影
 	// 頂点シェーダー

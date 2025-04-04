@@ -6,13 +6,12 @@
 #include "Game/Enemy/Enemy.h"
 
 // コンストラクタ
-PlayMainState::PlayMainState(Player* player, std::vector<Enemy*> enemys)
-	:
-	m_player(player),
-	m_enemys(enemys)
+PlayMainState::PlayMainState(std::vector<IObject*> objects)
 {
 	// 入力マネージャーのインスタンスを入力
 	m_inputManager = InputManager::GetInstance();
+	// オブジェクトを取得する
+	m_objects = objects;
 }
 
 // デストラクタ
@@ -22,46 +21,34 @@ PlayMainState::~PlayMainState()
 }
 
 // 初期化処理
-void PlayMainState::OnStateEnter(StateController* stateController)
+void PlayMainState::PreUpdate()
 {
-	
+	// オブジェクトを有効化にする
+	for (const auto& object : m_objects)
+	{
+		object->SetIsActive(true);
+	}
 }
 
 // 更新処理
-void PlayMainState::OnStateUpdate(StateController* stateController, const float& deltaTime)
+void PlayMainState::Update(const float& deltaTime)
 {
-	// スペースを入力したらプレイシーンへ以降
-	if (m_inputManager->OnKeyDown(InputManager::Keys::C))
+	// オブジェクトの更新を行う
+	for (const auto& object : m_objects)
 	{
-		// パラメーターの変更
-		stateController->SetParameter("FadeOUT", 1);
+		// 更新処理
+		object->Update();
+		// Transformの更新処理
+		object->GetTransform()->Update();
 	}
-	else if (m_inputManager->OnKeyDown(InputManager::Keys::F))
-	{
-		// パラメーターの変更
-		stateController->SetParameter("FadeOUT", 2);
-	}
+	// タイマーの更新処理
 
-	if (m_player->GetTransform()->GetLocalPosition().y <= -2.0f)
-	{
-		// パラメーターの変更
-		stateController->SetParameter("FadeOUT", 2);
-	}
-
-	for (auto enemy : m_enemys)
-	{
-		if (enemy->GetTransform()->GetLocalPosition().y >= -1.0f)
-		{
-			return;
-		}
-	}
-
-	// パラメーターの変更
-	stateController->SetParameter("FadeOUT", 1);
+	// シーン自体の更新
+	
 }
 
 // 終了処理
-void PlayMainState::OnStateExit(StateController* stateController)
+void PlayMainState::PostUpdate()
 {
 
 }

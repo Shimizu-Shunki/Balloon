@@ -1,6 +1,7 @@
 #include "Framework/pch.h"
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/Fade/Fade.h"
+#include "Game/Message/SceneMessenger.h"
 
 // コンストラクタ
 FadeInState::FadeInState(Fade* fade)
@@ -18,24 +19,26 @@ FadeInState::~FadeInState()
 }
 
 // 初期化処理
-void FadeInState::OnStateEnter(StateController* stateController)
+void FadeInState::PreUpdate()
 {
 	// フェードインを行う
 	m_fade->FadeIN(1.0f);
 }
 
 // 更新処理
-void FadeInState::OnStateUpdate(StateController* stateController, const float& deltaTime)
+void FadeInState::Update(const float& deltaTime)
 {
+	// フェードの更新を行う
+	m_fade->Update();
+
 	if (!m_fade->GetIsActive())
 	{
-		// パラメーターの変更
-		stateController->SetParameter("FadeIN", true);
+		SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_IN);
 	}
 }
 
 // 終了処理
-void FadeInState::OnStateExit(StateController* stateController)
+void FadeInState::PostUpdate()
 {
 
 }

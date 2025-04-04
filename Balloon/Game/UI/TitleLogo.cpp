@@ -36,7 +36,7 @@ void TitleLogo::Initialize(ObjectID objectID, const bool& active)
 	// Image‚Ì‰Šú‰»
 	m_image->Initialize(true, m_material.get(), m_transform.get());
 	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetTitleLogo(), width, height);
-	m_image->SetRuleTexture(nullptr);
+	m_image->SetRuleTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetRuleTexture());
 	m_image->SetIsActive(true);
 
 	// ƒ}ƒeƒŠƒAƒ‹‚ð‰Šú‰»‚·‚é
@@ -86,4 +86,15 @@ void TitleLogo::InitialMaterial(int width, int height)
 	material->SetUseRuleTexture(0.0f);
 	material->SetRuleProgress(0.0f);
 	material->SetRuleInverse(0.0f);
+}
+
+void TitleLogo::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void TitleLogo::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
 }

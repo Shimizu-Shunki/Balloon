@@ -1,5 +1,7 @@
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
+#include "Game/Message/CollisionMessenger.h"
+#include "Game/Message/Message.h"
 #include "Framework/CollisionManager.h"
 // オブジェクト
 #include "Game/PhysicsBody/PhysicsBody.h"
@@ -17,10 +19,15 @@
 
 CollisionManager::CollisionManager()
 	:
-	m_objects{},
-	m_collisionStates{}
+	m_pendingPhysicsBodys{},
+	m_physicsBodys{},
+	m_pendingCollider{},
+	m_Collider{},
+	m_objectIndex{}
 {
 	m_commonResources = CommonResources::GetInstance();
+
+	m_collisionMessenger = CollisionMessenger::GetInstance();
 }
 
 CollisionManager::~CollisionManager()
@@ -30,9 +37,13 @@ CollisionManager::~CollisionManager()
 
 void CollisionManager::Initialize()
 {
-	m_objects.clear();
-	m_pendingObjects.clear();
-	m_collisionStates.clear();
+	m_pendingPhysicsBodys.clear();
+	m_physicsBodys.clear();
+	m_pendingCollider.clear();
+	m_Collider.clear();
+
+	m_objectIndex = 0;
+	m_pendingObjectIndex = 0;
 
 	// デバッグの時のみ作成
 #ifdef _DEBUG
@@ -63,50 +74,75 @@ void CollisionManager::Initialize()
 #endif
 }
 
-// 当たり判定を行う
+/// <summary>
+/// 当たり判定を行う
+/// </summary>
 void CollisionManager::CheckCollision()
 {
-	for (const auto& [object1, colliders1] : m_objects) // キーを取得
+	for (int i = 0; i < m_objectIndex; i++)
 	{
-		for (const auto& [object2, colliders2] : m_objects) // キーを取得
+		for (int j = 0; j < m_objectIndex; j++)
 		{
-            // 同じオブジェクト同士の判定をスキップ
-            if (object1 == object2) continue;
+			IObject* object1 = m_collisionMessenger->GetObject(i);
+			IObject* object2 = m_collisionMessenger->GetObject(j);
+
+			// 同じオブジェクト同士の判定をスキップ
+			if (object1 == object2) continue;
 
 			// 円で大まかに判定を行い衝突していない場合はスキップ
 			if (!this->CircleCollisionCheck(object1->GetTransform()->GetWorldPosition(),
 				object2->GetTransform()->GetWorldPosition())) continue;
 
-			for (const auto& col1 : colliders1)
+			for (const auto& col1 : m_Collider[i])
 			{
-				for (const auto& col2 : colliders2)
+				for (const auto& col2 : m_Collider[j])
 				{
 					// 衝突判定を行う
-					this->DetectCollisions(object1, object2, col1, col2);
+					bool active = this->DetectCollisions(col1, col2);
+
+					// オブジェクトにメッセージを送信する
+					this->HandleCollisionEvents(active, i, j,
+						object1, object2, col1, col2);
 				}
 			}
-        }
+		}
 	}
 }
 
 /// <summary>
 /// 衝突判定
 /// </summary>
-/// <param name="object1">オブジェクト1</param>
-/// <param name="object2">オブジェクト2</param>
 /// <param name="collider1">オブジェクト1の当たり判定</param>
 /// <param name="collider2">オブジェクト2の当たり判定</param>
-void CollisionManager::DetectCollisions(IObject* object1, IObject* object2,ICollider* collider1,ICollider* collider2 )
+bool CollisionManager::DetectCollisions(ICollider* collider1,ICollider* collider2 )
 {
 	// どちらかの当たり判定が非アクティブの場合はスキップ
-	if (!collider1->GetIsActive() || !collider2->GetIsActive()) return;
+	if (!collider1->GetIsActive() || !collider2->GetIsActive())
+		return false;
 
 	// 判定を行う
-	bool active = collider1->DetectCollision(collider2);
+	return collider1->DetectCollision(collider2);
+}
 
+/// <summary>
+/// メッセージを送信する
+/// </summary>
+/// <param name="active">判定</param>
+/// <param name="index1">オブジェクトID1</param>
+/// <param name="index2">オブジェクトID2</param>
+/// <param name="object1">オブジェクト1</param>
+/// <param name="object2">オブジェクト2</param>
+/// <param name="collider1">当たり判定1</param>
+/// <param name="collider2">当たり判定2</param>
+void CollisionManager::HandleCollisionEvents(bool active, int index1, int index2, IObject* object1, IObject* object2,
+	ICollider* collider1, ICollider* collider2)
+{
+
+	PhysicsBody* body1 = m_physicsBodys[index1];
+	PhysicsBody* body2 = m_physicsBodys[index2];
 
 	// 衝突ペアを作成
-	CollisionPair pair{ object1, object2, collider1, collider2 };
+	CollisionPair pair{ index1, index2, collider1, collider2 };
 
 	// 衝突していない時
 	if (!active)
@@ -117,20 +153,17 @@ void CollisionManager::DetectCollisions(IObject* object1, IObject* object2,IColl
 		// トリガーか判定
 		if (collider1->GetIsTrigger())
 			// 離れた時
-			object1->OnTriggerExit(object2);
+			m_collisionMessenger->Dispatch(index1 , Message::CollisionMessageID::ON_TRIGGER_EXIT , object2);
 		else
 			// 離れた時
-			object1->OnCollisionExit(object2);
+			m_collisionMessenger->Dispatch(index2 , Message::CollisionMessageID::ON_COLLISION_EXIT , object2);
 
 		// 衝突していないことを保存
 		m_collisionStates[pair] = false;
 
-		PhysicsBody* body1 = m_physics[object1];
-		PhysicsBody* body2 = m_physics[object2];
-
 		if (body1 != nullptr && !body1->GetIsKinematic())
 			body1->SetUseGravity(true);
-		if(body2 != nullptr && !body2->GetIsKinematic())
+		if (body2 != nullptr && !body2->GetIsKinematic())
 			body2->SetUseGravity(true);
 		return;
 	}
@@ -138,65 +171,74 @@ void CollisionManager::DetectCollisions(IObject* object1, IObject* object2,IColl
 	// お互いがトリガー同士じゃない場合押し戻し処理を行う
 	if (!collider1->GetIsTrigger() == !collider2->GetIsTrigger())
 	{
-		PhysicsBody* body1 = m_physics[object1];
-		PhysicsBody* body2 = m_physics[object2];
-
 		// 押し戻し処理
 		AABB::PushBack(
 			object1, collider1, body1,
 			object2, collider2, body2);
 	}
 
-
 	// トリガーか判定
 	if (collider1->GetIsTrigger())
 	{
 		// 当たった瞬間
 		if (m_collisionStates[pair] == false)
-			object1->OnTriggerEnter(object2);
+			m_collisionMessenger->Dispatch(index1 , Message::CollisionMessageID::ON_TRIGGER_ENTER , object2);
 
 		// 当たっている時
-		object1->OnTriggerStay(object2);
+		m_collisionMessenger->Dispatch(index1 , Message::CollisionMessageID::ON_TRIGGER_STAY , object2);
 	}
 	else
 	{
 		// 当たった瞬間
 		if (m_collisionStates[pair] == false)
-			object1->OnCollisionEnter(object2);
+			m_collisionMessenger->Dispatch(index1 , Message::CollisionMessageID::ON_COLLISION_ENTER , object2);
 
 		// 当たっている時
-		object1->OnCollisionStay(object2);
+		m_collisionMessenger->Dispatch(index1 , Message::CollisionMessageID::ON_COLLISION_STAY , object2);
 	}
 
 	// 衝突していることを保存
 	m_collisionStates[pair] = true;
+
 }
 
 
-// アタッチする
-void CollisionManager::Attach(IObject* object, ICollider* collider)
+/// <summary>
+/// アタッチする
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="object">オブジェクト</param>
+/// <param name="collider">当たり判定</param>
+/// <param name="physicsBody">物理挙動</param>
+void CollisionManager::Attach(IObject* object,
+	std::vector<ICollider*> collider, PhysicsBody* physicsBody)
 {
-	// オブジェクトを保存する
-	m_pendingObjects[object].push_back(collider);
+	// メッセンジャーにオブジェクトを登録
+	m_collisionMessenger->Register(m_pendingObjectIndex, object);
+	// 当たり判定を登録
+	m_pendingCollider.insert({ m_pendingObjectIndex, collider });
+	// 物理挙動を登録
+	m_pendingPhysicsBodys.insert({ m_pendingObjectIndex,physicsBody });
+	// オブジェクト番号更新
+	m_pendingObjectIndex++;
 }
 
-void CollisionManager::PhysicsAttach(IObject* object, PhysicsBody* physics)
-{
-	m_pendingPhysics[object] = physics;
-}
+
 
 void CollisionManager::Start()
 {
 	// 現在のオブジェクトを削除
-	m_objects.clear();
-	m_physics.clear();
+	m_physicsBodys.clear();
+	m_Collider.clear();
 	// 以降
-	m_objects = m_pendingObjects;
-	m_physics = m_pendingPhysics;
+	m_physicsBodys = m_physicsBodys;
+	m_Collider = m_pendingCollider;
+	m_objectIndex = m_pendingObjectIndex;
 	// リセット
-	m_pendingObjects.clear();
-	m_pendingPhysics.clear();
+	m_physicsBodys.clear();
+	m_pendingCollider.clear();
 	m_collisionStates.clear();
+	m_pendingObjectIndex = 0;
 }
 
 
@@ -237,57 +279,55 @@ bool CollisionManager::CircleCollisionCheck(const DirectX::SimpleMath::Vector3& 
 	return sphere1.Intersects(sphere2);
 }
 
+
+/// <summary>
+/// デバッグ描画
+/// </summary>
 void CollisionManager::Render()
 {
 #ifdef _DEBUG
-	for (const auto& [object1, colliders1] : m_objects) // キーを取得
+	for (int i = 0; i < m_objectIndex; i++)
 	{
-		for (const auto& [object2, colliders2] : m_objects) // キーを取得
+		for (const auto& col : m_Collider[i])
 		{
-			for (const auto& col1 : colliders1)
+			DirectX::BoundingBox box;
+			DirectX::BoundingSphere sphere;
+
+			if (col->GetColliderType() == ICollider::ColliderType::BOX)
 			{
-				for (const auto& col2 : colliders2)
-				{
-					DirectX::BoundingBox box;
-					DirectX::BoundingSphere sphere;
-
-					if (col1->GetColliderType() == ICollider::ColliderType::BOX)
-					{
-						box.Center = col1->GetTransform()->GetWorldPosition();
-						box.Extents = col1->GetTransform()->GetWorldScale() / 2.0f;
-					}
-					else
-					{
-						sphere.Center = col1->GetTransform()->GetWorldPosition();
-						sphere.Radius = col1->GetTransform()->GetWorldScale().x;
-					}
-
-					// ビュー行列を設定する
-					m_basicEffect->SetView(m_commonResources->GetCameraManager()->GetViewMatrix());
-					// プロジェクション行列を設定する
-					m_basicEffect->SetProjection(m_commonResources->GetCameraManager()->GetProjectionMatrix());
-					// ワールド行列を設定する
-					m_basicEffect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
-					// コンテキストを設定する
-					m_basicEffect->Apply(m_commonResources->GetDeviceResources()->GetD3DDeviceContext());
-					// 入力レイアウトを設定する
-					m_commonResources->GetDeviceResources()->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
-
-					// グリッドを描画
-					m_primitiveBatch->Begin();
-					if (col1->GetColliderType() == ICollider::ColliderType::BOX)
-					{
-						DX::Draw(m_primitiveBatch.get(), box, DirectX::Colors::Green);
-					}
-					else
-					{
-						DX::Draw(m_primitiveBatch.get(), sphere, DirectX::Colors::Green);
-					}
-					m_primitiveBatch->End();
-
-				}
+				box.Center = col->GetTransform()->GetWorldPosition();
+				box.Extents = col->GetTransform()->GetWorldScale() / 2.0f;
 			}
+			else
+			{
+				sphere.Center = col->GetTransform()->GetWorldPosition();
+				sphere.Radius = col->GetTransform()->GetWorldScale().x;
+			}
+
+			// ビュー行列を設定する
+			m_basicEffect->SetView(m_commonResources->GetCameraManager()->GetViewMatrix());
+			// プロジェクション行列を設定する
+			m_basicEffect->SetProjection(m_commonResources->GetCameraManager()->GetProjectionMatrix());
+			// ワールド行列を設定する
+			m_basicEffect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
+			// コンテキストを設定する
+			m_basicEffect->Apply(m_commonResources->GetDeviceResources()->GetD3DDeviceContext());
+			// 入力レイアウトを設定する
+			m_commonResources->GetDeviceResources()->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
+
+			// グリッドを描画
+			m_primitiveBatch->Begin();
+			if (col->GetColliderType() == ICollider::ColliderType::BOX)
+			{
+				DX::Draw(m_primitiveBatch.get(), box, DirectX::Colors::Green);
+			}
+			else
+			{
+				DX::Draw(m_primitiveBatch.get(), sphere, DirectX::Colors::Green);
+			}
+			m_primitiveBatch->End();
 		}
+
 	}
 #endif
 

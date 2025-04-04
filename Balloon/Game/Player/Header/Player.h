@@ -8,6 +8,7 @@ class CommonResources;
 class PhysicsBody;
 class IComposite;
 class ICollider;
+class IState;
 class Jump;
 
 
@@ -46,19 +47,10 @@ public:
 	// 終了処理
 	void Finalize() override;
 
-	// 衝突があった時
-	void OnCollisionEnter(IObject* object) override;
-	// 衝突している時
-	void OnCollisionStay(IObject* object) override;
-	// オブジェクトと離れたとき
-	void OnCollisionExit(IObject* object) override;
-
-	// 衝突があった時（トリガー）
-	void OnTriggerEnter(IObject* object) override;
-	// 衝突している時（トリガー）
-	void OnTriggerStay(IObject* object) override;
-	// オブジェクトと離れたとき（トリガー）
-	void OnTriggerExit(IObject* object) override;
+	// オブジェクトメッセージを受け取る
+	void OnObjectMessegeAccepted(Message::ObjectMessageID messageID) override;
+	// 当たり判定メッセージを受け取る
+	void OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender) override;
 
 	// 部品を追加する
 	void Attach(std::unique_ptr<IObject> object, IObject::ObjectID objectId,
@@ -69,6 +61,8 @@ public:
 	// 部品を削除する
 	void Detach(std::unique_ptr<IObject> turretPart) override;
 
+	void ChangeState(IState* newState);
+
 private:
 	// 子オブジェクトを生成
 	void CreateChildObjects();
@@ -76,9 +70,13 @@ private:
 	void CreateCollider();
 	// 物理挙動を生成
 	void CreatePhysicsBody();
+	// ステート作成
+	void CreateStates();
 
-	// 移動処理
-	DirectX::SimpleMath::Vector3 GetMovementDirection(const DirectX::SimpleMath::Quaternion& angle);
+	// ステージないにいるかどうか
+	bool IsOutsideBounds(const DirectX::SimpleMath::Vector3& position);
+	// 力を与える
+	DirectX::SimpleMath::Vector3 GetCorrectionVector(const DirectX::SimpleMath::Vector3& position);
 
 private:
 	// 共有リソース
@@ -101,9 +99,24 @@ private:
 	std::unique_ptr<ICollider> m_boxCollider;
 	std::unique_ptr<ICollider> m_sphereCollider;
 
+	// ステート
+	std::unique_ptr<IState> m_idleState;
+	std::unique_ptr<IState> m_runState;
+	std::unique_ptr<IState> m_attackState;
+	// 現在のステート
+	IState* m_currentState;
+
+
+	// 膨らませ中かのフラグ
+	bool m_isFlating;
+	// ステージ内にいるかどうかのフラグ
+	bool m_isStage;
+
 	// 風船の数
 	int m_balloonIndex;
-
-	// ジャンプ処理
-	std::unique_ptr<Jump> m_jump;
+	// 風船の膨らませる量
+	float m_balloonAirAmount;
+	// ハイスピード移動
+	bool m_isMoveing;
+	float m_moveingTime;
 };

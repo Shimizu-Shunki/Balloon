@@ -3,6 +3,7 @@
 
 class CommonResources;
 class InputManager;
+class Fade;
 
 class MenuScene : public IScene
 {
@@ -23,6 +24,10 @@ public:
 	void Render() override;
 	// 終了処理
 	void Finalize() override;
+	// シーンのステートを変更する
+	void ChangeState(IState* newState) override;
+	// 当たり判定メッセージを受け取る
+	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
 	template <typename T>
@@ -70,6 +75,9 @@ private:
 
 	void SelectButton();
 
+	// ステートコントローラーの作成
+	void CreateStateStateController();
+
 private:
 
 	// 共有リソース
@@ -79,6 +87,17 @@ private:
 
 	// UIオブジェクト
 	std::vector<std::unique_ptr<IObject>> m_objects;
+
+	// フェード
+	std::unique_ptr<Fade> m_fade;
+	
+
+	// 現在のステート
+	IState* m_currentState;
+	// 各ステート
+	std::unique_ptr<IState> m_fadeInState;
+	std::unique_ptr<IState> m_fadeOutState;
+	std::unique_ptr<IState> m_menuMainState;
 
 	// 現在のボタン
 	int m_buttonIndex;

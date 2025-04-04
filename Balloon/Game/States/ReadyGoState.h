@@ -12,8 +12,6 @@ class ReadyGoState : public IState
 {
 public:
 
-public:
-
     // コンストラクタ
     ReadyGoState(ReadyGoUI* readyGoUI);
     // デストラクタ
@@ -21,11 +19,11 @@ public:
 
 public:
     // 初期化処理
-    void OnStateEnter(StateController* stateController) override;
+    void PreUpdate() override;
     // 更新処理
-    void OnStateUpdate(StateController* stateController, const float& deltaTime) override;
+    void Update(const float& deltaTime) override;
     // 終了処理
-    void OnStateExit(StateController* stateController) override;
+    void PostUpdate() override;
 
 private:
 

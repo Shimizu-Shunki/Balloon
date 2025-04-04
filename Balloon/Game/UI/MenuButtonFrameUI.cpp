@@ -49,7 +49,7 @@ void MenuButtonFrameUI::Initialize(ObjectID objectID, const bool& active)
 	// Image‚Ì‰Šú‰»
 	m_image->Initialize(true, m_material.get(), m_transform.get());
 	m_image->SetTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetMenuButtonFrame(), width, height);
-	m_image->SetRuleTexture(nullptr);
+	m_image->SetRuleTexture(CommonResources::GetInstance()->GetResources()->GetTextureResources()->GetRuleTexture());
 	m_image->SetIsActive(true);
 	// Image2‚Ì‰Šú‰»
 	m_image2->Initialize(true, m_material.get(), m_transform.get());
@@ -214,4 +214,15 @@ void MenuButtonFrameUI::InitialMaterial(int width, int height)
 		default:
 			break;
 	}
+}
+
+void MenuButtonFrameUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void MenuButtonFrameUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	(void)messageID;
+	(void)sender;
 }

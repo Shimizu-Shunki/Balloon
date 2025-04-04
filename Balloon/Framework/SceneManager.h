@@ -20,7 +20,9 @@ public:
 	// 初期フレームの時にシーンを変更する
 	void ChageScene() { m_isChange = true; }
 	// チェックチェンジシーン
-	void CheckChageScene();
+	bool CheckChageScene();
+	// ゲーム終了フラグを設定
+	void SetIsGameExit() { m_isExitGame = true; }
 
 public:
 	
@@ -79,4 +81,7 @@ private:
 
 	// 非同期タスク管理用
 	std::future<void> m_future;
+
+	// ゲーム終了フラグ
+	bool m_isExitGame;
 };

@@ -12,7 +12,6 @@
 // 物理挙動
 #include "Game/PhysicsBody/PhysicsBody.h"
 
-#include "Game/Jump/Jump.h"
 #include "Game/Player/Header/Player.h"
 
 
@@ -71,9 +70,7 @@ void Enemy::Initialize(ObjectID objectID, const bool& active)
 	m_boxCollider->GetTransform()->SetParent(m_transform.get());
 	m_transform->SetChild(m_boxCollider->GetTransform());
 
-	// 当たり判定をマネージャーに渡す
-	m_commonResources->GetCollisionManager()->Attach(this, m_boxCollider.get());
-
+	
 	m_sphereCollider = std::make_unique<SphereCollider>();
 	m_sphereCollider->SetIsActive(true);
 	m_sphereCollider->SetIsTrigger(true);
@@ -81,16 +78,19 @@ void Enemy::Initialize(ObjectID objectID, const bool& active)
 	m_sphereCollider->GetTransform()->SetLocalScale({ 0.4f * 10.0f,1.5f * 10.0f ,1.0f * 10.0f });
 	m_sphereCollider->GetTransform()->SetParent(m_transform.get());
 	m_transform->SetChild(m_sphereCollider->GetTransform());
-	// 当たり判定をマネージャーに渡す
-	m_commonResources->GetCollisionManager()->Attach(this, m_sphereCollider.get());
 
 	// 物理挙動を作成と設定
 	m_physicsBody = std::make_unique<PhysicsBody>(this);
-	m_commonResources->GetCollisionManager()->PhysicsAttach(this, m_physicsBody.get());
 	m_physicsBody->SetIsActive(true);
 	m_physicsBody->SetMass(10.0f);
 	m_physicsBody->SetUseGravity(true);
 	m_physicsBody->SetIsKinematic(false);
+
+	// 当たり判定をマネージャーに渡す
+	std::vector<ICollider*> colliders;
+	colliders.push_back(m_boxCollider.get());
+	colliders.push_back(m_sphereCollider.get());
+	m_commonResources->GetCollisionManager()->Attach(this, colliders , m_physicsBody.get());
 }
 
 /// <summary>
@@ -153,29 +153,43 @@ void Enemy::Detach(std::unique_ptr<IObject> turretParts)
 
 }
 
-void Enemy::OnCollisionEnter(IObject* object) { (void)object; }
-void Enemy::OnCollisionStay(IObject* object)  { (void)object; }
-void Enemy::OnCollisionExit(IObject* object)  { (void)object; }
-void Enemy::OnTriggerEnter(IObject* object)   
-{ 
-	if (object->GetObjectID() == ObjectID::PLAYER)
+
+void Enemy::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
+{
+	(void)messageID;
+}
+
+void Enemy::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
+{
+	switch (messageID)
 	{
-		Player* player = dynamic_cast<Player*>(object);
-
-		// 上方向に力を加える
-		player->GetPhysicsBody()->SetFoce(
-			player->GetPhysicsBody()->GetFoce() + DirectX::SimpleMath::Vector3::Up * 2000
-		);
-
-		if (m_balloonIndex > 0)
-		{
-			m_childs[m_balloonIndex]->SetIsActive(false);
-			// 風船の数を減らす
-			m_balloonIndex--;
-		}
+		case Message::ON_COLLISION_ENTER:
+			break;
+		case Message::ON_COLLISION_STAY:
+			break;
+		case Message::ON_COLLISION_EXIT:
+			break;
+		case Message::ON_TRIGGER_ENTER:
+			if (sender->GetObjectID() == ObjectID::PLAYER)
+			{
+				Player* player = dynamic_cast<Player*>(sender);
+				// 上方向に力を加える
+				player->GetPhysicsBody()->AddForce(
+					DirectX::SimpleMath::Vector3::Up * 2000
+				);
+				if (m_balloonIndex > 0)
+				{
+					m_childs[m_balloonIndex]->SetIsActive(false);
+					// 風船の数を減らす
+					m_balloonIndex--;
+				}
+			}
+			break;
+		case Message::ON_TRIGGER_STAY:
+			break;
+		case Message::ON_TRIGGER_EXIT:
+			break;
+		default:
+			break;
 	}
 }
-void Enemy::OnTriggerStay(IObject* object)    { (void)object; }
-void Enemy::OnTriggerExit(IObject* object)    { (void)object; }
-
-

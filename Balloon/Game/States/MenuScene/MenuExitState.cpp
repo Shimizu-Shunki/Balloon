@@ -1,11 +1,11 @@
 #include "Framework/pch.h"
-#include "Game/States/Player/PlayerRunGroundState.h"
+#include "Game/States/MenuScene/MenuExitState.h"
 #include "Framework/StateMachine/StateController.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerRunGroundState::PlayerRunGroundState()
+MenuExitState::MenuExitState()
 {
 
 }
@@ -14,7 +14,7 @@ PlayerRunGroundState::PlayerRunGroundState()
 /// 初期処理
 /// </summary>
 /// <param name="stateController">コントローラー</param>
-void PlayerRunGroundState::OnStateEnter(StateController* stateController)
+void MenuExitState::PreUpdate()
 {
 
 }
@@ -23,7 +23,7 @@ void PlayerRunGroundState::OnStateEnter(StateController* stateController)
 /// </summary>
 /// <param name="stateController">コントローラー</param>
 /// <param name="deltaTime">経過時間</param>
-void PlayerRunGroundState::OnStateUpdate(StateController* stateController, const float& deltaTime)
+void MenuExitState::Update(const float& deltaTime)
 {
 
 }
@@ -31,7 +31,7 @@ void PlayerRunGroundState::OnStateUpdate(StateController* stateController, const
 /// 終了処理
 /// </summary>
 /// <param name="stateController">コントローラー</param>
-void PlayerRunGroundState::OnStateExit(StateController* stateController)
+void MenuExitState::PostUpdate()
 {
 
 }

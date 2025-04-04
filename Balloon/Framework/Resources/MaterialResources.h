@@ -10,6 +10,10 @@ class MaterialResources
 public:
 	// デフォルトのPBRLitマテリアルを取得する
 	IMaterial* GetDefaultPBRLit() const { return m_defaultPBRLit.get(); }
+	// 風船のマテリアルを取得する
+	IMaterial* GetBalloon() const { return m_balloon.get(); }
+	// 雲のマテリアルを取得する
+	IMaterial* GetCloud() const { return m_cloud.get(); }
 
 public:
 	MaterialResources(const MaterialResources&) = delete;             // コピー禁止
@@ -32,8 +36,12 @@ public:
 	void Initialize(Resources* resources);
 
 private:
-	// デフォルトPBRLit
+	// プレイヤー
 	std::unique_ptr<IMaterial> m_defaultPBRLit;
+	// 風船
+	std::unique_ptr<IMaterial> m_balloon;
+	// 風船
+	std::unique_ptr<IMaterial> m_cloud;
 	// UI
 	std::unique_ptr<IMaterial> m_defaultUi;
 

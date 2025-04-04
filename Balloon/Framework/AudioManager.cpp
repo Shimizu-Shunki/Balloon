@@ -10,6 +10,9 @@ AudioManager::AudioManager()
 	m_waveBank{},
 	m_bgms{},
 	m_currentBGM{},
+	m_waveBankSe{},
+	m_ses{},
+	m_currentSE{},
 	m_masterVolume{},
 	m_seVolume{},
 	m_bgmVolume{},
@@ -65,8 +68,19 @@ void AudioManager::Initialize()
 		m_bgms.insert(BgmMap::value_type((XACT_WAVEBANK_SOUNDS)i, m_waveBank->CreateInstance((XACT_WAVEBANK_SOUNDS)i)));
 	}
 
+	// サウンドバンクを作成する
+	m_waveBankSe = std::make_unique<DirectX::WaveBank>
+		(m_audioEngine.get(), L"Resources/Sounds/SE.xwb");
+
+	// SEをマップに登録する
+	for (int i = 0; i < XACT_WAVEBANK_SOUNDS_ENTRY_COUNT_SE; i++)
+	{
+		m_ses.insert(SeMap::value_type((XACT_WAVEBANK_SOUNDS_SE)i, m_waveBank->CreateInstance((XACT_WAVEBANK_SOUNDS_SE)i)));
+	}
+
 	// インスタンスの初期化
 	m_currentBGM = nullptr;
+	m_currentSE = nullptr;
 }
 
 void AudioManager::Update(DX::StepTimer const& timer)
