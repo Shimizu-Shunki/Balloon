@@ -187,12 +187,25 @@ void MenuScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 	switch (messageID)
 	{
 		case Message::FADE_IN:
+			this->ChangeState(m_menuMainState.get());
 			break;
 		case Message::FADE_OUT:
 			this->ChangeState(m_fadeOutState.get());
 			break;
+		case Message::FADE_OUT_EXIT_GAME:
+			// IDを変更
+			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::EXIT_GAME);
+			// ステートを変更
+			this->ChangeState(m_fadeOutState.get());
+			break;
+		case Message::FADE_OUT_STAGE_SCENE:
+			// IDを変更
+			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::SELECT_SCENE);
+			// ステートを変更
+			this->ChangeState(m_fadeOutState.get());
+			break;
 		case Message::MAIN:
-			this->ChangeState(m_menuMainState.get());
+		
 		default:
 			break;
 	}

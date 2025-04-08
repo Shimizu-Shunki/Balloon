@@ -10,10 +10,10 @@
 #include "Game/Transform/Transform.h"
 
 
-PlayerIconUI::PlayerIconUI()
+PlayerIconUI::PlayerIconUI(Transform* player)
 {
 	
-
+	m_playerTransform = player;
 }
 
 
@@ -73,6 +73,16 @@ void PlayerIconUI::Finalize()
 void PlayerIconUI::Update()
 {
 	//m_material->UpdateConstBuffer();
+
+	// プレイヤーの高さを正規化
+	float height = std::clamp(m_playerTransform->GetLocalPosition().y / 5.0f, -1.0f, 1.0f);
+
+	height *= -1.0f;
+
+	height = 360.0f + (140.0f * height);
+
+	// アイコンの高さを設定
+	m_transform->SetLocalPosition({ m_transform->GetLocalPosition().x , height , m_transform->GetLocalPosition().z });
 }
 
 void PlayerIconUI::InitialMaterial(int width, int height)
@@ -86,6 +96,12 @@ void PlayerIconUI::InitialMaterial(int width, int height)
 	material->SetUseRuleTexture(0.0f);
 	material->SetRuleProgress(0.0f);
 	material->SetRuleInverse(0.0f);
+}
+
+float PlayerIconUI::GetNormalizedHeight(float height)
+{
+	float value = (-height + 5.0f) / 10.0f;
+	return std::clamp(value, 0.0f, 1.0f);
 }
 
 void PlayerIconUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)

@@ -11,7 +11,7 @@ ObjectMessenger::ObjectMessenger()
 void ObjectMessenger::Register(int objectID, IObject* object)
 {
 	// オブジェクトIDとオブジェクトを登録する
-	m_objects.emplace(objectID, object);
+	m_pendingObjects.emplace(objectID, object);
 }
 
 /// <summary>
@@ -33,4 +33,14 @@ void ObjectMessenger::Dispatch(int objectID, Message::ObjectMessageID messageID)
 		// 送信するオブジェクトのメッセージハンドラを呼び出す
 		it->second->OnObjectMessegeAccepted(messageID);
 	}
+}
+
+void ObjectMessenger::ApplyChanges()
+{
+	// 現在の物をクリアする
+	m_objects.clear();
+	// 準備段階のものを反映
+	m_objects = m_pendingObjects;
+	// 準備段階のものをクリアする
+	m_pendingObjects.clear();
 }

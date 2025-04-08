@@ -12,10 +12,17 @@
 #include "Framework/Tween/TweenManager.h"
 #include "Game/Game.h"
 
+// メッセンジャー
+#include "Game/Message/CollisionMessenger.h"
+#include "Game/Message/ObjectMessenger.h"
 // 各シーン
 #include "Game/Scenes/Header/PlayScene.h"
 #include "Game/Scenes/Header/TitleScene.h"
+#include "Game/Scenes/Header/MenuScene.h"
+#include "Game/Scenes/Header/StageSelectScene.h"
 #include "Game/Scenes/Header/PlayScene.h"
+#include "Game/Scenes/Header/GameClearScene.h"
+#include "Game/Scenes/Header/GameOverScene.h"
 #include "Game/Scenes/Header/DebugScene.h"
 
 /// <summary>
@@ -40,7 +47,7 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<PlayScene>();
+	m_currentScene = std::make_unique<GameClearScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
 
@@ -48,6 +55,10 @@ void SceneManager::Initialize()
 	m_commonResources->GetRenderManager()->SwitchRenderbleObjects();
 	// カメラを準備段階のものをメインに切り替える
 	m_commonResources->GetCameraManager()->SwitchCameras();
+
+	// メッセンジャー
+	CollisionMessenger::GetInstance()->ApplyChanges();
+	ObjectMessenger::GetInstance()->ApplyChanges();
 
 	// 初期シーンのスタート処理
 	m_currentScene->Start();
@@ -107,10 +118,12 @@ bool SceneManager::CheckChageScene()
 		// カメラを次のシーンの物に切り替える
 		m_commonResources->GetCameraManager()->SwitchCameras();
 
-		// 当たり判定を次のシーンの物に切り替える
+		// メッセンジャー
+		CollisionMessenger::GetInstance()->ApplyChanges();
+		ObjectMessenger::GetInstance()->ApplyChanges();
 		
 		// 前のTweenをすべて停止する
-		// m_tweenManager->Stop();
+		m_tweenManager->Stop();
 
 		// 次のシーンスタート処理
 		m_currentScene->Start();

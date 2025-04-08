@@ -80,6 +80,10 @@ public:
 	// 2D描画
 	void SpriteRender();
 
+	// スカイボックス　進行度設定
+	void SetDayProgress(float progress) { m_skyBox->SetDayProgress(progress); }
+
+
 private:
 	// ブレンドステートの作成
 	void CreateSpriteBlendState();

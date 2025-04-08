@@ -25,6 +25,9 @@ public:
     // デストラクタ
     ~FadeOutState() override;
 
+    // シーンIDを変更
+    void SetSceneID(const FadeOutState::ChageSceneID& chageSceneID) { m_chageSceneId = chageSceneID; }
+
 public:
     // 初期化処理
     void PreUpdate() override;

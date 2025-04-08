@@ -77,7 +77,9 @@ void SkyBox::Initialize()
 /// <param name="projection">射影行列</param>
 void SkyBox::Update(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix projection)
 {
-	m_angle++;
+	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
+
+	m_angle += elapsedTime * 30.0f;
 
 	// ワールド行列の作成
 	DirectX::SimpleMath::Matrix world =

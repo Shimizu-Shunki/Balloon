@@ -81,11 +81,11 @@ void MenuMainState::SelectButton()
 		buttonFrame->SetIsButtonActive(true);
 
 		if (m_buttonIndex == 0)
-			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT);
+			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT_STAGE_SCENE);
 		else if(m_buttonIndex == 1)
 			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT);
 		else
-			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT);
+			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT_EXIT_GAME);
 
 	}
 	else if (m_inputManager->OnKeyDown(InputManager::Keys::X))

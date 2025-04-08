@@ -78,4 +78,6 @@ void ModelResources::LoadResource(const nlohmann::json& data)
 	m_balloonModel = DirectX::Model::CreateFromCMO(device, modelPaths["Balloon"].c_str(), *effectFactory);
 	// プレイヤー　雲モデルをロードする
 	m_cloudModel = DirectX::Model::CreateFromCMO(device, modelPaths["Cloud"].c_str(), *effectFactory);
+	// ボックスモデル
+	m_boxModel = DirectX::Model::CreateFromCMO(device, modelPaths["Box"].c_str(), *effectFactory);
 }

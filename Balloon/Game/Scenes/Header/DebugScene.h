@@ -48,12 +48,9 @@ private:
 	// デバッグカメラで実装
 	std::unique_ptr<DebugCamera> m_debugCamera;
 
-
-
 	std::unique_ptr<Player> m_plaeyr;
 
 	std::unique_ptr<Cloud> m_cloud;
 
-
-
+	
 };

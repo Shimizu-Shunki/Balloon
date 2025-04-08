@@ -9,6 +9,11 @@ class IMaterial;
 
 class BalloonGageUI : public IObject
 {
+private:
+	static const float SPEED_SLOW;
+	static const float SPEED_NORMAL;
+	static const float SPEED_FAST;
+
 public:
 	// オブジェクトアクティブを取得する
 	bool GetIsActive() const  override { return m_isActive; }
@@ -68,4 +73,12 @@ private:
 	std::unique_ptr<Image> m_image;
 	// マテリアル
 	std::unique_ptr<IMaterial> m_material;
+
+	// 現在の大きさ
+	float m_currentScale;
+	// 膨らんでいる状態
+	bool m_isBalloon;
+	// 膨らませる速度
+	float m_speed;
+
 };

@@ -27,6 +27,8 @@ public:
 	DirectX::Model* GetBalloonModel() { return m_balloonModel.get(); }
 	// 雲のモデルを取得する
 	DirectX::Model* GetCloudModel() { return m_cloudModel.get(); }
+	// ボックスモデルを取得する
+	DirectX::Model* GetBoxModel() { return m_boxModel.get(); }
 
 public:
 	ModelResources(const ModelResources&) = delete;             // コピー禁止
@@ -69,4 +71,7 @@ private:
 	std::unique_ptr<DirectX::Model> m_balloonModel;
 	// 雲のモデル
 	std::unique_ptr<DirectX::Model> m_cloudModel;
+	// ボックスモデル
+	std::unique_ptr<DirectX::Model> m_boxModel;
+
 };

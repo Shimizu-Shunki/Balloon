@@ -32,7 +32,9 @@ TextureResources::TextureResources()
 	m_cloudNormalMap{},
 	m_cubeMap{},
 	m_eveningCubeMap{},
-	m_startText{}
+	m_startText{},
+	m_stageSelectTexts{},
+	m_cloudFrame{}
 {
 
 }
@@ -44,7 +46,7 @@ void TextureResources::LoadResource(const nlohmann::json& data)
     // デバイス
     ID3D11Device1* device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
 
-    // Textures のパスを取得
+    // テクスチャ
     std::unordered_map<std::string, std::wstring> texturePaths;
     if (data.contains("Textures")) {
         for (const auto& entry : data["Textures"]) {
@@ -125,7 +127,25 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// HPゲージフレーム
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["HPGageFrame"].c_str(), nullptr, m_hpGageFrame.ReleaseAndGetAddressOf());
+	// ステージテキスト
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["StageSelectTexts"].c_str(), nullptr, m_stageSelectTexts.ReleaseAndGetAddressOf());
+	// 雲フレーム
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["CloudFrame"].c_str(), nullptr, m_cloudFrame.ReleaseAndGetAddressOf());
+	// ステージセレクトキーガイド
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["StageSelectKeyGuide"].c_str(), nullptr, m_stageSelectKeyGuide.ReleaseAndGetAddressOf());
 
+	// リザルトシーンテキスト
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["ResultText"].c_str(), nullptr, m_resultSceneText.ReleaseAndGetAddressOf());
+	// リザルトシーンキーガイド
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["ResultSceneKeyGuide"].c_str(), nullptr, m_resultSceneKeyGuide.ReleaseAndGetAddressOf());
+	// ステージセレクトキーガイド
+	DirectX::CreateWICTextureFromFile(
+		device, texturePaths["ResultSceneText"].c_str(), nullptr, m_resultSceneButton.ReleaseAndGetAddressOf());
 
 	// プレイヤー画像
 	DirectX::CreateWICTextureFromFile(
@@ -133,7 +153,8 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	// 敵画像
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Enemy"].c_str(), nullptr, m_enemyTexture.ReleaseAndGetAddressOf());
-	
+
+	// ノーマルマップ
 	if (data.contains("Textures_NormalMaps")) {
 		for (const auto& entry : data["Textures_NormalMaps"]) {
 			for (const auto& [key, value] : entry.items()) {
@@ -158,9 +179,8 @@ void TextureResources::LoadResource(const nlohmann::json& data)
 	DirectX::CreateWICTextureFromFile(
 		device, texturePaths["Cloud"].c_str(), nullptr, m_cloudNormalMap.ReleaseAndGetAddressOf());
 
-	
 
-
+	// DDSテクスチャ
 	if (data.contains("Textures_DDS")) {
 		for (const auto& entry : data["Textures_DDS"]) {
 			for (const auto& [key, value] : entry.items()) {

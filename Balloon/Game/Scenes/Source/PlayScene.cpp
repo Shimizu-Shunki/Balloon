@@ -132,11 +132,13 @@ void PlayScene::CreateUI()
 {
 	using namespace DirectX::SimpleMath;
 
+	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
+
 	this->Attach<HeightMeterUI>(IObject::ObjectID::HEIGHT_METER_UI, false,
 		Vector3(1180.0f, 720.0f / 2.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
 	);
 	this->Attach<PlayerIconUI>(IObject::ObjectID::PLAYER_ICON_UI, false,
-		Vector3(1120.0f, 720.0f / 2.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.07f
+		Vector3(1126.0f, 360.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.07f,player->GetTransform()
 	);
 	this->Attach<PlayKeyGuideUI>(IObject::ObjectID::PLAY_SCENE_KEYS_GUIDE_UI, false,
 		Vector3(1020.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
@@ -157,7 +159,7 @@ void PlayScene::CreateUI()
 		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
 	);
 	this->Attach<HPGageUI>(IObject::ObjectID::BALLOON_GAGE_UI, false,
-		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
+		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, {0.6f , 0.55f , 0.0f}
 	);
 	this->Attach<TimerUI>(IObject::ObjectID::TIMER_UI, false,
 		Vector3(1180.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.12f, 0.3f ,0.2f }
@@ -165,7 +167,7 @@ void PlayScene::CreateUI()
 	this->Attach<ReadyGoUI>(IObject::ObjectID::READY_GO_UI, true,
 		Vector3(1280.0f + 600.0f , 720.0f / 2.0f , 0.0f), Quaternion::Identity, Vector3::One * 0.6f
 	);
-	this->Attach<ScoreUI>(IObject::ObjectID::SCORE_UI, true,
+	this->Attach<ScoreUI>(IObject::ObjectID::SCORE_UI, false,
 		Vector3(1180.0f / 8.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.2f, 0.4f ,0.2f }
 	);
 }

@@ -30,8 +30,15 @@ public:
 		return &instance;
 	}
 
+	// 準備段階の物を反映
+	void ApplyChanges();
+
 private:
 
 	// オブジェクトIDとオブジェクトマッピング
 	std::unordered_map<int, IObject*> m_objects;
+
+	// 準備段階　オブジェクトIDとオブジェクトマッピング
+	std::unordered_map<int, IObject*> m_pendingObjects;
+
 };

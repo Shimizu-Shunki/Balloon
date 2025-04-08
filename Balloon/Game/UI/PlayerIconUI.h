@@ -26,7 +26,7 @@ public:
 public:
 
 	// コンストラクタ
-	PlayerIconUI();
+	PlayerIconUI(Transform* player);
 	// デストラクタ
 	~PlayerIconUI() = default;
 
@@ -54,6 +54,8 @@ private:
 
 	// マテリアルの初期化処理
 	void InitialMaterial(int width, int height);
+	// 高さを正規化
+	float GetNormalizedHeight(float height);
 
 private:
 
@@ -63,6 +65,9 @@ private:
 	IObject::ObjectID m_objectId;
 	// トランスフォーム
 	std::unique_ptr<Transform> m_transform;
+
+	// プレイヤーのTransform
+	Transform* m_playerTransform;
 
 	// Image
 	std::unique_ptr<Image> m_image;

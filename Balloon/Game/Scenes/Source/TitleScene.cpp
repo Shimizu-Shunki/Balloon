@@ -180,6 +180,7 @@ void TitleScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 	switch (messageID)
 	{
 		case Message::FADE_IN:
+			this->ChangeState(m_titleMainState.get());
 			break;
 		case Message::FADE_OUT:
 			this->ChangeState(m_fadeOutState.get());

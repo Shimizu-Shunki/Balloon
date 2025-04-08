@@ -23,6 +23,9 @@ public:
 	// 描画処理
 	void Render(ID3D11DeviceContext1* context , DirectX::CommonStates* states);
 
+	// テクスチャを変更
+	void SetDayProgress(float progress) { m_dayProgress = progress; }
+
 private:
 
 	// スカイボックスモデル

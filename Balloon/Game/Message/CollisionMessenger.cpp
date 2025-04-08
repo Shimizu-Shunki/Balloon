@@ -15,7 +15,7 @@ CollisionMessenger::CollisionMessenger()
 void CollisionMessenger::Register(int objectID, IObject* object)
 {
 	// オブジェクトIDとオブジェクトを登録する
-	m_objects.emplace(objectID, object);
+	m_pendingObjects.emplace(objectID, object);
 }
 
 /// <summary>
@@ -48,4 +48,14 @@ IObject* CollisionMessenger::GetObject(int objectID)
 	auto it = m_objects.find(objectID);
 
 	return it->second;
+}
+
+void CollisionMessenger::ApplyChanges()
+{
+	// 現在の物をクリアする
+	m_objects.clear();
+	// 準備段階のものを反映
+	m_objects = m_pendingObjects;
+	// 準備段階のものをクリアする
+	m_pendingObjects.clear();
 }

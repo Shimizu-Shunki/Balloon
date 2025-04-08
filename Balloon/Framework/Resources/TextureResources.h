@@ -57,6 +57,19 @@ public:
 	// HPゲージフレーム
 	ID3D11ShaderResourceView* GetHPGageFrame() { return m_hpGageFrame.Get(); }
 
+	// ステージテキスト
+	ID3D11ShaderResourceView* GetStageSelectTexts() { return m_stageSelectTexts.Get(); }
+	// 雲のフレーム
+	ID3D11ShaderResourceView* GetCloudFrame() { return m_cloudFrame.Get(); }
+	// ステージセレクトキーガイド
+	ID3D11ShaderResourceView* GetStageSelectKeyGuide() { return m_stageSelectKeyGuide.Get(); }
+
+	// リザルトシーンテキスト
+	ID3D11ShaderResourceView* GetResultSceneText() { return m_resultSceneText.Get(); }
+	// リザルトシーンキーガイド
+	ID3D11ShaderResourceView* GetResultSceneKeyGuide() { return m_resultSceneKeyGuide.Get(); }
+	// リザルトシーンボタン
+	ID3D11ShaderResourceView* GetResultSceneButton() { return m_resultSceneButton.Get(); }
 
 	// プレイヤー
 	ID3D11ShaderResourceView* GetPlayerTexture() { return m_playerTexture.Get(); }
@@ -155,6 +168,19 @@ private:
 
 	// スタートテキスト
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_numbers1;
+	// ステージテキスト
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_stageSelectTexts;
+	// 雲フレーム
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_cloudFrame;
+	// ステージセレクトキーガイド
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_stageSelectKeyGuide;
+
+	// リザルトシーンテキスト
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_resultSceneText;
+	// リザルトシーンキーガイド
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_resultSceneKeyGuide;
+	// ステージセレクトキーガイド
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_resultSceneButton;
 
 
 	// プレイヤーテクスチャ

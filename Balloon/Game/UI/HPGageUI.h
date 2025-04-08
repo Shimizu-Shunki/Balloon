@@ -9,6 +9,14 @@ class IMaterial;
 
 class HPGageUI : public IObject
 {
+private:
+	static const float SPEED_SLOW;
+	static const float SPEED_NORMAL;
+	static const float SPEED_FAST;
+
+	static const float RECOVERY_DELAY;
+	static const float HP_OFFSET_FACTOR;
+
 public:
 	// オブジェクトアクティブを取得する
 	bool GetIsActive() const  override { return m_isActive; }
@@ -54,6 +62,10 @@ private:
 
 	// マテリアルの初期化処理
 	void InitialMaterial(int width, int height);
+	// HPゲージの見た目を更新する処理
+	void UpdateHpGaugeVisual();
+	// HP回復処理
+	void UpdateHpRecovery(float elapsedTime);
 
 private:
 
@@ -68,4 +80,20 @@ private:
 	std::unique_ptr<Image> m_image;
 	// マテリアル
 	std::unique_ptr<IMaterial> m_material;
+
+	// スピード
+	float m_speed;
+	// 現在のHP
+	float m_currentHp;
+	// 回復中かどうか
+	bool m_isHealing;
+
+	// 現在の時間
+	float m_currentTime;
+
+	// 画像の大きさ
+	float m_height , m_width;
+	// x座標
+	float m_baseX;
+	float m_hpOffsetFactor;
 };

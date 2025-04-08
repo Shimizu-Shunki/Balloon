@@ -83,9 +83,6 @@
     <Filter Include="Game\States\PlayScene">
       <UniqueIdentifier>{57841faf-9f3a-4bde-8aa5-95432189e085}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\States\ResultScene">
-      <UniqueIdentifier>{50a2e3ee-af09-4907-a671-25721e9b380f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Colliders">
       <UniqueIdentifier>{7464da57-1d6c-432d-bc20-ee1b6d02505d}</UniqueIdentifier>
     </Filter>
@@ -154,6 +151,18 @@
     </Filter>
     <Filter Include="Game\Message">
       <UniqueIdentifier>{7ec13f20-8d21-499f-be60-7c9d91056dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Box">
+      <UniqueIdentifier>{9f99e49f-10ff-436c-9acb-8c8e1753cb7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\StageSelectScene">
+      <UniqueIdentifier>{49557c76-8cb5-457b-b997-926ef0036e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\GameClearScene">
+      <UniqueIdentifier>{d5639937-5492-49b8-8afd-29b4ec8d8597}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\GameOverScene">
+      <UniqueIdentifier>{b5337a5d-a2a8-4025-b0df-7d88db187b89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -398,9 +407,6 @@
     <ClInclude Include="Game\UI\TitleLogo.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Game\States\ReadyGoState.h">
-      <Filter>Game\States</Filter>
-    </ClInclude>
     <ClInclude Include="Game\UI\ReadyGoUI.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
@@ -483,6 +489,45 @@
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\ScoreUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Box\Box.h">
+      <Filter>Game\Box</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\Header\StageSelectScene.h">
+      <Filter>Game\Scenes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\ReadyGoState.h">
+      <Filter>Game\States\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\StageSelectScene\StageSelectMainState.h">
+      <Filter>Game\States\StageSelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\GameOverScene\GameOverMainState.h">
+      <Filter>Game\States\GameOverScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\GameClearScene\GameClearMainState.h">
+      <Filter>Game\States\GameClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ClearText.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\CloudFrame.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\FailedText.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ResultSceneKeyGuide.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\StageNumberUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\StageSelectKeyGuide.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\StageSelectText.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -681,9 +726,6 @@
     <ClCompile Include="Game\Image\Image.cpp">
       <Filter>Game\Image</Filter>
     </ClCompile>
-    <ClCompile Include="Game\States\ReadyGoState.cpp">
-      <Filter>Game\States</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\ReadyGoUI.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
@@ -760,6 +802,45 @@
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\ScoreUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Box\Box.cpp">
+      <Filter>Game\Box</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\Source\StageSelectScene.cpp">
+      <Filter>Game\Scenes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\ReadyGoState.cpp">
+      <Filter>Game\States\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\StageSelectScene\StageSelectMainState.cpp">
+      <Filter>Game\States\StageSelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\GameOverScene\GameOverMainState.cpp">
+      <Filter>Game\States\GameOverScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\GameClearScene\GameClearMainState.cpp">
+      <Filter>Game\States\GameClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ClearText.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\CloudFrame.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\FailedText.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ResultSceneKeyGuide.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\StageNumberUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\StageSelectKeyGuide.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\StageSelectText.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -235,8 +235,6 @@ void Game::Render()
     // シーンの描画処理
     m_sceneManager->Render();
 
-  
-
     //  新フレームの開始（メインループの一番上に記述）
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -246,10 +244,8 @@ void Game::Render()
     io.ConfigViewportsNoTaskBarIcon = false; // OSのタスクバーにアイコンを表示しない
     io.ConfigViewportsNoDecoration = false; // OSウィンドウの枠を消す
 
-
     // PIX開始イベント
     m_deviceResources->PIXBeginEvent(L"Render");
-
 
     auto context = m_deviceResources->GetD3DDeviceContext();
 

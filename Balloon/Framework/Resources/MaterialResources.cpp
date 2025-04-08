@@ -28,9 +28,9 @@ void MaterialResources::Initialize(Resources* resources)
 	auto defaultPBRLit = dynamic_cast<PBRLit*>(m_defaultPBRLit.get());
 
 	defaultPBRLit->Initialize(resources);
-	defaultPBRLit->SetBaseColor(DirectX::SimpleMath::Vector4::One);
-	defaultPBRLit->SetMatallic(0.3f);
-	defaultPBRLit->SetSmoothness(0.7f);
+	defaultPBRLit->SetBaseColor({1.0f ,1.0f  ,1.0f,1.0f});
+	defaultPBRLit->SetMatallic(0.3f);//0.3f
+	defaultPBRLit->SetSmoothness(0.7f);//0.7f
 	defaultPBRLit->SetUseBaseMap(1.0f);
 	defaultPBRLit->SetUseNormalMap(0.0f);
 

@@ -150,10 +150,10 @@ void ScoreUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 		case Message::SUBTRACT_SCORE_TEN:
 			this->SubtractScore(10.0f);
 			break;
-		case Message::SUBTRACT_ONE_HUNDRED:
+		case Message::SUBTRACT_SCORE_ONE_HUNDRED:
 			this->SubtractScore(100.0f);
 			break;
-		case Message::SUBTRACT_ONE_THOUSAND:
+		case Message::SUBTRACT_SCORE_ONE_THOUSAND:
 			this->SubtractScore(1000.0f);
 			break;
 		case Message::RESET_SCORE:

@@ -6,6 +6,7 @@
 #include "Game/Scenes/Header/TitleScene.h"
 #include "Game/Scenes/Header/MenuScene.h"
 #include "Game/Scenes/Header/PlayScene.h"
+#include "Game/Scenes/Header/StageSelectScene.h"
 #include "Framework/SceneManager.h"
 
 // コンストラクタ
@@ -41,15 +42,14 @@ void FadeOutState::PreUpdate()
 			m_fade->ChangeSceneFadeOUT<MenuScene>(1.0f);
 			break;
 		case FadeOutState::ChageSceneID::SELECT_SCENE:
-
+			// 次のシーンの初期化を非同期で実行
+			m_sceneManager->PrepareScene<StageSelectScene>();
+			m_fade->ChangeSceneFadeOUT<StageSelectScene>(1.0f);
 			break;
 		case FadeOutState::ChageSceneID::PLAY_SCENE:
-			
 			// 次のシーンの初期化を非同期で実行
 			m_sceneManager->PrepareScene<PlayScene>();
-
 			m_fade->ChangeSceneFadeOUT<PlayScene>(1.0f);
-
 			break;
 		case FadeOutState::ChageSceneID::GAME_CLEAR_SCENE:
 			// 次のシーンの初期化を非同期で実行
