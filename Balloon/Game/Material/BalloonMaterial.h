@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: BalloonMaterial.h
+// 概要: BalloonMaterial.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Material/Buffers.h"
 #include "Interface/IMaterial.h"

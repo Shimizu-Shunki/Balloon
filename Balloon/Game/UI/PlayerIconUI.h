@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayerIconUI.h
+// 概要: PlayerIconUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: SeaMaterial.h
+// 概要: SeaMaterial.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 
 class CommonResources;
@@ -19,7 +27,7 @@ public:
 	// コンストラクタ
 	SeaMaterial();
 	// デストラクタ
-	~SeaMaterial();
+	~SeaMaterial() = default;
 
 public:
 

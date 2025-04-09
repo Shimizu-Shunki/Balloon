@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: MenuButtonUI.cpp
+// 概要: プレイヤーのアイコンUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/PlayerIconUI.h"
 #include "Framework/CommonResources.h"
@@ -9,14 +18,28 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="player">プレイヤーのオブジェクト</param>
 PlayerIconUI::PlayerIconUI(Transform* player)
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_playerTransform{},
+	m_image{},
+	m_material{}
 {
 	
 	m_playerTransform = player;
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void PlayerIconUI::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -52,6 +75,12 @@ void PlayerIconUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void PlayerIconUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -63,13 +92,9 @@ void PlayerIconUI::InitialTransform(
 	m_transform->SetLocalScale(scale);
 }
 
-
-void PlayerIconUI::Finalize()
-{
-
-}
-
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void PlayerIconUI::Update()
 {
 	//m_material->UpdateConstBuffer();
@@ -85,6 +110,21 @@ void PlayerIconUI::Update()
 	m_transform->SetLocalPosition({ m_transform->GetLocalPosition().x , height , m_transform->GetLocalPosition().z });
 }
 
+
+/// <summary>
+/// 終了処理
+/// </summary>
+void PlayerIconUI::Finalize()
+{
+}
+
+
+
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void PlayerIconUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -98,17 +138,31 @@ void PlayerIconUI::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// プレイヤーの高さ正規化
+/// </summary>
+/// <param name="height">高さ</param>
+/// <returns>正規化したあとの高さ</returns>
 float PlayerIconUI::GetNormalizedHeight(float height)
 {
 	float value = (-height + 5.0f) / 10.0f;
 	return std::clamp(value, 0.0f, 1.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void PlayerIconUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void PlayerIconUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

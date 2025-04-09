@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: GameOverScene.h
+// 概要: GameOverScene.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IScene.h"
 #include "Interface/IObject.h"
@@ -32,6 +40,7 @@ public:
 	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
+	// オブジェクトを検索する
 	template <typename T>
 	T* SearchObject(IObject::ObjectID objectID)
 	{
@@ -50,7 +59,7 @@ private:
 		return nullptr;
 	}
 
-
+	// オブジェクトを追加する
 	template <typename T, typename... Args>
 	T* Attach(
 		IObject::ObjectID objectId,
@@ -83,14 +92,12 @@ private:
 	// 共有リソース
 	CommonResources* m_commonResources;
 	
-
 	// フェード処理
 	std::unique_ptr<Fade> m_fade;
 
 	// オブジェクト
 	std::vector<std::unique_ptr<IObject>> m_objects;
 
-	
 	// 現在のステート
 	IState* m_currentState;
 	// 各ステート

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: RenderManager.h
+// 概要: RenderManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/ISprite.h"
 #include <unordered_map>
@@ -6,9 +14,6 @@
 #include "Game/ShadowMap/CascadedShadowMap.h"
 #include "Game/Sky/SkyBox.h"
 #include "Game/Model3D/Model3D.h"
-
-
-// 全てのモデル、UIの描画を行うクラス
 
 class Transform;
 class CameraManager;

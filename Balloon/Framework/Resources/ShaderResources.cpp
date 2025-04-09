@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: ShaderResources.cpp
+// 概要: シェーダーのリソースを管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/CommonResources.h"
@@ -22,6 +31,10 @@ const std::vector<D3D11_INPUT_ELEMENT_DESC> ShaderResources::SEA_INPUT_LAYOUT =
 	{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT,    0, sizeof(DirectX::SimpleMath::Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
 };
 
+
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ShaderResources::ShaderResources()
 	:
 	m_UIinputLayout{},
@@ -44,6 +57,11 @@ ShaderResources::ShaderResources()
 
 }
 
+
+/// <summary>
+/// シェーダーのリソースをロードする
+/// </summary>
+/// <param name="data">Jsonデータ</param>
 void ShaderResources::LoadResource(const nlohmann::json& data)
 {
 	// デバイス

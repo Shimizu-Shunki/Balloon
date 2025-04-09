@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: TextureResources.cpp
+// 概要: テクスチャのリソースを管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/Resources/TextureResources.h"
 #include "Framework/CommonResources.h"
@@ -5,7 +14,9 @@
 #include <unordered_map>
 
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 TextureResources::TextureResources()
 	:
 	m_titleLogo{},
@@ -40,7 +51,10 @@ TextureResources::TextureResources()
 }
 
 
-
+/// <summary>
+/// ロードする
+/// </summary>
+/// <param name="data">Josnデータ</param>
 void TextureResources::LoadResource(const nlohmann::json& data)
 {
     // デバイス

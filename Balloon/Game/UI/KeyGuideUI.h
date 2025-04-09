@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: KeyGuideUI.h
+// 概要: KeyGuideUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: DebugScene.h
+// 概要: DebugScene.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IScene.h"
 #include <Game/Material/SeaMaterial.h>

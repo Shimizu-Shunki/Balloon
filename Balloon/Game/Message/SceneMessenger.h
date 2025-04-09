@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: SceneMessenger.h
+// 概要: SceneMessenger.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Message/Message.h"
 #include "Interface/IScene.h"

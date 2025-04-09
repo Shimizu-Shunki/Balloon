@@ -1,11 +1,26 @@
+// ============================================
+// 
+// ファイル名: PhysicsBody.cpp
+// 概要: 物理挙動を制御するクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/PhysicsBody/PhysicsBody.h"
 #include "Framework/CommonResources.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="object">対象のオブジェクト</param>
 PhysicsBody::PhysicsBody(IObject* object)
     : 
     m_object(object),
     m_mass(1.0f),
+    m_restitution{},
+    m_friction{},
+    m_isActive{},
     m_velocity(DirectX::SimpleMath::Vector3::Zero),
     m_acceleration(DirectX::SimpleMath::Vector3::Zero),
     m_gravityForce(DirectX::SimpleMath::Vector3::Zero),
@@ -17,7 +32,9 @@ PhysicsBody::PhysicsBody(IObject* object)
     m_commonResources = CommonResources::GetInstance();
 }
 
-// 更新処理
+/// <summary>
+/// 更新処理
+/// </summary>
 void PhysicsBody::Update()
 {
     // 経過秒数

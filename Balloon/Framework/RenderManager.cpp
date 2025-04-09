@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: RenderManager.cpp
+// 概要: 全てのモデル、UIの描画を行うクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/RenderManager.h"
 #include "Framework/CommonResources.h"
@@ -10,6 +18,9 @@
 #include "Game/Material/Buffers.h"
 #include "Game/Image/Image.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 RenderManager::RenderManager()
 	:
 	m_sprite{},

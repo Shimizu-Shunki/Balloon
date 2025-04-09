@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: TimerUI.cpp
+// 概要: タイムの処理とUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/TimerUI.h"
 #include "Framework/CommonResources.h"
@@ -9,14 +18,29 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="isCountingUp">カウント状態</param>
+/// <param name="currentTime">タイム</param>
 TimerUI::TimerUI(bool isCountingUp, float currentTime)
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{}
+
 {
 	m_isCountingUp = isCountingUp;
 	m_currentTime = currentTime;
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void TimerUI::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -48,10 +72,10 @@ void TimerUI::Initialize(ObjectID objectID, const bool& active)
 
 	// 各桁を計算 (例: 23:45 -> {2, 3, 4, 5})
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = minutes / 10; // 分の10の位
-	digits.y = minutes % 10; // 分の1の位
-	digits.z = seconds / 10; // 秒の10の位
-	digits.w = seconds % 10; // 秒の1の位
+	digits.x = static_cast<float>(minutes / 10); // 分の10の位
+	digits.y = static_cast<float>(minutes % 10); // 分の1の位
+	digits.z = static_cast<float>(seconds / 10); // 秒の10の位
+	digits.w = static_cast<float>(seconds % 10); // 秒の1の位
 
 	// Transformの初期化
 	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
@@ -63,6 +87,12 @@ void TimerUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void TimerUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -74,13 +104,9 @@ void TimerUI::InitialTransform(
 	m_transform->SetLocalScale(scale);
 }
 
-
-void TimerUI::Finalize()
-{
-
-}
-
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void TimerUI::Update()
 {
 	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
@@ -107,14 +133,28 @@ void TimerUI::Update()
 
 	// 各桁を計算 (例: 23:45 -> {2, 3, 4, 5})
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = minutes / 10; // 分の10の位
-	digits.y = minutes % 10; // 分の1の位
-	digits.z = seconds / 10; // 秒の10の位
-	digits.w = seconds % 10; // 秒の1の位
+	digits.x = static_cast<float>(minutes / 10); // 分の10の位
+	digits.y = static_cast<float>(minutes % 10); // 分の1の位
+	digits.z = static_cast<float>(seconds / 10); // 秒の10の位
+	digits.w = static_cast<float>(seconds % 10); // 秒の1の位
 
 	m_transform->SetRect(digits);
 }
 
+
+/// <summary>
+/// 終了処理
+/// </summary>
+void TimerUI::Finalize()
+{
+
+}
+
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void TimerUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -128,11 +168,20 @@ void TimerUI::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void TimerUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void TimerUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

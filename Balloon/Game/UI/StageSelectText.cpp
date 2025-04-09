@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: StageSelectText.cpp
+// 概要: ステージセレクトシーンでのテキストUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/StageSelectText.h"
 #include "Framework/CommonResources.h"
@@ -12,13 +21,26 @@
 const float StageSelectText::TEXTURE_HEIGHT = 151.4f;
 const float StageSelectText::TEXTURE_WIDTH = 980.0f;
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 StageSelectText::StageSelectText()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{}
 {
 	
 
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void StageSelectText::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -42,7 +64,7 @@ void StageSelectText::Initialize(ObjectID objectID, const bool& active)
 	m_image->SetIsActive(active);
 
 	// マテリアルを初期化する
-	this->InitialMaterial(TEXTURE_WIDTH, TEXTURE_HEIGHT);
+	this->InitialMaterial((int)TEXTURE_WIDTH, (int)TEXTURE_HEIGHT);
 
 	// Transformの初期化
 	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
@@ -54,6 +76,12 @@ void StageSelectText::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void StageSelectText::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -66,17 +94,28 @@ void StageSelectText::InitialTransform(
 }
 
 
+/// <summary>
+/// 更新処理
+/// </summary>
+void StageSelectText::Update()
+{
+	//m_material->UpdateConstBuffer();
+}
+
+/// <summary>
+/// 終了処理
+/// </summary>
 void StageSelectText::Finalize()
 {
 
 }
 
 
-void StageSelectText::Update()
-{
-	//m_material->UpdateConstBuffer();
-}
-
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void StageSelectText::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -90,11 +129,22 @@ void StageSelectText::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void StageSelectText::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void StageSelectText::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

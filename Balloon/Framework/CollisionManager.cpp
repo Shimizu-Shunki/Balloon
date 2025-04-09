@@ -1,22 +1,27 @@
+// ============================================
+// 
+// ファイル名: CollisionManager.cpp
+// 概要: 当たり判定を処理、管理するクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Game/Message/CollisionMessenger.h"
 #include "Game/Message/Message.h"
 #include "Framework/CollisionManager.h"
-// オブジェクト
 #include "Game/PhysicsBody/PhysicsBody.h"
 #include "Interface/IObject.h"
-
-// コライダー
 #include "Framework/Collider/AABB.h"
 #include "Interface/ICollider.h"
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
-
 #include "Framework/Microsoft/DebugDraw.h"
-#include <vector>
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 CollisionManager::CollisionManager()
 	:
 	m_pendingPhysicsBodys{},
@@ -30,10 +35,7 @@ CollisionManager::CollisionManager()
 	m_collisionMessenger = CollisionMessenger::GetInstance();
 }
 
-CollisionManager::~CollisionManager()
-{
 
-}
 
 void CollisionManager::Initialize()
 {

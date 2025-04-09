@@ -7,18 +7,34 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 SeaMaterial::SeaMaterial()
+	:
+	m_vertexShader{},
+	m_hullShader{},
+	m_domainShader{},
+	m_pixelShader{},
+	m_constantBuffer{},
+	m_inputLayout{},
+	m_CBuffer{},
+	m_vertexBuffer{},
+	m_states{},
+	m_blendState{},
+	m_depthStencilState{},
+	m_rasterizerState{},
+	m_texture{},
+	m_index{}
 {
 	// インスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
 	m_time = 0.0f;
 }
 
-SeaMaterial::~SeaMaterial()
-{
-}
-
+/// <summary>
+/// 初期化処理
+/// </summary>
 void SeaMaterial::Initialize()
 {
 	auto device = m_commonResources->GetDeviceResources()->GetD3DDevice();
@@ -76,6 +92,9 @@ void SeaMaterial::Initialize()
 	m_index = 6.0f;
 }
 
+/// <summary>
+/// 描画処理
+/// </summary>
 void SeaMaterial::Render()
 {
 	m_time += 0.006f;
@@ -158,7 +177,10 @@ void SeaMaterial::Render()
 	
 }
 
-// ブレンドステートの作成
+/// <summary>
+/// ブレンドステートの作成
+/// </summary>
+/// <param name="device">デバイス</param>
 void SeaMaterial::CreateBlendState(ID3D11Device1* device)
 {
 	D3D11_BLEND_DESC blendDesc = {};
@@ -182,7 +204,10 @@ void SeaMaterial::CreateBlendState(ID3D11Device1* device)
 	device->CreateBlendState(&blendDesc, &m_blendState);
 }
 
-// 深度ステンシルステートの作成
+/// <summary>
+/// 深度ステンシルステートの作成
+/// </summary>
+/// <param name="device">デバイス</param>
 void SeaMaterial::CreateDepthStencilState(ID3D11Device1* device)
 {
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
@@ -195,7 +220,10 @@ void SeaMaterial::CreateDepthStencilState(ID3D11Device1* device)
 	device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
 }
 
-// ラスタライザーステートの作成
+/// <summary>
+/// ラスタライザーステートの作成
+/// </summary>
+/// <param name="device">デバイス</param>
 void SeaMaterial::CreateRasterizerState(ID3D11Device1* device)
 {
 	D3D11_RASTERIZER_DESC rasterDesc = {};

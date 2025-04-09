@@ -1,10 +1,23 @@
+// ============================================
+// 
+// ファイル名: TPSKeyCamera.cpp
+// 概要: TPSカメラ視点切り替えは自動
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Cameras/TPSKeyCamera.h"
 #include "Game/PhysicsBody/PhysicsBody.h"
 #include <Mouse.h>
 
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="targetTransform">追尾するカメラ</param>
+/// <param name="targetPhysicsBody">対象の物理挙動</param>
+/// <param name="distance">オブジェクトとカメラの距離</param>
 TPSKeyCamera::TPSKeyCamera(Transform* targetTransform, PhysicsBody* targetPhysicsBody, DirectX::SimpleMath::Vector3 distance)
 	:
 	m_targetTransform(targetTransform),
@@ -17,6 +30,9 @@ TPSKeyCamera::TPSKeyCamera(Transform* targetTransform, PhysicsBody* targetPhysic
 {
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
 void TPSKeyCamera::Initialize()
 {
 	// Transformを作成
@@ -43,6 +59,9 @@ void TPSKeyCamera::Initialize()
 	DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_RELATIVE);
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void TPSKeyCamera::Update()
 {
 	// 速度を取得
@@ -72,7 +91,10 @@ void TPSKeyCamera::Update()
 	this->CalculateViewMatrix();
 }
 
-// ビュー行列を計算する
+/// <summary>
+/// ビュー行列を計算する
+/// </summary>
+/// <returns>ビュー行列</returns>
 DirectX::SimpleMath::Matrix  TPSKeyCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得

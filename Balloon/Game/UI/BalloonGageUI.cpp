@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: BalloonGageUI.cpp
+// 概要: 風船のゲージUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/BalloonGageUI.h"
 #include "Framework/CommonResources.h"
@@ -17,9 +26,16 @@ const float BalloonGageUI::SPEED_FAST = 0.3f;
 /// コンストラクタ
 /// </summary>
 BalloonGageUI::BalloonGageUI()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{},
+	m_currentScale{},
+	m_isBalloon{},
+	m_speed{}
 {
-	
-
 }
 
 /// <summary>
@@ -118,7 +134,7 @@ void BalloonGageUI::Update()
 		0.0f
 		});
 	// 大きさを設定
-	float scaled = 0.1 + (m_currentScale * (0.6 - 0.1));
+	float scaled = 0.1f + (m_currentScale * (0.6f - 0.1f));
 	m_transform->SetLocalScale(DirectX::SimpleMath::Vector3::One * scaled);
 
 }
@@ -178,9 +194,10 @@ void BalloonGageUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 }
 
 /// <summary>
-/// メッセージを受け取る（当たり判定）
+/// 当たり判定のメッセージを受け取る
 /// </summary>
 /// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void BalloonGageUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

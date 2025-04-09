@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Body.cpp
+// 概要: 体オブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Player/Header/Body.h"
 #include "Framework/CommonResources.h"
@@ -151,11 +159,20 @@ void Body::Detach(std::unique_ptr<IObject> turretParts)
 
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void Body::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void Body::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

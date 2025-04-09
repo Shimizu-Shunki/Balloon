@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: ModelResources.h
+// 概要: ModelResources.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include <Model.h>
 #include <nlohmann/json.hpp>

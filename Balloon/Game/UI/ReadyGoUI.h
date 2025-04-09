@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: ReadyGoUI.h
+// 概要: ReadyGoUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

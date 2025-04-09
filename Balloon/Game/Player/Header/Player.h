@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Player.h
+// 概要: Player.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IComposite.h"
 #include "Interface/IObject.h"

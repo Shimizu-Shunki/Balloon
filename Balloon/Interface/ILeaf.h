@@ -1,10 +1,14 @@
+// ============================================
+// 
+// ファイル名: ILeaf.h
+// 概要: 単一オブジェクトを表す（インターフェース）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
-#ifndef ILEAF_DEFINED
-#define ILEAF_DEFINED
 #include "Interface/IObject.h"
 
 class ILeaf : public IObject
 {
 };
-
-#endif		// ILEAF_DEFINED

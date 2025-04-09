@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: MaterialResources.cpp
+// 概要: マテリアルを管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/ShaderResources.h"
@@ -10,12 +19,18 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Material/BalloonMaterial.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 MaterialResources::MaterialResources()
 {
 
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="resources">リソース</param>
 void MaterialResources::Initialize(Resources* resources)
 {
 	// テクスチャのリソース

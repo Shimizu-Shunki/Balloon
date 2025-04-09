@@ -1,26 +1,44 @@
+// ============================================
+// 
+// ファイル名: AABB.cpp
+// 概要: AABBの判定処理
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/Collider/AABB.h"
 #include "Game/PhysicsBody/PhysicsBody.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 AABB::AABB()
 {
 
 }
 
-
-AABB::~AABB()
-{
-
-}
-
-// 判定処理
+/// <summary>
+/// 判定処理
+/// </summary>
+/// <param name="box1">ボックス1</param>
+/// <param name="box2">ボックス2</param>
+/// <returns>衝突しているか</returns>
 const bool AABB::Intersects(const DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2)
 {
 	return box1.Intersects(box2);
 }
 
-// 押し戻し処理
+/// <summary>
+/// 押し戻し処理
+/// </summary>
+/// <param name="object1">オブジェクト1</param>
+/// <param name="collider1">当たり判定1</param>
+/// <param name="physicsBody1">物理挙動1</param>
+/// <param name="object2">オブジェクト2</param>
+/// <param name="collider2">当たり判定2</param>
+/// <param name="physicsBody2">物理挙動2</param>
+/// <returns></returns>
 const void AABB::PushBack(IObject* object1, ICollider* collider1, PhysicsBody* physicsBody1,
     IObject* object2, ICollider* collider2, PhysicsBody* physicsBody2)
 {
@@ -146,8 +164,12 @@ const void AABB::PushBack(IObject* object1, ICollider* collider1, PhysicsBody* p
 }
 
 
-
-// 上下左右判定処理
+/// <summary>
+/// 上下左右前後の判定処理
+/// </summary>
+/// <param name="box1">当たり判定1</param>
+/// <param name="box2">当たり判定2</param>
+/// <returns>判定結果</returns>
 const int AABB::DetermineCollisionDirection(const DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2)
 {
     int direction = CollisionDirection::NONE;

@@ -1,0 +1,27 @@
+{
+  "Stage1": [
+
+    { "Time": "Resources/Textures/Stages.png" }
+  ],
+
+  "Stage2": [
+
+    { "Time": "Resources/Textures/Stages.png" }
+  ],
+
+  "Stage3": [
+
+    { "Time": "Resources/Textures/Stages.png" }
+  ],
+
+  "Stage4": [
+
+    { "Time": "Resources/Textures/Stages.png" }
+  ],
+
+  "Stage5": [
+
+    { "Time": "Resources/Textures/Stages.png" }
+  ]
+
+}

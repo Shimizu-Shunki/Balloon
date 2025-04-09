@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: CameraManager.h
+// 概要: CameraManager.cppのヘッダーファイル（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #pragma once
 #include "Interface/ICamera.h"
 #include "Framework/Tween/Tween.h"

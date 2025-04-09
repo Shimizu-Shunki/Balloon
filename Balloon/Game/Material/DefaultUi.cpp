@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: DefaultUi.cpp
+// 概要: UIのマテリアル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Material/DefaultUi.h"
 #include "Framework/CommonResources.h"

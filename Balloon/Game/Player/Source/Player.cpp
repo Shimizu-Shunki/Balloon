@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Player.cpp
+// 概要: プレイヤーオブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Player/Header/Player.h"
 #include "Framework/CommonResources.h"
@@ -248,6 +256,10 @@ void Player::Detach(std::unique_ptr<IObject> turretParts)
 
 }
 
+/// <summary>
+/// ステートを切り替える
+/// </summary>
+/// <param name="newState">次のステート</param>
 void Player::ChangeState(IState* newState)
 {
 	// 事後処理
@@ -258,6 +270,10 @@ void Player::ChangeState(IState* newState)
 	m_currentState->PreUpdate();
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void Player::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	switch (messageID)
@@ -276,6 +292,11 @@ void Player::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 	}
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void Player::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	switch (messageID)
@@ -399,6 +420,9 @@ void Player::CreatePhysicsBody()
 	m_physicsBody->SetIsKinematic(false);                // キネマティック設定
 }
 
+/// <summary>
+/// ステートを作成
+/// </summary>
 void Player::CreateStates()
 {
 	m_idleState = std::make_unique<PlayerIdleState>();

@@ -1,9 +1,22 @@
+// ============================================
+// 
+// ファイル名: TPSCamera.cpp
+// 概要: TPSカメラ
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Cameras/TPSCamera.h"
 #include <Mouse.h>
 
 #include "Framework/InputManager.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="targetTransform">追尾するTransform</param>
+/// <param name="distance">オブジェクトとカメラの距離</param>
 TPSCamera::TPSCamera(Transform* targetTransform, DirectX::SimpleMath::Vector3 distance)
 	:
 	m_targetTransform(targetTransform),
@@ -19,6 +32,9 @@ TPSCamera::TPSCamera(Transform* targetTransform, DirectX::SimpleMath::Vector3 di
 	m_inputManager = InputManager::GetInstance();
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
 void TPSCamera::Initialize()
 {
 	// Transformを作成
@@ -47,6 +63,9 @@ void TPSCamera::Initialize()
 	DirectX::Mouse::Get().SetMode(DirectX::Mouse::MODE_RELATIVE);
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void TPSCamera::Update()
 {
 	// マウスステート
@@ -88,7 +107,10 @@ void TPSCamera::Update()
 #endif
 }
 
-// ビュー行列を計算する
+/// <summary>
+/// ビュー行列を計算する
+/// </summary>
+/// <returns>ビュー行列</returns>
 DirectX::SimpleMath::Matrix  TPSCamera::CalculateViewMatrix()
 {
 	// プレイヤーの座標を取得

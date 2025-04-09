@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: CollisionMessenger.h
+// 概要: CollisionMessenger.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Message/Message.h"
 #include "Interface/IObject.h"

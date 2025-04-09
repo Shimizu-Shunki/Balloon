@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayScene.h
+// 概要: PlayScene.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IScene.h"
 #include "Interface/ICamera.h"
@@ -39,6 +47,7 @@ public:
 	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
+	// オブジェクトを検索する
 	template <typename T>
 	T* SearchObject(IObject::ObjectID objectID)
 	{
@@ -57,7 +66,7 @@ private:
 		return nullptr;
 	}
 
-
+	// オブジェクトを追加する
 	template <typename T, typename... Args>
 	T* Attach(
 		IObject::ObjectID objectId,

@@ -1,9 +1,20 @@
+// ============================================
+// 
+// ファイル名: AudioManager.cpp
+// 概要: 音全般を管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/AudioManager.h"
 #include "Framework/Sounds.h"
 #include <Audio.h>
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 AudioManager::AudioManager()
 	:
 	m_audioEngine{},
@@ -27,7 +38,9 @@ AudioManager::AudioManager()
 	m_seTimer = 0.0f;
 }
 
-// デストラクタ
+/// <summary>
+/// デストラクタ
+/// </summary>
 AudioManager::~AudioManager()
 {
 	m_isActive = false;
@@ -39,7 +52,9 @@ AudioManager::~AudioManager()
 	}
 }
 
-// 初期化処理
+/// <summary>
+/// 初期化処理
+/// </summary>
 void AudioManager::Initialize()
 {
 	// オーディオエンジンのフラグ
@@ -83,6 +98,10 @@ void AudioManager::Initialize()
 	m_currentSE = nullptr;
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
+/// <param name="timer">経過時間</param>
 void AudioManager::Update(DX::StepTimer const& timer)
 {
 	// オーディオエンジンを更新する
@@ -137,6 +156,11 @@ void AudioManager::Update(DX::StepTimer const& timer)
 	}
 }
 
+/// <summary>
+/// フェードインしながらBGMを再生
+/// </summary>
+/// <param name="bgmName">BGM</param>
+/// <param name="fadeTime">フェード時間</param>
 void AudioManager::PlayFadeInBgm(XACT_WAVEBANK_SOUNDS bgmName, float fadeTime)
 {
 	// フェード中はスキップ
@@ -166,6 +190,10 @@ void AudioManager::PlayFadeInBgm(XACT_WAVEBANK_SOUNDS bgmName, float fadeTime)
 	m_isActive = true;
 }
 
+/// <summary>
+/// フェードアウトしながらBGMを停止する
+/// </summary>
+/// <param name="fadeTime">フェード時間</param>
 void AudioManager::StopFadeOutBgm( float fadeTime)
 {
 	// フェード中はスキップ
@@ -185,14 +213,19 @@ void AudioManager::StopFadeOutBgm( float fadeTime)
 	m_isActive = true;
 }
 
-// SEを再生させる
+/// <summary>
+/// SEを再生する
+/// </summary>
 void AudioManager::PlaySE()
 {
 	m_soundEffectInstanceSE->Play();
 	m_isSE = true;
 }
 
-// マスター音量を設定
+/// <summary>
+/// マスター音量を設定
+/// </summary>
+/// <param name="volume">音量</param>
 void AudioManager::SetMasterVolume(const float& volume)
 {
 	// マスター音量を設定
@@ -201,7 +234,10 @@ void AudioManager::SetMasterVolume(const float& volume)
 	m_audioEngine->SetMasterVolume(volume);
 }
 
-// SE音量を設定
+/// <summary>
+/// SE音量を設定
+/// </summary>
+/// <param name="volume">音量</param>
 void AudioManager::SetSeVolume(const float& volume)
 {
 	// SE音量を設定
@@ -210,7 +246,10 @@ void AudioManager::SetSeVolume(const float& volume)
 	m_soundEffectInstanceSE->SetVolume(m_seVolume);
 }
 
-// BGM音量を設定
+/// <summary>
+/// BGM音量を設定
+/// </summary>
+/// <param name="volume">音量</param>
 void AudioManager::SetBgmVolume(const float& volume)
 {
 	// BGM音量を設定

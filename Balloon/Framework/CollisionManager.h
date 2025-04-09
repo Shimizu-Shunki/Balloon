@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: CollisionManager.h
+// 概要: CollisionManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include <vector>
 #include <unordered_map>
@@ -13,19 +21,6 @@ class PhysicsBody;
 class CollisionManager
 {
 private:
-
-	//struct CollisionPair {
-	//	IObject* objA;
-	//	IObject* objB;
-	//	ICollider* colA;
-	//	ICollider* colB;
-
-	//	// 同じ衝突ペアかどうかを判定（unordered_map のキー比較用）
-	//	bool operator==(const CollisionPair& other) const {
-	//		return objA == other.objA && objB == other.objB && colA == other.colA && colB == other.colB;
-	//	}
-	//};
-
 	struct CollisionPair {
 		int objA;
 		int objB;
@@ -52,7 +47,7 @@ private:
 	//	コンストラクタ
 	CollisionManager();
 	// デストラクタ
-	~CollisionManager();
+	~CollisionManager() = default;
 public:
 	CollisionManager(const CollisionManager&) = delete;             // コピー禁止
 	CollisionManager& operator=(const CollisionManager&) = delete;  // コピー代入禁止

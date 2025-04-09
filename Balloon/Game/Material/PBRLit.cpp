@@ -1,15 +1,40 @@
+// ============================================
+// 
+// ファイル名: PBRLit.cpp
+// 概要: モデルのマテリアル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Material/PBRLit.h"
 #include "Interface/IMaterial.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/ShaderResources.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 PBRLit::PBRLit()
+	:
+	m_inputLayout{},
+	m_context{},
+	m_states{},
+	m_vertexShader{},
+	m_pixelShader{},
+	m_PBRLitconstantBuffer{},
+	m_constantBuffer{},
+	m_baseMap{},
+	m_normalMap{},
+	m_skyMap{}
 {
 
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="resources">リソース</param>
 void PBRLit::Initialize(Resources* resources)
 {
 	auto device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
@@ -35,6 +60,9 @@ void PBRLit::Initialize(Resources* resources)
 	);
 }
 
+/// <summary>
+/// 定数バッファ更新処理
+/// </summary>
 void PBRLit::UpdateConstBuffer()
 {
 	// GPUが使用するリソースのメモリにCPUからアクセスする際に利用する構造体
@@ -56,6 +84,9 @@ void PBRLit::UpdateConstBuffer()
 	context->Unmap(m_constantBuffer.Get(), 0);
 }
 
+/// <summary>
+/// マテリアルの適応
+/// </summary>
 void PBRLit::BeginMaterial()
 {
 
@@ -86,6 +117,9 @@ void PBRLit::BeginMaterial()
 	m_context->PSSetSamplers(0, 1, sampler);
 }
 
+/// <summary>
+/// マテリアルを解放する
+/// </summary>
 void PBRLit::EndMaterial()
 {
 	// シェーダの解放

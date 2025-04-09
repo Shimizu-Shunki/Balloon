@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PBRLit.h
+// 概要: PBRLit.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Material/Buffers.h"
 #include "Interface/IMaterial.h"

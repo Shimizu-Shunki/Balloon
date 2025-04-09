@@ -1,7 +1,18 @@
+// ============================================
+// 
+// ファイル名: SphereCollider.cpp
+// 概要: 球の当たり判定
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Colliders/SphereCollider.h"
 #include "Game/Transform/Transform.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 SphereCollider::SphereCollider()
 {
 	// コライダータイプ
@@ -15,6 +26,11 @@ SphereCollider::SphereCollider()
 	m_transform = std::make_unique<Transform>();
 }
 
+/// <summary>
+/// 判定を行う
+/// </summary>
+/// <param name="collider">相手</param>
+/// <returns>衝突しているかどうか</returns>
 bool SphereCollider::DetectCollision(ICollider* collider)
 {
 

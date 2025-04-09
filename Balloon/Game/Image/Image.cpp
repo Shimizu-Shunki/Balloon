@@ -1,9 +1,20 @@
+// ============================================
+// 
+// ファイル名: Image.cpp
+// 概要: UI画像の描画・テクスチャ設定を行うクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Image/Image.h"
 #include "Game/Transform/Transform.h"
 #include "Game/Material/Buffers.h"
 #include "Interface/IMaterial.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Image::Image()
 	:
 	m_isActive{},
@@ -14,6 +25,12 @@ Image::Image()
 {
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="isActive">アクティブ状態</param>
+/// <param name="material">マテリアル</param>
+/// <param name="transform">トランスフォーム</param>
 void Image::Initialize(bool isActive, IMaterial* material, Transform* transform)
 {
 	// 初期化設定
@@ -24,6 +41,12 @@ void Image::Initialize(bool isActive, IMaterial* material, Transform* transform)
 	m_ruleTexture = nullptr;
 }
 
+/// <summary>
+/// 描画処理
+/// </summary>
+/// <param name="context">コンテキスト</param>
+/// <param name="vertexBuffer">頂点バッファ</param>
+/// <returns>マテリアル</returns>
 IMaterial* Image::Render(ID3D11DeviceContext1* context,ID3D11Buffer* vertexBuffer)
 {
 	UIVertexBuffer UiVertexBuffer;
@@ -60,6 +83,12 @@ IMaterial* Image::Render(ID3D11DeviceContext1* context,ID3D11Buffer* vertexBuffe
 	return m_material;
 }
 
+/// <summary>
+/// テクスチャを設定
+/// </summary>
+/// <param name="texture">テクスチャ</param>
+/// <param name="width">縦</param>
+/// <param name="height">横</param>
 void Image::SetTexture(ID3D11ShaderResourceView* texture, int& width, int& height)
 {
 	// 画像をセット

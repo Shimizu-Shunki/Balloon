@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: CascadedShadowMap.h
+// 概要: カスケードシャドウマップを作成するクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/ShadowMap/CascadedShadowMap.h"
 #include <Framework/Microsoft/RenderTexture.h>

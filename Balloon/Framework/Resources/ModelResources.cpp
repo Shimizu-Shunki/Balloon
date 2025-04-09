@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: ModelResources.cpp
+// 概要: モデルのリソースを管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/Resources/ModelResources.h"
 #include "Framework/CommonResources.h"
@@ -5,6 +14,9 @@
 #include <Framework/Microsoft/ReadData.h>
 #include <unordered_map>
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ModelResources::ModelResources()
 	:
 	m_playerHeadModel{},
@@ -20,6 +32,10 @@ ModelResources::ModelResources()
 
 }
 
+/// <summary>
+/// モデルのリソースをロードする
+/// </summary>
+/// <param name="data">Jsonデータ</param>
 void ModelResources::LoadResource(const nlohmann::json& data)
 {
 	// デバイス

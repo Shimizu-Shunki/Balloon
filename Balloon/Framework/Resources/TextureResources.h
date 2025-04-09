@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: TextureResources.h
+// 概要: TextureResources.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #pragma once
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>

@@ -1,8 +1,22 @@
+// ============================================
+// 
+// ファイル名: CollisionMessenger.cpp
+// 概要: 当たり判定のメッセンジャー（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include <unordered_map>
 #include "Game/Message/CollisionMessenger.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 CollisionMessenger::CollisionMessenger()
+	:
+	m_objects{},
+	m_pendingObjects{}
 {
 
 }

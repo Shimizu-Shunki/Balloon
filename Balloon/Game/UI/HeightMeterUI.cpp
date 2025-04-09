@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: HeightMeterUI.cpp
+// 概要: 高さのメーター
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/HeightMeterUI.h"
 #include "Framework/CommonResources.h"
@@ -9,14 +18,26 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 HeightMeterUI::HeightMeterUI()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{}
 {
 	
 
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void HeightMeterUI::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -52,6 +73,12 @@ void HeightMeterUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void HeightMeterUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -63,18 +90,30 @@ void HeightMeterUI::InitialTransform(
 	m_transform->SetLocalScale(scale);
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
+void HeightMeterUI::Update()
+{
+	//m_material->UpdateConstBuffer();
+}
 
+
+/// <summary>
+/// 終了処理
+/// </summary>
 void HeightMeterUI::Finalize()
 {
 
 }
 
 
-void HeightMeterUI::Update()
-{
-	//m_material->UpdateConstBuffer();
-}
 
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void HeightMeterUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -88,11 +127,20 @@ void HeightMeterUI::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void HeightMeterUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void HeightMeterUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

@@ -1,9 +1,22 @@
+// ============================================
+// 
+// ファイル名: CollisionMessenger.cpp
+// 概要: オブジェクトのメッセンジャー（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include <unordered_map>
 #include "Game/Message/ObjectMessenger.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ObjectMessenger::ObjectMessenger()
+	:
+	m_objects{},
+	m_pendingObjects{}
 {
 
 }

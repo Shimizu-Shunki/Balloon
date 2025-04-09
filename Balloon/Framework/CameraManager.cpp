@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: CameraManager.cpp
+// 概要: カメラを管理するクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Framework/CameraManager.h"
 #include "Framework/CommonResources.h"

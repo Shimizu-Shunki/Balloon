@@ -1,15 +1,40 @@
+// ============================================
+// 
+// ファイル名: BalloonMaterial.cpp
+// 概要: 風船のマテリアル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Material/BalloonMaterial.h"
 #include "Interface/IMaterial.h"
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/ShaderResources.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 BalloonMaterial::BalloonMaterial()
+	:
+	m_inputLayout{},
+	m_context{},
+	m_states{},
+	m_vertexShader{},
+	m_pixelShader{},
+	m_PBRLitconstantBuffer{},
+	m_constantBuffer{},
+	m_baseMap{},
+	m_normalMap{},
+	m_skyMap{}
 {
 
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="resources">リソース</param>
 void BalloonMaterial::Initialize(Resources* resources)
 {
 	auto device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
@@ -35,6 +60,9 @@ void BalloonMaterial::Initialize(Resources* resources)
 	);
 }
 
+/// <summary>
+/// 定数バッファ更新処理
+/// </summary>
 void BalloonMaterial::UpdateConstBuffer()
 {
 	// GPUが使用するリソースのメモリにCPUからアクセスする際に利用する構造体
@@ -56,6 +84,9 @@ void BalloonMaterial::UpdateConstBuffer()
 	context->Unmap(m_constantBuffer.Get(), 0);
 }
 
+/// <summary>
+/// マテリアルを適応する
+/// </summary>
 void BalloonMaterial::BeginMaterial()
 {
 
@@ -86,6 +117,9 @@ void BalloonMaterial::BeginMaterial()
 	m_context->PSSetSamplers(0, 1, sampler);
 }
 
+/// <summary>
+/// マテリアルを解放
+/// </summary>
 void BalloonMaterial::EndMaterial()
 {
 	// シェーダの解放

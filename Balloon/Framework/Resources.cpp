@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Resources.cpp
+// 概要: 各種リソースの管理と読み込みを行うクラス（シングルトン）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/Resources.h"
 #include <iostream>
@@ -8,6 +16,9 @@
 #include "Framework/Resources/TextureResources.h"
 #include "Framework/Resources/MaterialResources.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Resources::Resources()
 	
 {
@@ -19,7 +30,9 @@ Resources::Resources()
 }
 
 
-// リソースをロードする
+/// <summary>
+/// 各リソースのロード
+/// </summary>
 void Resources::LoadResource()
 {
 	// JSONファイルを開く

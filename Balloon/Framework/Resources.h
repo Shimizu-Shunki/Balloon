@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: Resources.h
+// 概要: Resources.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #pragma once
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>

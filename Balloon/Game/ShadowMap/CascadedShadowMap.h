@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: CascadedShadowMap.h
+// 概要: CascadedShadowMap.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Framework/Microsoft/RenderTexture.h"
 #include "Framework/DepthStencil.h"

@@ -1,9 +1,19 @@
+// ============================================
+// 
+// ファイル名: Model3D.cpp
+// 概要: 3Dモデルを管理するクラス
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Model3D/Model3D.h"
-
 #include "Interface/IMaterial.h"
 #include "Interface/IObject.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Model3D::Model3D()
 	:
 	m_model{},
@@ -13,7 +23,13 @@ Model3D::Model3D()
 {
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="model">モデル</param>
+/// <param name="material">マテリアル</param>
+/// <param name="object">対象のオブジェクト</param>
+/// <param name="isShadow">シャドウ有効にするか</param>
 void Model3D::Initialize(DirectX::Model* model, IMaterial* material, IObject* object, bool isShadow)
 {
 	m_model    = model;
@@ -22,7 +38,14 @@ void Model3D::Initialize(DirectX::Model* model, IMaterial* material, IObject* ob
 	m_isShadow = isShadow;
 }
 
-
+/// <summary>
+/// 描画処理
+/// </summary>
+/// <param name="context">コンテキスト</param>
+/// <param name="states">コモンステート</param>
+/// <param name="viewMatrix">ビュー行列</param>
+/// <param name="projectionMatrix">射影行列</param>
+/// <param name="lightBuffer">ライトのバッファ</param>
 void Model3D::Render(ID3D11DeviceContext1* context, DirectX::CommonStates* states,
 	DirectX::SimpleMath::Matrix viewMatrix, DirectX::SimpleMath::Matrix projectionMatrix,
 	ID3D11Buffer* lightBuffer

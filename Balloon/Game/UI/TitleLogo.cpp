@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: TitleLogo.cpp
+// 概要: タイトルロゴUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/TitleLogo.h"
 #include "Framework/CommonResources.h"
@@ -9,14 +18,24 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 TitleLogo::TitleLogo()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{}
 {
-	
-
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void TitleLogo::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -52,6 +71,12 @@ void TitleLogo::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void TitleLogo::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -64,17 +89,28 @@ void TitleLogo::InitialTransform(
 }
 
 
-void TitleLogo::Finalize()
-{
-
-}
-
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void TitleLogo::Update()
 {
 	//m_material->UpdateConstBuffer();
 }
 
+
+/// <summary>
+/// 終了処理
+/// </summary>
+void TitleLogo::Finalize()
+{
+
+}
+
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void TitleLogo::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -88,11 +124,21 @@ void TitleLogo::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void TitleLogo::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void TitleLogo::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

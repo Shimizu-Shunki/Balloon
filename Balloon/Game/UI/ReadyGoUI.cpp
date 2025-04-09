@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: ReadyGoUI.cpp
+// 概要: カウントダウンUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/ReadyGoUI.h"
 #include "Framework/CommonResources.h"
@@ -9,14 +18,24 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ReadyGoUI::ReadyGoUI()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{}
 {
-
-
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void ReadyGoUI::Initialize(ObjectID objectID, const bool& active)
 {
 	// 共有リソース
@@ -56,6 +75,13 @@ void ReadyGoUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void ReadyGoUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -67,17 +93,27 @@ void ReadyGoUI::InitialTransform(
 	m_transform->SetLocalScale(scale);
 }
 
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void ReadyGoUI::Update()
 {
 	// m_material->UpdateConstBuffer();
 }
 
+/// <summary>
+/// 終了処理
+/// </summary>
 void ReadyGoUI::Finalize()
 {
 
 }
 
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void ReadyGoUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -91,11 +127,20 @@ void ReadyGoUI::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void ReadyGoUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void ReadyGoUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

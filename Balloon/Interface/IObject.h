@@ -1,13 +1,17 @@
+// ============================================
+// 
+// ファイル名: IObject.h
+// 概要: ゲームオブジェクトの共通（インターフェース）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
-#ifndef ICOMPONENT_DEFINED
-#define ICOMPONENT_DEFINED
 #include "Framework/pch.h"
 #include "Framework/StepTimer.h"
 #include "Interface/ICollision.h"
 #include "Interface/IObserver.h"
 #include "Game/Transform/Transform.h"
-#include <variant>
-
 
 class IObject : public IObserver
 {
@@ -94,5 +98,3 @@ public:
 	// 後処理を行う
 	virtual void Finalize() = 0;
 };
-
-#endif		// ICOMPONENT_DEFINED

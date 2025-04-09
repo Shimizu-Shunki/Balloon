@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: ScoreUI.cpp
+// 概要: スコアのUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/ScoreUI.h"
 #include "Framework/CommonResources.h"
@@ -9,12 +18,25 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ScoreUI::ScoreUI()
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{},
+	m_currentScore{}
 {
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void ScoreUI::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -43,10 +65,10 @@ void ScoreUI::Initialize(ObjectID objectID, const bool& active)
 	this->InitialMaterial(width,height);
 
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = ((int)m_currentScore / 1000) % 10; // 1000の位
-	digits.y = ((int)m_currentScore / 100) % 10; // 100の位
-	digits.z = ((int)m_currentScore / 10) % 10; //  10の位
-	digits.w = (int)m_currentScore % 10; //   1の位
+	digits.x = static_cast<float>(((int)m_currentScore / 1000) % 10); // 1000の位
+	digits.y = static_cast<float>(((int)m_currentScore / 100) % 10);  //  100の位
+	digits.z = static_cast<float>(((int)m_currentScore / 10) % 10);   //   10の位
+	digits.w = static_cast<float>((int)m_currentScore % 10);          //    1の位
 
 	// Transformの初期化
 	m_transform->SetLocalPosition(DirectX::SimpleMath::Vector3::Zero);
@@ -58,6 +80,12 @@ void ScoreUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void ScoreUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -70,15 +98,25 @@ void ScoreUI::InitialTransform(
 }
 
 
-void ScoreUI::Finalize()
-{
-}
-
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void ScoreUI::Update()
 {
 }
 
+/// <summary>
+/// 終了処理
+/// </summary>
+void ScoreUI::Finalize()
+{
+}
+
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void ScoreUI::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -92,48 +130,61 @@ void ScoreUI::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
-
+/// <summary>
+/// スコアを追加
+/// </summary>
+/// <param name="score">増加量</param>
 void ScoreUI::AddScore(float score)
 {
 	m_currentScore += score;
 
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = ((int)m_currentScore / 1000) % 10; // 1000の位
-	digits.y = ((int)m_currentScore / 100) % 10; // 100の位
-	digits.z = ((int)m_currentScore / 10) % 10; //  10の位
-	digits.w = (int)m_currentScore % 10; //   1の位
+	digits.x = static_cast<float>(((int)m_currentScore / 1000) % 10); // 1000の位
+	digits.y = static_cast<float>(((int)m_currentScore / 100) % 10);  //  100の位
+	digits.z = static_cast<float>(((int)m_currentScore / 10) % 10);   //   10の位
+	digits.w = static_cast<float>((int)m_currentScore % 10);          //    1の位
 
 	m_transform->SetRect(digits);
 }
 
+/// <summary>
+/// スコアを減算
+/// </summary>
+/// <param name="score">減算慮</param>
 void ScoreUI::SubtractScore(float socre)
 {
 	m_currentScore += socre;
 
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = ((int)m_currentScore / 1000) % 10; // 1000の位
-	digits.y = ((int)m_currentScore / 100) % 10; // 100の位
-	digits.z = ((int)m_currentScore / 10) % 10; //  10の位
-	digits.w = (int)m_currentScore % 10; //   1の位
+	digits.x = static_cast<float>(((int)m_currentScore / 1000) % 10); // 1000の位
+	digits.y = static_cast<float>(((int)m_currentScore / 100) % 10);  //  100の位
+	digits.z = static_cast<float>(((int)m_currentScore / 10) % 10);   //   10の位
+	digits.w = static_cast<float>((int)m_currentScore % 10);          //    1の位
 
 	m_transform->SetRect(digits);
 }
 
+/// <summary>
+/// スコアをゼロにリセット
+/// </summary>
 void ScoreUI::ResetScore()
 {
 	m_currentScore = 0.0f;
 
 	DirectX::SimpleMath::Vector4 digits;
-	digits.x = ((int)m_currentScore / 1000) % 10; // 1000の位
-	digits.y = ((int)m_currentScore / 100) % 10; // 100の位
-	digits.z = ((int)m_currentScore / 10) % 10; //  10の位
-	digits.w = (int)m_currentScore % 10; //   1の位
+	digits.x = static_cast<float>(((int)m_currentScore / 1000) % 10); // 1000の位
+	digits.y = static_cast<float>(((int)m_currentScore / 100) % 10);  //  100の位
+	digits.z = static_cast<float>(((int)m_currentScore / 10) % 10);   //   10の位
+	digits.w = static_cast<float>((int)m_currentScore % 10);          //    1の位
 
 	m_transform->SetRect(digits);
 }
 
 
-
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void ScoreUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	switch (messageID)
@@ -164,6 +215,12 @@ void ScoreUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 	}
 }
 
+
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void ScoreUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

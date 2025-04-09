@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: FailedText.h
+// 概要: FailedText.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

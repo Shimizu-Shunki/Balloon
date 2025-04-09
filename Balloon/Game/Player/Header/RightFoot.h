@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: RightFoot.h
+// 概要: RightFoot.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/ILeaf.h"
 #include "Interface/IObject.h"

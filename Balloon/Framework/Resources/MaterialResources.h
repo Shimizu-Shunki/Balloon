@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: MaterialResources.h
+// 概要: MaterialResources.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #pragma once
 #include "Interface/IMaterial.h"
 

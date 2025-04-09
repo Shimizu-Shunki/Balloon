@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: LeftFoot.h
+// 概要: LeftFoot.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/ILeaf.h"
 #include "Interface/IObject.h"

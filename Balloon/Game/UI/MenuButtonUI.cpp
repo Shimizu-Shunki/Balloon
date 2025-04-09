@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: MenuButtonUI.cpp
+// 概要: メニューボタンUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/MenuButtonUI.h"
 #include "Framework/CommonResources.h"
@@ -16,15 +25,30 @@ const float MenuButtonUI::EXIT_WIDTH = 680.0f;
 
 const float MenuButtonUI::BUTTON_HEIGHT = 123.6f;
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="buttonType">ボタンタイプ</param>
+/// <param name="buttonActive">ボタンの状態</param>
 MenuButtonUI::MenuButtonUI(MenuButtonUI::ButtonType buttonType, bool buttonActive)
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_rect{},
+	m_image{},
+	m_material{}
 {
 	m_buttonType = buttonType;
 	m_isButtonActive = buttonActive;
 
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void MenuButtonUI::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -60,6 +84,13 @@ void MenuButtonUI::Initialize(ObjectID objectID, const bool& active)
 	commonResources->GetRenderManager()->AddSprite(m_image.get());
 }
 
+
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void MenuButtonUI::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -71,17 +102,26 @@ void MenuButtonUI::InitialTransform(
 	m_transform->SetLocalScale(scale);
 }
 
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void MenuButtonUI::Update()
 {
 	// m_material->UpdateConstBuffer();
 }
 
+/// <summary>
+/// 終了処理
+/// </summary>
 void MenuButtonUI::Finalize()
 {
 
 }
 
+/// <summary>
+/// ボタンの状態処理
+/// </summary>
+/// <param name="buttonActive">ボタンの状態</param>
 void MenuButtonUI::SetIsButtonActive(bool buttonActive)
 {
 	DirectX::SimpleMath::Vector4 rect = m_transform->GetRect();
@@ -104,8 +144,16 @@ void MenuButtonUI::SetIsButtonActive(bool buttonActive)
 	m_isButtonActive = buttonActive;
 }
 
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void MenuButtonUI::InitialMaterial(int width, int height)
 {
+	(void)width;
+	(void)height;
+
 	// マテリアルの初期化処理
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
 	material->SetPixelShader(CommonResources::GetInstance()->GetResources()->GetShaderResources()->GetUI_PS());
@@ -173,11 +221,20 @@ void MenuButtonUI::InitialMaterial(int width, int height)
 	m_rect /= 6.0f;
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void MenuButtonUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void MenuButtonUI::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: LeftArm.cpp
+// 概要: 左腕オブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Player/Header/LeftArm.h"
 #include "Framework/CommonResources.h"
@@ -80,12 +88,20 @@ void LeftArm::Update() {}
 /// </summary>
 void LeftArm::Finalize() {}
 
-
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void LeftArm::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void LeftArm::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

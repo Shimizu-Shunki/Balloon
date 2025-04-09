@@ -1,7 +1,11 @@
-﻿/*
-	@file	DebugCamera.h
-	@brief	デバッグ用カメラクラス
-*/
+﻿// ============================================
+// 
+// ファイル名: DebugCamera.cpp
+// 概要: デバッグカメラ
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Cameras/DebugCamera.h"
 
@@ -10,9 +14,9 @@ using namespace DirectX::SimpleMath;
 
 const float DebugCamera::DEFAULT_CAMERA_DISTANCE = 2.0f;
 
-//---------------------------------------------------------
-// コンストラクタ
-//---------------------------------------------------------
+/// <summary>
+/// コンストラクタ
+/// </summary>
 DebugCamera::DebugCamera()
 	:
 	m_yAngle{ 0.0f },
@@ -31,9 +35,11 @@ DebugCamera::DebugCamera()
 
 }
 
-//---------------------------------------------------------
-// 初期化する
-//---------------------------------------------------------
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="screenWidth">スクリーンサイズ　横</param>
+/// <param name="screenHeight">スクリーンサイズ　縦</param>
 void DebugCamera::Initialize(int screenWidth,int screenHeight)
 {
 	CalculateRerativeScale(screenWidth, screenHeight);
@@ -44,9 +50,9 @@ void DebugCamera::Initialize(int screenWidth,int screenHeight)
 	//!! DirectX::Mouseはシングルトンなので…
 }
 
-//---------------------------------------------------------
-// 更新する
-//---------------------------------------------------------
+/// <summary>
+/// 更新処理
+/// </summary>
 void DebugCamera::Update()
 {
 	
@@ -98,9 +104,11 @@ void DebugCamera::Update()
 	//m_graphics->SetViewMatrix(m_view);
 }
 
-//---------------------------------------------------------
-// 変位を計測する
-//---------------------------------------------------------
+/// <summary>
+/// 変位を計測する
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
 void DebugCamera::Motion(int x, int y)
 {
 	// マウスポインタの位置のドラッグ開始位置からの変位 (相対値)
@@ -119,9 +127,9 @@ void DebugCamera::Motion(int x, int y)
 	}
 }
 
-//---------------------------------------------------------
-// ビュー行列を計算する
-//---------------------------------------------------------
+/// <summary>
+/// ビュー行列を計算する
+/// </summary>
 void DebugCamera::CalculateViewMatrix()
 {
 	// ビュー行列を算出する
@@ -145,9 +153,11 @@ void DebugCamera::CalculateViewMatrix()
 	m_view = Matrix::CreateLookAt(eye, target, up);
 }
 
-//---------------------------------------------------------
-// 相対スケールを計算する
-//---------------------------------------------------------
+/// <summary>
+/// 相対スケールを計算する
+/// </summary>
+/// <param name="screenWidth">スクリーンサイズ　横</param>
+/// <param name="screenHeight">スクリーンサイズ　縦</param>
 void DebugCamera::CalculateRerativeScale(int screenWidth, int screenHeight)
 {
 	// 画面サイズに対する相対的なスケールに調整

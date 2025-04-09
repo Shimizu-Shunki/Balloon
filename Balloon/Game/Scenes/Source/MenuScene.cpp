@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: MenuScene.cpp
+// 概要: メニューシーン
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Game/Scenes/Header/MenuScene.h"

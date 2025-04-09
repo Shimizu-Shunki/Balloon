@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: GameOverScene.cpp
+// 概要: ゲームオーバーシーン
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Game/Scenes/Header/GameOverScene.h"

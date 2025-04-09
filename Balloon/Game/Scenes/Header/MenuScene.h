@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: MenuScene.h
+// 概要: MenuScene.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IScene.h"
 
@@ -30,6 +38,7 @@ public:
 	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
 
 private:
+	// オブジェクトを検索する
 	template <typename T>
 	T* SearchObject(IObject::ObjectID objectID)
 	{
@@ -49,7 +58,7 @@ private:
 		return nullptr;
 	}
 
-
+	// オブジェクトを追加する
 	template <typename T, typename... Args>
 	T* Attach(
 		IObject::ObjectID objectId,
@@ -91,7 +100,6 @@ private:
 	// フェード
 	std::unique_ptr<Fade> m_fade;
 	
-
 	// 現在のステート
 	IState* m_currentState;
 	// 各ステート

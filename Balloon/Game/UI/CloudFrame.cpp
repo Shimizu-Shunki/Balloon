@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: CloudFrame.cpp
+// 概要: 雲の形を額縁UI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/CloudFrame.h"
 #include "Framework/CommonResources.h"
@@ -11,13 +20,27 @@
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
-
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="stageNumber">ステージ番号</param>
 CloudFrame::CloudFrame(int stageNumber)
+	:
+	m_isActive{},
+	m_objectId{},
+	m_transform{},
+	m_image{},
+	m_material{},
+	m_stageNumberText{}
 {
 	m_stageNumber = stageNumber;
 }
 
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="active">アクティブ処理</param>
 void CloudFrame::Initialize(ObjectID objectID, const bool& active)
 {
 	m_objectId = objectID;
@@ -58,6 +81,12 @@ void CloudFrame::Initialize(ObjectID objectID, const bool& active)
 	
 }
 
+/// <summary>
+/// Transformの初期化処理
+/// </summary>
+/// <param name="position">座標</param>
+/// <param name="rotation">回転</param>
+/// <param name="scale">大きさ</param>
 void CloudFrame::InitialTransform(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -75,22 +104,30 @@ void CloudFrame::InitialTransform(
 	);
 }
 
-
-void CloudFrame::Finalize()
-{
-
-}
-
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void CloudFrame::Update()
 {
 	//m_material->UpdateConstBuffer();
 
 	m_stageNumberText->Update();
 	m_stageNumberText->GetTransform()->Update();
+}
+
+/// <summary>
+/// 終了処理
+/// </summary>
+void CloudFrame::Finalize()
+{
 
 }
 
+/// <summary>
+/// マテリアルの初期化
+/// </summary>
+/// <param name="width">テクスチャ横</param>
+/// <param name="height">テクスチャ縦</param>
 void CloudFrame::InitialMaterial(int width, int height)
 {
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());
@@ -104,10 +141,20 @@ void CloudFrame::InitialMaterial(int width, int height)
 	material->SetRuleInverse(0.0f);
 }
 
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void CloudFrame::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
+
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 
 void CloudFrame::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {

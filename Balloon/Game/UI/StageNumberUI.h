@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: StageNumberUI.h
+// 概要: StageNumberUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

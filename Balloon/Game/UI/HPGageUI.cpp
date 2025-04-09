@@ -1,3 +1,12 @@
+// ============================================
+// 
+// ファイル名: HPGageUI.cpp
+// 概要: HPのゲージUI
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
+
 #include "Framework/pch.h"
 #include "Game/UI/HPGageUI.h"
 #include "Framework/CommonResources.h"
@@ -73,8 +82,8 @@ void HPGageUI::Initialize(ObjectID objectID, const bool& active)
 	// マテリアルを初期化する
 	this->InitialMaterial(width,height);
 
-	m_height = height;
-	m_width  = width;
+	m_height = (float)height;
+	m_width  = (float)width;
 
 	float currentHpWidth = m_currentHp * m_width;
 
@@ -115,6 +124,8 @@ void HPGageUI::InitialTransform(
 /// <param name="height">テクスチャ縦</param>
 void HPGageUI::InitialMaterial(int width, int height)
 {
+	(void)width;
+
 	float original = m_currentHp * 535.0f;
 
 	auto material = dynamic_cast<DefaultUi*>(m_material.get());

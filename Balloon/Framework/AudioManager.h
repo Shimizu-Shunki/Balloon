@@ -1,9 +1,15 @@
+// ============================================
+// 
+// ファイル名: AudioManager.h
+// 概要: AudioManager.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include <future>
 #include "Sounds.h"
 #include <Audio.h>
-
-
 
 class AudioManager
 {

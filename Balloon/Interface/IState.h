@@ -1,7 +1,13 @@
+// ============================================
+// 
+// ファイル名: IState.h
+// 概要: 状態遷移における更新処理を定義する（インターフェース）
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Framework/StateMachine/StateController.h"
-#ifndef ISTATE_DEFINED
-#define ISTATE_DEFINED
 
 class StateController;
 
@@ -19,4 +25,3 @@ public:
 	virtual void PostUpdate() = 0;
 };
 
-#endif		// ISTATE_DEFINED

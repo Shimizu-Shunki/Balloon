@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: DebugScene.cpp
+// 概要: デバッグ用のシーン
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Framework/CommonResources.h"
 #include "Game/Message/ObjectMessenger.h"

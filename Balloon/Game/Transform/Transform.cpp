@@ -1,8 +1,19 @@
+// ============================================
+// 
+// ファイル名: Transform.cpp
+// 概要: Transformの階層管理とアニメーション制御
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Transform/Transform.h"
 #include "Framework/Tween/TweenManager.h"
 #include "Framework/Tween/Tween.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Transform::Transform()
 	:
 	m_parent(nullptr)
@@ -15,6 +26,12 @@ Transform::Transform()
 	m_localScale    = DirectX::SimpleMath::Vector3::One;
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <param name="position">初期座標</param>
+/// <param name="rotation">初期回転</param>
+/// <param name="scale">初期スケール</param>
 void Transform::Initialize(
 	DirectX::SimpleMath::Vector3 position,
 	DirectX::SimpleMath::Quaternion rotation,
@@ -31,7 +48,9 @@ void Transform::Initialize(
 	m_localScale    = scale;
 }
 
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void Transform::Update()
 {
 	// ローカル行列を計算する
@@ -53,7 +72,10 @@ void Transform::Update()
 	}
 }
 
-// 親のTransofrmを設定する
+/// <summary>
+/// 親のTransofrmを設定する
+/// </summary>
+/// <param name="parent">親Transform</param>
 void Transform::SetParent(Transform* parent)
 {
 	using namespace DirectX::SimpleMath;
@@ -113,7 +135,10 @@ void Transform::SetParent(Transform* parent)
 }
 
 
-// Tweenを取得する
+/// <summary>
+/// Tweenを取得する
+/// </summary>
+/// <returns>起動しているTween</returns>
 Tween* Transform::GetTween()
 {
 	// 進行中ではないtweenを取得する

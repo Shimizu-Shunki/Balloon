@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: HeightMeterUI.h
+// 概要: HeightMeterUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"

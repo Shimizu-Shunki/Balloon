@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: BalloonGageUI.h
+// 概要: BalloonGageUI.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IObject.h"
 #include "Game/Image/Image.h"
@@ -27,7 +35,6 @@ public:
 	// オブジェクトのIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
 
-
 public:
 
 	// コンストラクタ
@@ -35,11 +42,10 @@ public:
 	// デストラクタ
 	~BalloonGageUI() = default;
 
-	// 更新処理
-	void Update();
-
 	// 初期化処理
 	void Initialize(ObjectID objectID, const bool& active) override;
+	// 更新処理
+	void Update() override;
 	// Transformの初期化
 	void InitialTransform(
 		DirectX::SimpleMath::Vector3 position,
@@ -48,15 +54,12 @@ public:
 	) override;
 	// 終了処理
 	void Finalize() override;
-
-
 	// オブジェクトメッセージを受け取る
 	void OnObjectMessegeAccepted(Message::ObjectMessageID messageID) override;
 	// 当たり判定メッセージを受け取る
 	void OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender) override;
 
 private:
-
 	// マテリアルの初期化処理
 	void InitialMaterial(int width, int height);
 
@@ -80,5 +83,4 @@ private:
 	bool m_isBalloon;
 	// 膨らませる速度
 	float m_speed;
-
 };

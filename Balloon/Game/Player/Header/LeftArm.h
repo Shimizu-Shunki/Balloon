@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: LeftArm.h
+// 概要: LeftArm.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/ILeaf.h"
 #include "Interface/IObject.h"

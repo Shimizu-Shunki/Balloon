@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Fade.h
+// 概要: Fade.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Image/Image.h"
 #include "Game/Material/DefaultUi.h"

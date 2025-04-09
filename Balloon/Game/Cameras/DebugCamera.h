@@ -1,7 +1,11 @@
-﻿/*
-	@file	DebugCamera.h
-	@brief	デバッグ用カメラクラス
-*/
+﻿// ============================================
+// 
+// ファイル名: DebugCamera.h
+// 概要: DebugCamera.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include <Mouse.h>
 #include <Keyboard.h>

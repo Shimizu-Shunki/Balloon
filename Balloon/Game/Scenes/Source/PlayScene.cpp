@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayScene.cpp
+// 概要: プレイシーン
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Scenes/Header/PlayScene.h"
 #include "Framework/CommonResources.h"

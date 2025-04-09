@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: StageSelectScene.cpp
+// 概要: ステージセレクトシーン
+//  
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Scenes/Header/StageSelectScene.h"
 // フレームワーク

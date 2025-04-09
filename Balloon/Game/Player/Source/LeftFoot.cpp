@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: LeftFoot.cpp
+// 概要: 左足オブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/Player/Header/LeftFoot.h"
 #include "Framework/CommonResources.h"
@@ -79,12 +87,20 @@ void LeftFoot::Update() {}
 /// </summary>
 void LeftFoot::Finalize() {}
 
-
+/// <summary>
+/// メッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
 void LeftFoot::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
 	(void)messageID;
 }
 
+/// <summary>
+/// 当たり判定のメッセージを受け取る
+/// </summary>
+/// <param name="messageID">メッセージID</param>
+/// <param name="sender">当たった相手のオブジェクト</param>
 void LeftFoot::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)
 {
 	(void)messageID;

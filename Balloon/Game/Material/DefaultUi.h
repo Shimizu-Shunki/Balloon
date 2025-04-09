@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: DefaultUi.h
+// 概要: DefaultUi.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Buffers.h"
 #include "Interface/IMaterial.h"
