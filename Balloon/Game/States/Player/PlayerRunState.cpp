@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayerRunState.cpp
+// 概要: プレイヤーランステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/Player/PlayerRunState.h"
 #include "Framework/StateMachine/StateController.h"
@@ -29,6 +37,8 @@ void PlayerRunState::PreUpdate()
 /// <param name="deltaTime">経過時間</param>
 void PlayerRunState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	// キーボードステート
 	InputManager* input = InputManager::GetInstance();
 

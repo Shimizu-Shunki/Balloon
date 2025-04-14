@@ -37,6 +37,7 @@ public:
 		ENEMY_RIGHT_FOOT,
 		CHARACTER,
 		BALLOON,
+		STAGE,
 
 		TitleLogoUI,
 		StartUI,
@@ -63,6 +64,7 @@ public:
 		FAILED_TEXT_UI,
 		CLEAR_TEXT_UI,
 		RESULT_SCENE_KEY_GUIDE_UI,
+		TIMER_TEXT_UI,
 
 		STAGE_NUMBER,
 	

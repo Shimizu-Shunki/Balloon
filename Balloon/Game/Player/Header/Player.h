@@ -24,6 +24,10 @@ class Jump;
 class Player : public IComposite
 {
 public:
+	static const DirectX::SimpleMath::Vector3 MIN_LIMIT;
+	static const DirectX::SimpleMath::Vector3 MAX_LIMIT;
+
+public:
 	// オブジェクトがアクティブかどうかを取得する
 	bool GetIsActive() const override { return m_isActive; }
 	// オブジェクトがアクティブかどうかを設定する
@@ -34,6 +38,8 @@ public:
 	Transform* GetTransform() const override { return m_transform.get(); }
 	// 物理挙動を取得
 	PhysicsBody* GetPhysicsBody() const { return m_physicsBody.get(); }
+	// アタック中かどうか取得する
+	bool GetIsAttack() { return m_isAttack; }
 
 public:
 	// コンストラクタ
@@ -68,8 +74,10 @@ public:
 	) override;
 	// 部品を削除する
 	void Detach(std::unique_ptr<IObject> turretPart) override;
-
+	// ステートを切り替える
 	void ChangeState(IState* newState);
+
+	DirectX::SimpleMath::Vector3 ClampPlayerPosition(DirectX::SimpleMath::Vector3 position);
 
 private:
 	// 子オブジェクトを生成
@@ -80,6 +88,8 @@ private:
 	void CreatePhysicsBody();
 	// ステート作成
 	void CreateStates();
+
+
 
 	// ステージないにいるかどうか
 	bool IsOutsideBounds(const DirectX::SimpleMath::Vector3& position);
@@ -127,4 +137,14 @@ private:
 	// ハイスピード移動
 	bool m_isMoveing;
 	float m_moveingTime;
+
+	// 現在の大きさ
+	float m_currentScale;
+	// 膨らんでいる状態
+	bool m_isBalloon;
+	// 膨らませる速度
+	float m_speed;
+
+	// アタック中かどうか
+	bool m_isAttack;
 };

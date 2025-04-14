@@ -13,6 +13,7 @@
 #include "Framework/Tween/Tween.h"
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
+#include "Game/Message/ObjectMessenger.h"
 
 #include "Game/Image/Image.h"
 #include "Game/Material/DefaultUi.h"
@@ -175,9 +176,16 @@ void BalloonGageUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 	{
 		case Message::ON_BALLOON:
 			m_isBalloon = true;
+
+			for (int i = 0; i < 3; i++)
+				ObjectMessenger::GetInstance()->Dispatch(i + 4, Message::ObjectMessageID::ON_BALLOON);
+
 			break;
 		case Message::OFF_BALLOON:
 			m_isBalloon = false;
+
+			for (int i = 0; i < 3; i++)
+				ObjectMessenger::GetInstance()->Dispatch(i + 4, Message::ObjectMessageID::OFF_BALLOON);
 			break;
 		case Message::BALLOON_SPEED_SLOW:
 			m_speed = SPEED_SLOW;

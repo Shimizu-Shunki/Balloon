@@ -56,4 +56,17 @@ private:
 	std::unique_ptr<Transform> m_transform;
 	// 3Dƒ‚ƒfƒ‹
 	std::unique_ptr<Model3D> m_model;
+
+	// ‰Šú‚Ì‘å‚«‚³
+	DirectX::SimpleMath::Vector3 m_initScale;
+	// ‰ŠúˆÊ’u
+	DirectX::SimpleMath::Vector3 m_initPosition;
+
+	// Œ»İ‚Ì‘å‚«‚³
+	float m_currentScale;
+	// –c‚ç‚ñ‚Å‚¢‚éó‘Ô
+	bool m_isBalloon;
+	// –c‚ç‚Ü‚¹‚é‘¬“x
+	float m_speed;
 };
+

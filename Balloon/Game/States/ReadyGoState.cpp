@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: ReadyGoState.cpp
+// 概要: カウントダウンステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/ReadyGoState.h"
 #include "Game/UI/ReadyGoUI.h"
@@ -5,20 +13,19 @@
 #include "Framework/StateMachine/StateController.h"
 #include "Game/Message/SceneMessenger.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 ReadyGoState::ReadyGoState(ReadyGoUI* readyGoUI)
 {
 	// 取得
 	m_readyGoUI = readyGoUI;
 }
 
-// デストラクタ
-ReadyGoState::~ReadyGoState()
-{
 
-}
-
-// 初期化処理
+/// <summary>
+/// 初期処理
+/// </summary>
 void ReadyGoState::PreUpdate()
 {
 	// ステート切り替えフラグを非アクティブ
@@ -30,9 +37,14 @@ void ReadyGoState::PreUpdate()
 	this->ReadyGoSetAnimation();
 }
 
-// 更新処理
+/// <summary>
+/// 更新処理
+/// </summary>
+/// <param name="deltaTime">経過時間</param>
 void ReadyGoState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	// ステートを切り替えるフラグがオンになったら
 	if (m_changeFlag)
 	{
@@ -41,12 +53,18 @@ void ReadyGoState::Update(const float& deltaTime)
 	}
 }
 
-// 終了処理
+
+/// <summary>
+/// 終了処理
+/// </summary>
 void ReadyGoState::PostUpdate()
 {
 
 }
 
+/// <summary>
+/// カウントダウンアニメーション設定
+/// </summary>
 void ReadyGoState::ReadyGoSetAnimation()
 {
 	// Readyを中央に移動

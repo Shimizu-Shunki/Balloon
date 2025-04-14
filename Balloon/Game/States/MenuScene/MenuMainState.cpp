@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: MenuMainState.cpp
+// 概要: ゲームメニューシーンのメイン処理ステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/MenuScene/MenuMainState.h"
 #include "Framework/StateMachine/StateController.h"
@@ -37,6 +45,8 @@ void MenuMainState::PreUpdate()
 /// <param name="deltaTime">経過時間</param>
 void MenuMainState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	this->SelectButton();
 }
 /// <summary>
@@ -52,12 +62,18 @@ void MenuMainState::SelectButton()
 {
 	if (m_inputManager->OnKeyDown(InputManager::Keys::Up))
 	{
+		// SEを再生
+		AudioManager::GetInstance()->PlaySE(XACT_WAVEBANK_SOUNDS_MOVE);
+
 		m_buttonIndex--;
 		if (m_buttonIndex < 0)
 			m_buttonIndex = 2;
 	}
 	else if (m_inputManager->OnKeyDown(InputManager::Keys::Down))
 	{
+		// SEを再生
+		AudioManager::GetInstance()->PlaySE(XACT_WAVEBANK_SOUNDS_MOVE);
+
 		m_buttonIndex++;
 		if (m_buttonIndex > 2)
 			m_buttonIndex = 0;
@@ -75,6 +91,9 @@ void MenuMainState::SelectButton()
 
 	if (m_inputManager->OnKeyDown(InputManager::Keys::Z))
 	{
+		// SEを再生
+		AudioManager::GetInstance()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOON_POP);
+		
 		// 現在のボタンのオブジェクトを取得
 		MenuButtonFrameUI* buttonFrame = dynamic_cast<MenuButtonFrameUI*>(m_buttons[m_buttonIndex + 3]);
 		// ボタンフレームをオンにする
@@ -82,9 +101,8 @@ void MenuMainState::SelectButton()
 
 		if (m_buttonIndex == 0)
 			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT_STAGE_SCENE);
-		else if(m_buttonIndex == 1)
-			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT);
-		else
+		else if(m_buttonIndex == 2)
+			//SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT);
 			SceneMessenger::GetInstance()->Dispatch(Message::SceneMessageID::FADE_OUT_EXIT_GAME);
 
 	}

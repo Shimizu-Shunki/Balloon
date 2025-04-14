@@ -43,11 +43,25 @@ void RightArm::Initialize(ObjectID objectID, const bool& active)
 	m_objectId = objectID;
 	// オブジェクトアクティブを設定
 	m_isActive = active;
-	// 3Dモデルを準備する
-	m_model = std::make_unique<Model3D>();
-	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerRightArmModel(),
-		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
-	);
+
+	if (m_objectId == IObject::ObjectID::PLAYER_RIGHT_ARM)
+	{
+		// 3Dモデルを準備する
+		m_model = std::make_unique<Model3D>();
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerRightArmModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		);
+	}
+	else
+	{
+		// 3Dモデルを準備する
+		m_model = std::make_unique<Model3D>();
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerRightArmModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetEnemy(), this
+		);
+	}
+
+	
 
 	// 描画マネージャーに渡す
 	commonResources->GetRenderManager()->AddModel(m_model.get());

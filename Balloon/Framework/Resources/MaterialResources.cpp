@@ -35,7 +35,7 @@ void MaterialResources::Initialize(Resources* resources)
 {
 	// テクスチャのリソース
 	auto textureResources = resources->GetTextureResources();
-	auto shaderResources = resources->GetShaderResources();
+	// auto shaderResources = resources->GetShaderResources();
 
 	// デフォルトのマテリアルを作成
 	m_defaultPBRLit = std::make_unique<PBRLit>();
@@ -86,6 +86,22 @@ void MaterialResources::Initialize(Resources* resources)
 	cloud->SetBaseMap(nullptr);
 	cloud->SetNormalMap(nullptr);
 	cloud->SetSkyMap(textureResources->GetCubeMap());
+
+	m_enemy = std::make_unique<PBRLit>();
+
+	auto enemy = dynamic_cast<PBRLit*>(m_enemy.get());
+
+	enemy->Initialize(resources);
+	enemy->SetBaseColor({ 1.0f ,1.0f  ,1.0f,1.0f });
+	enemy->SetMatallic(0.3f);//0.3f
+	enemy->SetSmoothness(0.7f);//0.7f
+	enemy->SetUseBaseMap(1.0f);
+	enemy->SetUseNormalMap(0.0f);
+
+	// テクスチャを設定
+	enemy->SetBaseMap(textureResources->GetEnemyTexture());
+	enemy->SetNormalMap(textureResources->GetWoodNormalMap());
+	enemy->SetSkyMap(textureResources->GetCubeMap());
 
 	// defaultPBRLit->UpdateConstantBuffer();
 }

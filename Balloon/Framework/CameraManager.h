@@ -87,6 +87,17 @@ private:
 	// プロジェクション行列
 	DirectX::SimpleMath::Matrix m_projectionMatrix;
 
+	// 開始地点
+	DirectX::SimpleMath::Vector3 m_startPosition;
+	DirectX::SimpleMath::Vector3 m_startTarget;
+	// 終了地点
+	DirectX::SimpleMath::Vector3 m_endPosition;
+	DirectX::SimpleMath::Vector3 m_endTarget;
+	// フェード時間
+	float m_fadeTime;
+	// 経過時間
+	float m_elapsed;
+
 	// カメラを切り替え中かどうか
 	bool m_isFadeActive;	
 	

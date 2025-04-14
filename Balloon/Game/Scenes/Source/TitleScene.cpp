@@ -97,7 +97,7 @@ void TitleScene::Start()
 
 
 	// BGMを再生
-	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
 	// カメラを切り替える
 	m_commonResources->GetCameraManager()->SwitchActiveCamera(1 , 3.0f , Tween::EasingType::EaseInBack);
 
@@ -112,10 +112,10 @@ void TitleScene::Update()
 	m_currentState->Update(deltaTime);
 
 	// オブジェクトの更新処理
-	for (const auto& object : m_objects)
-	{
-		// object->Update();
-	}
+	//for (const auto& object : m_objects)
+	//{
+	//	// object->Update();
+	//}
 
 	// Transformのみ更新する
 	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
@@ -191,6 +191,7 @@ void TitleScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 			this->ChangeState(m_titleMainState.get());
 			break;
 		case Message::FADE_OUT:
+			m_commonResources->GetAudioManager()->StopFadeOutBgm(1.0f);
 			this->ChangeState(m_fadeOutState.get());
 			break;
 		case Message::MAIN:

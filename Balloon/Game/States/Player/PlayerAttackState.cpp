@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayerAttackState.cpp
+// 概要: プレイヤーアタックステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/Player/PlayerAttackState.h"
 #include "Game/Message/ObjectMessenger.h"
@@ -20,13 +28,13 @@ PlayerAttackState::PlayerAttackState(Player* player)
 void PlayerAttackState::PreUpdate()
 {
 	m_elapsedTime = 0.0f;
-	m_moveingTime = 0.1f;
+	m_moveingTime = 0.2f;
 
 	DirectX::SimpleMath::Vector3 velocity = { 0.0f , 0.0f ,6.0f };
 	velocity = DirectX::SimpleMath::Vector3::Transform(velocity, m_player->GetTransform()->GetLocalRotation());
 	velocity.y = -6.0f;
 	m_player->GetPhysicsBody()->SetVelocity(
-		velocity * 4.0f
+		velocity * 2.0f
 	);
 }
 /// <summary>

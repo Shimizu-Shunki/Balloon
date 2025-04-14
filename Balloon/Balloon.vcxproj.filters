@@ -116,9 +116,6 @@
     <Filter Include="Resources\Shaders\PBRLit">
       <UniqueIdentifier>{c26e59b3-dd84-4568-be38-c5bb72f9163e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Shaders\SkySphere">
-      <UniqueIdentifier>{712ac026-769b-40cd-a66b-182caa3ce5fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Resources">
       <UniqueIdentifier>{9067b00d-407f-4d07-97d0-fc171ce47aaf}</UniqueIdentifier>
     </Filter>
@@ -163,6 +160,12 @@
     </Filter>
     <Filter Include="Game\States\GameOverScene">
       <UniqueIdentifier>{b5337a5d-a2a8-4025-b0df-7d88db187b89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\SkyBox">
+      <UniqueIdentifier>{712ac026-769b-40cd-a66b-182caa3ce5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Stage">
+      <UniqueIdentifier>{a7098846-1b08-4375-af0b-129bc0eb6c6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +533,18 @@
     <ClInclude Include="Game\UI\StageSelectText.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Stage\Stage.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\StageResources.h">
+      <Filter>Framework\Resources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TimerText.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ResultButtonUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Microsoft\DebugDraw.cpp">
@@ -843,6 +858,18 @@
     <ClCompile Include="Game\UI\StageSelectText.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\Stage.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Resources\StageResources.cpp">
+      <Filter>Framework\Resources\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TimerText.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ResultButtonUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Game\Balloon.ico">
@@ -871,7 +898,7 @@
       <Filter>Resources\Shaders\PBRLit</Filter>
     </None>
     <None Include="Resources\Shaders\hlsl\SkyBox.hlsli">
-      <Filter>Resources\Shaders\SkySphere</Filter>
+      <Filter>Resources\Shaders\SkyBox</Filter>
     </None>
     <None Include="Resources\Shaders\hlsl\UI.hlsli">
       <Filter>Resources\Shaders\UI</Filter>
@@ -903,10 +930,10 @@
       <Filter>Resources\Shaders\PBRLit</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\SkyBox_VS.hlsl">
-      <Filter>Resources\Shaders\SkySphere</Filter>
+      <Filter>Resources\Shaders\SkyBox</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\SkyBox_PS.hlsl">
-      <Filter>Resources\Shaders\SkySphere</Filter>
+      <Filter>Resources\Shaders\SkyBox</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\Model3D\Balloon_PS.hlsl">
       <Filter>Resources\Shaders\Balloon</Filter>

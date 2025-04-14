@@ -47,16 +47,17 @@ void Body::Initialize(ObjectID objectID, const bool& active)
 
 	// 3Dモデルを準備する
 	m_model = std::make_unique<Model3D>();
-	m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerBodyModel(),
-		commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
-	);
 
-	// 描画マネージャーに渡す
-	commonResources->GetRenderManager()->AddModel(m_model.get());
+	
 
 	// プレイヤー
 	if (m_objectId == ObjectID::PLAYER_BODY)
 	{
+		// プレイヤーのマテリアルを適応
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerBodyModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+		);
+
 		// アタッチ
 		// 頭
 		this->Attach(std::make_unique<Head>(this)           , ObjectID::PLAYER_HEAD);
@@ -72,6 +73,11 @@ void Body::Initialize(ObjectID objectID, const bool& active)
 	// 敵
 	else
 	{
+		// 敵のマテリアルを適応
+		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetPlayerBodyModel(),
+			commonResources->GetResources()->GetMaterialResources()->GetEnemy(), this
+		);
+
 		// アタッチ
 		// 頭
 		this->Attach(std::make_unique<Head>(this)           , ObjectID::ENEMY_HEAD);
@@ -85,6 +91,8 @@ void Body::Initialize(ObjectID objectID, const bool& active)
 		this->Attach(std::make_unique<RightFoot>(this), ObjectID::ENEMY_RIGHT_FOOT);
 	}
 	
+	// 描画マネージャーに渡す
+	commonResources->GetRenderManager()->AddModel(m_model.get());
 }
 
 /// <summary>

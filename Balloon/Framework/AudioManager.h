@@ -33,7 +33,10 @@ public:
 	void StopFadeOutBgm(float fadeTime = 1.0f);
 
 	// SEを再生
-	void PlaySE();
+	void PlaySE(XACT_WAVEBANK_SOUNDS_SE bgmName);
+	void PlaySE(XACT_WAVEBANK_SOUNDS_SE bgmName , float time);
+	void PlayLoopSE(XACT_WAVEBANK_SOUNDS_SE bgmName);
+	void StopSE();
 
 private:
 	//	コンストラクタ
@@ -85,6 +88,8 @@ private:
 	// 現在の音量
 	float m_currentValue;
 
+	float m_stopSeTime;
+
 	// フェード中の経過時間
 	float m_fadeElapsedTime;
 	// スタートボリューム
@@ -92,9 +97,6 @@ private:
 	// 終了ボリューム
 	float m_endValueme;
 
-
-	std::unique_ptr<DirectX::SoundEffect> m_soundEffectSE;
-	std::unique_ptr<DirectX::SoundEffectInstance> m_soundEffectInstanceSE;
 	// マスター音量
 	float m_masterVolume;
 	// SEの音量

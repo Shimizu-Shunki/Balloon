@@ -84,7 +84,6 @@ float Fd_Burley(float ndotv, float ndotl, float ldoth, float roughness)
     return diffuse;
 }
 
-
 // BRDFŽ®
 float4 BRDF(
 	float3 albedo,

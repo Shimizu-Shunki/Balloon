@@ -36,6 +36,7 @@ AudioManager::AudioManager()
 	m_isActive = false;
 	m_isSE = false;
 	m_seTimer = 0.0f;
+	m_stopSeTime = 2.0f;
 }
 
 /// <summary>
@@ -66,7 +67,7 @@ void AudioManager::Initialize()
 	// 音量をすべて1に初期化
 	m_masterVolume = 1.0f;
 	m_seVolume     = 1.0f;
-	m_bgmVolume    = 1.0f;
+	m_bgmVolume    = 0.5f;
 
 	// オーディオエンジンを作成する
 	m_audioEngine = std::make_unique<DirectX::AudioEngine>(eflags);
@@ -90,7 +91,7 @@ void AudioManager::Initialize()
 	// SEをマップに登録する
 	for (int i = 0; i < XACT_WAVEBANK_SOUNDS_ENTRY_COUNT_SE; i++)
 	{
-		m_ses.insert(SeMap::value_type((XACT_WAVEBANK_SOUNDS_SE)i, m_waveBank->CreateInstance((XACT_WAVEBANK_SOUNDS_SE)i)));
+		m_ses.insert(SeMap::value_type((XACT_WAVEBANK_SOUNDS_SE)i, m_waveBankSe->CreateInstance((XACT_WAVEBANK_SOUNDS_SE)i)));
 	}
 
 	// インスタンスの初期化
@@ -114,14 +115,15 @@ void AudioManager::Update(DX::StepTimer const& timer)
 		}
 	}
 
-	// SEが再生されたら0.3秒後停止する
+	// SEが再生されたら数秒で停止する
 	if (m_isSE)
 	{
 		m_seTimer += float(timer.GetElapsedSeconds());
-		if (m_seTimer >= 0.3f)
+		if (m_seTimer >= m_stopSeTime)
 		{
 			m_seTimer = 0.0f;
-			m_soundEffectInstanceSE->Stop();
+			m_stopSeTime = 2.0f;
+			m_currentSE->Stop();
 			m_isSE = false;
 		}
 	}
@@ -216,10 +218,85 @@ void AudioManager::StopFadeOutBgm( float fadeTime)
 /// <summary>
 /// SEを再生する
 /// </summary>
-void AudioManager::PlaySE()
+void AudioManager::PlaySE(XACT_WAVEBANK_SOUNDS_SE bgmName)
 {
-	m_soundEffectInstanceSE->Play();
+	// 今のSEを停止
+	if (m_currentSE)
+	{
+		m_currentSE->Stop(true);
+		m_seTimer = 0.0f;
+		m_stopSeTime = 2.0f;
+	}
+
+	// 新しいBGMを再生する
+	m_ses.at(bgmName)->Play(true);
+	// 新しいBGMを今のBGMとする
+	m_currentSE = m_ses.at(bgmName).get();
+	// 新しいBGMの音量を0にする
+	m_currentSE->SetVolume(m_seVolume);
+
+	m_currentSE->Play();
 	m_isSE = true;
+}
+
+/// <summary>
+/// SEを再生する
+/// </summary>
+void AudioManager::PlaySE(XACT_WAVEBANK_SOUNDS_SE bgmName, float time)
+{
+	// 今のSEを停止
+	if (m_currentSE)
+	{
+		m_currentSE->Stop(true);
+		m_seTimer = 0.0f;
+		m_isSE = false;
+	}
+
+	// 新しいBGMを再生する
+	//m_ses.at(bgmName)->Play(true);
+	// 新しいBGMを今のBGMとする
+	m_currentSE = m_ses.at(bgmName).get();
+	// 新しいBGMの音量を0にする
+	m_currentSE->SetVolume(m_seVolume);
+
+	m_stopSeTime = time;
+
+	m_currentSE->Play();
+	m_isSE = true;
+}
+
+/// <summary>
+/// SEをループ再生
+/// </summary>
+/// <param name="bgmName"></param>
+void AudioManager::PlayLoopSE(XACT_WAVEBANK_SOUNDS_SE bgmName)
+{
+	// 今のSEを停止
+	if (m_currentSE)
+	{
+		m_currentSE->Stop(true);
+		m_seTimer = 0.0f;
+		m_stopSeTime = 2.0f;
+	}
+
+	// 新しいBGMを再生する
+	m_ses.at(bgmName)->Play(true);
+	// 新しいBGMを今のBGMとする
+	m_currentSE = m_ses.at(bgmName).get();
+	// 新しいBGMの音量を0にする
+	m_currentSE->SetVolume(m_seVolume);
+
+	m_currentSE->IsLooped();
+	m_currentSE->Play();
+}
+
+/// <summary>
+/// ループ再生を停止する
+/// </summary>
+void AudioManager::StopSE()
+{
+	m_currentSE->IsLooped();
+	m_currentSE->Stop();
 }
 
 /// <summary>
@@ -243,7 +320,7 @@ void AudioManager::SetSeVolume(const float& volume)
 	// SE音量を設定
 	m_seVolume = volume;
 	// サウンドエフェクトに音量を設定する
-	m_soundEffectInstanceSE->SetVolume(m_seVolume);
+	m_currentSE->SetVolume(m_seVolume);
 }
 
 /// <summary>

@@ -99,6 +99,10 @@ void CollisionManager::CheckCollision()
 			{
 				for (const auto& col2 : m_Collider[j])
 				{
+
+					// 同じコライダー同士の判定をスキップ
+					if (!col1->GetIsActive() || !col2->GetIsActive()) continue;
+					
 					// 衝突判定を行う
 					bool active = this->DetectCollisions(col1, col2);
 
@@ -233,11 +237,11 @@ void CollisionManager::Start()
 	m_physicsBodys.clear();
 	m_Collider.clear();
 	// 以降
-	m_physicsBodys = m_physicsBodys;
+	m_physicsBodys = m_pendingPhysicsBodys;
 	m_Collider = m_pendingCollider;
 	m_objectIndex = m_pendingObjectIndex;
 	// リセット
-	m_physicsBodys.clear();
+	m_pendingPhysicsBodys.clear();
 	m_pendingCollider.clear();
 	m_collisionStates.clear();
 	m_pendingObjectIndex = 0;

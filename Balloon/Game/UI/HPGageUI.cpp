@@ -13,14 +13,15 @@
 #include "Framework/Tween/Tween.h"
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
+#include "Game/Message/ObjectMessenger.h"
 
 #include "Game/Image/Image.h"
 #include "Game/Material/DefaultUi.h"
 #include "Game/Transform/Transform.h"
 
 const float HPGageUI::SPEED_SLOW   = 0.04f;
-const float HPGageUI::SPEED_NORMAL = 0.06f;
-const float HPGageUI::SPEED_FAST   = 0.1f;
+const float HPGageUI::SPEED_NORMAL = 0.17f;
+const float HPGageUI::SPEED_FAST   = 0.2f;
 
 const float HPGageUI::RECOVERY_DELAY = 2.0f;
 const float HPGageUI::HP_OFFSET_FACTOR = 147.0f;
@@ -225,15 +226,40 @@ void HPGageUI::UpdateHpRecovery(float elapsedTime)
 /// <param name="messageID">メッセージID</param>
 void HPGageUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
+
+	// 経過時間の取得
+	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
+
 	switch (messageID)
 	{
 	// HPを0.1減らす
 	case Message::SUBTRACT_HP01:
-		m_currentHp -= 0.1f;
+		
+		
 		break;
 	// HPを0.05減らす
-	case Message::SUBTRACT_HP005:
-		m_currentHp -= 0.05f;
+	case Message::BALLOON_SCALE_SUBTRACT_HP:
+		if (m_currentHp >= 0.005f)
+		{
+			m_currentHp -= 0.4f * elapsedTime;
+			ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::PLAYER_BALLOON_SCALE_ON);
+			ObjectMessenger::GetInstance()->Dispatch(2, Message::ObjectMessageID::ON_BALLOON);
+			ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::ON_BALLOON);
+		}
+		else
+		{
+			ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::PLAYER_BALLOON_SCALE_OFF);
+			ObjectMessenger::GetInstance()->Dispatch(2, Message::ObjectMessageID::OFF_BALLOON);
+			ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::OFF_BALLOON);
+		}
+		break;
+	case Message::PLAYER_ATTACK:
+		if (m_currentHp >= 0.1f)
+		{
+			// メッセージを送信する
+			ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::PLAYER_ATTACK);
+			m_currentHp -= 0.1f;
+		}
 		break;
 	// 回復速度を遅く設定
 	case Message::RECOVERY_SPEED_SLOW:
@@ -250,6 +276,9 @@ void HPGageUI::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 	default:
 		break;
 	}
+
+	if (m_currentHp <= 0.0f)
+		m_currentHp = 0.0f;
 }
 
 /// <summary>

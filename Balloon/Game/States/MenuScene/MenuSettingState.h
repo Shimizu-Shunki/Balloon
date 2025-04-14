@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: MenuSettingState.h
+// 概要: MenuSettingState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 

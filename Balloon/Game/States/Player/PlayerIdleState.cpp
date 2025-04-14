@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayerIdleState.cpp
+// 概要: プレイヤーアイドルステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/Player/PlayerIdleState.h"
 #include "Framework/StateMachine/StateController.h"
@@ -27,6 +35,8 @@ void PlayerIdleState::PreUpdate()
 /// <param name="deltaTime">経過時間</param>
 void PlayerIdleState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	InputManager* input = InputManager::GetInstance();
 
 	// 方向キーが押されたら移動ステートのメッセージを送信
@@ -44,8 +54,8 @@ void PlayerIdleState::Update(const float& deltaTime)
 	// Zキーが押されたらアタックステートのメッセージを送信する
 	if (input->OnKeyDown(InputManager::Keys::Z))
 	{
-		// メッセージを送信する
-		ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::PLAYER_ATTACK);
+		// アタック処理
+		ObjectMessenger::GetInstance()->Dispatch(3, Message::ObjectMessageID::PLAYER_ATTACK);
 	}
 
 }

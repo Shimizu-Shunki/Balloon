@@ -140,15 +140,15 @@ const void AABB::PushBack(IObject* object1, ICollider* collider1, PhysicsBody* p
     // 重力設定
     if (isTopCollision && physicsBody1 != nullptr)
     {
-        // Yの速度を0にする
-        physicsBody1->SetVelocity({
-            physicsBody1->GetVelocity().x,
-            0.0f,
-            physicsBody1->GetVelocity().z
-         });
+            // Yの速度を0にする
+            physicsBody1->SetVelocity({
+                physicsBody1->GetVelocity().x,
+                0.0f,
+                physicsBody1->GetVelocity().z
+                });
 
-        // 重力を無効化
-        physicsBody1->SetUseGravity(false);
+            // 重力を無効化
+            physicsBody1->SetUseGravity(false);
     }
     else if(!isTopCollision && physicsBody1 != nullptr)
     {

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: PlayMainState.h
+// 概要: PlayMainState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 #include "Framework/SceneManager.h"
@@ -18,7 +26,7 @@ public:
     // コンストラクタ
     PlayMainState(std::vector<IObject*> objects);
     // デストラクタ
-    ~PlayMainState() override;
+    ~PlayMainState() override = default;
 
 public:
     // 初期化処理

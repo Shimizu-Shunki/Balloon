@@ -198,6 +198,7 @@
     <ClInclude Include="Framework\Resources\MaterialResources.h" />
     <ClInclude Include="Framework\Resources\ModelResources.h" />
     <ClInclude Include="Framework\Resources\ShaderResources.h" />
+    <ClInclude Include="Framework\Resources\StageResources.h" />
     <ClInclude Include="Framework\Resources\TextureResources.h" />
     <ClInclude Include="Framework\SceneManager.h" />
     <ClInclude Include="Framework\Sounds.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Game\Scenes\Header\TitleScene.h" />
     <ClInclude Include="Game\ShadowMap\CascadedShadowMap.h" />
     <ClInclude Include="Game\Sky\SkyBox.h" />
+    <ClInclude Include="Game\Stage\Stage.h" />
     <ClInclude Include="Game\States\Fade\FadeInState.h" />
     <ClInclude Include="Game\States\Fade\FadeOutState.h" />
     <ClInclude Include="Game\States\GameClearScene\GameClearMainState.h" />
@@ -274,6 +276,7 @@
     <ClInclude Include="Game\UI\PlayerIconUI.h" />
     <ClInclude Include="Game\UI\PlayKeyGuideUI.h" />
     <ClInclude Include="Game\UI\ReadyGoUI.h" />
+    <ClInclude Include="Game\UI\ResultButtonUI.h" />
     <ClInclude Include="Game\UI\ResultSceneKeyGuide.h" />
     <ClInclude Include="Game\UI\ScoreFrameUI.h" />
     <ClInclude Include="Game\UI\ScoreUI.h" />
@@ -282,6 +285,7 @@
     <ClInclude Include="Game\UI\StageSelectText.h" />
     <ClInclude Include="Game\UI\StartUI.h" />
     <ClInclude Include="Game\UI\TimeFrameUI.h" />
+    <ClInclude Include="Game\UI\TimerText.h" />
     <ClInclude Include="Game\UI\TimerUI.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -324,6 +328,7 @@
     <ClCompile Include="Framework\Resources\MaterialResources.cpp" />
     <ClCompile Include="Framework\Resources\ModelResources.cpp" />
     <ClCompile Include="Framework\Resources\ShaderResources.cpp" />
+    <ClCompile Include="Framework\Resources\StageResources.cpp" />
     <ClCompile Include="Framework\Resources\TextureResources.cpp" />
     <ClCompile Include="Framework\SceneManager.cpp" />
     <ClCompile Include="Framework\Tween\Tween.cpp" />
@@ -368,6 +373,7 @@
     <ClCompile Include="Game\Scenes\Source\TitleScene.cpp" />
     <ClCompile Include="Game\ShadowMap\CascadedShadowMap.cpp" />
     <ClCompile Include="Game\Sky\SkyBox.cpp" />
+    <ClCompile Include="Game\Stage\Stage.cpp" />
     <ClCompile Include="Game\States\Fade\FadeInState.cpp" />
     <ClCompile Include="Game\States\Fade\FadeOutState.cpp" />
     <ClCompile Include="Game\States\GameClearScene\GameClearMainState.cpp" />
@@ -397,6 +403,7 @@
     <ClCompile Include="Game\UI\PlayerIconUI.cpp" />
     <ClCompile Include="Game\UI\PlayKeyGuideUI.cpp" />
     <ClCompile Include="Game\UI\ReadyGoUI.cpp" />
+    <ClCompile Include="Game\UI\ResultButtonUI.cpp" />
     <ClCompile Include="Game\UI\ResultSceneKeyGuide.cpp" />
     <ClCompile Include="Game\UI\ScoreFrameUI.cpp" />
     <ClCompile Include="Game\UI\ScoreUI.cpp" />
@@ -405,6 +412,7 @@
     <ClCompile Include="Game\UI\StageSelectText.cpp" />
     <ClCompile Include="Game\UI\StartUI.cpp" />
     <ClCompile Include="Game\UI\TimeFrameUI.cpp" />
+    <ClCompile Include="Game\UI\TimerText.cpp" />
     <ClCompile Include="Game\UI\TimerUI.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="imgui\imgui.cpp">

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: StageSelectMainState.h
+// 概要: StageSelectMainState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 #include "Framework/SceneManager.h"
@@ -15,7 +23,7 @@ public:
     // コンストラクタ
     StageSelectMainState();
     // デストラクタ
-    ~StageSelectMainState() override;
+    ~StageSelectMainState() override = default;
 
 public:
     // 初期化処理

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: FadeInState.h
+// 概要: FadeInState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 #include "Framework/SceneManager.h"
@@ -16,7 +24,7 @@ public:
     // コンストラクタ
     FadeInState(Fade* fade);
     // デストラクタ
-    ~FadeInState() override;
+    ~FadeInState() override = default;
 
 public:
     // 初期化処理

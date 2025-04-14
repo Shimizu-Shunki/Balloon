@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: GameClearMainState.h
+// 概要: GameClearMainState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 #include "Framework/SceneManager.h"
@@ -15,7 +23,7 @@ public:
     // コンストラクタ
     GameClearMainState();
     // デストラクタ
-    ~GameClearMainState() override;
+    ~GameClearMainState() override = default;
 
 public:
     // 初期化処理

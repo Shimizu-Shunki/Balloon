@@ -25,7 +25,7 @@
         { "StartText": "Resources/Textures/StartText.png" },
 
         { "PlayerIcon": "Resources/Textures/PLayerIcon.png" },
-        { "PlaySceneKeysGuide": "Resources/Textures/PlaySceneKeysGuide.png" },
+        { "PlaySceneKeysGuide": "Resources/Textures/PlaySceneKeysGuide1.png" },
         { "TimeFrame": "Resources/Textures/TimeFrame.png" },
         { "ScoreFrame": "Resources/Textures/ScoreFrame.png" },
         { "BalloonGageFrame": "Resources/Textures/BalloonGageFrame.png" },

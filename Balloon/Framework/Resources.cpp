@@ -15,6 +15,7 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
 #include "Framework/Resources/MaterialResources.h"
+#include "Framework/Resources/StageResources.h"
 
 /// <summary>
 /// コンストラクタ
@@ -27,6 +28,7 @@ Resources::Resources()
 	m_shaderResources   = ShaderResources::GetInstance();
 	m_textureResources  = TextureResources::GetInstance();
 	m_materialResources = MaterialResources::GetInstance();
+	m_stageResources    = StageResources::GetInstance();
 }
 
 
@@ -42,12 +44,21 @@ void Resources::LoadResource()
 	nlohmann::json data;
 	file >> data; 
 
+	// JSONファイルを開く
+	std::ifstream StageDatafile("Resources/Json/StageData.json");
+	assert(StageDatafile);
+	// JSON をロード
+	nlohmann::json StageData;
+	StageDatafile >> StageData;
+
 	// モデルをロードする
 	m_modelResources->LoadResource(data);
 	// シェーダーをロードする
 	m_shaderResources->LoadResource(data);
 	// テクスチャをロードする
 	m_textureResources->LoadResource(data);
-
+	// マテリアルの初期化処理
 	m_materialResources->Initialize(this);
+
+	m_stageResources->LoadResource(StageData);
 }

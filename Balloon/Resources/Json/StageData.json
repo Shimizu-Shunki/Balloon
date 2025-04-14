@@ -1,27 +1,29 @@
 {
-  "Stage1": [
+    "Stage1": [
+        { "score": 0 },
+        { "time": 180.0 }
+    ],
 
-    { "Time": "Resources/Textures/Stages.png" }
-  ],
+    "Stage2": [
+        { "score": 7450 },
+        { "time": 78.6 }
+    ],
 
-  "Stage2": [
+    "Stage3": [
+        { "score": 7450 },
+        { "time": 78.6 }
+    ],
 
-    { "Time": "Resources/Textures/Stages.png" }
-  ],
+    "Stage4": [
+        { "score": 7450 },
+        { "time": 78.6 }
+    ],
 
-  "Stage3": [
-
-    { "Time": "Resources/Textures/Stages.png" }
-  ],
-
-  "Stage4": [
-
-    { "Time": "Resources/Textures/Stages.png" }
-  ],
-
-  "Stage5": [
-
-    { "Time": "Resources/Textures/Stages.png" }
-  ]
+    "Stage5": [
+        { "score": 7450 },
+        { "time": 78.6 }
+    ]
 
 }
+
+

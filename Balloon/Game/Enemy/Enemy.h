@@ -19,7 +19,10 @@ public:
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
 	// Transformの取得
 	Transform* GetTransform() const override { return m_transform.get(); }
-	// 物理的数値
+	// // 物理挙動を取得
+	PhysicsBody* GetPhysicsBody() const { return m_physicsBody.get(); }
+	// アタック中かどうか取得する
+	bool GetIsAttack() { return m_isAttack; }
 	// 当たり判定
 
 public:
@@ -90,4 +93,8 @@ private:
 
 	// 風船の数
 	int m_balloonIndex;
+
+
+	// アタック中かどうか
+	bool m_isAttack;
 };

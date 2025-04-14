@@ -39,7 +39,7 @@ void DebugScene::Initialize()
 
 	
 
-	m_plaeyr = std::make_unique<Player>(nullptr);
+	/*m_plaeyr = std::make_unique<Player>(nullptr);
 	m_plaeyr->Initialize(IObject::ObjectID::PLAYER, true);
 	m_plaeyr->InitialTransform(
 		DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
@@ -56,7 +56,7 @@ void DebugScene::Initialize()
 	);
 
 	m_objectMessenger->Register(0, m_plaeyr.get());
-	m_objectMessenger->Register(1, m_cloud.get());
+	m_objectMessenger->Register(1, m_cloud.get());*/
 }
 
 void DebugScene::Start()
@@ -71,12 +71,12 @@ void DebugScene::Update()
 	// ƒJƒƒ‰‚ðXV
 	m_debugCamera->Update();
 
-	m_plaeyr->Update();
+	//m_plaeyr->Update();
 
-	m_cloud->Update();
+	//m_cloud->Update();
 	
-	m_plaeyr->GetTransform()->Update();
-	m_cloud->GetTransform()->Update();
+	//m_plaeyr->GetTransform()->Update();
+	//m_cloud->GetTransform()->Update();
 	
 }
 
@@ -84,8 +84,8 @@ void DebugScene::Render()
 {
 	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());
 
-	m_commonResources->GetCollisionManager()->CheckCollision();
-	m_commonResources->GetCollisionManager()->Render();
+	/*m_commonResources->GetCollisionManager()->CheckCollision();
+	m_commonResources->GetCollisionManager()->Render();*/
 
 	m_commonResources->GetRenderManager()->Render(); 
 }
@@ -98,7 +98,7 @@ void DebugScene::Finalize()
 
 void DebugScene::ChangeState(IState* newState)
 {
-
+	(void)newState;
 }
 
 void DebugScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)

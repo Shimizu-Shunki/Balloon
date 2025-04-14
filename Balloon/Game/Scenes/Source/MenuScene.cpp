@@ -88,7 +88,8 @@ void MenuScene::Initialize()
 
 void MenuScene::Start()
 {
-	// BGMを再生する
+	// BGMを再生
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
 
 	SceneMessenger::GetInstance()->Clear();
 	SceneMessenger::GetInstance()->Register(this);
@@ -198,15 +199,18 @@ void MenuScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 			this->ChangeState(m_menuMainState.get());
 			break;
 		case Message::FADE_OUT:
+			m_commonResources->GetAudioManager()->StopFadeOutBgm(0.4f);
 			this->ChangeState(m_fadeOutState.get());
 			break;
 		case Message::FADE_OUT_EXIT_GAME:
+			m_commonResources->GetAudioManager()->StopFadeOutBgm(0.4f);
 			// IDを変更
 			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::EXIT_GAME);
 			// ステートを変更
 			this->ChangeState(m_fadeOutState.get());
 			break;
 		case Message::FADE_OUT_STAGE_SCENE:
+			m_commonResources->GetAudioManager()->StopFadeOutBgm(0.4f);
 			// IDを変更
 			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::SELECT_SCENE);
 			// ステートを変更

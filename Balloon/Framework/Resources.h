@@ -17,6 +17,7 @@ class ModelResources;
 class ShaderResources;
 class TextureResources;
 class MaterialResources;
+class StageResources;
 
 // Resourcesクラスを定義する
 class Resources
@@ -36,6 +37,8 @@ public:
 	TextureResources* GetTextureResources() { return m_textureResources; }
 	// マテリアルリソースを取得する
 	MaterialResources* GetMaterialResources() { return m_materialResources; }
+	// ステージデータを取得する
+	StageResources* GetStageResources() { return m_stageResources; }
 
 public:
 	Resources(const Resources&) = delete;             // コピー禁止
@@ -65,4 +68,6 @@ private:
 	TextureResources* m_textureResources;
 	// マテリアルリソース
 	MaterialResources* m_materialResources;
+	// ステージリソース
+	StageResources* m_stageResources;
 };

@@ -36,9 +36,7 @@ GameOverScene::~GameOverScene()
 
 void GameOverScene::Initialize()
 {
-	// フェードの作成
-	m_fade = std::make_unique<Fade>();
-	m_fade->Initialize();
+	
 
 	this->Attach<FailedText>(IObject::ObjectID::FAILED_TEXT_UI, true,
 		{ 360.0f , 150.0f , 0.0f },
@@ -49,6 +47,10 @@ void GameOverScene::Initialize()
 		{ 1280.0f / 3.0f , 720.0f * 0.95f , 0.0f },
 		DirectX::SimpleMath::Quaternion::Identity,
 		DirectX::SimpleMath::Vector3::One * 0.5f);
+
+	// フェードの作成
+	m_fade = std::make_unique<Fade>();
+	m_fade->Initialize();
 
 	// ステートの作成
 	m_fadeInState = std::make_unique<FadeInState>(m_fade.get());
@@ -66,6 +68,8 @@ void GameOverScene::Initialize()
 void GameOverScene::Start()
 {
 	// BGMを再生する
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
+
 	m_currentState->PreUpdate();
 
 	m_commonResources->GetRenderManager()->SetDayProgress(0.5f);
@@ -109,6 +113,7 @@ void GameOverScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 	switch (messageID)
 	{
 		case Message::FADE_IN:
+			this->ChangeState(m_gameOverMainState.get());
 			break;
 		case Message::FADE_OUT:
 			this->ChangeState(m_fadeOutState.get());

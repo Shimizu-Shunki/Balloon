@@ -34,9 +34,7 @@ GameClearScene::~GameClearScene()
 
 void GameClearScene::Initialize()
 {
-	// フェードの作成
-	m_fade = std::make_unique<Fade>();
-	m_fade->Initialize();
+	
 
 	this->Attach<ClearText>(IObject::ObjectID::CLEAR_TEXT_UI, true,
 		{ 360.0f , 150.0f , 0.0f },
@@ -47,6 +45,10 @@ void GameClearScene::Initialize()
 		{ 1280.0f / 3.0f , 720.0f * 0.95f , 0.0f },
 		DirectX::SimpleMath::Quaternion::Identity,
 		DirectX::SimpleMath::Vector3::One * 0.5f);
+
+	// フェードの作成
+	m_fade = std::make_unique<Fade>();
+	m_fade->Initialize();
 
 	// ステートの作成
 	m_fadeInState = std::make_unique<FadeInState>(m_fade.get());
@@ -64,6 +66,8 @@ void GameClearScene::Initialize()
 void GameClearScene::Start()
 {
 	// BGMを再生する
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMECLEARSCENE, 3.0f);
+
 	m_currentState->PreUpdate();
 }
 

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: FadeOutState.cpp
+// 概要: フェードアウトのステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/Fade/FadeOutState.h"
 #include "Game/Fade/Fade.h"
@@ -9,24 +17,26 @@
 #include "Game/Scenes/Header/StageSelectScene.h"
 #include "Framework/SceneManager.h"
 
-// コンストラクタ
+
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="fade">フェード処理</param>
+/// <param name="chageSceneID">シーンID</param>
 FadeOutState::FadeOutState(Fade* fade, const FadeOutState::ChageSceneID& chageSceneID)
 {
 	// シーンマネージャーのインスタンスを取得する
 	m_sceneManager = SceneManager::GetInstance();
-
+	// シーンID登録
 	m_chageSceneId = chageSceneID;
-
+	// フェード処理を取得
 	m_fade = fade;
 }
 
-// デストラクタ
-FadeOutState::~FadeOutState()
-{
 
-}
-
-// 初期化処理
+/// <summary>
+/// 初期処理
+/// </summary>
 void FadeOutState::PreUpdate()
 {
 	switch (m_chageSceneId)
@@ -70,14 +80,21 @@ void FadeOutState::PreUpdate()
 	}
 }
 
-// 更新処理
+/// <summary>
+/// 更新処理
+/// </summary>
+/// <param name="deltaTime">経過時間</param>
 void FadeOutState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	// フェードの更新
 	m_fade->Update();
 }
 
-// 終了処理
+/// <summary>
+/// 終了処理
+/// </summary>
 void FadeOutState::PostUpdate()
 {
 

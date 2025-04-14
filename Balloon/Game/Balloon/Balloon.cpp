@@ -15,7 +15,12 @@ Balloon::Balloon(IObject* parent)
 	m_transform{},
 	m_objectId{},
 	m_isActive{},
-	m_model{}
+	m_model{},
+	m_currentScale{},
+	m_initScale{},
+	m_initPosition{},
+	m_speed(0.5f),
+	m_isBalloon(false)
 {
 	// Transformを生成
 	m_transform = std::make_unique<Transform>();
@@ -65,6 +70,9 @@ void Balloon::InitialTransform(
 	// スケールを初期化
 	m_transform->SetLocalScale(scale);
 
+	m_initScale = scale;
+	m_initPosition = position;
+
 	// トランスフォームを親に設定
 	m_transform->SetParent(m_parent->GetTransform());
 }
@@ -72,7 +80,35 @@ void Balloon::InitialTransform(
 /// <summary>
 /// 更新処理
 /// </summary>
-void Balloon::Update() {}
+void Balloon::Update()
+{
+	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
+
+	// オンの場合
+	if (m_isBalloon)
+	{
+		m_currentScale += elapsedTime * m_speed;
+
+		if (m_currentScale >= 1.0f)
+		{
+			m_currentScale = 1.0f;
+		}
+	}
+	else
+	{
+		m_currentScale -= elapsedTime * m_speed;
+
+		if (m_currentScale <= 0.0f)
+		{
+			m_currentScale = 0.0f;
+		}
+	}
+
+	// 座標を設定
+	m_transform->SetLocalPosition({ m_initPosition.x ,m_initPosition.y - (m_currentScale * 20.0f) , m_initPosition.z });
+	// スケールを設定
+	m_transform->SetLocalScale(m_initScale * (m_currentScale + 1.0f));
+}
 
 /// <summary>
 /// 終了処理
@@ -82,7 +118,14 @@ void Balloon::Finalize() {}
 
 void Balloon::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 {
-	(void)messageID;
+	switch (messageID)
+	{
+		case Message::ON_BALLOON:
+			m_isBalloon = true;
+			break;
+		case Message::OFF_BALLOON:
+			m_isBalloon = false;
+	}
 }
 
 void Balloon::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IObject* sender)

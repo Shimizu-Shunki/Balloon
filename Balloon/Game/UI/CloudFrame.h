@@ -76,8 +76,12 @@ private:
 	std::unique_ptr<Image> m_image;
 	// マテリアル
 	std::unique_ptr<IMaterial> m_material;
-
+	// ステージナンバー
 	std::unique_ptr<IObject> m_stageNumberText;
+	// タイムテキスト
+	std::unique_ptr<IObject> m_timeText;
+	// タイム番号
+	std::unique_ptr<IObject> m_timer;
 
 	int m_stageNumber;
 };

@@ -60,7 +60,7 @@ void Head::Initialize(ObjectID objectID, const bool& active)
 		// 3Dƒ‚ƒfƒ‹‚ğ€”õ‚·‚é
 		m_model = std::make_unique<Model3D>();
 		m_model->Initialize(commonResources->GetResources()->GetModelResources()->GetEnemyHeadModel(),
-			commonResources->GetResources()->GetMaterialResources()->GetDefaultPBRLit(), this
+			commonResources->GetResources()->GetMaterialResources()->GetEnemy(), this
 		);
 	}
 

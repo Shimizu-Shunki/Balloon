@@ -30,11 +30,14 @@ public:
 	// オブジェクトのIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectId; }
 
+	// 現在の時間を取得
+	float GetTime() { return m_currentTime; }
+
 
 public:
 
 	// コンストラクタ
-	TimerUI(bool isCountingUp = true, float currentTime = 0.0f);
+	TimerUI(bool isCountingUp = false, float currentTime = 0.0f);
 	// デストラクタ
 	~TimerUI() = default;
 

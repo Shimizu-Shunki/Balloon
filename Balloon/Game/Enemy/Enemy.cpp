@@ -20,7 +20,8 @@
 Enemy::Enemy(IObject* parent)
 	:
 	m_parent(parent),
-	m_transform{}
+	m_transform{},
+	m_isAttack(false)
 {
 	// インスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
@@ -120,6 +121,7 @@ void Enemy::Update()
 	if (m_balloonIndex == 0)
 	{
 		m_boxCollider->SetIsActive(false);
+		m_sphereCollider->SetIsActive(false);
 	}
 
 	// 子供を更新する
@@ -173,16 +175,41 @@ void Enemy::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, IO
 			if (sender->GetObjectID() == ObjectID::PLAYER)
 			{
 				Player* player = dynamic_cast<Player*>(sender);
-				// 上方向に力を加える
-				player->GetPhysicsBody()->AddForce(
-					DirectX::SimpleMath::Vector3::Up * 2000
-				);
-				if (m_balloonIndex > 0)
+
+				// 高さの速度をリセット
+				player->GetPhysicsBody()->SetVelocity({
+						player->GetPhysicsBody()->GetVelocity().x,
+						0.0f,
+						player->GetPhysicsBody()->GetVelocity().z
+					});
+
+				if (player->GetIsAttack())
 				{
-					m_childs[m_balloonIndex]->SetIsActive(false);
-					// 風船の数を減らす
-					m_balloonIndex--;
+					// SEを再生
+					m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOON_POP);
+
+					// 上方向に力を加える
+					player->GetPhysicsBody()->AddForce(
+						DirectX::SimpleMath::Vector3::Up * 2000
+					);
+					if (m_balloonIndex > 0)
+					{
+						m_childs[m_balloonIndex]->SetIsActive(false);
+						// 風船の数を減らす
+						m_balloonIndex--;
+					}
 				}
+				else
+				{
+					// SEを再生
+					m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOONBLOWUP);
+
+					// 上方向に力を加える
+					player->GetPhysicsBody()->AddForce(
+						DirectX::SimpleMath::Vector3::Up * 3000
+					);
+				}
+				
 			}
 			break;
 		case Message::ON_TRIGGER_STAY:

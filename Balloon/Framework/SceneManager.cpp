@@ -47,7 +47,7 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<GameClearScene>();
+	m_currentScene = std::make_unique<TitleScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
 

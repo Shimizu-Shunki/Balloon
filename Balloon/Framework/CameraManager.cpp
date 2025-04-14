@@ -135,20 +135,15 @@ void CameraManager::SwitchActiveCamera(int index, float fadeTime, Tween::EasingT
 	// カメラを切り替え中にする
 	m_isFadeActive = true;
 
-	// 現在のカメラの座標情報を保存
-	m_transform->SetLocalPosition(m_cameras[m_cameraIndex]->GetTransform()->GetLocalPosition());
-	// 現在のカメラのターゲットを保存
-	m_transform->SetLocalScale(m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale());
+	// スタート地点
+	m_startPosition = m_cameras[m_cameraIndex]->GetTransform()->GetLocalPosition();
+	m_endTarget = m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale();
+	// 終了地点
+	m_endPosition = m_cameras[index]->GetTransform()->GetLocalPosition();
+	m_endTarget = m_cameras[index]->GetTransform()->GetLocalScale();
 
-	// Tweenを起動
-	m_transform->GetTween()->DOMove(m_cameras[index]->GetTransform()->GetLocalPosition(), fadeTime).SetEase(easingType);
-	m_transform->GetTween()->DOScale(m_cameras[index]->GetTransform()->GetLocalScale(), fadeTime).SetEase(easingType)
-		.OnComplete([this] {
-		// フェードが終わったらカメラのビュー行列を作成する
-		m_viewMatrix = m_cameras[m_cameraIndex]->CalculateViewMatrix();
-		// フェードを非アクティブにする
-		m_isFadeActive = false;
-		});
+	m_elapsed = 0.0f;
+	m_fadeTime = fadeTime;
 
 	// 次のカメラの番号を設定
 	m_cameraIndex = index;
@@ -162,9 +157,30 @@ void CameraManager::Fade()
 	// カメラ切り替え中出なければ更新しない
 	if (!m_isFadeActive) return;
 
+	// 経過時間の取得
+	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
+
+	// 現在の時間を更新する
+	m_elapsed += elapsedTime;
+
+	// アニメーションの進行度を計算（0.0 ～ 1.0 に正規化）
+	float t = (m_elapsed) / m_fadeTime;
+	// t を 1.0 にクランプ（補間の上限を超えないようにする）
+	if (t > 1.0f) t = 1.0f;
+
+	// 終了地点
+	m_endPosition = m_cameras[m_cameraIndex]->GetTransform()->GetLocalPosition();
+	m_endTarget = m_cameras[m_cameraIndex]->GetTransform()->GetLocalScale();
+
+	DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Lerp(m_startPosition, m_endPosition, t);
+	DirectX::SimpleMath::Vector3 target = DirectX::SimpleMath::Vector3::Lerp(m_endPosition, m_endTarget, t);
+
+	if(t >= 1.0f)
+	m_isFadeActive = false;
+
 	// ビュー行列を更新する
 	m_viewMatrix =
 		DirectX::SimpleMath::Matrix::CreateLookAt(
-			m_transform->GetLocalPosition(), m_transform->GetLocalScale(), DirectX::SimpleMath::Vector3::Up
+			position, target, DirectX::SimpleMath::Vector3::Up
 	);	
 }

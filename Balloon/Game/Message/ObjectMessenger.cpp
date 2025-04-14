@@ -21,6 +21,11 @@ ObjectMessenger::ObjectMessenger()
 
 }
 
+/// <summary>
+/// オブジェクトを登録
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="object">オブジェクト</param>
 void ObjectMessenger::Register(int objectID, IObject* object)
 {
 	// オブジェクトIDとオブジェクトを登録する
@@ -35,7 +40,11 @@ void ObjectMessenger::Clear()
 	m_objects.clear();
 }
 
-
+/// <summary>
+/// メッセージ送信
+/// </summary>
+/// <param name="objectID">オブジェクトID</param>
+/// <param name="messageID">メッセージID</param>
 void ObjectMessenger::Dispatch(int objectID, Message::ObjectMessageID messageID)
 {
 	// メッセージを送信するオブジェクトを検索する
@@ -47,6 +56,17 @@ void ObjectMessenger::Dispatch(int objectID, Message::ObjectMessageID messageID)
 		it->second->OnObjectMessegeAccepted(messageID);
 	}
 }
+
+/// <summary>
+/// メッセージ送信（メッセージデータを渡せるようにする関数）
+/// </summary>
+/// <param name="objectID"></param>
+/// <param name="messageData"></param>
+void ObjectMessenger::Dispatch(int objectID, MessageData messageData)
+{
+
+}
+
 
 void ObjectMessenger::ApplyChanges()
 {

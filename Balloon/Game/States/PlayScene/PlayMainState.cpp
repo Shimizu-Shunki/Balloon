@@ -1,11 +1,23 @@
+// ============================================
+// 
+// ファイル名: PlayMainState.cpp
+// 概要: プレイシーンのメイン処理ステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/PlayScene/PlayMainState.h"
 #include "Game/Fade/Fade.h"
 #include "Framework/InputManager.h"
 #include "Game/Player/Header/Player.h"
 #include "Game/Enemy/Enemy.h"
+#include "Game/Message/SceneMessenger.h"
+#include "Game/UI/TimerUI.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 PlayMainState::PlayMainState(std::vector<IObject*> objects)
 {
 	// 入力マネージャーのインスタンスを入力
@@ -14,13 +26,9 @@ PlayMainState::PlayMainState(std::vector<IObject*> objects)
 	m_objects = objects;
 }
 
-// デストラクタ
-PlayMainState::~PlayMainState()
-{
-
-}
-
-// 初期化処理
+/// <summary>
+/// 初期処理
+/// </summary>
 void PlayMainState::PreUpdate()
 {
 	// オブジェクトを有効化にする
@@ -30,9 +38,14 @@ void PlayMainState::PreUpdate()
 	}
 }
 
-// 更新処理
+/// <summary>
+/// 更新処理
+/// </summary>
+/// <param name="deltaTime">経過時間</param>
 void PlayMainState::Update(const float& deltaTime)
 {
+	(void)deltaTime;
+
 	// オブジェクトの更新を行う
 	for (const auto& object : m_objects)
 	{
@@ -40,14 +53,34 @@ void PlayMainState::Update(const float& deltaTime)
 		object->Update();
 		// Transformの更新処理
 		object->GetTransform()->Update();
-	}
-	// タイマーの更新処理
 
-	// シーン自体の更新
-	
+		if (object->GetObjectID() == IObject::ObjectID::TIMER_UI)
+		{
+			TimerUI* timerUI = dynamic_cast<TimerUI*>(object);
+			if (timerUI->GetTime() <= 0.0f)
+			{
+				SceneMessenger::GetInstance()->Dispatch(Message::FADE_OUT_GAME_OVER_SCENE);
+			}
+		}
+	}
+
+	// プレイヤーが落ちたら
+	if (m_objects[0]->GetTransform()->GetLocalPosition().y <= -10.0f)
+	{
+		SceneMessenger::GetInstance()->Dispatch(Message::FADE_OUT_GAME_OVER_SCENE);
+	}
+
+	// 敵がすべて落ちたら
+	if (m_objects[1]->GetTransform()->GetLocalPosition().y <= -10.0f &&
+		m_objects[2]->GetTransform()->GetLocalPosition().y <= -10.0f)
+	{
+		SceneMessenger::GetInstance()->Dispatch(Message::FADE_OUT_GAME_CLEAR_SCENE);
+	}	
 }
 
-// 終了処理
+/// <summary>
+/// 終了処理
+/// </summary>
 void PlayMainState::PostUpdate()
 {
 

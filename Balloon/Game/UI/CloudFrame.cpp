@@ -13,8 +13,11 @@
 #include "Framework/Tween/Tween.h"
 #include "Framework/Resources/ShaderResources.h"
 #include "Framework/Resources/TextureResources.h"
-
+#include "Framework/Resources/StageResources.h"
 #include "Game/UI/StageNumberUI.h"
+#include "Game/UI/TimerText.h"
+#include "Game/UI/TimerUI.h"
+
 
 #include "Game/Image/Image.h"
 #include "Game/Material/DefaultUi.h"
@@ -78,7 +81,12 @@ void CloudFrame::Initialize(ObjectID objectID, const bool& active)
 	// ステージ番号を設定
 	m_stageNumberText = std::make_unique<StageNumberUI>((StageNumberUI::StageNumberID)m_stageNumber);
 	m_stageNumberText->Initialize(IObject::ObjectID::STAGE_NUMBER, true);
-	
+
+	m_timeText = std::make_unique<TimerText>();
+	m_timeText->Initialize(IObject::ObjectID::TIMER_TEXT_UI, true);
+
+	m_timer = std::make_unique<TimerUI>(false, (float)StageResources::GetInstance()->GetStageData(1).time);
+	m_timer->Initialize(IObject::ObjectID::TIMER_UI, true);
 }
 
 /// <summary>
@@ -101,6 +109,18 @@ void CloudFrame::InitialTransform(
 		{ position.x , position.y - 180.0f , position.z },
 		rotation,
 		{scale.x + 0.2f , scale.y - 0.2f , scale.z }
+	);
+
+	m_timeText->InitialTransform(
+		{ position.x - 170.0f , position.y + 40.0f , position.z },
+		rotation,
+		{ scale.x - 0.2f , scale.y - 0.2f , scale.z }
+	);
+
+	m_timer->InitialTransform(
+		{ position.x + 100.0f , position.y + 40.0f , position.z },
+		rotation,
+		{ scale.x - 0.5f , scale.y - 0.2f , scale.z }
 	);
 }
 

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: FadeOutState.h
+// 概要: FadeOutState.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Interface/IState.h"
 #include "Game/Fade/Fade.h"
@@ -23,7 +31,7 @@ public:
     // コンストラクタ
     FadeOutState(Fade* fade, const FadeOutState::ChageSceneID& chageSceneID);
     // デストラクタ
-    ~FadeOutState() override;
+    ~FadeOutState() override = default;
 
     // シーンIDを変更
     void SetSceneID(const FadeOutState::ChageSceneID& chageSceneID) { m_chageSceneId = chageSceneID; }

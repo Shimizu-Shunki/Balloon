@@ -40,6 +40,8 @@ void FixedCamera::Initialize()
 	// 回転を適応
 	target = DirectX::SimpleMath::Vector3::Transform(target, m_transform->GetLocalRotation());
 
+	target.Normalize();
+
 	// ターゲット座標を設定する スケールをターゲットとしてみる
 	m_transform->SetLocalScale(m_transform->GetLocalPosition() + target);
 	// 頭の向きを設定する

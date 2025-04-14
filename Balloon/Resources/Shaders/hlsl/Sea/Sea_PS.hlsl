@@ -87,11 +87,11 @@ float4 main(PS_INPUT input) : SV_TARGET
     float p = originalNoise(uv * FN_UV_POWER);
     uv += float2(p * FN_UV_PATH1 * cos(TessellationFactor.y), p * FN_UV_PATH2 * sin(TessellationFactor.y));
     
+    // 波打ち関数
     waveUV(uv);
     
+    // テクスチャをサンプリング
     float4 output = tex.Sample(sam, uv);
     
-   
-    // 白色（RGBA）を出力
-    return output; // R, G, B, A = 1.0 (白色)
+    return output;
 }

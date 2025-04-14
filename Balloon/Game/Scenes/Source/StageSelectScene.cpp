@@ -54,7 +54,7 @@ void StageSelectScene::Initialize()
 	for (int i = 0; i < 6; i++)
 	{
 		this->Attach<CloudFrame>(IObject::ObjectID::CLOUD_FRAME_UI, true,
-			{ (1280.0f / 2.0f) - (1280.0f / 1.5f) + (1280.0f / 1.5f) * i , 720.0f / 2.0f , 0.0f },
+			{ (1280.0f / 2.0f)/* - (1280.0f / 1.5f)*/ + (1280.0f / 1.5f) * i , 720.0f / 2.0f , 0.0f },
 			DirectX::SimpleMath::Quaternion::Identity,
 			DirectX::SimpleMath::Vector3::One * 0.7f , i + 1);
 	}
@@ -92,6 +92,9 @@ void StageSelectScene::Initialize()
 
 void StageSelectScene::Start()
 {
+	// BGMを再生
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_GAMEOVERSCENE, 1.0f);
+
 	// ステートマシンスタート処理
 	m_currentState->PreUpdate();
 
@@ -114,10 +117,10 @@ void StageSelectScene::Update()
 	m_currentState->Update(deltaTime);
 
 	// オブジェクトの更新処理
-	for (const auto& object : m_objects)
-	{
-		// object->Update();
-	}
+	//for (const auto& object : m_objects)
+	//{
+	//	// object->Update();
+	//}
 
 	// Transformのみ更新する
 	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
@@ -144,7 +147,7 @@ void StageSelectScene::CreateStateController()
 {
 	// ステートの作成
 	m_fadeInState          = std::make_unique<FadeInState>(m_fade.get());
-	m_fadeOutState         = std::make_unique<FadeOutState>(m_fade.get(), FadeOutState::ChageSceneID::MENU_SCENE);
+	m_fadeOutState         = std::make_unique<FadeOutState>(m_fade.get(), FadeOutState::ChageSceneID::PLAY_SCENE);
 	m_stageSelectMainState = std::make_unique<StageSelectMainState>();
 	// 現在のステートを設定
 	m_currentState = m_fadeInState.get();

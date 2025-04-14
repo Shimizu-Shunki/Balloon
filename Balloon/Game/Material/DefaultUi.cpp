@@ -83,7 +83,7 @@ void DefaultUi::UiCreateBuffer()
 	bufferDesc.ByteWidth = sizeof(UIConstBuffer);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-	HRESULT hr = m_device->CreateBuffer(&bufferDesc, nullptr, m_constBufferObject.GetAddressOf());
+	m_device->CreateBuffer(&bufferDesc, nullptr, m_constBufferObject.GetAddressOf());
 }
 
 void DefaultUi::UpdateConstBuffer()

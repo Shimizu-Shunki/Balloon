@@ -23,6 +23,8 @@ public:
 	IMaterial* GetBalloon() const { return m_balloon.get(); }
 	// 雲のマテリアルを取得する
 	IMaterial* GetCloud() const { return m_cloud.get(); }
+	// 敵のマテリアルを取得する
+	IMaterial* GetEnemy() const { return m_enemy.get(); }
 
 public:
 	MaterialResources(const MaterialResources&) = delete;             // コピー禁止
@@ -47,9 +49,11 @@ public:
 private:
 	// プレイヤー
 	std::unique_ptr<IMaterial> m_defaultPBRLit;
+	// 敵
+	std::unique_ptr<IMaterial> m_enemy;
 	// 風船
 	std::unique_ptr<IMaterial> m_balloon;
-	// 風船
+	// 雲
 	std::unique_ptr<IMaterial> m_cloud;
 	// UI
 	std::unique_ptr<IMaterial> m_defaultUi;

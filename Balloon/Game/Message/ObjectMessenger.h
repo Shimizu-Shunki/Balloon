@@ -13,12 +13,23 @@
 class ObjectMessenger
 {
 public:
+
+	struct MessageData
+	{
+		Message::ObjectMessageID id;
+		int intValue = 0;
+		float floatValue = 0.0f;
+		bool boolValue = false;
+	};
+
+public:
 	// オブジェクトを登録する
 	void Register(int objectID, IObject* object);
 	// オブジェクトを全て解除する
 	void Clear();
 	// メッセージを送信する
 	void Dispatch(int objectID, Message::ObjectMessageID messageID);
+	void Dispatch(int objectID, MessageData messageData);
 
 private:
 	//	コンストラクタ

@@ -20,17 +20,22 @@
 #include "Interface/IObject.h"
 
 #include "Game/Player/Header/Player.h"
+#include "Game/Enemy/Enemy.h"
 #include "Game/Cloud/Cloud.h"
 #include "Game/Enemy/Enemy.h"
 #include "Game/Fade/Fade.h"
+#include "Game/Stage/Stage.h"
 
 #include "Game/Cameras/TPSKeyCamera.h"
+#include "Game/Cameras/FollowCamera.h"
+#include "Game/Cameras/FixedCamera.h"
 #include "Game/Cameras/DebugCamera.h"
 
 #include "Game/States/Fade/FadeInState.h"
 #include "Game/States/Fade/FadeOutState.h"
 #include "Game/States/ReadyGoState.h"
 #include "Game/States/PlayScene/PlayMainState.h"
+#include "Framework/Resources/StageResources.h"
 
 // UI
 #include "Game/UI/PlayKeyGuideUI.h"
@@ -77,11 +82,27 @@ void PlayScene::Initialize()
 	// ステートを作成
 	this->CreateState();
 
-	ScoreUI* scoreUI = this->SearchObject<ScoreUI>(IObject::ObjectID::SCORE_UI);
-	// メッセンジャーに登録
-	ObjectMessenger::GetInstance()->Register(1, scoreUI);
+	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
 
-	//m_commonResources->GetCameraManager()->ChageCamera(2);
+	// メッセンジャーに登録
+	ObjectMessenger::GetInstance()->Register(0, player);
+	ObjectMessenger::GetInstance()->Register(1, this->SearchObject<ScoreUI>(IObject::ObjectID::SCORE_UI));
+	ObjectMessenger::GetInstance()->Register(2, this->SearchObject<BalloonGageUI>(IObject::ObjectID::BALLOON_GAGE_UI));
+	ObjectMessenger::GetInstance()->Register(3, this->SearchObject<HPGageUI>(IObject::ObjectID::HP_GAGE_UI));
+
+
+	std::unique_ptr<ICamera> camera = std::make_unique<FixedCamera>(DirectX::SimpleMath::Vector3(0.0f, 10.0f, 15.0f),
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitX, DirectX::XMConvertToRadians(30.0f)) * 
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::UnitY, DirectX::XMConvertToRadians(180.0f)));
+	camera->Initialize();
+	// カメラを管理者に渡す
+	m_commonResources->GetCameraManager()->Attach(std::move(camera));
+
+	camera = std::make_unique<FollowCamera>(player->GetTransform(),
+		DirectX::SimpleMath::Vector3(0.0f, 6.0f, -6.0f ));
+	camera->Initialize();
+	// カメラを管理者に渡す
+	m_commonResources->GetCameraManager()->Attach(std::move(camera));
 }
 
 void PlayScene::Start()
@@ -90,21 +111,30 @@ void PlayScene::Start()
 	SceneMessenger::GetInstance()->Clear();
 	SceneMessenger::GetInstance()->Register(this);
 
+	// オブジェクトの更新を行う
+	for (const auto& object : m_objects)
+	{
+		// 更新処理
+		object->Update();
+		// Transformの更新処理
+		object->GetTransform()->Update();
+	}
+
 	m_currentState->PreUpdate();
 	m_commonResources->GetCollisionManager()->Start();
 	// BGMを再生
-	//m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
+	m_commonResources->GetAudioManager()->PlayFadeInBgm(XACT_WAVEBANK_SOUNDS_PLAYSCENE, 3.0f);
 }
 
 void PlayScene::Update()
 {
-	const float deltaTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+	float elapsedTime = (float)CommonResources::GetInstance()->GetStepTimer()->GetElapsedSeconds();
 
 	// 現在のステートを更新
-	m_currentState->Update(deltaTime);
+	m_currentState->Update(elapsedTime);
 
-	m_debugCamera->Update();
-	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());
+	/*m_debugCamera->Update();
+	m_commonResources->GetCameraManager()->SetViewMatrix(m_debugCamera->GetViewMatrix());*/
 }
 
 void PlayScene::Render()
@@ -129,8 +159,19 @@ void PlayScene::CreateObject()
 	using namespace DirectX::SimpleMath;
 
 	this->Attach<Player>(IObject::ObjectID::PLAYER, true,
-		Vector3::Zero, Quaternion::Identity, Vector3::One * 0.6f,nullptr
+		Vector3::Zero, Quaternion::Identity, Vector3::One * 0.1f,nullptr
 	);
+	this->Attach<Enemy>(IObject::ObjectID::ENEMY, true,
+		{0.0f , 0.0f , 3.0f}, Quaternion::Identity, Vector3::One * 0.1f, nullptr
+	);
+	this->Attach<Enemy>(IObject::ObjectID::ENEMY, true,
+		{ -3.0f , -4.0f , 3.0f }, Quaternion::Identity, Vector3::One * 0.1f, nullptr
+	);
+
+	this->Attach<Stage>(IObject::ObjectID::STAGE, true,
+		Vector3::Zero, Quaternion::Identity, Vector3::One, nullptr
+	);
+	
 }
 
 /// <summary>
@@ -139,6 +180,8 @@ void PlayScene::CreateObject()
 void PlayScene::CreateUI()
 {
 	using namespace DirectX::SimpleMath;
+
+	StageResources::StageData stageData = StageResources::GetInstance()->GetStageData(1);
 
 	Player* player = this->SearchObject<Player>(IObject::ObjectID::PLAYER);
 
@@ -166,11 +209,11 @@ void PlayScene::CreateUI()
 	this->Attach<HPGageFrameUI>(IObject::ObjectID::BALLOON_GAGE_FRAME_UI, false,
 		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, Vector3::One * 0.6f
 	);
-	this->Attach<HPGageUI>(IObject::ObjectID::BALLOON_GAGE_UI, false,
+	this->Attach<HPGageUI>(IObject::ObjectID::HP_GAGE_UI, false,
 		Vector3(390.0f, 600.0f, 0.0f), Quaternion::Identity, {0.6f , 0.55f , 0.0f}
 	);
 	this->Attach<TimerUI>(IObject::ObjectID::TIMER_UI, false,
-		Vector3(1180.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.12f, 0.3f ,0.2f }
+		Vector3(1180.0f, 720.0f / 7.5f, 0.0f), Quaternion::Identity, { 0.12f, 0.3f ,0.2f }, false , stageData.time
 	);
 	this->Attach<ReadyGoUI>(IObject::ObjectID::READY_GO_UI, true,
 		Vector3(1280.0f + 600.0f , 720.0f / 2.0f , 0.0f), Quaternion::Identity, Vector3::One * 0.6f
@@ -231,6 +274,19 @@ void PlayScene::OnSceneMessegeAccepted(Message::SceneMessageID messageID)
 		case Message::COUNTDOWN:
 			this->ChangeState(m_playMainState.get());
 			break;
+		case Message::FADE_OUT_GAME_CLEAR_SCENE:
+			// IDを変更
+			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::GAME_CLEAR_SCENE);
+			// ステートを変更
+			this->ChangeState(m_fadeOutState.get());
+			break;
+		case Message::FADE_OUT_GAME_OVER_SCENE:
+			// IDを変更
+			dynamic_cast<FadeOutState*>(m_fadeOutState.get())->SetSceneID(FadeOutState::ChageSceneID::GAME_OVER_SCENE);
+			// ステートを変更
+			this->ChangeState(m_fadeOutState.get());
+			break;
+
 		default:
 			break;
 	}

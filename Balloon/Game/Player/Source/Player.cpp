@@ -17,10 +17,16 @@
 #include "Game/Colliders/BoxCollider.h"
 #include "Game/Colliders/SphereCollider.h"
 #include "Game/PhysicsBody/PhysicsBody.h"
+#include "Game/Enemy/Enemy.h"
 
 #include "Game/States/Player/PlayerIdleState.h"
 #include "Game/States/Player/PlayerRunState.h"
 #include "Game/States/Player/PlayerAttackState.h"
+
+#include "Game/Message/ObjectMessenger.h"
+
+const DirectX::SimpleMath::Vector3 Player::MIN_LIMIT = { -5.0f, -5.0f, -5.0f };
+const DirectX::SimpleMath::Vector3 Player::MAX_LIMIT = {  5.0f,  5.0f,  5.0f };
 
 
 /// <summary>
@@ -37,7 +43,11 @@ Player::Player(IObject* parent)
 	m_physicsBody{},
 	m_boxCollider{},
 	m_sphereCollider{},
-	m_balloonIndex{}
+	m_balloonIndex{},
+	m_currentScale{},
+	m_speed(0.5f),
+	m_isBalloon(false),
+	m_isAttack(false)
 {
 	// インスタンスを取得する
 m_commonResources = CommonResources::GetInstance();
@@ -81,6 +91,13 @@ void Player::Initialize(ObjectID objectID, const bool& active)
 	colliders.push_back(m_sphereCollider.get());
 	m_commonResources->GetCollisionManager()->Attach(this, colliders, m_physicsBody.get());
 
+
+	// 風船をメッセンジャーに登録
+	for (int i =0; i < m_balloonIndex; i++)
+	{
+		ObjectMessenger::GetInstance()->Register(i + 4, m_childs[i + 1].get());
+	}
+
 	m_balloonAirAmount = 0.0f;
 	m_isFlating = false;
 	m_isMoveing = false;
@@ -116,95 +133,74 @@ void Player::Update()
 	// キーボードステート
 	InputManager* input = m_commonResources->GetInputManager();
 	float deltaTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
+	float elapsedTime = (float)m_commonResources->GetStepTimer()->GetElapsedSeconds();
 
 	m_currentState->Update(deltaTime);
 
 	// 上昇の処理を実行
 	if (input->OnKey(InputManager::Keys::Space))
 	{
-   		m_isFlating = true;
+		// 上昇処理
+		if (m_currentScale < 1.0f)
+		ObjectMessenger::GetInstance()->Dispatch(3, Message::ObjectMessageID::BALLOON_SCALE_SUBTRACT_HP);
+	}
+	if (input->OnKeyDown(InputManager::Keys::Space))
+	{
+		// SEを再生
+		m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOONBLOWUP, 1.5f);
 	}
 	// 上昇の処理を解除
 	if (input->OnKeyUp(InputManager::Keys::Space))
 	{
-		m_isFlating = false;
+		m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOONRELEASEAIR, 1.0f);
+		m_isBalloon = false;
+		ObjectMessenger::GetInstance()->Dispatch(2, Message::ObjectMessageID::OFF_BALLOON);
+		ObjectMessenger::GetInstance()->Dispatch(0, Message::ObjectMessageID::OFF_BALLOON);
 	}
 
 	// 照準
-	if (input->OnKey(InputManager::Keys::X))
+	if (input->OnKeyDown(InputManager::Keys::X))
 	{
 		// 照準カメラを起動
+		m_commonResources->GetCameraManager()->SwitchActiveCamera(1,0.5f,Tween::EasingType::Linear);
 	}
 
 	if (input->OnKeyUp(InputManager::Keys::X))
 	{
 		// 照準解除
+		m_commonResources->GetCameraManager()->SwitchActiveCamera(0, 0.5f, Tween::EasingType::Linear);
 	}
 
-	// スキルの発動
-	if (input->OnKeyDown(InputManager::Keys::Z) && input->OnKey(InputManager::Keys::X))
+	// オンの場合
+	if (m_isBalloon)
 	{
-		// スキル発動
+ 		m_currentScale += elapsedTime * m_speed;
 
-		// 発動後数秒後に解除
-	}
-
-	if (m_isFlating)
-	{
-		// 風船を大きくする
-		m_balloonAirAmount += deltaTime;
-
-		// 風船の大きさを制限
-		if (m_balloonAirAmount >= 5.0f)
+		if (m_currentScale >= 1.0f)
 		{
-			m_balloonAirAmount = 5.0f;
+			m_currentScale = 1.0f;
 		}
 
-		// 風船の大きさに応じて上昇スピードを設定
-		float force = m_balloonAirAmount * 0.3f;
-		// 重力を設定する
-		if(!m_isStage)
-		m_physicsBody->SetGravity(force);
-
-		// 力を与える
-		// m_physicsBody->SetFoce(m_physicsBody->GetFoce() + force);
+		// 重力を設定
+		m_physicsBody->SetGravity(3.0f * m_currentScale);
 	}
 	else
 	{
-		// 風船を小さくする
-		m_balloonAirAmount -= deltaTime;
+		m_currentScale -= elapsedTime * m_speed;
 
-		// 風船の大きさが一番小さくなったら
-		if (m_balloonAirAmount <= 0.0f)
+		if (m_currentScale <= 0.0f)
 		{
-			// 力を与えない
-			m_balloonAirAmount = -0.3f;
-
-			// 重力を設定する
-			//m_physicsBody->SetGravity(m_balloonAirAmount);
+			m_currentScale = 0.0f;
 		}
 
-		// 風船の大きさに応じて上昇スピードを設定
-		float force = m_balloonAirAmount * 0.3f;
-
-		// 重力を設定する
-		if (!m_isStage)
-		m_physicsBody->SetGravity(force);
+		// m_currentScale に応じて重力を設定（0.0f のときは -2.0f になる）
+		float gravity = -2.0f * (m_currentScale + 1.0f);
+		m_physicsBody->SetGravity(gravity);
 	}
 
-	// ステージないにいるかどうかの判定
-	m_isStage = this->IsOutsideBounds(m_transform->GetLocalPosition());
-	// ステージ外にいるとき
-	if (m_isStage)
-	{
-		// プレイヤーのステージ制限
-		DirectX::SimpleMath::Vector3 correction = this->GetCorrectionVector(m_transform->GetLocalPosition());
-		// ステージ外にいる場合は押し戻す
-		m_physicsBody->AddForce(correction);
+	
 
-		m_physicsBody->SetGravity(m_physicsBody->GetGravity() * 0.2f);
-	}
-
+	
 	// 物理挙動の更新処理
 	m_physicsBody->Update();
 
@@ -222,6 +218,8 @@ void Player::Finalize()
 {
 
 }
+
+
 
 
 /// <summary>
@@ -279,13 +277,21 @@ void Player::OnObjectMessegeAccepted(Message::ObjectMessageID messageID)
 	switch (messageID)
 	{
 		case Message::PLAYER_IDLE:
+			m_isAttack = false;
 			this->ChangeState(m_idleState.get());
 			break;
 		case Message::PLAYER_RUN:
 			this->ChangeState(m_runState.get());
 			break;
 		case Message::PLAYER_ATTACK:
+			m_isAttack = true;
 			this->ChangeState(m_attackState.get());
+			break;
+		case Message::PLAYER_BALLOON_SCALE_ON:
+			m_isBalloon = true;
+			break;
+		case Message::PLAYER_BALLOON_SCALE_OFF:
+			m_isBalloon = false;
 			break;
 		default:
 			break;
@@ -308,6 +314,38 @@ void Player::OnCollisionMessegeAccepted(Message::CollisionMessageID messageID, I
 	case Message::ON_COLLISION_EXIT:
 		break;
 	case Message::ON_TRIGGER_ENTER:
+		if (sender->GetObjectID() == ObjectID::ENEMY)
+		{
+			Enemy* enemy = dynamic_cast<Enemy*>(sender);
+
+			if (enemy->GetIsAttack())
+			{
+				// SEを再生
+				m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOON_POP);
+
+				// 上方向に力を加える
+				enemy->GetPhysicsBody()->AddForce(
+					DirectX::SimpleMath::Vector3::Up * 2000
+				);
+				if (m_balloonIndex > 0)
+				{
+					m_childs[m_balloonIndex]->SetIsActive(false);
+					// 風船の数を減らす
+					m_balloonIndex--;
+				}
+			}
+			else
+			{
+				// SEを再生
+				m_commonResources->GetAudioManager()->PlaySE(XACT_WAVEBANK_SOUNDS_BALLOONHIT);
+
+				// 上方向に力を加える
+				enemy->GetPhysicsBody()->AddForce(
+					DirectX::SimpleMath::Vector3::Up * 3000
+				);
+			}
+
+		}
 		break;
 	case Message::ON_TRIGGER_STAY:
 		break;
@@ -401,9 +439,10 @@ void Player::CreateCollider()
 	m_sphereCollider = std::make_unique<SphereCollider>();                                     // 当たり判定を生成
 	m_sphereCollider->SetIsActive(true);                                                       // アクティブ設定
 	m_sphereCollider->SetIsTrigger(true);                                                      // トリガー設定
-	m_sphereCollider->GetTransform()->SetLocalPosition({ 0.0f,2.0f * 10.0f,-0.6f * 10.0f });   // 座標を設定
-	m_sphereCollider->GetTransform()->SetLocalScale({ 0.4f * 10.0f,0.0f ,0.0f });              // スケール設定
+	m_sphereCollider->GetTransform()->SetLocalPosition({ 0.0f,1.5f * 10.0f,-0.6f * 10.0f });
+	m_sphereCollider->GetTransform()->SetLocalScale({ 0.4f * 10.0f,1.5f * 10.0f ,1.0f * 10.0f });
 	m_sphereCollider->GetTransform()->SetParent(m_transform.get());                            // 親のTransformを設定
+	
 }
 
 /// <summary>

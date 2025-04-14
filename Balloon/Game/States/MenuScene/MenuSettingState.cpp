@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: MenuSettingState.cpp
+// 概要: ゲームメニューシーンの設定ステート
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "Framework/pch.h"
 #include "Game/States/MenuScene/MenuSettingState.h"
 #include "Framework/StateMachine/StateController.h"
@@ -25,7 +33,7 @@ void MenuSettingState::PreUpdate()
 /// <param name="deltaTime">経過時間</param>
 void MenuSettingState::Update(const float& deltaTime)
 {
-
+	(void)deltaTime;
 }
 /// <summary>
 /// 終了処理
