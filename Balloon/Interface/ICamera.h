@@ -1,21 +1,6 @@
-// ============================================
-// 
-// ファイル名: ICamera.h
-// 概要: カメラ（インターフェース）
-// 
-// 製作者 : 清水駿希
-// 
-// ============================================
 #pragma once
-#ifndef ICAMERA_DEFINED
-#define IICAMERA_DEFINED
-#include "Framework/pch.h"
-#include "Framework/StepTimer.h"
-#include "Interface/IObject.h"
-#include "Game/Transform/Transform.h"
-#include "Framework/CameraManager.h"
-
-class CameraManager;
+#include "pch.h"
+#include  "Game/Transform/Transform.h"
 
 class ICamera
 {
@@ -35,6 +20,3 @@ public:
 	// ビュー行列の作成
 	virtual DirectX::SimpleMath::Matrix CalculateViewMatrix() = 0;
 };
-
-
-#endif		// ICAMERA_DEFINED

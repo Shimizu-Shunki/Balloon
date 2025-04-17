@@ -2,17 +2,12 @@
 // Game.cpp
 //
 
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Game.h"
-
+#include "Framework/CommonResources.h"
+#include "Framework/Resources/Resources.h"
 #include "Framework/SceneManager.h"
-#include "Framework/InputManager.h"
-#include "Game/Material/SeaMaterial.h"
-#include "Framework/CollisionManager.h"
-
-#include "Game/Message/ObjectMessenger.h"
-#include "Game/Message/CollisionMessenger.h"
-#include "Game/Message/SceneMessenger.h"
+#include "Game/SkyBox/SkyBox.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -30,9 +25,7 @@ Game::Game() noexcept(false)
 {
     // 共有リソースのインスタンスを取得する
     m_commonResources = CommonResources::GetInstance();
-    // リソースのインスタンスを取得する
-    m_resources = Resources::GetInstance();
-  
+
     // デバイスリソースを作成する
     m_deviceResources = std::make_unique<DX::DeviceResources>(
         DXGI_FORMAT_B8G8R8A8_UNORM,     // バックバッファのフォーマットを指定する
@@ -53,9 +46,9 @@ Game::~Game()
 void Game::Initialize(HWND window, int width, int height)
 {
 
-// デバイスリソース初期化================================================
+    // デバイスリソース初期化================================================
 
-    // ウィンドウハンドルを設定する
+        // ウィンドウハンドルを設定する
     m_hWnd = window;
     // デバイスリソースを生成する
     m_deviceResources->CreateDeviceResources();
@@ -67,8 +60,11 @@ void Game::Initialize(HWND window, int width, int height)
     CreateWindowSizeDependentResources();
 
     // デバイスとコンテキストを設定
-    m_device  = m_deviceResources->GetD3DDevice();
+    m_device = m_deviceResources->GetD3DDevice();
     m_context = m_deviceResources->GetD3DDeviceContext();
+
+    // デバイスリソースを共有リソースに設定
+    m_commonResources->SetDeviceResources(m_deviceResources.get());
 
     // タイマー設定を変更する   
     //m_timer.SetFixedTimeStep(true);
@@ -77,56 +73,32 @@ void Game::Initialize(HWND window, int width, int height)
 
     // スクリーンサイズを設定
     m_commonResources->SetScreenSize(width, height);
-
-    
-// 管理者達の生成========================================================
-
-   
+    // 顧問ステートを設定
     m_commonResources->SetCommonStates(m_commonStates.get());
+    // タイマーを設定
     m_commonResources->SetStepTimer(&m_timer);
-
+ 
     // リソースをロードする
-    m_resources->LoadResource();
-    m_commonResources->SetResources(m_resources);
+    Resources::GetInstance()->LoadResource();
 
-    // Tweenマネージャーのインスタンスを取得する
-    m_tweenManager = TweenManager::GetInstance();
-    // インプットマネージャーのインスタンスを取得する
+    // スカイボックスの作成
+    m_skyBox = std::make_unique<SkyBox>();
+    m_skyBox->Initialize();
+
+    // 管理者達の生成========================================================
+
+    // シーンマネージャーの作成、インスタンスを取得する
+    m_sceneManager = SceneManager::GetInstance();
+    // インプットマネージャーの生成、インスタンスを取得する
     m_inputManager = InputManager::GetInstance();
     m_inputManager->GetMouse()->SetWindow(window);
-    m_commonResources->SetInputManager(m_inputManager);
-    // カメラマネージャーの生成
-    m_cameraManager = CameraManager::GetInstance();
-    m_commonResources->SetCameraManager(m_cameraManager);
-    // 描画マネージャーの生成
-    m_renderManager = RenderManager::GetInstance();
-    m_commonResources->SetRenderManager(m_renderManager);
-    // オーディオマネージャーの生成
+    // オーディオマネージャーの生成、インスタンスを取得する
     m_audioManager = AudioManager::GetInstance();
     m_audioManager->Initialize();
-    m_commonResources->SetAudioManager(m_audioManager);
-    // シーンマネージャーの生成
-    m_sceneManager = SceneManager::GetInstance();
-    m_commonResources->SetSceneManager(m_sceneManager);
-    // 当たり判定マネージャーの生成
-    m_collisionManager = CollisionManager::GetInstance();
-    m_collisionManager->Initialize();
-    m_commonResources->SetCollisionManager(m_collisionManager);
 
-    // メッセンジャー
-    m_objectMessenger = ObjectMessenger::GetInstance();
-    m_collisionMessenger = CollisionMessenger::GetInstance();
-    m_sceneMessenger = SceneMessenger::GetInstance();
+    // ImGuiの初期化========================================================
 
-    // 海の作成
-    m_seaMaterial = std::make_unique<SeaMaterial>();
-    m_seaMaterial->Initialize();
-
-    m_sceneManager->Initialize();
-
-// ImGuiの初期化========================================================
-
-    //  バージョンの確認
+        //  バージョンの確認
     IMGUI_CHECKVERSION();
     //  コンテキストの作成
     ImGui::CreateContext();
@@ -146,6 +118,18 @@ void Game::Initialize(HWND window, int width, int height)
     ID3D11Device* device = m_deviceResources->GetD3DDevice();
     ID3D11DeviceContext* context = m_deviceResources->GetD3DDeviceContext();
     ImGui_ImplDX11_Init(device, context);
+
+    // プロジェクション行列の作成
+     m_commonResources->SetProjectionMatrix(
+         DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(
+        DirectX::XMConvertToRadians(60.0f),
+        (float)width / (float)height,
+        0.1f,
+        100000.0f
+    ));
+
+    // シーンの初期化処理
+    m_sceneManager->Initialize();
 
     // デバッグの時のみ作成
 #ifdef _DEBUG
@@ -171,11 +155,11 @@ void Game::Initialize(HWND window, int width, int height)
     );
     //	スプライトバッチの作成
     m_spriteBatch = std::make_unique<SpriteBatch>(
-        m_commonResources->GetDeviceResources()->GetD3DDeviceContext()
+       m_context
     );
     //	スプライトフォントの作成
     m_spriteFont = std::make_unique<SpriteFont>(
-        m_commonResources->GetDeviceResources()->GetD3DDevice(),
+        m_device,
         L"Resources/Fonts/SegoeUI_18.spritefont"
     );
     // プリミティブバッチの作成
@@ -190,9 +174,9 @@ void Game::Initialize(HWND window, int width, int height)
 void Game::Tick()
 {
     m_timer.Tick([&]()
-    {
-        Update(m_timer);
-    });
+        {
+            Update(m_timer);
+        });
     // 描画する
     Render();
 }
@@ -200,18 +184,8 @@ void Game::Tick()
 // ワールドを更新する
 void Game::Update(DX::StepTimer const& timer)
 {
-    if (!m_sceneManager->CheckChageScene())
-    {
-        ExitGame();
-    }
-    // 入力マネージャーの更新処理
-    m_inputManager->Update();
-    // オーディオマネージャーの更新処理
-    m_audioManager->Update(timer);
-    // Tweenマネージャーの更新処理
-    m_tweenManager->Update();
-    // カメラの更新
-    m_cameraManager->Update();
+    (void)timer;
+
     // シーンの更新処理
     m_sceneManager->Update();
 }
@@ -230,11 +204,17 @@ void Game::Render()
     // バックバッファをクリアする
     Clear();
 
-    m_seaMaterial->Render();
+    // スカイボックスを更新する
+    m_skyBox->Update(
+        m_commonResources->GetViewMatrix(),
+        m_commonResources->GetProjectionMatrix()
+    );
+    // スカイボックスを描画
+    m_skyBox->Render(m_context, m_commonStates.get());
 
     // シーンの描画処理
     m_sceneManager->Render();
-
+    
     //  新フレームの開始（メインループの一番上に記述）
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -252,9 +232,6 @@ void Game::Render()
     // TODO: Add your rendering code here.
     context;
 
-    int screen_w, screen_h;
-    m_commonResources->GetScreenSize(screen_w, screen_h);
-
     //  ImGuiの描画処理
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -266,7 +243,6 @@ void Game::Render()
         ImGui::RenderPlatformWindowsDefault();
         // TODO for OpenGL: restore current GL context.
     }
-
 
     // デバッグ描画
 #ifdef _DEBUG
@@ -286,7 +262,7 @@ void Game::Render()
     );
 
     // ビュー行列を設定する
-    m_basicEffect->SetView(m_commonResources->GetCameraManager()->GetViewMatrix());
+    m_basicEffect->SetView(m_commonResources->GetViewMatrix());
     // プロジェクション行列を設定する
     m_basicEffect->SetProjection(projection);
     // ワールド行列を設定する
@@ -315,7 +291,7 @@ void Game::Render()
     swprintf(stringBuffer, sizeof(stringBuffer) / sizeof(wchar_t), L"FPS : %d", m_timer.GetFramesPerSecond());
     m_spriteFont->DrawString(m_spriteBatch.get(), stringBuffer, SimpleMath::Vector2(10, 20), Colors::White, 0.0f, SimpleMath::Vector2::Zero, 0.8f);
     // スクリーンサイズ
-    swprintf(stringBuffer, sizeof(stringBuffer) / sizeof(wchar_t), L"ScreenW : %d ScreenH : %d", screen_w, screen_h);
+    swprintf(stringBuffer, sizeof(stringBuffer) / sizeof(wchar_t), L"ScreenW : %d ScreenH : %d", 1280, 720);
     m_spriteFont->DrawString(m_spriteBatch.get(), stringBuffer, SimpleMath::Vector2(10, 40), Colors::White, 0.0f, SimpleMath::Vector2::Zero, 0.8f);
     m_spriteBatch->End();
 #endif
@@ -396,7 +372,7 @@ void Game::OnWindowSizeChanged(int width, int height)
     CreateWindowSizeDependentResources();
 
     // ゲームウィンドウのサイズが変更された時の処理を記述する
-    m_commonResources->SetScreenSize(width, height);
+    //m_commonResources->SetScreenSize(width, height);
 }
 
 // Properties
@@ -412,7 +388,7 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 // デバイスに依存したリソースを生成する
 void Game::CreateDeviceDependentResources()
 {
-    m_commonResources->SetDeviceResources(m_deviceResources.get());
+   //  m_commonResources->SetDeviceResources(m_deviceResources.get());
 
     auto device = m_deviceResources->GetD3DDevice();
     //	コモンステートの作成
@@ -422,7 +398,7 @@ void Game::CreateDeviceDependentResources()
     // ウィンドウの既定サイズを取得する
     GetDefaultSize(width, height);
     // 「ウィンドウハンドル」「幅」「高さ」を設定する
-    m_commonResources->GetDeviceResources()->SetWindow(m_hWnd, width, height);
+    m_deviceResources->SetWindow(m_hWnd, width, height);
 }
 
 // ウィンドウサイズが変更されたイベントによりメモリリソースを確保する
@@ -445,7 +421,7 @@ void Game::CreateWindowSizeDependentResources()
         1000.0f
     );
     // 射影行列を設定する
-    m_commonResources->SetProjectionMatrix(projection);
+    // m_commonResources->SetProjectionMatrix(projection);
 }
 
 // デバイスロストが発生した時の処理を記述する

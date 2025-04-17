@@ -2,10 +2,11 @@
 // Main.cpp
 //
 
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Game.h"
 #include <Mouse.h>
 #include <Keyboard.h>
+#include "Framework/Resources/Resources.h"
 
 using namespace DirectX;
 
@@ -49,8 +50,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(hr))
         return 1;
 
-   
-
     // フルスクリーン対応
     static bool s_fullscreen = false;
     // メッセージボックスの表示
@@ -60,7 +59,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (result == IDYES) {
         s_fullscreen = true;
     }
-    else{
+    else {
         s_fullscreen = false;
     }
 

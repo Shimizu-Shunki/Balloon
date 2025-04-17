@@ -6,23 +6,16 @@
 
 #include "Framework/DeviceResources.h"
 #include "Framework/StepTimer.h"
-#include "Framework/Resources.h"
-#include "Framework/CommonResources.h"
-#include "Framework/CameraManager.h"
-#include "Framework/RenderManager.h"
-#include "Framework/AudioManager.h"
-#include "Framework/Tween/TweenManager.h"
 
-class SceneManager;
+
+class CommonResources;
 class InputManager;
-class SeaMaterial;
-class CollisionManager;
-class ObjectMessenger;
-class CollisionMessenger;
-class SceneMessenger;
+class AudioManager;
+class SceneManager;
+class SkyBox;
 
-
-// D3D11デバイスを生成しゲームループを提供するゲームクラス
+// A basic game implementation that creates a D3D11 device and
+// provides a game loop.
 class Game final : public DX::IDeviceNotify
 {
 public:
@@ -81,44 +74,24 @@ private:
     ID3D11Device1* m_device;
     // コンテキスト
     ID3D11DeviceContext1* m_context;
-
-
+    //  コモンステート
+    std::unique_ptr<DirectX::CommonStates>  m_commonStates;
     // デバイスリソース
     std::unique_ptr<DX::DeviceResources> m_deviceResources;
     // フルスクリーン
     BOOL m_full_screen;
-   
+
     // 共有リソース
     CommonResources* m_commonResources;
-    // リソース
-    Resources* m_resources;
-    //  コモンステート
-    std::unique_ptr<DirectX::CommonStates>  m_commonStates;
-
-    // 管理クラス
     // シーンマネージャー
     SceneManager* m_sceneManager;
     // 入力マネージャー
     InputManager* m_inputManager;
-    // カメラマネージャー
-    CameraManager* m_cameraManager;
-    // 描画マネージャー
-    RenderManager* m_renderManager;
     // オーディオマネージャー
     AudioManager* m_audioManager;
-    // Tweenマネージャー
-    TweenManager* m_tweenManager;
-    // 当たり判定マネージャー
-    CollisionManager* m_collisionManager;
 
-    // メッセンジャー
-    ObjectMessenger* m_objectMessenger;
-    CollisionMessenger* m_collisionMessenger;
-    SceneMessenger* m_sceneMessenger;
-
-    // 海
-    std::unique_ptr<SeaMaterial> m_seaMaterial;
-
+    // スカイボックス
+    std::unique_ptr<SkyBox> m_skyBox;
 
     // デバッグの時のみ作成
 #ifdef _DEBUG

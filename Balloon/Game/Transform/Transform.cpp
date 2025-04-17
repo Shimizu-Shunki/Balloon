@@ -6,7 +6,7 @@
 // 製作者 : 清水駿希
 // 
 // ============================================
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Game/Transform/Transform.h"
 #include "Framework/Tween/TweenManager.h"
 #include "Framework/Tween/Tween.h"
@@ -38,10 +38,6 @@ void Transform::Initialize(
 	DirectX::SimpleMath::Vector3 scale
 )
 {
-	// ワールド座標系を設定する
-	m_position = position;
-	m_rotation = rotation;
-	m_scale = scale;
 	// ローカル座標系を設定する
 	m_localPosition = position;
 	m_localRotation = rotation;
@@ -72,44 +68,22 @@ void Transform::Update()
 	}
 }
 
-/// <summary>
-/// 親のTransofrmを設定する
-/// </summary>
-/// <param name="parent">親Transform</param>
-void Transform::SetParent(Transform* parent)
+// ワールド座標を取得
+DirectX::SimpleMath::Vector3 Transform::GetWorldPosition() const
+{
+	// ワールド行列の第4列 (41, 42, 43) が平行移動成分
+	return DirectX::SimpleMath::Vector3(m_worldMatrix._41, m_worldMatrix._42, m_worldMatrix._43);
+}
+
+// ワールド回転を取得
+DirectX::SimpleMath::Quaternion Transform::GetWorldRotation() const
 {
 	using namespace DirectX::SimpleMath;
 
-
-	if (parent == nullptr) return;
-
-	DirectX::SimpleMath::Matrix parentMatrix =
-		DirectX::SimpleMath::Matrix::CreateScale(parent->GetLocalScale()) *
-		DirectX::SimpleMath::Matrix::CreateFromQuaternion(parent->GetLocalRotation()) *
-		DirectX::SimpleMath::Matrix::CreateTranslation(parent->GetLocalPosition());
-
-	DirectX::SimpleMath::Matrix childMatrix =
-		DirectX::SimpleMath::Matrix::CreateScale(m_localScale) *
-		DirectX::SimpleMath::Matrix::CreateFromQuaternion(m_localRotation) *
-		DirectX::SimpleMath::Matrix::CreateTranslation(m_localPosition);
-
-	childMatrix *= parentMatrix.Invert();
-
-	// ローカル座標を計算
-	m_localPosition = { childMatrix._41,childMatrix._42, childMatrix._43 };
-
-
-	// 各軸のスケールを計算
-	float scaleX = Vector3(childMatrix._11, childMatrix._12, childMatrix._13).Length();
-	float scaleY = Vector3(childMatrix._21, childMatrix._22, childMatrix._23).Length();
-	float scaleZ = Vector3(childMatrix._31, childMatrix._32, childMatrix._33).Length();
-
-	m_localScale = { scaleX, scaleY, scaleZ };
-
 	// スケールを除去して回転行列を取り出す
-	Vector3 scale = m_localScale;
+	Vector3 scale = GetWorldScale();
 
-	Matrix rotationMatrix = childMatrix;
+	Matrix rotationMatrix = m_worldMatrix;
 	rotationMatrix._11 /= scale.x;
 	rotationMatrix._12 /= scale.x;
 	rotationMatrix._13 /= scale.x;
@@ -122,17 +96,24 @@ void Transform::SetParent(Transform* parent)
 	rotationMatrix._32 /= scale.z;
 	rotationMatrix._33 /= scale.z;
 
-	// 行列の正規化（オルトノーマル化）
-	rotationMatrix = rotationMatrix.Transpose().Invert();
-
 	// 回転行列からクォータニオンを作成
-	m_localRotation =  Quaternion::CreateFromRotationMatrix(rotationMatrix);
-	
-	m_parent = parent;
-
-	// 親に自分自身を設定
-	parent->SetChild(this);
+	return Quaternion::CreateFromRotationMatrix(rotationMatrix);
 }
+
+// ワールドスケールを取得
+DirectX::SimpleMath::Vector3 Transform::GetWorldScale() const
+{
+	using namespace DirectX::SimpleMath;
+
+	// 各軸のスケールを計算
+	float scaleX = Vector3(m_worldMatrix._11, m_worldMatrix._12, m_worldMatrix._13).Length();
+	float scaleY = Vector3(m_worldMatrix._21, m_worldMatrix._22, m_worldMatrix._23).Length();
+	float scaleZ = Vector3(m_worldMatrix._31, m_worldMatrix._32, m_worldMatrix._33).Length();
+
+	return Vector3(scaleX, scaleY, scaleZ);
+}
+
+
 
 
 /// <summary>

@@ -6,24 +6,13 @@
 // 製作者 : 清水駿希
 // 
 // ============================================
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Framework/SceneManager.h"
 #include "Framework/CommonResources.h"
-#include "Framework/Tween/TweenManager.h"
 #include "Game/Game.h"
 
-// メッセンジャー
-#include "Game/Message/CollisionMessenger.h"
-#include "Game/Message/ObjectMessenger.h"
 // 各シーン
-#include "Game/Scenes/Header/PlayScene.h"
-#include "Game/Scenes/Header/TitleScene.h"
-#include "Game/Scenes/Header/MenuScene.h"
-#include "Game/Scenes/Header/StageSelectScene.h"
-#include "Game/Scenes/Header/PlayScene.h"
-#include "Game/Scenes/Header/GameClearScene.h"
-#include "Game/Scenes/Header/GameOverScene.h"
-#include "Game/Scenes/Header/DebugScene.h"
+#include "Game/Scenes/DebugScene.h"
 
 /// <summary>
 /// コンストラクタ
@@ -37,8 +26,6 @@ SceneManager::SceneManager()
 {
 	// 共有リソースのインスタンスを取得する
 	m_commonResources = CommonResources::GetInstance();
-	// TweenManagerのインスタンスを取得する
-	m_tweenManager = TweenManager::GetInstance();
 }
 
 /// <summary>
@@ -47,18 +34,9 @@ SceneManager::SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの作成
-	m_currentScene = std::make_unique<TitleScene>();
+	m_currentScene = std::make_unique<DebugScene>();
 	// 初期シーンの初期化
 	m_currentScene->Initialize();
-
-	// 描画マネージャーのモデル達を準備段階から移動
-	m_commonResources->GetRenderManager()->SwitchRenderbleObjects();
-	// カメラを準備段階のものをメインに切り替える
-	m_commonResources->GetCameraManager()->SwitchCameras();
-
-	// メッセンジャー
-	CollisionMessenger::GetInstance()->ApplyChanges();
-	ObjectMessenger::GetInstance()->ApplyChanges();
 
 	// 初期シーンのスタート処理
 	m_currentScene->Start();
@@ -112,18 +90,6 @@ bool SceneManager::CheckChageScene()
 		m_currentScene.reset();
 		// 次のシーンを入れる
 		m_currentScene = std::move(m_nextScene);
-
-		// 描画オブジェクトを次のシーンの物に切り替える
-		m_commonResources->GetRenderManager()->SwitchRenderbleObjects();
-		// カメラを次のシーンの物に切り替える
-		m_commonResources->GetCameraManager()->SwitchCameras();
-
-		// メッセンジャー
-		CollisionMessenger::GetInstance()->ApplyChanges();
-		ObjectMessenger::GetInstance()->ApplyChanges();
-		
-		// 前のTweenをすべて停止する
-		m_tweenManager->Stop();
 
 		// 次のシーンスタート処理
 		m_currentScene->Start();

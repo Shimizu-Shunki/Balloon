@@ -24,5 +24,9 @@ cbuffer Parameters : register(b0)
     float4x4 WorldViewProj         : packoffset(c22);
 };
 
-
-
+// 環境光定数バッファ
+cbuffer AmbientLightParameters : register(b1)
+{
+    float3 c_ambientLightColor : packoffset(c0); // 環境光の色
+    float f_ambientLightIntensity : packoffset(c0.w); // 環境光の強さ
+}

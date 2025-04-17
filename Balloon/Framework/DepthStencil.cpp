@@ -6,7 +6,7 @@
 // »ìÒ : ´…xŠó
 // 
 // ============================================
-#include "Framework/pch.h"
+#include "pch.h"
 #include "DepthStencil.h"
 
 using namespace DirectX;

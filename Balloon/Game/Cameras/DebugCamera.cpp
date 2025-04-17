@@ -6,7 +6,7 @@
 // 製作者 : 清水駿希
 // 
 // ============================================
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Game/Cameras/DebugCamera.h"
 
 using namespace DirectX;

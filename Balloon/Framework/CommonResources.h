@@ -8,18 +8,16 @@
  *
  **********************************************/
 #pragma once
-#include "Framework/pch.h"
+#include "pch.h"
 #include "DeviceResources.h"
-#include "StepTimer.h"
 #include "CommonStates.h"
-#include "Framework/AudioManager.h"
+#include "StepTimer.h"
+#include "Framework/Resources/Resources.h"
 #include "InputManager.h"
-#include "SceneManager.h"
-#include "Framework/Resources.h"
-#include "Framework/RenderManager.h"
-#include "Framework/CameraManager.h"
-#include "Framework/CollisionManager.h"
-#include "Framework/Tween/TweenManager.h"
+#include "Framework/AudioManager.h"
+#include "Game/SkyBox/SkyBox.h"
+#include "Framework/SceneManager.h"
+
 
 
 class CommonResources
@@ -35,27 +33,9 @@ public:
 	//	コモンステート
 	void SetCommonStates(DirectX::CommonStates* commonStates) { m_commonStates = commonStates; }
 	DirectX::CommonStates* GetCommonStates() { return m_commonStates; }
-	//	オーディオマネージャー
-	void SetAudioManager(AudioManager* audioManager) { m_audioManager =  audioManager; }
-	AudioManager* GetAudioManager() { return m_audioManager; }
-	//	入力マネージャー
-	void SetInputManager(InputManager* inputManager) { m_inputManager = inputManager; }
-	InputManager* GetInputManager() { return m_inputManager; }
-	//	シーンマネージャー
-	void SetSceneManager(SceneManager* sceneManager) { m_sceneManager = sceneManager; }
-	SceneManager* GetSceneManager() { return m_sceneManager; }
-	// リソース
-	void SetResources(Resources* resources) { m_resources = resources; }
-	Resources* GetResources() { return m_resources; }
-	// 描画マネージャー
-	void SetRenderManager(RenderManager* renderManager) { m_renderManager = renderManager; }
-	RenderManager* GetRenderManager() { return m_renderManager; }
-	// カメラマネージャー
-	void SetCameraManager(CameraManager* cameraManager) { m_cameraManager = cameraManager; }
-	CameraManager* GetCameraManager() { return m_cameraManager; }
-	// 当たり判定マネージャー
-	void SetCollisionManager(CollisionManager* collisionManager) { m_collisionManager = collisionManager; }
-	CollisionManager* GetCollisionManager() { return m_collisionManager; }
+	// スカイボックス
+	void SetSkyBox(SkyBox* skyBox) { m_skyBox = skyBox; }
+	SkyBox* GetSkyBox() { return m_skyBox; }
 
 	// スクリーンサイズ
 	void GetScreenSize(int& width, int& height) const { width = m_screenW; height = m_screenH; }
@@ -73,13 +53,7 @@ private:
 		m_deviceResources(nullptr),
 		m_stepTimer(nullptr),
 		m_commonStates(nullptr),
-		m_audioManager(nullptr),
-		m_inputManager(nullptr),
-		m_sceneManager(nullptr),
-		m_resources(nullptr),
-		m_renderManager(nullptr),
-		m_cameraManager(nullptr),
-		m_collisionManager(nullptr),
+		m_skyBox(nullptr),
 		m_screenW(0),
 		m_screenH(0),
 		m_view{},
@@ -107,23 +81,11 @@ private:
 	DX::DeviceResources* m_deviceResources;
 	// タイマー
 	DX::StepTimer* m_stepTimer;
-	// リソース
-	Resources* m_resources;
 	// コモンステート
 	DirectX::CommonStates* m_commonStates;
-	// オーディオマネージャー
-	AudioManager* m_audioManager;
-	// 入力マネージャー
-	InputManager* m_inputManager;
-	// シーンマネージャー
-	SceneManager* m_sceneManager;
-	// 描画マネージャー
-	RenderManager* m_renderManager;
-	// カメラマネージャー
-	CameraManager* m_cameraManager;
-	// 当たり判定マネージャー
-	CollisionManager* m_collisionManager;
-
+	
+	// スカイボックス
+	SkyBox* m_skyBox;
 	// スクリーンサイズ
 	int m_screenW, m_screenH;
 	// ビュー行列

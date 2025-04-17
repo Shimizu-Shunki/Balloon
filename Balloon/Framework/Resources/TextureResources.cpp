@@ -7,11 +7,12 @@
 // 
 // ============================================
 
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Framework/Resources/TextureResources.h"
 #include "Framework/CommonResources.h"
-#include "Framework/Resources.h"
-#include <unordered_map>
+#include "Framework/Resources/Resources.h"
+#include <DDSTextureLoader.h>
+#include <WICTextureLoader.h>
 
 
 /// <summary>
@@ -19,35 +20,10 @@
 /// </summary>
 TextureResources::TextureResources()
 	:
-	m_titleLogo{},
-	m_playerIcon{},
-	m_playSceneKeysGuide{},
-	m_timeFrame{},
-	m_scoreFrame{},
-	m_balloonGageFrame{},
-	m_balloonGage{},
-	m_heightMeter{},
-	m_hpGage{},
-	m_hpGageFrame{},
-	m_numbers{},
-	m_ruleTexture{},
-	m_clearText{},
-	m_failedText{},
-	m_SeaTexture{},
-	m_playerTexture{},
-	m_enemyTexture{},
-	m_meatNormalMap{},
-	m_woodNormalMap{},
-	m_rockNormalMap{},
-	m_seaNormalMap{},
-	m_cloudNormalMap{},
-	m_cubeMap{},
-	m_eveningCubeMap{},
-	m_startText{},
-	m_stageSelectTexts{},
-	m_cloudFrame{}
+	m_textures{}
 {
-
+	// デバイスのインスタンスを取得する
+	m_device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
 }
 
 
@@ -57,163 +33,95 @@ TextureResources::TextureResources()
 /// <param name="data">Josnデータ</param>
 void TextureResources::LoadResource(const nlohmann::json& data)
 {
-    // デバイス
-    ID3D11Device1* device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
+	// テクスチャのディレクトリを取得
+	const std::wstring directory          = Resources::GetDirectoryFromJSON(data, "TextureDirectory");
+	const std::wstring normalMapDirectory = Resources::GetDirectoryFromJSON(data, "NormalMapTextureDirectory");
+	const std::wstring ddsDirectory       = Resources::GetDirectoryFromJSON(data, "DDSTextureDirectory");
 
-    // テクスチャ
-    std::unordered_map<std::string, std::wstring> texturePaths;
-    if (data.contains("Textures")) {
-        for (const auto& entry : data["Textures"]) {
-            for (const auto& [key, value] : entry.items()) {
-                texturePaths[key] = Resources::ConvertToWString(value);
-            }
-        }
-    }
+	// テクスチャ
+	if (data.contains("Textures") && data["Textures"].is_object()) 
+	{
+		for (const auto& [key, value] : data["Textures"].items()) 
+		{
+			// 無効なキーまたは非文字列値はスキップ
+			if (!value.is_string() || key.empty()) continue;
 
-    // タイトルロゴ
-    DirectX::CreateWICTextureFromFile(
-        device, texturePaths["Logo"].c_str(), nullptr, m_titleLogo.ReleaseAndGetAddressOf());
+			// パス構築
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
 
+			// テクスチャをロードする
+			HRESULT hr = DirectX::CreateWICTextureFromFile(
+				m_device,
+				path.c_str(),
+				nullptr,
+				m_textures[key].ReleaseAndGetAddressOf()
+			);
 
-	// ルール画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Fade"].c_str(), nullptr, m_ruleTexture.ReleaseAndGetAddressOf());
-	// ゲームクリアテキスト画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ClearText"].c_str(), nullptr, m_clearText.ReleaseAndGetAddressOf());
-	// ゲームオーバーテキスト画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["FailedText"].c_str(), nullptr, m_failedText.ReleaseAndGetAddressOf());
-	// 海画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Sea"].c_str(), nullptr, m_SeaTexture.ReleaseAndGetAddressOf());
-
-	// レディゴー
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ReadyGo"].c_str(), nullptr, m_readyGo.ReleaseAndGetAddressOf());
-	// ナンバーズ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Numbers"].c_str(), nullptr, m_numbers.ReleaseAndGetAddressOf());
-	// ナンバーズ1
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Numbers1"].c_str(), nullptr, m_numbers1.ReleaseAndGetAddressOf());
-	// メニューボタンテキスト
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["MenuButton"].c_str(), nullptr, m_menuButtonText.ReleaseAndGetAddressOf());
-	// キー操作説明
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["KeyGuide"].c_str(), nullptr, m_keyGuide.ReleaseAndGetAddressOf());
-	// キー操作説明
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["MenuButtonFrame"].c_str(), nullptr, m_menuButtonFrame.ReleaseAndGetAddressOf());
-	// キー操作説明
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["MenuButtonFrame2"].c_str(), nullptr, m_menuButtonFrame2.ReleaseAndGetAddressOf());
-	// スタートテキスト
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["StartText"].c_str(), nullptr, m_startText.ReleaseAndGetAddressOf());
-
-
-	// プレイヤーアイコン
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["PlayerIcon"].c_str(), nullptr, m_playerIcon.ReleaseAndGetAddressOf());
-	// プレイシーンキーガイド
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["PlaySceneKeysGuide"].c_str(), nullptr, m_playSceneKeysGuide.ReleaseAndGetAddressOf());
-	// タイムフレーム
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["TimeFrame"].c_str(), nullptr, m_timeFrame.ReleaseAndGetAddressOf());
-	// スコアフレーム
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ScoreFrame"].c_str(), nullptr, m_scoreFrame.ReleaseAndGetAddressOf());
-	// バルーンゲージフレーム
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["BalloonGageFrame"].c_str(), nullptr, m_balloonGageFrame.ReleaseAndGetAddressOf());
-	// バルーンゲージ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["BalloonGage"].c_str(), nullptr, m_balloonGage.ReleaseAndGetAddressOf());
-	// 高さメーター
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["HeightMeter"].c_str(), nullptr, m_heightMeter.ReleaseAndGetAddressOf());
-	// HPゲージ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["HPGage"].c_str(), nullptr, m_hpGage.ReleaseAndGetAddressOf());
-	// HPゲージフレーム
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["HPGageFrame"].c_str(), nullptr, m_hpGageFrame.ReleaseAndGetAddressOf());
-	// ステージテキスト
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["StageSelectTexts"].c_str(), nullptr, m_stageSelectTexts.ReleaseAndGetAddressOf());
-	// 雲フレーム
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["CloudFrame"].c_str(), nullptr, m_cloudFrame.ReleaseAndGetAddressOf());
-	// ステージセレクトキーガイド
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["StageSelectKeyGuide"].c_str(), nullptr, m_stageSelectKeyGuide.ReleaseAndGetAddressOf());
-
-	// リザルトシーンテキスト
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ResultText"].c_str(), nullptr, m_resultSceneText.ReleaseAndGetAddressOf());
-	// リザルトシーンキーガイド
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ResultSceneKeyGuide"].c_str(), nullptr, m_resultSceneKeyGuide.ReleaseAndGetAddressOf());
-	// ステージセレクトキーガイド
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["ResultSceneText"].c_str(), nullptr, m_resultSceneButton.ReleaseAndGetAddressOf());
-
-	// プレイヤー画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Player"].c_str(), nullptr, m_playerTexture.ReleaseAndGetAddressOf());
-	// 敵画像
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Enemy"].c_str(), nullptr, m_enemyTexture.ReleaseAndGetAddressOf());
+			// ロード失敗時はデバッグ時のみ停止
+			assert(SUCCEEDED(hr)); 
+		}
+	}
 
 	// ノーマルマップ
-	if (data.contains("Textures_NormalMaps")) {
-		for (const auto& entry : data["Textures_NormalMaps"]) {
-			for (const auto& [key, value] : entry.items()) {
-				texturePaths[key] = Resources::ConvertToWString(value);
-			}
+	if (data.contains("Textures_NormalMaps") && data["Textures_NormalMaps"].is_object()) 
+	{
+		for (const auto& [key, value] : data["Textures_NormalMaps"].items()) 
+		{
+
+			// 無効なキーまたは非文字列値はスキップ
+			if (!value.is_string() || key.empty()) continue;
+
+			// パス構築
+			std::wstring path = normalMapDirectory + L"/" + Resources::ConvertToWString(value);
+
+			// ノーマルマップをロードする
+			HRESULT hr = DirectX::CreateWICTextureFromFile(
+				m_device,
+				path.c_str(),
+				nullptr,
+				m_textures[key].ReleaseAndGetAddressOf()
+			);
+
+			// ロード失敗時はデバッグ時のみ停止
+			assert(SUCCEEDED(hr)); 
 		}
 	}
-
-	// 肉 ノーマルマップ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Meat"].c_str(), nullptr, m_meatNormalMap.ReleaseAndGetAddressOf());
-	// 木　ノーマルマップ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Wood"].c_str(), nullptr, m_woodNormalMap.ReleaseAndGetAddressOf());
-	// 岩　ノーマルマップ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Rock"].c_str(), nullptr, m_rockNormalMap.ReleaseAndGetAddressOf());
-	// 海　ノーマルマップ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Sea"].c_str(), nullptr, m_seaNormalMap.ReleaseAndGetAddressOf());
-	// 雲　ノーマルマップ
-	DirectX::CreateWICTextureFromFile(
-		device, texturePaths["Cloud"].c_str(), nullptr, m_cloudNormalMap.ReleaseAndGetAddressOf());
-
 
 	// DDSテクスチャ
-	if (data.contains("Textures_DDS")) {
-		for (const auto& entry : data["Textures_DDS"]) {
-			for (const auto& [key, value] : entry.items()) {
-				texturePaths[key] = Resources::ConvertToWString(value);
-			}
+	if (data.contains("Textures_DDS") && data["Textures_DDS"].is_object()) {
+		for (const auto& [key, value] : data["Textures_DDS"].items()) {
+
+			// 無効なキーまたは非文字列値はスキップ
+			if (!value.is_string() || key.empty()) continue;
+
+			// パス構築
+			std::wstring path = ddsDirectory + L"/" + Resources::ConvertToWString(value);
+
+			// ddsテクスチャをロードする
+			HRESULT hr = DirectX::CreateDDSTextureFromFile(
+				m_device,
+				path.c_str(),
+				nullptr,
+				m_textures[key].ReleaseAndGetAddressOf()
+			);
+
+			// ロード失敗時はデバッグ時のみ停止
+			assert(SUCCEEDED(hr)); 
 		}
 	}
+}
 
-	// スカイマップ
-	DirectX::CreateDDSTextureFromFile(
-		device, texturePaths["CubeMap"].c_str(), nullptr, m_cubeMap.ReleaseAndGetAddressOf());
+/// <summary>
+/// テクスチャを取得する
+/// </summary>
+/// <param name="id">テクスチャID</param>
+/// <returns>リソース</returns>
+ID3D11ShaderResourceView* TextureResources::GetTexture(TextureKeyID id)
+{
+	// キーをstring型に変更
+	std::string key = std::string(magic_enum::enum_name(id));
 
-	// スカイマップ
-	DirectX::CreateDDSTextureFromFile(
-		device, texturePaths["EveningCubeMap"].c_str(), nullptr, m_eveningCubeMap.ReleaseAndGetAddressOf());
-
-	// 風船画像
-	DirectX::CreateDDSTextureFromFile(
-		device, texturePaths["Balloon"].c_str(), nullptr, m_balloonTexture.ReleaseAndGetAddressOf());
-
-	texturePaths.clear();
+	// 検索
+	auto it = m_textures.find(key);
+	return (it != m_textures.end()) ? it->second.Get() : nullptr;
 }

@@ -12,7 +12,6 @@
 
 class IScene;
 class CommonResources;
-class TweenManager;
 
 class SceneManager
 {
@@ -68,8 +67,7 @@ private:
 
 	// 共有リソース
 	CommonResources* m_commonResources;
-	// TweenManager
-	TweenManager* m_tweenManager;
+	
 
 	// シーン
 	std::unique_ptr<IScene> m_currentScene;

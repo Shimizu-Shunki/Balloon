@@ -7,27 +7,18 @@
 // 
 // ============================================
 
-#include "Framework/pch.h"
+#include "pch.h"
 #include "Framework/Resources/ModelResources.h"
 #include "Framework/CommonResources.h"
-#include "Framework/Resources.h"
+#include "Framework/Resources/Resources.h"
 #include <Framework/Microsoft/ReadData.h>
-#include <unordered_map>
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 ModelResources::ModelResources()
 	:
-	m_playerHeadModel{},
-	m_playerBodyModel{},
-	m_playerRightArmModel{},
-	m_playerLeftArmModel{},
-	m_playerRightFootModel{},
-	m_playerLeftFootModel{},
-	m_enemyHeadModel{},
-	m_balloonModel{},
-	m_cloudModel{}
+	m_models{}
 {
 
 }
@@ -43,57 +34,58 @@ void ModelResources::LoadResource(const nlohmann::json& data)
 	// エフェクトファクトリを生成する
 	std::unique_ptr<DirectX::EffectFactory> effectFactory = std::make_unique<DirectX::EffectFactory>(device);
 
-	// PlayerModelのパスを取得
-	std::unordered_map<std::string, std::wstring> modelPaths;
-	if (data.contains("PlayerModels")) {
-		for (const auto& entry : data["PlayerModels"]) {
-			for (const auto& [key, value] : entry.items()) {
-				modelPaths[key] = Resources::ConvertToWString(value);
-			}
-		}
-	}
-	// リソースディレクトリを設定する
-	effectFactory->SetDirectory(modelPaths["Directory"].c_str());
-	// プレイヤー　頭モデルをロードする
-	m_playerHeadModel = DirectX::Model::CreateFromCMO(device, modelPaths["Head"].c_str(), *effectFactory);
-	// プレイヤー　体モデルをロードする
-	m_playerBodyModel = DirectX::Model::CreateFromCMO(device, modelPaths["Body"].c_str(), *effectFactory);
-	// プレイヤー　右腕モデルをロードする
-	m_playerRightArmModel = DirectX::Model::CreateFromCMO(device, modelPaths["RightArm"].c_str(), *effectFactory);
-	// プレイヤー　左腕モデルをロードする
-	m_playerLeftArmModel = DirectX::Model::CreateFromCMO(device, modelPaths["LeftArm"].c_str(), *effectFactory);
-	// プレイヤー　右足モデルをロードする
-	m_playerRightFootModel = DirectX::Model::CreateFromCMO(device, modelPaths["RightFoot"].c_str(), *effectFactory);
-	// プレイヤー　左足モデルをロードする
-	m_playerLeftFootModel = DirectX::Model::CreateFromCMO(device, modelPaths["LeftFoot"].c_str(), *effectFactory);
+	// モデルの各ディレクトリを取得する
+	const std::wstring directory       = Resources::GetDirectoryFromJSON(data,"ModelDirectory");
+	const std::wstring playerDirectory = Resources::GetDirectoryFromJSON(data,"PlayerModelDirectory");
+	const std::wstring EnemyDirectory  = Resources::GetDirectoryFromJSON(data,"EnemyModelDirectory");
+	// ディレクトリを設定する
+	effectFactory->SetDirectory(directory.c_str());
 
-	// EnemyModelのパスを取得
-	if (data.contains("EnemyModel")) {
-		for (const auto& entry : data["EnemyModel"]) {
-			for (const auto& [key, value] : entry.items()) {
-				modelPaths[key] = Resources::ConvertToWString(value);
-			}
-		}
-	}
-	// リソースディレクトリを設定
-	effectFactory->SetDirectory(modelPaths["Directory"].c_str());
-	// 敵　頭モデルをロードする
-	m_enemyHeadModel = DirectX::Model::CreateFromCMO(device, modelPaths["Head"].c_str(), *effectFactory);
+	// モデルをロードする
+	if (data.contains("Models") && data["Models"].is_object()) {
+		const auto& models = data["Models"];
 
-	// Modelのパスを取得
-	if (data.contains("Model")) {
-		for (const auto& entry : data["Model"]) {
-			for (const auto& [key, value] : entry.items()) {
-				modelPaths[key] = Resources::ConvertToWString(value);
-			}
+		for (const auto& [key, value] : models.items()) 
+		{
+			// パス構築
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// モデルのロード
+			m_models[key] = DirectX::Model::CreateFromCMO(device, path.c_str(), *effectFactory);
 		}
 	}
-	// リソースディレクトリを設定する
-	effectFactory->SetDirectory(modelPaths["Directory"].c_str());
-	// プレイヤー　風船モデルをロードする
-	m_balloonModel = DirectX::Model::CreateFromCMO(device, modelPaths["Balloon"].c_str(), *effectFactory);
-	// プレイヤー　雲モデルをロードする
-	m_cloudModel = DirectX::Model::CreateFromCMO(device, modelPaths["Cloud"].c_str(), *effectFactory);
-	// ボックスモデル
-	m_boxModel = DirectX::Model::CreateFromCMO(device, modelPaths["Box"].c_str(), *effectFactory);
+
+	// プレイヤーモデルのディレクトリを設定する
+	effectFactory->SetDirectory(playerDirectory.c_str());
+
+	// プレイヤーモデルをロードする
+	if (data.contains("PlayerModels") && data["PlayerModels"].is_object()) {
+		const auto& models = data["PlayerModels"];
+
+		for (const auto& [key, value] : models.items())
+		{
+			// パス構築
+			std::wstring path = playerDirectory + L"/" + Resources::ConvertToWString(value);
+
+			// モデルのロード
+			m_models[key] = DirectX::Model::CreateFromCMO(device, path.c_str(), *effectFactory);
+		}
+	}
+
+	// 敵モデルのディレクトリを設定する
+	effectFactory->SetDirectory(EnemyDirectory.c_str());
+
+	// 敵モデルをロードする
+	if (data.contains("EnemyModel") && data["EnemyModel"].is_object()) {
+		const auto& models = data["EnemyModel"];
+
+		for (const auto& [key, value] : models.items())
+		{
+			// パス構築
+			std::wstring path = EnemyDirectory + L"/" + Resources::ConvertToWString(value);
+
+			// モデルのロード
+			m_models[key] = DirectX::Model::CreateFromCMO(device, path.c_str(), *effectFactory);
+		}
+	}
 }

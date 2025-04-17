@@ -7,13 +7,12 @@
 // 
 // ============================================
 
-#include "Framework/pch.h"
-#include "Framework/Resources/ShaderResources.h"
+#include "pch.h"
 #include "Framework/CommonResources.h"
-#include "Framework/Resources.h"
+#include "Framework/Resources/ShaderResources.h"
+#include "Framework/Resources/Resources.h"
 #include <Framework/Microsoft/ReadData.h>
-#include <unordered_map>
-#include "Game/Material/PBRLit.h"
+#include <VertexTypes.h>
 
 
 const std::vector<D3D11_INPUT_ELEMENT_DESC> ShaderResources::UI_INPUT_LAYOUT =
@@ -38,23 +37,9 @@ const std::vector<D3D11_INPUT_ELEMENT_DESC> ShaderResources::SEA_INPUT_LAYOUT =
 ShaderResources::ShaderResources()
 	:
 	m_UIinputLayout{},
-	m_UI_VS{},
-	m_UI_GS{},
-	m_UI_PS{},
 	m_SeaInputLayout{},
-	m_SeaVS{},
-	m_SeaHS{},
-	m_SeaDS{},
-	m_SeaPS{},
-	m_PBRLitInputLayout{},
-	m_PBRLitVS{},
-	m_PBRLitPS{},
-	m_ShadowVS{},
-	m_ShadowPS{},
-	m_skyBoxVS{},
-	m_skyBoxPS{}
+	m_PBRLitInputLayout{}
 {
-
 }
 
 
@@ -66,128 +51,161 @@ void ShaderResources::LoadResource(const nlohmann::json& data)
 {
 	// デバイス
 	ID3D11Device1* device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
+	// モデルの各ディレクトリを取得する
+	const std::wstring directory = Resources::GetDirectoryFromJSON(data, "ShaderDirectory");
 
-	// Shaderのパスを取得
-	std::unordered_map<std::string, std::wstring> shaderPaths;
-	if (data.contains("Shaders")) {
-		for (const auto& entry : data["Shaders"]) {
-			for (const auto& [key, value] : entry.items()) {
-				shaderPaths[key] = Resources::ConvertToWString(value);
-			}
+	std::vector<uint8_t> blob;
+
+	// 頂点シェーダー
+	if (data["Shaders"].contains("VS")) {
+		for (const auto& [key, value] : data["Shaders"]["VS"].items()) {
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// シェーダーをロードする
+			blob = DX::ReadData(path.c_str());
+			DX::ThrowIfFailed(
+				device->CreateVertexShader(blob.data(), blob.size(), nullptr, 
+					m_vertexShaders[key].ReleaseAndGetAddressOf())
+			);
+		}
+	}
+	// ハルシェーダー
+	if (data["Shaders"].contains("HS")) {
+		for (const auto& [key, value] : data["Shaders"]["HS"].items()) {
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// シェーダーをロードする
+			blob = DX::ReadData(path.c_str());
+			DX::ThrowIfFailed(
+				device->CreateHullShader(blob.data(), blob.size(), nullptr,
+					m_hullShaders[key].ReleaseAndGetAddressOf())
+			);
+		}
+	}
+	// ドメインシェーダー
+	if (data["Shaders"].contains("DS")) {
+		for (const auto& [key, value] : data["Shaders"]["DS"].items()) {
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// シェーダーをロードする
+			blob = DX::ReadData(path.c_str());
+			DX::ThrowIfFailed(
+				device->CreateDomainShader(blob.data(), blob.size(), nullptr,
+					m_domainShaders[key].ReleaseAndGetAddressOf())
+			);
+		}
+	}
+	// ジオメトリシェーダー
+	if (data["Shaders"].contains("GS")) {
+		for (const auto& [key, value] : data["Shaders"]["GS"].items()) {
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// シェーダーをロードする
+			blob = DX::ReadData(path.c_str());
+			DX::ThrowIfFailed(
+				device->CreateGeometryShader(blob.data(), blob.size(), nullptr,
+					m_geometryShaders[key].ReleaseAndGetAddressOf())
+			);
+		}
+	}
+	// ピクセルシェーダー
+	if (data["Shaders"].contains("PS")) {
+		for (const auto& [key, value] : data["Shaders"]["PS"].items()) {
+			std::wstring path = directory + L"/" + Resources::ConvertToWString(value);
+
+			// シェーダーをロードする
+			blob = DX::ReadData(path.c_str());
+			DX::ThrowIfFailed(
+				device->CreatePixelShader(blob.data(), blob.size(), nullptr,
+					m_pixelShaders[key].ReleaseAndGetAddressOf())
+			);
 		}
 	}
 
-	// シェーダー
-	std::vector<uint8_t> blob;
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(shaderPaths["UI_VS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_UI_VS.ReleaseAndGetAddressOf())
-	);
-	//	インプットレイアウトの作成
-	device->CreateInputLayout(&UI_INPUT_LAYOUT[0],
-		static_cast<UINT>(UI_INPUT_LAYOUT.size()),
-		blob.data(), blob.size(),
-		m_UIinputLayout.GetAddressOf());
 
-	// ジオメトリシェーダをロードする
-	blob = DX::ReadData(shaderPaths["UI_GS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateGeometryShader(blob.data(), blob.size(), nullptr, m_UI_GS.ReleaseAndGetAddressOf())
-	);
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["UI_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_UI_PS.ReleaseAndGetAddressOf())
-	);
+	// 入力レイアウトの構築（必要なものだけ）
+	if (m_vertexShaders.contains("UI_VS")) {
+		blob = DX::ReadData((directory + L"/UI_VS.cso").c_str());
+		device->CreateInputLayout(UI_INPUT_LAYOUT.data(),
+			(UINT)UI_INPUT_LAYOUT.size(),
+			blob.data(), blob.size(),
+			m_UIinputLayout.GetAddressOf());
+	}
 
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["NumberUI_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_numberPS.ReleaseAndGetAddressOf())
-	);
+	if (m_vertexShaders.contains("Sea_VS")) {
+		blob = DX::ReadData((directory + L"/Sea_VS.cso").c_str());
+		device->CreateInputLayout(SEA_INPUT_LAYOUT.data(),
+			(UINT)SEA_INPUT_LAYOUT.size(),
+			blob.data(), blob.size(),
+			m_SeaInputLayout.GetAddressOf());
+	}
 
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["ScoreUI_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_scorePS.ReleaseAndGetAddressOf())
-	);
+	if (m_vertexShaders.contains("PBRLit_VS")) {
+		blob = DX::ReadData((directory + L"/PBRLit_VS.cso").c_str());
+		device->CreateInputLayout(
+			DirectX::VertexPositionNormalTangentColorTexture::InputElements,
+			DirectX::VertexPositionNormalTangentColorTexture::InputElementCount,
+			blob.data(), blob.size(),
+			m_PBRLitInputLayout.GetAddressOf());
+	}
+}
 
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(shaderPaths["Sea_VS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_SeaVS.ReleaseAndGetAddressOf())
-	);
+/// <summary>
+/// 頂点シェーダーを取得する
+/// </summary>
+/// <param name="id">頂点シェーダーID</param>
+/// <returns>頂点シェーダー</returns>
+ID3D11VertexShader* ShaderResources::GetVertexShader(VS_ID id)
+{
+	std::string key = std::string(magic_enum::enum_name(id));
+	auto it = m_vertexShaders.find(key);
+	return (it != m_vertexShaders.end()) ? it->second.Get() : nullptr;
+}
 
-	//	インプットレイアウトの作成
-	device->CreateInputLayout(&SEA_INPUT_LAYOUT[0],
-		static_cast<UINT>(SEA_INPUT_LAYOUT.size()),
-		blob.data(), blob.size(),
-		m_SeaInputLayout.GetAddressOf());
+/// <summary>
+/// ハルシェーダーを取得する
+/// </summary>
+/// <param name="id">ハルシェーダーID</param>
+/// <returns>ハルシェーダー</returns>
+ID3D11HullShader* ShaderResources::GetHullShader(HS_ID id)
+{
+	std::string key = std::string(magic_enum::enum_name(id));
+	auto it = m_hullShaders.find(key);
+	return (it != m_hullShaders.end()) ? it->second.Get() : nullptr;
+}
 
-	// ハルシェーダーをロードする
-	blob = DX::ReadData(shaderPaths["Sea_HS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateHullShader(blob.data(), blob.size(), nullptr, m_SeaHS.ReleaseAndGetAddressOf())
-	);
+/// <summary>
+/// ドメインシェーダーを取得する
+/// </summary>
+/// <param name="id">ドメインシェーダーID</param>
+/// <returns>ドメインシェーダー</returns>
+ID3D11DomainShader* ShaderResources::GetDomainShader(DS_ID id)
+{
+	std::string key = std::string(magic_enum::enum_name(id));
+	auto it = m_domainShaders.find(key);
+	return (it != m_domainShaders.end()) ? it->second.Get() : nullptr;
+}
 
-	// ドメインシェーダをロードする
-	blob = DX::ReadData(shaderPaths["Sea_DS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateDomainShader(blob.data(), blob.size(), nullptr, m_SeaDS.ReleaseAndGetAddressOf())
-	);
+/// <summary>
+/// ジオメトリシェーダーを取得する
+/// </summary>
+/// <param name="id">ジオメトリシェーダーID</param>
+/// <returns>ジオメトリシェーダー</returns>
+ID3D11GeometryShader* ShaderResources::GetGeometryShader(GS_ID id)
+{
+	std::string key = std::string(magic_enum::enum_name(id));
+	auto it = m_geometryShaders.find(key);
+	return (it != m_geometryShaders.end()) ? it->second.Get() : nullptr;
+}
 
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["Sea_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_SeaPS.ReleaseAndGetAddressOf())
-	);
-
-	// シャドウマップ
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(shaderPaths["ShadowMap_VS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_ShadowVS.ReleaseAndGetAddressOf())
-	);
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["ShadowMap_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_ShadowPS.ReleaseAndGetAddressOf())
-	);
-
-	// 物理ベースレンダリング
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(shaderPaths["PBRLit_VS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_PBRLitVS.ReleaseAndGetAddressOf())
-	);
-	//	インプットレイアウトの作成
-	device->CreateInputLayout(&DirectX::VertexPositionNormalTangentColorTexture::InputElements[0],
-		static_cast<UINT>(DirectX::VertexPositionNormalTangentColorTexture::InputElementCount),
-		blob.data(), blob.size(),
-		m_PBRLitInputLayout.GetAddressOf());
-
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["PBRLit_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_PBRLitPS.ReleaseAndGetAddressOf())
-	);
-
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["Balloon_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_balloonPS.ReleaseAndGetAddressOf())
-	);
-
-	// スカイボックス
-	// 頂点シェーダをロードする
-	blob = DX::ReadData(shaderPaths["SkyBox_VS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreateVertexShader(blob.data(), blob.size(), nullptr, m_skyBoxVS.ReleaseAndGetAddressOf())
-	);
-	// ピクセルシェーダをロードする
-	blob = DX::ReadData(shaderPaths["SkyBox_PS"].c_str());
-	DX::ThrowIfFailed(
-		device->CreatePixelShader(blob.data(), blob.size(), nullptr, m_skyBoxPS.ReleaseAndGetAddressOf())
-	);
+/// <summary>
+/// ピクセルシェーダーを取得する
+/// </summary>
+/// <param name="id">ピクセルシェーダーID</param>
+/// <returns>ピクセルシェーダー</returns>
+ID3D11PixelShader* ShaderResources::GetPixelShader(PS_ID id)
+{
+	std::string key = std::string(magic_enum::enum_name(id));
+	auto it = m_pixelShaders.find(key);
+	return (it != m_pixelShaders.end()) ? it->second.Get() : nullptr;
 }
