@@ -7,13 +7,13 @@
 // 
 // ============================================
 #pragma once
-
+#include "Framework/Resources/ResourceKeys.h"
 
 class ModelResources
 {
 public:
 	// テクスチャを取得する
-	DirectX::Model* GetModel(const std::string& key) { return m_models[key].get(); }
+	DirectX::Model* GetModel(ModelKeyID id);
 
 public:
 	ModelResources(const ModelResources&) = delete;             // コピー禁止

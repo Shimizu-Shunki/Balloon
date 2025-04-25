@@ -60,12 +60,6 @@ void Transform::Update()
 		// 子の行列に親の変位分を上乗せする
 		m_worldMatrix *= m_parent->GetWorldMatrix() ;
 	}
-	
-	// 子供の行列計算を行う
-	for (auto& child : m_childs)
-	{
-		child->Update();
-	}
 }
 
 // ワールド座標を取得

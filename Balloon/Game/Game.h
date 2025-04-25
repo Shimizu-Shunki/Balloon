@@ -12,7 +12,11 @@ class CommonResources;
 class InputManager;
 class AudioManager;
 class SceneManager;
+class Renderer;
 class SkyBox;
+class Sea;
+class Parameters;
+
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -89,9 +93,15 @@ private:
     InputManager* m_inputManager;
     // オーディオマネージャー
     AudioManager* m_audioManager;
-
+    // 描画処理
+    std::unique_ptr<Renderer> m_renderer;
+    // 海
+    std::unique_ptr<Sea> m_sea;
     // スカイボックス
     std::unique_ptr<SkyBox> m_skyBox;
+
+    // パラメーター
+    Parameters* m_parameters;
 
     // デバッグの時のみ作成
 #ifdef _DEBUG

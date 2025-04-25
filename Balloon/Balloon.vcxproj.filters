@@ -74,6 +74,69 @@
     <Filter Include="Game\Message">
       <UniqueIdentifier>{80c7c29a-9024-45e0-82f4-35663387b481}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{a51235e3-2b4d-462f-a574-676bc41bc332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects">
+      <UniqueIdentifier>{d3db543d-50ac-4163-b146-c889562befee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\Player">
+      <UniqueIdentifier>{a247ecd8-ccde-4d22-ae87-6c9d99b15cda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\Balloon">
+      <UniqueIdentifier>{192f8d1c-f8b6-40dc-9599-e2526c2c72b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\Enemy">
+      <UniqueIdentifier>{7b57f30d-f01e-4709-944b-98451659d60e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\RenderableObjects">
+      <UniqueIdentifier>{157a11d1-2a7d-4734-aac3-7accca2c4ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Buffers">
+      <UniqueIdentifier>{bd6492e2-5e1e-40c8-ae80-1b3f89ce104c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\Player\Header">
+      <UniqueIdentifier>{04c813f4-861c-4d5b-989b-141b411bbb15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\Player\Source">
+      <UniqueIdentifier>{10e6da19-afca-4920-a2bc-8663c4f180bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Factorys">
+      <UniqueIdentifier>{8a503d5e-934e-4429-ac48-77a63c3fe7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node">
+      <UniqueIdentifier>{f5a9e71b-7e43-4a7f-8c81-0d0264307e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Sea">
+      <UniqueIdentifier>{e5d2d51d-b9c4-41a3-a656-7659d151eb02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UIObject">
+      <UniqueIdentifier>{c4f9a4ce-20be-4039-aa1d-a0da13ec75fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UIObjects">
+      <UniqueIdentifier>{11ae79d6-d7a5-4c43-9433-ee9bdb9b6f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States">
+      <UniqueIdentifier>{8dbfea36-0b23-4a2f-8717-20ca28af9b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\SceneStates">
+      <UniqueIdentifier>{4a851ede-a798-421c-8c5c-a5d4de301a41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\ObjectStates">
+      <UniqueIdentifier>{3c6d8db8-dafd-496b-b5c2-f091b2617fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\ObjectStates\Player">
+      <UniqueIdentifier>{be1d3fac-84dc-41d3-a5a8-705f43b69bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\ObjectStates\Enemy">
+      <UniqueIdentifier>{c71ccec1-4712-454c-befb-36a3e59d913a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States\ObjectStates\Balloon">
+      <UniqueIdentifier>{3212d712-cfcd-4943-8494-027c534e16c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Parameters">
+      <UniqueIdentifier>{b015532b-bc87-4fcd-98fb-6e9795dbd753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -195,6 +258,114 @@
     <ClInclude Include="Interface\IState.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Object\Object.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IRenderableObject.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RenderableObjects\PlayerRenderableObject.h">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Buffers\ConstantBuffer.h">
+      <Filter>Game\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Body.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Head.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\LeftArm.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\LeftFoot.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\RightFoot.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\RightArm.h">
+      <Filter>Game\Objects\Player\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IComposite.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ILeaf.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IPlayerFactory.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\PlayerFactory.h">
+      <Filter>Game\Factorys</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Renderer.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IEnemyFactory.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\EnemyFactory.h">
+      <Filter>Game\Factorys</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Enemy.h">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RenderableObjects\EnemyRenderableObject.h">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\NodeBase.h">
+      <Filter>Game\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\Root.h">
+      <Filter>Game\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Sea\Sea.h">
+      <Filter>Game\Sea</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UIObject\UIObject.h">
+      <Filter>Game\UIObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Balloon\Balloon.h">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Balloon\BalloonBody.h">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Balloon\BalloonRope.h">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IBalloonFactory.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\BalloonFactory.h">
+      <Filter>Game\Factorys</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RenderableObjects\BalloonRenderableObject.h">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\KeyboardMessenger.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerIdleState.h">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerAttackState.h">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\States\Player\PlayerRunState.h">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Parameters\Parameters.h">
+      <Filter>Game\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Parameters\ParameterKeys.h">
+      <Filter>Game\Parameters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -272,6 +443,90 @@
     <ClCompile Include="Framework\Tween\TweenManager.cpp">
       <Filter>Framework\Tween</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Object\Object.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RenderableObjects\PlayerRenderableObject.cpp">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Body.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Head.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\LeftArm.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\LeftFoot.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\RightArm.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\RightFoot.cpp">
+      <Filter>Game\Objects\Player\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\PlayerFactory.cpp">
+      <Filter>Game\Factorys</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Renderer.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\EnemyFactory.cpp">
+      <Filter>Game\Factorys</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Enemy.cpp">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RenderableObjects\EnemyRenderableObject.cpp">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\NodeBase.cpp">
+      <Filter>Game\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\Root.cpp">
+      <Filter>Game\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Sea\Sea.cpp">
+      <Filter>Game\Sea</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UIObject\UIObject.cpp">
+      <Filter>Game\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Balloon\Balloon.cpp">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Balloon\BalloonBody.cpp">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Balloon\BalloonRope.cpp">
+      <Filter>Game\Objects\Balloon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\BalloonFactory.cpp">
+      <Filter>Game\Factorys</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RenderableObjects\BalloonRenderableObject.cpp">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Message\KeyboardMessenger.cpp">
+      <Filter>Game\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerIdleState.cpp">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerAttackState.cpp">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\States\Player\PlayerRunState.cpp">
+      <Filter>Game\States\ObjectStates\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Parameters\Parameters.cpp">
+      <Filter>Game\Parameters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -290,6 +545,7 @@
     <None Include="Resources\Shaders\hlsl\UI.hlsli">
       <Filter>Shaders\UI</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="imgui\LICENSE.txt">

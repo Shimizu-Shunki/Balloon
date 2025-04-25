@@ -12,7 +12,8 @@
 
 class CommonResources;
 class DebugCamera;
-
+class Root;
+class Parameters;
 
 class DebugScene : public IScene
 {
@@ -34,10 +35,21 @@ public:
 	// 終了処理
 	void Finalize() override;
 
+	// シーンのステートを変更する
+	void ChangeState(IState* newState) override;
+	// 当たり判定メッセージを受け取る
+	void OnSceneMessegeAccepted(Message::SceneMessageID messageID) override;
+
 private:
+
+	// パラメーター
+	Parameters* m_parameters;
 
 	// 共有リソース
 	CommonResources* m_commonResources;
 	// デバッグカメラで実装
 	std::unique_ptr<DebugCamera> m_debugCamera;
+
+	// プレイヤーを追加
+	std::unique_ptr<Root> m_root;
 };

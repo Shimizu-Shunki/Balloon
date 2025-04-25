@@ -1,0 +1,9 @@
+{
+    "PlayerBrakingRate": 0.0,
+    "PlayerMass": 0.0,
+    "PlayerMaxForce": 0.0,
+    "PlayerMaxSpeed": 0.0,
+    "PlayerMaxTurnRate": 0.0,
+    "PlayerRadius": 0.0,
+    "PlayerScale": 0.0
+}

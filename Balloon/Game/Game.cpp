@@ -7,7 +7,10 @@
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/Resources.h"
 #include "Framework/SceneManager.h"
+#include "Framework/Renderer.h"
 #include "Game/SkyBox/SkyBox.h"
+#include "Game/Sea/Sea.h"
+#include "Game/Parameters/Parameters.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -85,7 +88,19 @@ void Game::Initialize(HWND window, int width, int height)
     m_skyBox = std::make_unique<SkyBox>();
     m_skyBox->Initialize();
 
+    // 海の作成
+    m_sea = std::make_unique<Sea>();
+    m_sea->Initialize();
+
+    // パラメーターのインスタンスを取得する
+    m_parameters = Parameters::GetInstance();
+ 
+
     // 管理者達の生成========================================================
+
+    // 描画処理の作成
+    m_renderer = std::make_unique<Renderer>();
+    m_commonResources->SetRenderer(m_renderer.get());
 
     // シーンマネージャーの作成、インスタンスを取得する
     m_sceneManager = SceneManager::GetInstance();
@@ -185,6 +200,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     (void)timer;
+    m_inputManager->Update();
 
     // シーンの更新処理
     m_sceneManager->Update();
@@ -209,11 +225,17 @@ void Game::Render()
         m_commonResources->GetViewMatrix(),
         m_commonResources->GetProjectionMatrix()
     );
+
+
+
     // スカイボックスを描画
     m_skyBox->Render(m_context, m_commonStates.get());
-
+    // 海の描画
+    m_sea->Render();
     // シーンの描画処理
     m_sceneManager->Render();
+
+    
     
     //  新フレームの開始（メインループの一番上に記述）
     ImGui_ImplDX11_NewFrame();
@@ -231,6 +253,8 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
     context;
+
+    m_parameters->ShowImGuiEditor();
 
     //  ImGuiの描画処理
     ImGui::Render();

@@ -38,4 +38,4 @@ DS_OUTPUT main(
     output.uv = input.uvw;
 
     return output;
-    }
+}

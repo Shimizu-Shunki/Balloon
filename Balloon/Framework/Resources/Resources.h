@@ -8,7 +8,9 @@
 // ============================================
 
 #pragma once
-
+#include "Framework/Resources/ModelResources.h"
+#include "Framework/Resources/ShaderResources.h"
+#include "Framework/Resources/TextureResources.h"
 
 class CommonResources;
 

@@ -12,6 +12,7 @@
 #include "Framework/CommonResources.h"
 #include "Framework/Resources/Resources.h"
 #include <Framework/Microsoft/ReadData.h>
+#include "Framework/Resources/ResourceKeys.h"
 
 /// <summary>
 /// コンストラクタ
@@ -88,4 +89,19 @@ void ModelResources::LoadResource(const nlohmann::json& data)
 			m_models[key] = DirectX::Model::CreateFromCMO(device, path.c_str(), *effectFactory);
 		}
 	}
+}
+
+/// <summary>
+/// モデルを取得する
+/// </summary>
+/// <param name="id">テクスチャID</param>
+/// <returns>リソース</returns>
+DirectX::Model* ModelResources::GetModel(ModelKeyID id)
+{
+	// キーをstring型に変更
+	std::string key = std::string(magic_enum::enum_name(id));
+
+	// 検索
+	auto it = m_models.find(key);
+	return (it != m_models.end()) ? it->second.get() : nullptr;
 }

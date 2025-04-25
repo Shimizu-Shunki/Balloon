@@ -11,6 +11,13 @@
 #include <Keyboard.h>
 #include <GamePad.h>
 
+enum class KeyType : int
+{
+	ON_KEY,
+	ON_KEY_DOWN,
+	ON_KEY_UP,
+};
+
 class InputManager
 {
 public:

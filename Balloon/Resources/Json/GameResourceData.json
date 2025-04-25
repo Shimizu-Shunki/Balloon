@@ -44,7 +44,7 @@
         "Meat": "Meat_normal.png",
         "Wood": "Wood_normal.png",
         "Rock": "Rock_normal.png",
-        "Sea": "Sea_normal.png",
+        "Sea2": "Sea_normal.png",
         "Cloud": "Cloud_normal.png"
     },
 
@@ -68,7 +68,8 @@
     },
 
     "Models": {
-        "Balloon": "Balloon.cmo",
+        "BalloonBody": "BalloonBody.cmo",
+        "BalloonRope": "BalloonRope.cmo",
         "Box": "torus.cmo",
         "Cloud": "Cloud.cmo",
         "Sphere": "Sphere.cmo",

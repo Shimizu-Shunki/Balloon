@@ -15,6 +15,7 @@
 #include "Framework/Resources/Resources.h"
 #include "InputManager.h"
 #include "Framework/AudioManager.h"
+#include "Framework/Renderer.h"
 #include "Game/SkyBox/SkyBox.h"
 #include "Framework/SceneManager.h"
 
@@ -33,6 +34,9 @@ public:
 	//	コモンステート
 	void SetCommonStates(DirectX::CommonStates* commonStates) { m_commonStates = commonStates; }
 	DirectX::CommonStates* GetCommonStates() { return m_commonStates; }
+	// 描画処理
+	void SetRenderer(Renderer* renderer) { m_renderer = renderer; }
+	Renderer* GetRenderer() { return m_renderer; }
 	// スカイボックス
 	void SetSkyBox(SkyBox* skyBox) { m_skyBox = skyBox; }
 	SkyBox* GetSkyBox() { return m_skyBox; }
@@ -54,6 +58,7 @@ private:
 		m_stepTimer(nullptr),
 		m_commonStates(nullptr),
 		m_skyBox(nullptr),
+		m_renderer(nullptr),
 		m_screenW(0),
 		m_screenH(0),
 		m_view{},
@@ -84,6 +89,9 @@ private:
 	// コモンステート
 	DirectX::CommonStates* m_commonStates;
 	
+	// 描画処理
+	Renderer* m_renderer;
+
 	// スカイボックス
 	SkyBox* m_skyBox;
 	// スクリーンサイズ
