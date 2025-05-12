@@ -15,7 +15,7 @@
 /// <param name="angle"></param>
 /// <param name="position"></param>
 /// <param name="messageID"></param>
-Balloon::Balloon(IObject* parent, IObject::ObjectID objectID,
+Balloon::Balloon(IObject* root, IObject* parent, IObject::ObjectID objectID,
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Quaternion& rotation,
 	const DirectX::SimpleMath::Vector3& scale,
@@ -29,7 +29,7 @@ Balloon::Balloon(IObject* parent, IObject::ObjectID objectID,
 		0.0f
 	),
 	m_isActive(true),
-	m_objectNumber(Object::CountUpNumber()),
+	m_objectNumber(root->GetObjectNumber() + Object::CountUpNumber()),
 	m_objectID(objectID),
 	m_messageID(messageID),
 	m_parent(parent),
@@ -74,10 +74,10 @@ void Balloon::Initialize()
 
 	// 風船の本体を追加
 	this->Attach(BalloonFactory::CreateBalloonBody(this, m_objectID,
-		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One));
+		{ 0.0f , 14.0f , -7.0f }, DirectX::SimpleMath::Vector3::UnitX * -30.0f, DirectX::SimpleMath::Vector3::One * 0.04f));
 	// 風船のひもを追加
 	this->Attach(BalloonFactory::CreateBalloonRope(this, m_objectID,
-		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One));
+		{ 0.0f , 6.0f , -2.0f }, DirectX::SimpleMath::Vector3::UnitX * -30.0f, DirectX::SimpleMath::Vector3::One * 0.02f));
 }
 
 /// <summary>
@@ -108,14 +108,16 @@ void Balloon::Finalize()
 
 }
 
-void Balloon::OnMessegeAccepted(Message::MessageID messageID)
+void Balloon::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageID;
+	(void)messageData;
 }
 
 // 通知する
 void Balloon::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 {
+	UNREFERENCED_PARAMETER(type);
+	UNREFERENCED_PARAMETER(key);
 }
 
 /// <summary>
@@ -134,4 +136,21 @@ void Balloon::Attach(std::unique_ptr<IObject> object)
 void Balloon::Detach(std::unique_ptr<IObject> object)
 {
 
+}
+
+// 衝突判定を準備する
+void Balloon::PrepareCollision(ICollisionVisitor* collision)
+{
+	// ボディの当たり判定を行う
+	for (const auto& child : m_childs)
+	{
+		dynamic_cast<ICollision*>(child.get())->PrepareCollision(collision);
+	}
+}
+
+// 衝突判定する
+void Balloon::DetectCollision(ICollisionVisitor* collision, IObject* object)
+{
+	UNREFERENCED_PARAMETER(collision);
+	UNREFERENCED_PARAMETER(object);
 }

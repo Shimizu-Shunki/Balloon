@@ -11,6 +11,8 @@
 #include "Game/SkyBox/SkyBox.h"
 #include "Game/Sea/Sea.h"
 #include "Game/Parameters/Parameters.h"
+#include "Game/AmbientLight/AmbientLight.h"
+#include "Game/Visitor/CollisionVisitor.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -28,6 +30,8 @@ Game::Game() noexcept(false)
 {
     // 共有リソースのインスタンスを取得する
     m_commonResources = CommonResources::GetInstance();
+
+    m_collisionVisitor = CollisionVisitor::GetInstance();
 
     // デバイスリソースを作成する
     m_deviceResources = std::make_unique<DX::DeviceResources>(
@@ -94,6 +98,10 @@ void Game::Initialize(HWND window, int width, int height)
 
     // パラメーターのインスタンスを取得する
     m_parameters = Parameters::GetInstance();
+    m_parameters->LoadFromJson("Resources/Json/Parameters.json");
+
+    // 環境光の初期化
+    AmbientLight::GetInstance()->Initialize();
  
 
     // 管理者達の生成========================================================
@@ -137,7 +145,7 @@ void Game::Initialize(HWND window, int width, int height)
     // プロジェクション行列の作成
      m_commonResources->SetProjectionMatrix(
          DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(
-        DirectX::XMConvertToRadians(60.0f),
+        DirectX::XMConvertToRadians(45.0f),
         (float)width / (float)height,
         0.1f,
         100000.0f
@@ -202,6 +210,9 @@ void Game::Update(DX::StepTimer const& timer)
     (void)timer;
     m_inputManager->Update();
 
+    // 環境光の初期化
+    AmbientLight::GetInstance()->Update((float)timer.GetElapsedSeconds());
+
     // シーンの更新処理
     m_sceneManager->Update();
 }
@@ -254,20 +265,7 @@ void Game::Render()
     // TODO: Add your rendering code here.
     context;
 
-    m_parameters->ShowImGuiEditor();
-
-    //  ImGuiの描画処理
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    // Update and Render additional Platform Windows
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        // TODO for OpenGL: restore current GL context.
-    }
-
+  
     // デバッグ描画
 #ifdef _DEBUG
     wchar_t stringBuffer[128];
@@ -307,6 +305,10 @@ void Game::Render()
         10,                                 // 横分割数
         10                                  // 縦分割数
     );
+
+    // 当たり判定の境界を描画
+    m_collisionVisitor->DebugDraw(m_primitiveBatch.get());
+
     m_primitiveBatch->End();
 
 
@@ -319,6 +321,21 @@ void Game::Render()
     m_spriteFont->DrawString(m_spriteBatch.get(), stringBuffer, SimpleMath::Vector2(10, 40), Colors::White, 0.0f, SimpleMath::Vector2::Zero, 0.8f);
     m_spriteBatch->End();
 #endif
+
+    m_parameters->ShowImGuiEditor();
+
+    //  ImGuiの描画処理
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    // Update and Render additional Platform Windows
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        // TODO for OpenGL: restore current GL context.
+    }
+
     // PIX終了イベント
     m_deviceResources->PIXEndEvent();
     // 新規フレームを描画する

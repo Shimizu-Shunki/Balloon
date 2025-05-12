@@ -5,6 +5,7 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Game/RenderableObjects/BalloonRenderableObject.h"
 #include "Game/Buffers/ConstantBuffer.h"
+#include "Game/AmbientLight/AmbientLight.h"
 #include "Game/Buffers.h"
 
 /// <summary>
@@ -26,6 +27,8 @@ BalloonRenderableObject::BalloonRenderableObject(const bool& isActive, DirectX::
 	m_resources = Resources::GetInstance();
 	// デバイスを取得する
 	m_device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
+
+	m_ambientLight = AmbientLight::GetInstance();
 }
 
 /// <summary>
@@ -42,8 +45,8 @@ void BalloonRenderableObject::Initialize(const PBRLitConstantBuffer& constants)
 	m_constantBuffer->Initialize(m_device);
 
 	// テクスチャを設定
-	m_baseMap   = m_resources->GetTextureResources()->GetTexture(TextureKeyID::Balloon);
-	m_normalMap = m_resources->GetTextureResources()->GetTexture(TextureKeyID::Wood);
+	m_baseMap   = m_resources->GetTextureResources()->GetTexture(TextureKeyID::Player);
+	m_normalMap = m_resources->GetTextureResources()->GetTexture(TextureKeyID::Balloon);
 	m_skyMap    = m_resources->GetTextureResources()->GetTexture(TextureKeyID::CubeMap);
 
 	// インプットレイアウトを設定
@@ -85,9 +88,9 @@ void BalloonRenderableObject::Render(ID3D11DeviceContext* context, DirectX::Comm
 	m_model->Draw(context, *commonStates, m_worldMatrix, viewMatrix, projectionMatrix, false, [&]
 		{
 			// 定数バッファを指定する
-			/*ID3D11Buffer* cbuf[] = { lightBuffer };
+			ID3D11Buffer* cbuf[] = { m_ambientLight->GetBuffer() };
 			context->VSSetConstantBuffers(1, 1, cbuf);
-			context->PSSetConstantBuffers(1, 1, cbuf);*/
+			context->PSSetConstantBuffers(1, 1, cbuf);
 
 			// ブレンドステートを設定 (半透明描画用)
 			context->OMSetBlendState(commonStates->AlphaBlend(), nullptr, 0xFFFFFFFF);
@@ -95,7 +98,7 @@ void BalloonRenderableObject::Render(ID3D11DeviceContext* context, DirectX::Comm
 			context->IASetInputLayout(m_inputLayout);
 
 			// 定数バッファを指定する
-			ID3D11Buffer* cbuf[] = { m_constantBuffer->GetBuffer()};
+			cbuf[0] = { m_constantBuffer->GetBuffer()};
 			context->VSSetConstantBuffers(2, 1, cbuf);
 			context->PSSetConstantBuffers(2, 1, cbuf);
 

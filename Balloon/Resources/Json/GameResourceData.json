@@ -7,38 +7,40 @@
     "EnemyModelDirectory": "Resources/Models/EnemyModels",
     "ShaderDirectory": "Resources/Shaders/cso",
 
-    "Textures": {
-        "Logo": "Logo.png",
-        "Fade": "Fade.png",
-        "ClearText": "ClearText.png",
-        "FailedText": "FailedText.png",
-        "Player": "Player.png",
-        "Enemy": "Enemy.png",
-        "Sea": "Sea.png",
-        "ReadyGo": "ReadyGo.png",
-        "Numbers": "Number00.png",
-        "Numbers1": "Number0.png",
-        "MenuButton": "MenuButtonText.png",
-        "MenuButtonFrame": "MenuButtonFrames.png",
-        "MenuButtonFrame2": "MenuButtonFrames2.png",
-        "KeyGuide": "KeyGuide.png",
-        "StartText": "StartText.png",
-        "PlayerIcon": "PLayerIcon.png",
-        "PlaySceneKeysGuide": "PlaySceneKeysGuide1.png",
-        "TimeFrame": "TimeFrame.png",
-        "ScoreFrame": "ScoreFrame.png",
-        "BalloonGageFrame": "BalloonGageFrame.png",
-        "BalloonGage": "BalloonGage.png",
-        "HeightMeter": "HeightMeter.png",
-        "HPGage": "HPGage.png",
-        "HPGageFrame": "HPGageFrame.png",
-        "CloudFrame": "CloudFrame.png",
-        "StageSelectTexts": "StageSelectTexts.png",
-        "StageSelectKeyGuide": "StageSelectKeyGuide.png",
-        "ResultText": "ResultText.png",
-        "ResultSceneKeyGuide": "ResultSceneKeyGuide.png",
-        "ResultSceneText": "ResultSceneText.png"
-    },
+  "Textures": {
+    "Logo": "Logo.png",
+    "Fade": "Fade.png",
+    "ClearText": "ClearText.png",
+    "FailedText": "FailedText.png",
+    "Player": "Player.png",
+    "Enemy": "Enemy.png",
+    "Sea": "Sea.png",
+    "ReadyGo": "ReadyGo.png",
+    "Numbers": "Number00.png",
+    "Numbers1": "Number0.png",
+    "MenuButton": "MenuButtonText.png",
+    "MenuButtonFrame": "MenuButtonFrames.png",
+    "MenuButtonFrame2": "MenuButtonFrames2.png",
+    "KeyGuide": "KeyGuide.png",
+    "StartText": "StartText.png",
+    "PlayerIcon": "PLayerIcon.png",
+    "PlaySceneKeysGuide": "PlaySceneKeysGuide1.png",
+    "TimeFrame": "TimeFrame.png",
+    "ScoreFrame": "ScoreFrame.png",
+    "BalloonGageFrame": "BalloonGageFrame.png",
+    "BalloonGage": "BalloonGage.png",
+    "HeightMeter": "HeightMeter.png",
+    "HPGage": "HPGage.png",
+    "HPGageFrame": "HPGageFrame.png",
+    "CloudFrame": "CloudFrame.png",
+    "StageSelectTexts": "StageSelectTexts.png",
+    "StageSelectKeyGuide": "StageSelectKeyGuide.png",
+    "ResultText": "ResultText.png",
+    "ResultSceneKeyGuide": "ResultSceneKeyGuide.png",
+    "ResultSceneText": "ResultSceneText.png",
+    "Particle": "particle.png"
+
+  },
 
     "Textures_NormalMaps": {
         "Meat": "Meat_normal.png",
@@ -82,7 +84,8 @@
             "ShadowMap_VS": "ShadowMap_VS.cso",
             "SkyBox_VS": "SkyBox_VS.cso",
             "Sea_VS": "Sea_VS.cso",
-            "UI_VS": "UI_VS.cso"
+            "UI_VS": "UI_VS.cso",
+            "Particle_VS": "Particle_VS.cso"
         },
         "PS": {
             "PBRLit_PS": "PBRLit_PS.cso",
@@ -92,10 +95,12 @@
             "Sea_PS": "Sea_PS.cso",
             "UI_PS": "UI_PS.cso",
             "NumberUI_PS": "NumberUI_PS.cso",
-            "ScoreUI_PS": "ScoreUI_PS.cso"
+            "ScoreUI_PS": "ScoreUI_PS.cso",
+            "Particle_PS": "Particle_PS.cso"
         },
         "GS": {
-            "UI_GS": "UI_GS.cso"
+            "UI_GS": "UI_GS.cso",
+            "Particle_GS": "Particle_GS.cso"
         },
         "HS": {
             "Sea_HS": "Sea_HS.cso"

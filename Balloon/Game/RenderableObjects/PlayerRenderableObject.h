@@ -4,6 +4,7 @@
 #include "Game/Buffers.h"
 
 class Resources;
+class AmbientLight;
 
 class PlayerRenderableObject : public IRenderableObject
 {
@@ -52,6 +53,8 @@ private:
     Resources* m_resources;
     // デバイス
     ID3D11Device1* m_device;
+
+    AmbientLight* m_ambientLight;
 
     // インプットレイアウト
     ID3D11InputLayout* m_inputLayout;

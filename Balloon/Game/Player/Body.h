@@ -15,6 +15,9 @@ public:
 	// オブジェクトのアクティブ状態を取得
 	bool GetIsActive() const { return m_isActive; }
 
+	// オブジェクト番号を取得する
+	int GetObjectNumber() const  override { return m_objectNumber; }
+
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectID; }
 	// Transformを取得する
@@ -30,7 +33,7 @@ public:
 	void SetAcceralation(const DirectX::SimpleMath::Vector3& accelaration) override { m_acceralation = accelaration; }
 
 	// コンストラクタ
-	Body(IObject* parent, IObject::ObjectID objectID,
+	Body(IObject* root,  IObject* parent, IObject::ObjectID objectID,
 		const DirectX::SimpleMath::Vector3& position,
 		const DirectX::SimpleMath::Quaternion& rotation,
 		const DirectX::SimpleMath::Vector3& scale,
@@ -41,7 +44,7 @@ public:
 	// 初期化する
 	void Initialize();
 	// メッセージを取得する
-	void OnMessegeAccepted(Message::MessageID messageID) override;
+	void OnMessegeAccepted(Message::MessageData messageData) override;
 	// キーが押下げられたら通知する
 	void OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key) override;
 	// 更新する

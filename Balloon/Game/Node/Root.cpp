@@ -27,12 +27,6 @@ Root::Root(IObject* parent, IObject::ObjectID objectID,
 }
 
 
-Root::~Root()
-{
-
-}
-
-
 // 初期化する
 void Root::Initialize()
 {
@@ -51,9 +45,9 @@ void Root::Finalize()
 {
 }
 
-void Root::OnMessegeAccepted(Message::MessageID messageID)
+void Root::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageID;
+	(void)messageData;
 }
 
 // 通知する
@@ -65,12 +59,11 @@ void Root::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 
 void Root::Attach(std::unique_ptr<IObject> node)
 {
-	// ノード番号を更新
-	NodeBase::GetNodeCountAfterCountUp();
 	// ノードを追加する
 	NodeBase::Attach(std::move(node));
+	// ノード番号を更新
+	NodeBase::GetNodeCountAfterCountUp();
 }
-
 
 
 void Root::Detach(std::unique_ptr<IObject> node)

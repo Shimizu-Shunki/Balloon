@@ -21,25 +21,51 @@ Parameters::Parameters()
 /// JOSNデータをロードする
 /// </summary>
 /// <param name="filepath">ファイルパス</param>
-void Parameters::LoadFromJson(const std::string& filepath) 
+void Parameters::LoadFromJson(const std::string& filepath)
 {
-    // JSONファイルを開く
     std::ifstream file(filepath);
-    assert(file);
-    // JSON をロード
-    json data;
-    file >> data;
+    if (!file) return;
 
-    for (auto& [key, val] : data.items()) {
-        if (val.is_number_float()) {
-            m_parameters[key] = val.get<float>();
-        }
-        else if (val.is_number_integer()) {
-            m_parameters[key] = val.get<int>();
-        }
-        else if (val.is_array() && val.size() == 3) {
-            DirectX::SimpleMath::Vector3 vec(val[0].get<float>(), val[1].get<float>(), val[2].get<float>());
-            m_parameters[key] = vec;
+    json j;
+    file >> j;
+
+    m_parameters.clear();
+
+    for (auto& [categoryName, paramGroup] : j.items())
+    {
+        for (auto& [paramKey, value] : paramGroup.items())
+        {
+            if (value.is_boolean())
+            {
+                m_parameters[categoryName][paramKey] = value.get<bool>();
+            }
+            else if (value.is_number_float())
+            {
+                m_parameters[categoryName][paramKey] = value.get<float>();
+            }
+            else if (value.is_number_integer())
+            {
+                m_parameters[categoryName][paramKey] = value.get<int>();
+            }
+            else if (value.is_string())
+            {
+                m_parameters[categoryName][paramKey] = value.get<std::string>();
+            }
+            else if (value.is_array())
+            {
+                if (value.size() == 3)
+                {
+                    m_parameters[categoryName][paramKey] = DirectX::SimpleMath::Vector3(
+                        value[0].get<float>(), value[1].get<float>(), value[2].get<float>()
+                    );
+                }
+                else if (value.size() == 4)
+                {
+                    m_parameters[categoryName][paramKey] = DirectX::SimpleMath::Vector4(
+                        value[0].get<float>(), value[1].get<float>(), value[2].get<float>(), value[3].get<float>()
+                    );
+                }
+            }
         }
     }
 }
@@ -51,26 +77,42 @@ void Parameters::LoadFromJson(const std::string& filepath)
 void Parameters::SaveToJson(const std::string& filepath)
 {
     json j;
-    for (const auto& [key, val] : m_parameters)
+
+    for (const auto& [categoryName, paramGroup] : m_parameters)
     {
-        if (std::holds_alternative<float>(val))
+        for (const auto& [paramKey, paramValue] : paramGroup)
         {
-            j[key] = std::get<float>(val);
-        }
-        else if (std::holds_alternative<int>(val))
-        {
-            j[key] = std::get<int>(val);
-        }
-        else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(val))
-        {
-            const auto& v = std::get<DirectX::SimpleMath::Vector3>(val);
-            j[key] = { v.x, v.y, v.z };
+            if (std::holds_alternative<bool>(paramValue))
+            {
+                j[categoryName][paramKey] = std::get<bool>(paramValue);
+            }
+            else if (std::holds_alternative<float>(paramValue))
+            {
+                j[categoryName][paramKey] = std::get<float>(paramValue);
+            }
+            else if (std::holds_alternative<int>(paramValue))
+            {
+                j[categoryName][paramKey] = std::get<int>(paramValue);
+            }
+            else if (std::holds_alternative<std::string>(paramValue))
+            {
+                j[categoryName][paramKey] = std::get<std::string>(paramValue);
+            }
+            else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(paramValue))
+            {
+                const auto& v = std::get<DirectX::SimpleMath::Vector3>(paramValue);
+                j[categoryName][paramKey] = { v.x, v.y, v.z };
+            }
+            else if (std::holds_alternative<DirectX::SimpleMath::Vector4>(paramValue))
+            {
+                const auto& v = std::get<DirectX::SimpleMath::Vector4>(paramValue);
+                j[categoryName][paramKey] = { v.x, v.y, v.z, v.w };
+            }
         }
     }
-    // ファイルパスに対して
-    std::ofstream out(filepath); 
-    // JSON を出力（インデント 4）
-    out << j.dump(4);                 
+
+    std::ofstream out(filepath);
+    out << j.dump(4);
 }
 
 
@@ -137,20 +179,25 @@ std::string Parameters::SaveFile() const
 /// </summary>
 /// <param name="key">キー</param>
 /// <returns>int値</returns>
-int Parameters::GetParameter(const ParameterKeysI& key) const
+int Parameters::GetParameter(const ParametersID& id, const ParameterKeysI& key) const
 {
-    // enum → string（キー名に変換）
+    // enum -> string に変換
+    std::string idStr = std::string(magic_enum::enum_name(id));
     std::string keyStr = std::string(magic_enum::enum_name(key));
 
-    // パラメータ検索
-    auto it = m_parameters.find(keyStr);
-    if (it != m_parameters.end() && std::holds_alternative<int>(it->second)) 
+    // まずカテゴリ(id)を検索
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
     {
-        // 値を返す
-        return std::get<int>(it->second);  
+        // その中のキーを検索
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<int>(paramIt->second))
+        {
+            return std::get<int>(paramIt->second);
+        }
     }
 
-    // 失敗時：0などの安全なデフォルトを返す
+    // 失敗時：安全なデフォルト
     return 0;
 }
 
@@ -159,21 +206,68 @@ int Parameters::GetParameter(const ParameterKeysI& key) const
 /// </summary>
 /// <param name="key">キー</param>
 /// <returns>float値</returns>
-float Parameters::GetParameter(const ParameterKeysF& key) const
+float Parameters::GetParameter(const ParametersID& id, const ParameterKeysF& key) const
 {
-    // enum → string（キー名に変換）
+    std::string idStr = std::string(magic_enum::enum_name(id));
     std::string keyStr = std::string(magic_enum::enum_name(key));
 
-    // パラメータ検索
-    auto it = m_parameters.find(keyStr);
-    if (it != m_parameters.end() && std::holds_alternative<float>(it->second))
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
     {
-        // 値を返す
-        return std::get<float>(it->second);
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<float>(paramIt->second))
+        {
+            return std::get<float>(paramIt->second);
+        }
     }
 
-    // 失敗時：0などの安全なデフォルトを返す
     return 0.0f;
+}
+
+/// <summary>
+/// パラメータを取得する bool
+/// </summary>
+/// <param name="key">キー</param>
+/// <returns>bool値</returns>
+bool Parameters::GetParameter(const ParametersID& id, const ParameterKeysB& key) const
+{
+    std::string idStr = std::string(magic_enum::enum_name(id));
+    std::string keyStr = std::string(magic_enum::enum_name(key));
+
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
+    {
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<bool>(paramIt->second))
+        {
+            return std::get<bool>(paramIt->second);
+        }
+    }
+
+    return false;
+}
+
+/// <summary>
+/// パラメータを取得する string
+/// </summary>
+/// <param name="key">キー</param>
+/// <returns>string値</returns>
+std::string Parameters::GetParameter(const ParametersID& id, const ParameterKeysS& key) const
+{
+    std::string idStr = std::string(magic_enum::enum_name(id));
+    std::string keyStr = std::string(magic_enum::enum_name(key));
+
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
+    {
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<std::string>(paramIt->second))
+        {
+            return std::get<std::string>(paramIt->second);
+        }
+    }
+
+    return "";
 }
 
 /// <summary>
@@ -181,145 +275,218 @@ float Parameters::GetParameter(const ParameterKeysF& key) const
 /// </summary>
 /// <param name="key">キー</param>
 /// <returns>Vector3値</returns>
-DirectX::SimpleMath::Vector3 Parameters::GetParameter(const ParameterKeysV& key) const
+DirectX::SimpleMath::Vector3 Parameters::GetParameter(const ParametersID& id, const ParameterKeysV3& key) const
 {
-    // enum → string（キー名に変換）
+    std::string idStr = std::string(magic_enum::enum_name(id));
     std::string keyStr = std::string(magic_enum::enum_name(key));
 
-    // パラメータ検索
-    auto it = m_parameters.find(keyStr);
-    if (it != m_parameters.end() && std::holds_alternative<DirectX::SimpleMath::Vector3>(it->second))
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
     {
-        // 値を返す
-        return std::get<DirectX::SimpleMath::Vector3>(it->second);
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<DirectX::SimpleMath::Vector3>(paramIt->second))
+        {
+            return std::get<DirectX::SimpleMath::Vector3>(paramIt->second);
+        }
     }
 
-    // 失敗時：0などの安全なデフォルトを返す
     return DirectX::SimpleMath::Vector3::Zero;
 }
+
+/// <summary>
+/// パラメータを取得する Vector4
+/// </summary>
+/// <param name="key">キー</param>
+/// <returns>Vector4値</returns>
+DirectX::SimpleMath::Vector4 Parameters::GetParameter(const ParametersID& id, const ParameterKeysV4& key) const
+{
+    std::string idStr = std::string(magic_enum::enum_name(id));
+    std::string keyStr = std::string(magic_enum::enum_name(key));
+
+    auto catIt = m_parameters.find(idStr);
+    if (catIt != m_parameters.end())
+    {
+        auto paramIt = catIt->second.find(keyStr);
+        if (paramIt != catIt->second.end() && std::holds_alternative<DirectX::SimpleMath::Vector4>(paramIt->second))
+        {
+            return std::get<DirectX::SimpleMath::Vector4>(paramIt->second);
+        }
+    }
+
+    return DirectX::SimpleMath::Vector4::Zero;
+}
+
 
 /// <summary>
 /// デバッグウィンドウ
 /// </summary>
 void Parameters::ShowImGuiEditor() 
 {
-    // パラメータマネージャーウィンドウを表示（上部にメニューバーを有効にする）
+
+    // UI保持用
+    static int selectedCategoryIndex = 0;
+    static char newCategoryName[64] = "";
+
+    // 既存カテゴリ一覧をvectorにする
+    std::vector<std::string> categoryList;
+    for (auto& [catName, _] : m_parameters) {
+        categoryList.push_back(catName);
+    }
+
+
     ImGui::Begin("Parameter Editor", nullptr, ImGuiWindowFlags_MenuBar);
 
-    // メニューバーの表示開始
-    if (ImGui::BeginMenuBar()) {
-        // 「Load」ボタンを押すとファイルダイアログからJSONを読み込む
+    if (ImGui::BeginMenuBar())
+    {
         if (ImGui::Button("Load")) 
         {
-            // ファイル選択
-            const std::string path = this->OpenFile();  
-            // ファイルパスが有効ならロード実行
-            if (!path.empty()) LoadFromJson(path);      
+            const std::string path = this->OpenFile();
+            if (!path.empty()) LoadFromJson(path);
         }
-
-        // ボタンを同一行に表示
         ImGui::SameLine();
-
-        // 「Save」ボタンを押すと保存ダイアログからJSONに保存
-        if (ImGui::Button("Save")) 
+        if (ImGui::Button("Save"))
         {
-            // ファイル保存先選択
-            const std::string path = this->SaveFile();  
-            // パスが有効なら保存
-            if (!path.empty()) SaveToJson(path);        
+            const std::string path = this->SaveFile();
+            if (!path.empty()) SaveToJson(path);
         }
-        // メニューバー終了
-        ImGui::EndMenuBar(); 
+
+        ImGui::EndMenuBar();
     }
 
-    // タブバーの開始（View / Edit / Add タブ）
+    // タブ開始
     if (ImGui::BeginTabBar("ParameterTabs")) {
 
-        // パラメータ表示専用タブ
+        // -------- Viewタブ
         if (ImGui::BeginTabItem("View")) {
-            for (const auto& [key, value] : m_parameters) {
-                // float型の表示
-                if (std::holds_alternative<float>(value)) {
-                    ImGui::Text("%s: %.2f", key.c_str(), std::get<float>(value));
-                }
-                // int型の表示
-                else if (std::holds_alternative<int>(value)) {
-                    ImGui::Text("%s: %d", key.c_str(), std::get<int>(value));
-                }
-                // Vector3型の表示
-                else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(value)) {
-                    const auto& v = std::get<DirectX::SimpleMath::Vector3>(value);
-                    ImGui::Text("%s: (%.2f, %.2f, %.2f)", key.c_str(), v.x, v.y, v.z);
+            if (!categoryList.empty()) {
+                // カテゴリ選択
+                std::vector<const char*> catItems;
+                for (const auto& str : categoryList) catItems.push_back(str.c_str());
+
+                ImGui::Combo("Category", &selectedCategoryIndex, catItems.data(), catItems.size());
+
+                // 選択カテゴリのパラメータを表示
+                const auto& selectedCategory = categoryList[selectedCategoryIndex];
+                for (auto& [paramName, paramValue] : m_parameters[selectedCategory]) {
+                    if (std::holds_alternative<float>(paramValue))
+                        ImGui::Text("%s : %.2f", paramName.c_str(), std::get<float>(paramValue));
+                    else if (std::holds_alternative<int>(paramValue))
+                        ImGui::Text("%s : %d", paramName.c_str(), std::get<int>(paramValue));
+                    else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(paramValue)) {
+                        auto v = std::get<DirectX::SimpleMath::Vector3>(paramValue);
+                        ImGui::Text("%s : (%.2f, %.2f, %.2f)", paramName.c_str(), v.x, v.y, v.z);
+                    }
                 }
             }
-            // 表示タブ終了
-            ImGui::EndTabItem();  
+            ImGui::EndTabItem();
         }
 
-        // パラメータ編集用タブ
+        // -------- Editタブ
         if (ImGui::BeginTabItem("Edit")) {
-            for (auto& [key, value] : m_parameters) {
-                // floatの編集スライダー
-                if (std::holds_alternative<float>(value)) {
-                    float v = std::get<float>(value);
-                    if (ImGui::SliderFloat(key.c_str(), &v, 0.0f, 100.0f)) value = v;
-                }
-                // intの編集スライダー
-                else if (std::holds_alternative<int>(value)) {
-                    int v = std::get<int>(value);
-                    if (ImGui::SliderInt(key.c_str(), &v, 0, 100)) value = v;
-                }
-                // Vector3の編集スライダー
-                else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(value)) {
-                    auto v = std::get<DirectX::SimpleMath::Vector3>(value);
-                    if (ImGui::SliderFloat3(key.c_str(), &v.x, -100.0f, 100.0f)) value = v;
+            if (!categoryList.empty()) {
+                std::vector<const char*> catItems;
+                for (const auto& str : categoryList) catItems.push_back(str.c_str());
+
+                ImGui::Combo("Category", &selectedCategoryIndex, catItems.data(), catItems.size());
+
+                const auto& selectedCategory = categoryList[selectedCategoryIndex];
+                for (auto& [paramName, paramValue] : m_parameters[selectedCategory]) {
+                    if (std::holds_alternative<float>(paramValue)) {
+                        float v = std::get<float>(paramValue);
+                        if (ImGui::SliderFloat(paramName.c_str(), &v, -1000.0f, 1000.0f)) paramValue = v;
+                    }
+                    else if (std::holds_alternative<int>(paramValue)) {
+                        int v = std::get<int>(paramValue);
+                        if (ImGui::SliderInt(paramName.c_str(), &v, -1000, 1000)) paramValue = v;
+                    }
+                    else if (std::holds_alternative<DirectX::SimpleMath::Vector3>(paramValue)) {
+                        auto v = std::get<DirectX::SimpleMath::Vector3>(paramValue);
+                        if (ImGui::SliderFloat3(paramName.c_str(), &v.x, -1000.0f, 1000.0f)) paramValue = v;
+                    }
                 }
             }
-            // 編集タブ終了
-            ImGui::EndTabItem();  
+            ImGui::EndTabItem();
         }
 
-        // 新規パラメータ追加用タブ
-        if (ImGui::BeginTabItem("Add")) {
-            // 入力状態保持用変数（static で状態保持）
-            static char newName[64] = "";
-            static int typeIndex = 0;
-            static float fval = 0.0f;
-            static int ival = 0;
-            static DirectX::SimpleMath::Vector3 vec3val(0, 0, 0);
+        // --- UI用保持変数
+        static bool isNewCategory = false;
+        static int selectedCategoryIndex = 0;
+        static char newCategoryName[64] = "";
 
-            // 型選択リスト
+        static char newParamName[64] = "";
+        static int newTypeIndex = 0;
+        static float floatVal = 0.0f;
+        static int intVal = 0;
+        static DirectX::SimpleMath::Vector3 vec3Val(0, 0, 0);
+
+        // --- 既存カテゴリリスト
+        std::vector<std::string> categoryList;
+        for (auto& [catName, _] : m_parameters) {
+            categoryList.push_back(catName);
+        }
+
+        // --- 描画開始
+        if (ImGui::BeginTabItem("Add"))
+        {
+            // 新規カテゴリかどうか選ぶ
+            ImGui::Checkbox("New Category", &isNewCategory);
+
+            // 新規カテゴリ
+            if (isNewCategory) {
+                ImGui::InputText("New Category Name", newCategoryName, sizeof(newCategoryName));
+            }
+            // 既存カテゴリ
+            else if (!categoryList.empty()) {
+                std::vector<const char*> catItems;
+                for (const auto& str : categoryList) catItems.push_back(str.c_str());
+
+                ImGui::Combo("Select Existing Category", &selectedCategoryIndex, catItems.data(), catItems.size());
+            }
+
+            // パラメータ名と型・値入力
+            ImGui::InputText("Parameter Name", newParamName, sizeof(newParamName));
             const char* types[] = { "float", "int", "Vector3" };
+            ImGui::Combo("Type", &newTypeIndex, types, IM_ARRAYSIZE(types));
 
-            // パラメータ名の入力欄
-            ImGui::InputText("Name", newName, sizeof(newName));
-            // パラメータ型の選択（ドロップダウン）
-            ImGui::Combo("Type", &typeIndex, types, IM_ARRAYSIZE(types));
+            if (newTypeIndex == 0) ImGui::InputFloat("Value (float)", &floatVal);
+            else if (newTypeIndex == 1) ImGui::InputInt("Value (int)", &intVal);
+            else if (newTypeIndex == 2) ImGui::InputFloat3("Value (Vector3)", &vec3Val.x);
 
-            // 型に応じた入力欄
-            if (typeIndex == 0) ImGui::InputFloat("Value", &fval);
-            else if (typeIndex == 1) ImGui::InputInt("Value", &ival);
-            else if (typeIndex == 2) ImGui::InputFloat3("Value", &vec3val.x);
+            // Addボタン押したら追加
+            if (ImGui::Button("Add Parameter"))
+            {
+                std::string category;
+                if (isNewCategory && strlen(newCategoryName) > 0) {
+                    category = std::string(newCategoryName);
+                }
+                else if (!isNewCategory && !categoryList.empty()) {
+                    category = categoryList[selectedCategoryIndex];
+                }
 
-            // 追加ボタン
-            if (ImGui::Button("Add Parameter") && std::strlen(newName) > 0) {
-                std::string name(newName);
+                if (!category.empty() && strlen(newParamName) > 0)
+                {
+                    std::string param(newParamName);
 
-                // 選択された型に応じて追加
-                if (typeIndex == 0) m_parameters[name] = fval;
-                else if (typeIndex == 1) m_parameters[name] = ival;
-                else if (typeIndex == 2) m_parameters[name] = vec3val;
-                // 入力欄をクリア
-                std::memset(newName, 0, sizeof(newName)); 
+                    if (newTypeIndex == 0)
+                        m_parameters[category][param] = floatVal;
+                    else if (newTypeIndex == 1)
+                        m_parameters[category][param] = intVal;
+                    else if (newTypeIndex == 2)
+                        m_parameters[category][param] = vec3Val;
+
+                    // 入力リセット
+                    std::memset(newCategoryName, 0, sizeof(newCategoryName));
+                    std::memset(newParamName, 0, sizeof(newParamName));
+                }
             }
-            // 追加タブ終了
-            ImGui::EndTabItem();  
+
+            ImGui::EndTabItem();
         }
-        // タブバー終了
-        ImGui::EndTabBar();  
+
+        ImGui::EndTabBar();
     }
-    // ウィンドウ終了
-    ImGui::End();  
+
+    ImGui::End();
 }
 
 

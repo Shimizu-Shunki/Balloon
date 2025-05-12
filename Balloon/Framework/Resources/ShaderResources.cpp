@@ -38,7 +38,8 @@ ShaderResources::ShaderResources()
 	:
 	m_UIinputLayout{},
 	m_SeaInputLayout{},
-	m_PBRLitInputLayout{}
+	m_PBRLitInputLayout{},
+	m_particleInputLayout{}
 {
 }
 
@@ -147,6 +148,15 @@ void ShaderResources::LoadResource(const nlohmann::json& data)
 			DirectX::VertexPositionNormalTangentColorTexture::InputElementCount,
 			blob.data(), blob.size(),
 			m_PBRLitInputLayout.GetAddressOf());
+	}
+
+	if (m_vertexShaders.contains("Particle_VS")) {
+		blob = DX::ReadData((directory + L"/Particle_VS.cso").c_str());
+		device->CreateInputLayout(
+			DirectX::VertexPositionColorTexture::InputElements,
+			DirectX::VertexPositionColorTexture::InputElementCount,
+			blob.data(), blob.size(),
+			m_particleInputLayout.GetAddressOf());
 	}
 }
 

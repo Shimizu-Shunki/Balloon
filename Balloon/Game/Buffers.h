@@ -54,3 +54,12 @@ struct SkyBoxConstBuffer
 	DirectX::SimpleMath::Matrix projectionMatrix;
 	DirectX::SimpleMath::Vector4 dayProgress;
 };
+
+struct ParticleConstBuffer
+{
+	DirectX::SimpleMath::Matrix worldMatrix;
+	DirectX::SimpleMath::Matrix viewMatrix;
+	DirectX::SimpleMath::Matrix projectionMatrix;
+	DirectX::SimpleMath::Matrix billboardMatrix;
+	DirectX::SimpleMath::Vector4 time;
+};

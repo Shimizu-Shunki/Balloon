@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game/Factorys/BalloonFactory.h"
+#include "Game/Node/root.h"
 
 // パーツ
 #include "Game/Balloon/Balloon.h"
@@ -21,7 +22,7 @@ std::unique_ptr<IObject> BalloonFactory::CreateBalloon(
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> player;
 	// Turretクラスのインスタンスを生成する
-	player.reset(new Balloon(parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	player.reset(new Balloon(Root::GetInstance(),parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	player->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -42,7 +43,7 @@ std::unique_ptr<IObject> BalloonFactory::CreateBalloonBody(
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyBody;
 	// Turretクラスのインスタンスを生成する
-	enemyBody.reset(new BalloonBody(parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyBody.reset(new BalloonBody(Root::GetInstance(), parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyBody->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -64,7 +65,7 @@ std::unique_ptr<IObject> BalloonFactory::CreateBalloonRope(
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyHead;
 	// Turretクラスのインスタンスを生成する
-	enemyHead.reset(new BalloonRope(parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyHead.reset(new BalloonRope(Root::GetInstance(), parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyHead->Initialize();
 	// プレイヤークラスのインスタンスを返す

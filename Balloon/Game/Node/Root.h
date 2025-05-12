@@ -8,6 +8,7 @@ class Transform;
 class Root : public NodeBase, public IComposite
 {
 public:
+
 	// オブジェクトのアクティブ設定
 	void SetIsActive(const bool& isActive) override { m_isActive = isActive; }
 	// オブジェクトのアクティブ状態を取得
@@ -18,16 +19,37 @@ public:
 	// Transformを取得する
 	Transform* GetTransform() const override { return m_transform.get(); }
 
-public:
+	// ノード番号を取得する
+	int GetObjectNumber() const override { return NodeBase::GetNodeCount(); }
 
+
+private:
 	// コンストラクタ
 	Root(IObject* parent, IObject::ObjectID objectID,
 		const DirectX::SimpleMath::Vector3& position,
 		const DirectX::SimpleMath::Quaternion& rotation,
 		const DirectX::SimpleMath::Vector3& scale
 	);
-	// デストラクタ
-	~Root();
+
+	//	デストラクタ
+	~Root() = default;
+public:
+	Root(const Root&) = delete;             // コピー禁止
+	Root& operator=(const Root&) = delete;  // コピー代入禁止
+	Root(const Root&&) = delete;            // ムーブ禁止
+	Root& operator=(const Root&&) = delete; // ムーブ代入禁止
+
+	//	シングルトンインスタンスの取得
+	static Root* GetInstance()
+	{
+		static Root instance(
+			nullptr,IObject::ObjectID::NODE_BASE,
+			DirectX::SimpleMath::Vector3::Zero,
+			DirectX::SimpleMath::Quaternion::Identity,
+			DirectX::SimpleMath::Vector3::One
+		);
+		return &instance;
+	}
 
 public:
 
@@ -44,7 +66,7 @@ public:
 	void Detach(std::unique_ptr<IObject> node) override;
 
 	// メッセージを取得する
-	void OnMessegeAccepted(Message::MessageID messageID) override;
+	void OnMessegeAccepted(Message::MessageData messageData) override;
 	// キーが押下げられたら通知する
 	void OnKeyPressed(KeyType type , const DirectX::Keyboard::Keys& key) override;
 
@@ -52,8 +74,10 @@ private:
 
 	// オブジェクトID
 	IObject::ObjectID m_objectID;
+
 	// 状態
 	bool m_isActive;
+
 	// Transform
 	std::unique_ptr<Transform> m_transform;
 };

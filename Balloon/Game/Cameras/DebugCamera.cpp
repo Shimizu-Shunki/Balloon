@@ -8,6 +8,7 @@
 // ============================================
 #include "pch.h"
 #include "Game/Cameras/DebugCamera.h"
+#include "Game/Transform/Transform.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -42,12 +43,17 @@ DebugCamera::DebugCamera()
 /// <param name="screenHeight">スクリーンサイズ　縦</param>
 void DebugCamera::Initialize(int screenWidth,int screenHeight)
 {
+
+	m_transform = std::make_unique<Transform>();
+
 	CalculateRerativeScale(screenWidth, screenHeight);
 	CalculateViewMatrix();
 
 	// マウスのホイール値をリセット
 	Mouse::Get().ResetScrollWheelValue();
 	//!! DirectX::Mouseはシングルトンなので…
+	
+	
 }
 
 /// <summary>
@@ -149,6 +155,9 @@ void DebugCamera::CalculateViewMatrix()
 	m_eye = eye;
 	m_target = target;
 	m_up = up;
+
+	m_transform->SetLocalPosition(m_eye);
+	m_transform->SetLocalScale(m_target);
 
 	m_view = Matrix::CreateLookAt(eye, target, up);
 }

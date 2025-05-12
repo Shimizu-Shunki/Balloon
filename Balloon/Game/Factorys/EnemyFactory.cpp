@@ -2,6 +2,8 @@
 #include "Interface/IObject.h"
 #include "Game/Factorys/EnemyFactory.h"
 #include "Game/Message/Message.h"
+#include "Game/Message/ObjectMessenger.h"
+#include "Game/Node/Root.h"
 
 // 敵パーツ
 #include "Game/Enemy/Enemy.h"
@@ -26,9 +28,13 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemy(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> player;
 	// Turretクラスのインスタンスを生成する
-	player.reset(new Enemy(parent , IObject::ObjectID::ENEMY , initialPosition, rotation , initialScale , Message::MessageID::NONE));
+	player.reset(new Enemy(Root::GetInstance(), parent , IObject::ObjectID::ENEMY , initialPosition, rotation , initialScale , Message::MessageID::NONE));
 	// 初期化する
 	player->Initialize();
+
+	// オブジェクトメッセンジャーに登録
+	ObjectMessenger::GetInstance()->Register(player->GetObjectNumber(), player.get());
+
 	// プレイヤークラスのインスタンスを返す
 	return std::move(player);
 }
@@ -46,7 +52,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyBody(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyBody;
 	// Turretクラスのインスタンスを生成する
-	enemyBody.reset(new Body(parent, IObject::ObjectID::ENEMY_BODY, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyBody.reset(new Body(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_BODY, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyBody->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -67,7 +73,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyHead(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyHead;
 	// Turretクラスのインスタンスを生成する
-	enemyHead.reset(new Head(parent, IObject::ObjectID::ENEMY_HEAD, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyHead.reset(new Head(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_HEAD, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyHead->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -88,7 +94,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyLeftArm(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyLeftArm;
 	// Turretクラスのインスタンスを生成する
-	enemyLeftArm.reset(new LeftArm(parent, IObject::ObjectID::ENEMY_LEFT_ARM, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyLeftArm.reset(new LeftArm(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_LEFT_ARM, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyLeftArm->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -108,7 +114,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyLeftFoot(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyLeftFoot;
 	// Turretクラスのインスタンスを生成する
-	enemyLeftFoot.reset(new LeftFoot(parent, IObject::ObjectID::ENEMY_LEFT_FOOT, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyLeftFoot.reset(new LeftFoot(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_LEFT_FOOT, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyLeftFoot->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -129,7 +135,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyRightArm(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyRightArm;
 	// Turretクラスのインスタンスを生成する
-	enemyRightArm.reset(new RightArm(parent, IObject::ObjectID::ENEMY_RIGHT_ARM, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyRightArm.reset(new RightArm(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_RIGHT_ARM, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyRightArm->Initialize();
 	// プレイヤークラスのインスタンスを返す
@@ -149,7 +155,7 @@ std::unique_ptr<IObject> EnemyFactory::CreateEnemyRightFoot(IObject* parent,
 	// 砲塔を宣言する
 	std::unique_ptr<IObject> enemyRightFoot;
 	// Turretクラスのインスタンスを生成する
-	enemyRightFoot.reset(new RightFoot(parent, IObject::ObjectID::ENEMY_RIGHT_FOOT, initialPosition, rotation, initialScale, Message::MessageID::NONE));
+	enemyRightFoot.reset(new RightFoot(Root::GetInstance(), parent, IObject::ObjectID::ENEMY_RIGHT_FOOT, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyRightFoot->Initialize();
 	// プレイヤークラスのインスタンスを返す

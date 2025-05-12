@@ -7,7 +7,17 @@
 #include "Framework/Resources/ResourceKeys.h"
 #include "Game/Buffers.h"
 #include "Game/Factorys/EnemyFactory.h"
+#include "Game/Factorys/BalloonFactory.h"
+#include "Game/Balloon/Balloon.h"
+#include "Game/Visitor/CollisionVisitor.h"
+#include "Game/Message/ObjectMessenger.h"
+#include "Game/Player/Player.h"
 
+#include "Game/SteeringBehavior/WindBehavior.h"
+#include "Game/SteeringBehavior/KnockbackBehavior.h"
+#include "Game/SteeringBehavior/FloatBehavior.h"
+#include "Game/SteeringBehavior/FloatForceBehavior.h"
+#include "Game/SteeringBehavior/PushBackBehavior.h"
 
 
 /// <summary>
@@ -16,7 +26,7 @@
 /// <param name="angle"></param>
 /// <param name="position"></param>
 /// <param name="messageID"></param>
-Enemy::Enemy(IObject* parent, IObject::ObjectID objectID,
+Enemy::Enemy(IObject* root, IObject* parent, IObject::ObjectID objectID,
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Quaternion& rotation,
 	const DirectX::SimpleMath::Vector3& scale,
@@ -30,13 +40,19 @@ Enemy::Enemy(IObject* parent, IObject::ObjectID objectID,
 		0.0f
 	),
 	m_isActive(true),
-	m_objectNumber(Object::CountUpNumber()),
+	m_objectNumber(root->GetObjectNumber() + Object::CountUpNumber()),
 	m_objectID(objectID),
 	m_messageID(messageID),
 	m_parent(parent),
 	m_transform{},
 	m_childs {}
 {
+
+	m_collisionVisitor = CollisionVisitor::GetInstance();
+
+	// ステアリングビヘイビアのインスタンスを取得
+	m_steeringBehavior = WindBehavior::GetInstance();
+
 	// Transformを作成
 	m_transform = std::make_unique<Transform>();
 	
@@ -71,9 +87,48 @@ void Enemy::Initialize()
 	// 当たり判定の大きさを設定
 	m_boundingSphere.Radius = 2.0f;
 
+	// ノックバック
+	m_knockbackBehavior = std::make_unique<KnockbackBehavior>(this);
+	// 揺れる処理
+	m_floatBehavior = std::make_unique<FloatBehavior>();
+	m_floatBehavior->On(m_transform->GetLocalPosition().y);
+
+	m_floatBehavior->Off();
+
+	m_floatForceBehavior = std::make_unique<FloatForceBehavior>(this);
+	m_floatForceBehavior->SetForceStrength(0.0f);
+
+	m_pushBackBehavior = std::make_unique<PushBackBehavior>(this);
+
+
 	// 体を追加する
 	this->Attach(EnemyFactory::CreateEnemyBody(this,
 		DirectX::SimpleMath::Vector3::Zero,DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One));
+
+
+	// 風船を追加する
+	this->Attach(BalloonFactory::CreateBalloon(this, IObject::ObjectID::BALLOON,
+		DirectX::SimpleMath::Vector3::Left * -1.0f, DirectX::SimpleMath::Vector3::Backward * 25.0f, DirectX::SimpleMath::Vector3::One));
+	// 風船を追加する
+	this->Attach(BalloonFactory::CreateBalloon(this, IObject::ObjectID::BALLOON,
+		DirectX::SimpleMath::Vector3::Right * -1.0f, DirectX::SimpleMath::Vector3::Forward * 25.0f, DirectX::SimpleMath::Vector3::One));
+	// 風船を追加する
+	this->Attach(BalloonFactory::CreateBalloon(this, IObject::ObjectID::BALLOON,
+		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One));
+	
+
+	for (int i = 0; i < 3; i++)
+	{
+		// 風船のボディを取得
+		m_balloonObject.push_back(dynamic_cast<Balloon*>(m_childs[i + 1].get())->GetBody());
+	}
+
+	// オブジェクトのカウントをリセット
+	Object::ResetNumber();
+
+	m_collisionVisitor->StartPrepareCollision(this);
+
+	
 }
 
 /// <summary>
@@ -84,8 +139,24 @@ void Enemy::Update(const float& elapsedTime)
 {
 	(void)elapsedTime;
 
+	m_knockbackBehavior->SetTargetObject(
+		dynamic_cast<Object*>(ObjectMessenger::GetInstance()->GetObjectI(0) ) );
+
+	// 操舵力から加速度を計算する
+	DirectX::SimpleMath::Vector3 acceleration =
+		m_steeringBehavior->Calculate() + m_knockbackBehavior->Calculate() +
+		m_floatBehavior->Calculate() + m_floatForceBehavior->Calculate() + m_pushBackBehavior->Calculate();
+
+	// 速度に加速度を加算する
+	m_velocity += acceleration * elapsedTime;
+	// 現在の位置を更新する
+	m_transform->SetLocalPosition(m_transform->GetLocalPosition() + m_velocity * elapsedTime);
+
+	m_velocity = m_velocity * (1.0f - 2.0f * elapsedTime);
+
 	// Transformの更新処理
 	m_transform->Update();
+
 	// ワールド座標を当たり判定の座標に設定
 	m_boundingSphere.Center = m_transform->GetWorldPosition();
 
@@ -94,6 +165,14 @@ void Enemy::Update(const float& elapsedTime)
 	{
 		child->Update(elapsedTime);
 	}
+
+	
+	auto player = dynamic_cast<Player*>(ObjectMessenger::GetInstance()->GetObjectI(0));
+	for (const auto& balloon : player->GetBalloonObject())
+	{
+		m_collisionVisitor->DetectCollision(this, balloon);
+	}
+	
 }
 
 /// <summary>
@@ -126,12 +205,34 @@ void Enemy::Detach(std::unique_ptr<IObject> object)
 /// メッセージを受け取る
 /// </summary>
 /// <param name="messageID">メッセージID</param>
-void Enemy::OnMessegeAccepted(Message::MessageID messageID)
+void Enemy::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageID;
+	(void)messageData;
 }
 
 // 通知する
 void Enemy::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 {
+	UNREFERENCED_PARAMETER(type);
+	UNREFERENCED_PARAMETER(key);
+}
+
+// 衝突判定を準備する
+void Enemy::PrepareCollision(ICollisionVisitor* collision)
+{
+	collision->PrepareCollision(this, DirectX::SimpleMath::Vector3::Up * 0.2f, 0.3f);
+
+	for (const auto& child : m_childs)
+	{
+		if (child->GetObjectID() == IObject::ObjectID::BALLOON)
+			dynamic_cast<Balloon*>(child.get())->PrepareCollision(collision);
+	}
+
+}
+
+// 衝突判定する
+void Enemy::DetectCollision(ICollisionVisitor* collision, IObject* object)
+{
+	// 判定を行う
+	collision->DetectCollision(this, object);
 }

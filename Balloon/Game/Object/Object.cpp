@@ -2,13 +2,13 @@
 #include "Game/Object/Object.h"
 
 // オブジェクト番号
-int Object::s_objectNumber = -1;
+int Object::s_objectNumber = 0;
 
 // オブジェクトをカウントアップする
 int Object::CountUpNumber() { return s_objectNumber++; }
 
 // 現在のオブジェクトのカウントを取得する
-int Object::ResetNumber() { return s_objectNumber = -1; }
+int Object::ResetNumber() { return s_objectNumber = 0; }
 
 
 // コンストラクタ

@@ -18,7 +18,7 @@
 #include "Framework/Renderer.h"
 #include "Game/SkyBox/SkyBox.h"
 #include "Framework/SceneManager.h"
-
+#include "Game/Transform/Transform.h"
 
 
 class CommonResources
@@ -40,6 +40,10 @@ public:
 	// スカイボックス
 	void SetSkyBox(SkyBox* skyBox) { m_skyBox = skyBox; }
 	SkyBox* GetSkyBox() { return m_skyBox; }
+
+	// カメラ座標
+	void SetCameraTransform(Transform* transform) { m_cameraTransform = transform; }
+	Transform* GetCameraTransform() const { return m_cameraTransform; }
 
 	// スクリーンサイズ
 	void GetScreenSize(int& width, int& height) const { width = m_screenW; height = m_screenH; }
@@ -96,6 +100,10 @@ private:
 	SkyBox* m_skyBox;
 	// スクリーンサイズ
 	int m_screenW, m_screenH;
+
+	// カメラ座標
+	Transform* m_cameraTransform;
+
 	// ビュー行列
 	DirectX::SimpleMath::Matrix m_view;
 	// 射影行列

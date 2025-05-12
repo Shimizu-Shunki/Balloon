@@ -13,6 +13,7 @@ enum class TextureKeyID : int
     Player,
     Enemy,
     Sea,
+    Particle,
     ReadyGo,
     Numbers,
     Numbers1,
@@ -36,6 +37,7 @@ enum class TextureKeyID : int
     ResultText,
     ResultSceneKeyGuide,
     ResultSceneText,
+    
 
     Meat,
     Wood,
@@ -75,6 +77,7 @@ enum class PS_ID : int
     UI_PS,
     NumberUI_PS,
     ScoreUI_PS,
+    Particle_PS,
 };
 
 
@@ -86,12 +89,14 @@ enum class VS_ID : int
     SkyBox_VS,
     Sea_VS,
     UI_VS,
+    Particle_VS,
 };
 
 // ジオメトリシェーダーID
 enum class GS_ID : int
 {
     UI_GS,
+    Particle_GS,
 };
 
 // ハルシェーダーID

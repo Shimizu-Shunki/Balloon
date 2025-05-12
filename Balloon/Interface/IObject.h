@@ -32,6 +32,10 @@ public:
 		BALLOON_RED,
 		BALLOON_YELLOW,
 		BALLOON_PURPLE,
+
+		SUN,
+
+		EFFECT_CONTROLLER,
 	};
 
 public:
@@ -39,6 +43,9 @@ public:
 	virtual void SetIsActive(const bool& isActive) = 0;
 	// オブジェクトのアクティブ状態を取得
 	virtual bool GetIsActive() const = 0;
+
+	// オブジェクト番号を取得する
+	virtual int GetObjectNumber() const = 0;
 
 	// オブジェクトIDを取得する
 	virtual IObject::ObjectID GetObjectID() const = 0;

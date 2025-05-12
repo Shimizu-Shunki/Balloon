@@ -14,6 +14,8 @@ class CommonResources;
 class DebugCamera;
 class Root;
 class Parameters;
+class WindBehavior;
+class ParticleEmitter;
 
 class DebugScene : public IScene
 {
@@ -44,6 +46,8 @@ private:
 
 	// パラメーター
 	Parameters* m_parameters;
+	// ステアリングビヘイビア
+	WindBehavior* m_steeringBehavior;
 
 	// 共有リソース
 	CommonResources* m_commonResources;
@@ -51,5 +55,9 @@ private:
 	std::unique_ptr<DebugCamera> m_debugCamera;
 
 	// プレイヤーを追加
-	std::unique_ptr<Root> m_root;
+	Root* m_root;
+
+
+	// パーティクル生成器
+	std::unique_ptr< ParticleEmitter> m_emitter;
 };

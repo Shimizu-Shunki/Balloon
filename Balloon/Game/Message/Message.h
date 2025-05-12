@@ -4,6 +4,8 @@ class Message
 {
 public:
 
+	
+
 	// メッセージID
 	enum class MessageID : int
 	{
@@ -14,6 +16,16 @@ public:
 		PLAYER_ATTCK,
 		PLAYER_DOWN,
 		PLAYER_SKILL,
+		EFFECT_NUMBER,
+
+		// エフェクト
+		EXPLOSION,
+		ATTACK,
+		SMOKE,
+		MOVEMENT,
+
+		// 判定処理
+		ON_COLLISION,
 
 	};
 
@@ -33,4 +45,13 @@ public:
 		MAIN,
 		SETTING,
 	};
+
+	struct MessageData
+	{
+		Message::MessageID messageId;
+		int dataInt = 0;
+		float dataFloat = 0.0f;
+		bool dataBool = false;
+	};
+
 };

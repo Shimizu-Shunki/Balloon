@@ -1,11 +1,13 @@
 #pragma once
 #include "Interface/IState.h"
 
+class Object;
+
 class PlayerAttackState : public IState
 {
 public:
 	// コンストラクタ
-	PlayerAttackState();
+	PlayerAttackState(Object* player);
 	// デストラクタ
 	~PlayerAttackState() = default;
 	// 初期化する
@@ -21,7 +23,11 @@ public:
 
 public:
 
+private:
 
+	Object* m_player;
 
+	float m_elapsedTime;
 
+	float m_moveingTime;
 };

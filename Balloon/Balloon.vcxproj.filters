@@ -101,9 +101,6 @@
     <Filter Include="Game\Objects\Player\Source">
       <UniqueIdentifier>{10e6da19-afca-4920-a2bc-8663c4f180bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Factorys">
-      <UniqueIdentifier>{8a503d5e-934e-4429-ac48-77a63c3fe7d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Node">
       <UniqueIdentifier>{f5a9e71b-7e43-4a7f-8c81-0d0264307e52}</UniqueIdentifier>
     </Filter>
@@ -136,6 +133,30 @@
     </Filter>
     <Filter Include="Game\Parameters">
       <UniqueIdentifier>{b015532b-bc87-4fcd-98fb-6e9795dbd753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SteeringBehavior">
+      <UniqueIdentifier>{f9e52bf4-3a93-4ce9-bac6-c5f01c48cc7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Objects\AmbientLight">
+      <UniqueIdentifier>{322c405a-7e31-46cb-a883-061f8dbadf2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SteeringBehavior\Header">
+      <UniqueIdentifier>{dc045c6a-b788-4605-a0e3-98cde659d88d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SteeringBehavior\Source">
+      <UniqueIdentifier>{ca306479-3e61-4df7-8298-468911bc6332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Particle">
+      <UniqueIdentifier>{4fa16318-5cde-4f6d-9b7f-335aba81cfd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Particle">
+      <UniqueIdentifier>{c63d1cfd-d0ce-439c-a5eb-7a58979d52c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Factorys">
+      <UniqueIdentifier>{8a503d5e-934e-4429-ac48-77a63c3fe7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Visitor">
+      <UniqueIdentifier>{1f851cbe-771f-4c1a-9d7f-11bc17420eb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +387,51 @@
     <ClInclude Include="Game\Parameters\ParameterKeys.h">
       <Filter>Game\Parameters</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\ISteeringBehavior.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Message\ObjectMessenger.h">
+      <Filter>Game\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AmbientLight\AmbientLight.h">
+      <Filter>Game\Objects\AmbientLight</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\FloatBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\FloatForceBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\KnockbackBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\PushBackBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\WindBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\Particle.h">
+      <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\ParticleEmitter.h">
+      <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Particle\EffectController.h">
+      <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\EffectFactory.h">
+      <Filter>Game\Factorys</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ICollisionVisitor.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ICollision.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Visitor\CollisionVisitor.h">
+      <Filter>Game\Visitor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -527,6 +593,42 @@
     <ClCompile Include="Game\Parameters\Parameters.cpp">
       <Filter>Game\Parameters</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Message\ObjectMessenger.cpp">
+      <Filter>Game\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\AmbientLight\AmbientLight.cpp">
+      <Filter>Game\Objects\AmbientLight</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\FloatBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\KnockbackBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\FloatForceBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\PushBackBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\WindBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\Particle.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\ParticleEmitter.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Particle\EffectController.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\EffectFactory.cpp">
+      <Filter>Game\Factorys</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Visitor\CollisionVisitor.cpp">
+      <Filter>Game\Visitor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -544,6 +646,9 @@
     </None>
     <None Include="Resources\Shaders\hlsl\UI.hlsli">
       <Filter>Shaders\UI</Filter>
+    </None>
+    <None Include="Resources\Shaders\hlsl\Particle.hlsli">
+      <Filter>Shaders\Particle</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
@@ -613,6 +718,15 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\hlsl\ShadowMap_VS.hlsl">
       <Filter>Shaders\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Particle_VS.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Particle_PS.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\hlsl\Particle_GS.hlsl">
+      <Filter>Shaders\Particle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

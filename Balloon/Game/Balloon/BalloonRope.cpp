@@ -13,7 +13,7 @@
 /// <param name="angle"></param>
 /// <param name="position"></param>
 /// <param name="messageID"></param>
-BalloonRope::BalloonRope(IObject* parent, IObject::ObjectID objectID,
+BalloonRope::BalloonRope(IObject* root, IObject* parent, IObject::ObjectID objectID,
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Quaternion& rotation,
 	const DirectX::SimpleMath::Vector3& scale,
@@ -27,7 +27,7 @@ BalloonRope::BalloonRope(IObject* parent, IObject::ObjectID objectID,
 		0.0f
 	),
 	m_isActive(true),
-	m_objectNumber(Object::CountUpNumber()),
+	m_objectNumber(root->GetObjectNumber() + Object::CountUpNumber()),
 	m_objectID(objectID),
 	m_messageID(messageID),
 	m_parent(parent),
@@ -113,12 +113,27 @@ void BalloonRope::Finalize()
 
 }
 
-void BalloonRope::OnMessegeAccepted(Message::MessageID messageID)
+void BalloonRope::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageID;
+	(void)messageData;
 }
 
 // í ímÇ∑ÇÈ
 void BalloonRope::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 {
+	UNREFERENCED_PARAMETER(type);
+	UNREFERENCED_PARAMETER(key);
+}
+
+// è’ìÀîªíËÇèÄîıÇ∑ÇÈ
+void BalloonRope::PrepareCollision(ICollisionVisitor* collision)
+{
+	UNREFERENCED_PARAMETER(collision);
+}
+
+// è’ìÀîªíËÇ∑ÇÈ
+void BalloonRope::DetectCollision(ICollisionVisitor* collision, IObject* object)
+{
+	UNREFERENCED_PARAMETER(collision);
+	UNREFERENCED_PARAMETER(object);
 }

@@ -1,18 +1,22 @@
 #pragma once
 #include "Game/Object/Object.h"
 #include "Interface/ILeaf.h"
+#include "Interface/ICollision.h"
 
 class Transform;
 class IRenderableObject;
 class CommonResources;
 
-class BalloonRope : public Object , ILeaf
+class BalloonRope : public Object, public ICollision, ILeaf
 {
 public:
 	// オブジェクトのアクティブ設定
 	void SetIsActive(const bool& isActive) { m_isActive = isActive; }
 	// オブジェクトのアクティブ状態を取得
 	bool GetIsActive() const { return m_isActive; }
+
+	// オブジェクト番号を取得する
+	int GetObjectNumber() const  override { return m_objectNumber; }
 
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectID; }
@@ -29,7 +33,7 @@ public:
 	void SetAcceralation(const DirectX::SimpleMath::Vector3& accelaration) override { m_acceralation = accelaration; }
 
 	// コンストラクタ
-	BalloonRope(IObject* parent, IObject::ObjectID objectID,
+	BalloonRope(IObject* root, IObject* parent, IObject::ObjectID objectID,
 		const DirectX::SimpleMath::Vector3& position,
 		const DirectX::SimpleMath::Quaternion& rotation,
 		const DirectX::SimpleMath::Vector3& scale,
@@ -40,13 +44,19 @@ public:
 	// 初期化する
 	void Initialize();
 	// メッセージを取得する
-	void OnMessegeAccepted(Message::MessageID messageID) override;
+	void OnMessegeAccepted(Message::MessageData messageData) override;
 	// キーが押下げられたら通知する
 	void OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key) override;
 	// 更新する
 	void Update(const float& elapsedTime) override;
 	// 後処理を行う
 	void Finalize() override;
+
+	// 衝突判定を準備する
+	void PrepareCollision(ICollisionVisitor* collision) override;
+
+	// 衝突判定する
+	void DetectCollision(ICollisionVisitor* collision, IObject* object) override;
 	
 private:
 

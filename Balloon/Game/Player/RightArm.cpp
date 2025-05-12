@@ -14,7 +14,7 @@
 /// <param name="angle"></param>
 /// <param name="position"></param>
 /// <param name="messageID"></param>
-RightArm::RightArm(IObject* parent, IObject::ObjectID objectID,
+RightArm::RightArm(IObject* root, IObject* parent, IObject::ObjectID objectID,
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Quaternion& rotation,
 	const DirectX::SimpleMath::Vector3& scale,
@@ -28,7 +28,7 @@ RightArm::RightArm(IObject* parent, IObject::ObjectID objectID,
 		0.0f
 	),
 	m_isActive(true),
-	m_objectNumber(Object::CountUpNumber()),
+	m_objectNumber(root->GetObjectNumber() + Object::CountUpNumber()),
 	m_objectID(objectID),
 	m_messageID(messageID),
 	m_parent(parent),
@@ -125,13 +125,15 @@ void RightArm::Finalize()
 
 }
 
-void RightArm::OnMessegeAccepted(Message::MessageID messageID)
+void RightArm::OnMessegeAccepted(Message::MessageData messageData)
 {
-
+	(void)messageData;
 }
 
 
 // ’Ê’m‚·‚é
 void RightArm::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 {
+	UNREFERENCED_PARAMETER(type);
+	UNREFERENCED_PARAMETER(key);
 }

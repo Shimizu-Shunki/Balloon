@@ -23,6 +23,8 @@ public:
 	ID3D11InputLayout* GetSeaInputLayout() { return m_SeaInputLayout.Get(); }
 	// 物理ベースレンダリング インプットレイアウトを取得
 	ID3D11InputLayout* GetPBRLitInputLayout() { return m_PBRLitInputLayout.Get(); }
+	// パーティクル インプットレイアウトを取得
+	ID3D11InputLayout* GetParticleInputLayout() { return m_particleInputLayout.Get(); }
 
 	// 頂点シェーダーを取得する
 	ID3D11VertexShader* GetVertexShader(VS_ID id);
@@ -55,12 +57,14 @@ private:
 	ShaderResources();
 
 private:
-	// 入力レイアウト
+	// 入力レイアウト UI
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>    m_UIinputLayout;
-	// 入力レイアウト
+	// 入力レイアウト Sea
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>    m_SeaInputLayout;
-	// 入力レイアウト
+	// 入力レイアウト PBRLit
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>    m_PBRLitInputLayout;
+	// 入力レイアウト Particle
+	Microsoft::WRL::ComPtr<ID3D11InputLayout>    m_particleInputLayout;
 
 	// 頂点シェーダー
 	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11VertexShader>> m_vertexShaders;

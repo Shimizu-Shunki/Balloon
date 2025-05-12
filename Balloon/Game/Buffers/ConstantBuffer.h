@@ -26,23 +26,38 @@ public:
 
     // 値が変更された場合のみ更新
     void UpdateIfNeeded(ID3D11DeviceContext* context, const T& data) {
-        if (std::memcmp(&cachedData, &data, sizeof(T)) != 0) 
+        if (!buffer) return;  // 安全チェック
+
+        if (std::memcmp(&cachedData, &data, sizeof(T)) != 0)
         {
             D3D11_MAPPED_SUBRESOURCE mapped{};
             HRESULT hr = context->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-            if (SUCCEEDED(hr)) 
+            if (SUCCEEDED(hr) && mapped.pData) 
             {
                 std::memcpy(mapped.pData, &data, sizeof(T));
-
                 context->Unmap(buffer.Get(), 0);
                 cachedData = data;
+            }
+            else 
+            {
+                OutputDebugStringA("Map failed or pData is null\n");
             }
         }
     }
 
-    // 強制更新（無条件に送信）
-    void Update(ID3D11DeviceContext* context, const T& data) {
-        context->UpdateSubresource(buffer.Get(), 0, nullptr, &data, 0, 0);
+    // 強制更新
+    void Update(ID3D11DeviceContext* context, const T& data) 
+    {
+        // GPUが使用するリソースのメモリにCPUからアクセスする際に利用する構造体
+        D3D11_MAPPED_SUBRESOURCE mappedResource{};
+        // 定数バッファをマップする
+        context->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+        std::memcpy(mappedResource.pData, &data, sizeof(T));
+       
+        // マップ解除
+        context->Unmap(buffer.Get(), 0);
+
         cachedData = data;
     }
 

@@ -27,14 +27,14 @@ void PlayerRunState::Update(const float& elapsedTime)
 	// ‘O•û‚ÖˆÚ“®’†‚©‚Ç‚¤‚©
 	if (m_isForward)
 		m_object->SetVelocity(m_object->GetVelocity() +
-			DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 20.0f * elapsedTime),
+			DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 5.0f * elapsedTime),
 				m_object->GetTransform()->GetLocalRotation())
 		);
 
 	// Œã•û‚ÖˆÚ“®’†‚©‚Ç‚¤‚©
 	if(m_isBackward)
 		m_object->SetVelocity(m_object->GetVelocity() +
-			DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -20.0f * elapsedTime),
+			DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -5.0f * elapsedTime),
 				m_object->GetTransform()->GetLocalRotation())
 		);
 }

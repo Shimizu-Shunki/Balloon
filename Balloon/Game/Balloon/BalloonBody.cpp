@@ -13,7 +13,7 @@
 /// <param name="angle"></param>
 /// <param name="position"></param>
 /// <param name="messageID"></param>
-BalloonBody::BalloonBody(IObject* parent, IObject::ObjectID objectID,
+BalloonBody::BalloonBody(IObject* root, IObject* parent, IObject::ObjectID objectID,
 	const DirectX::SimpleMath::Vector3& position,
 	const DirectX::SimpleMath::Quaternion& rotation,
 	const DirectX::SimpleMath::Vector3& scale,
@@ -27,7 +27,7 @@ BalloonBody::BalloonBody(IObject* parent, IObject::ObjectID objectID,
 		0.0f
 	),
 	m_isActive(true),
-	m_objectNumber(Object::CountUpNumber()),
+	m_objectNumber(root->GetObjectNumber() + Object::CountUpNumber()),
 	m_objectID(objectID),
 	m_messageID(messageID),
 	m_parent(parent),
@@ -73,9 +73,9 @@ void BalloonBody::Initialize()
 	// 初期化処理
 	PBRLitConstantBuffer buffer{
 		DirectX::SimpleMath::Vector4::One,
-		0.3f,
-		0.7f,
+		0.2f,
 		1.0f,
+		5.0f,
 		0.0f
 	};
 
@@ -113,12 +113,28 @@ void BalloonBody::Finalize()
 
 }
 
-void BalloonBody::OnMessegeAccepted(Message::MessageID messageID)
+void BalloonBody::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageID;
+	(void)messageData;
 }
 
 // 通知する
 void BalloonBody::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 {
+	UNREFERENCED_PARAMETER(type);
+	UNREFERENCED_PARAMETER(key);
+}
+
+// 衝突判定を準備する
+void BalloonBody::PrepareCollision(ICollisionVisitor* collision)
+{
+	// 今回プレイヤーのみの当たり判定なので再帰処理は行わない
+	collision->PrepareCollision(this, DirectX::SimpleMath::Vector3::Zero, 0.3f);
+}
+
+// 衝突判定する
+void BalloonBody::DetectCollision(ICollisionVisitor* collision, IObject* object)
+{
+	UNREFERENCED_PARAMETER(collision);
+	UNREFERENCED_PARAMETER(object);
 }

@@ -5,6 +5,7 @@
 #include "Framework/Resources/ShaderResources.h"
 #include "Game/RenderableObjects/PlayerRenderableObject.h"
 #include "Game/Buffers/ConstantBuffer.h"
+#include "Game/AmbientLight/AmbientLight.h"
 #include "Game/Buffers.h"
 
 /// <summary>
@@ -26,6 +27,8 @@ PlayerRenderableObject::PlayerRenderableObject(const bool& isActive, DirectX::Mo
 	m_resources = Resources::GetInstance();
 	// デバイスを取得する
 	m_device = CommonResources::GetInstance()->GetDeviceResources()->GetD3DDevice();
+
+	m_ambientLight = AmbientLight::GetInstance();
 }
 
 /// <summary>
@@ -55,6 +58,27 @@ void PlayerRenderableObject::Initialize(const PBRLitConstantBuffer& constants)
 
 	// ワールド行列初期化
 	m_worldMatrix = DirectX::SimpleMath::Matrix::Identity;
+
+	// モデルのエフェクト情報を更新する
+	m_model->UpdateEffects([](DirectX::IEffect* effect) {
+		// ベーシックエフェクトを設定する
+		DirectX::BasicEffect* basicEffect = dynamic_cast<DirectX::BasicEffect*>(effect);
+		if (basicEffect)
+		{
+			// 拡散反射光
+			DirectX::SimpleMath::Color diffuseColor = DirectX::SimpleMath::Color(1.0f, 0.95f, 0.9f);
+			// ライトが照らす方向
+			DirectX::SimpleMath::Vector3 lightDirection(0.0f, 1.0f, 0.0f);
+
+			basicEffect->SetLightEnabled(1, false);
+			basicEffect->SetLightEnabled(2, false);
+
+			// ゼロ番のライトに拡散反射光を設定する
+			basicEffect->SetLightDiffuseColor(0, diffuseColor);
+			// ゼロ番のライトが照らす方向を設定する
+			basicEffect->SetLightDirection(0, lightDirection);
+		}
+		});
 }
 
 /// <summary>
@@ -85,9 +109,9 @@ void PlayerRenderableObject::Render(ID3D11DeviceContext* context, DirectX::Commo
 	m_model->Draw(context, *commonStates, m_worldMatrix, viewMatrix, projectionMatrix, false, [&]
 		{
 			// 定数バッファを指定する
-			/*ID3D11Buffer* cbuf[] = { lightBuffer };
+			ID3D11Buffer* cbuf[] = { m_ambientLight->GetBuffer()};
 			context->VSSetConstantBuffers(1, 1, cbuf);
-			context->PSSetConstantBuffers(1, 1, cbuf);*/
+			context->PSSetConstantBuffers(1, 1, cbuf);
 
 			// ブレンドステートを設定 (半透明描画用)
 			context->OMSetBlendState(commonStates->AlphaBlend(), nullptr, 0xFFFFFFFF);
@@ -95,7 +119,7 @@ void PlayerRenderableObject::Render(ID3D11DeviceContext* context, DirectX::Commo
 			context->IASetInputLayout(m_inputLayout);
 
 			// 定数バッファを指定する
-			ID3D11Buffer* cbuf[] = { m_constantBuffer->GetBuffer()};
+			cbuf[0] = {m_constantBuffer->GetBuffer()};
 			context->VSSetConstantBuffers(2, 1, cbuf);
 			context->PSSetConstantBuffers(2, 1, cbuf);
 

@@ -16,6 +16,7 @@ class Renderer;
 class SkyBox;
 class Sea;
 class Parameters;
+class CollisionVisitor;
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -102,6 +103,8 @@ private:
 
     // パラメーター
     Parameters* m_parameters;
+
+    CollisionVisitor* m_collisionVisitor;
 
     // デバッグの時のみ作成
 #ifdef _DEBUG

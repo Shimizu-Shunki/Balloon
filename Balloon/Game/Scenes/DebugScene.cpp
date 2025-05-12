@@ -17,12 +17,19 @@
 #include "Game/Factorys/EnemyFactory.h"
 #include "Game/Message/KeyboardMessenger.h"
 #include "Game/Parameters/Parameters.h"
+#include "Game/SteeringBehavior/WindBehavior.h"
+#include "Game/AmbientLight/AmbientLight.h"
+#include "Game/Particle/ParticleEmitter.h"
+#include "Game/Factorys/EffectFactory.h"
+#include "Game/Message/ObjectMessenger.h"
 
 
 DebugScene::DebugScene()
 {
 	m_commonResources = CommonResources::GetInstance();
 	m_parameters = Parameters::GetInstance();
+	m_steeringBehavior = WindBehavior::GetInstance();
+	m_root = Root::GetInstance();
 }
 
 
@@ -37,16 +44,27 @@ void DebugScene::Initialize()
 	m_debugCamera = std::make_unique<DebugCamera>();
 	m_debugCamera->Initialize(1280, 720);
 
-	m_root = std::make_unique<Root>(nullptr, IObject::ObjectID::NODE_BASE,
-		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Quaternion::Identity, DirectX::SimpleMath::Vector3::One
-	);
 	m_root->Initialize();
 
-	m_root->Attach(PlayerFactory::CreatePlayer(m_root.get(),
-		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Up * 180.0f, DirectX::SimpleMath::Vector3::One * 0.1f));
+	
 
-	m_root->Attach(EnemyFactory::CreateEnemy(m_root.get(),
-		DirectX::SimpleMath::Vector3::Backward, DirectX::SimpleMath::Vector3::Up * 180.0f, DirectX::SimpleMath::Vector3::One * 0.1f));
+	m_root->Attach(PlayerFactory::CreatePlayer(m_root,
+		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Up , DirectX::SimpleMath::Vector3::One * 0.1f));
+
+	m_root->Attach(EnemyFactory::CreateEnemy(m_root,
+		DirectX::SimpleMath::Vector3::Backward, DirectX::SimpleMath::Vector3::Up, DirectX::SimpleMath::Vector3::One * 0.1f));
+	
+
+	m_root->Attach(EffectFactory::CreateEffectController({ ParametersID::PARTICLE , ParametersID::EFFECT }));
+
+	ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::EXPLOSION ,0,0.0f ,true });
+	//ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::SMOKE ,0,0.0f ,true });
+
+	//m_emitter = std::make_unique< ParticleEmitter>();
+	//m_emitter->Initialize(ParametersID::PARTICLE);
+	//m_commonResources->GetRenderer()->Attach(m_emitter.get());
+
+	//m_emitter->Play();
 }
 
 void DebugScene::Start()
@@ -61,11 +79,17 @@ void DebugScene::Update()
 	// 通知を行う
 	KeyboardMessenger::GetInstance()->Dispatch();
 
+	m_steeringBehavior->Update(elapsedTime);
+
 	// カメラを更新
 	m_debugCamera->Update();
 	m_commonResources->SetViewMatrix(m_debugCamera->GetViewMatrix());
 
+	m_commonResources->SetCameraTransform(m_debugCamera->GetTransform());
+
 	m_root->Update(elapsedTime);
+
+	// m_emitter->Update(elapsedTime);
 }
 
 void DebugScene::Render()
