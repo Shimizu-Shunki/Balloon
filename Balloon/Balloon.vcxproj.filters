@@ -158,6 +158,9 @@
     <Filter Include="Game\Visitor">
       <UniqueIdentifier>{1f851cbe-771f-4c1a-9d7f-11bc17420eb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BehaviorTree">
+      <UniqueIdentifier>{7c58296e-1b99-4af4-aa7e-532347e4ba45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -432,6 +435,36 @@
     <ClInclude Include="Game\Visitor\CollisionVisitor.h">
       <Filter>Game\Visitor</Filter>
     </ClInclude>
+    <ClInclude Include="Game\SteeringBehavior\SeekBehavior.h">
+      <Filter>Game\SteeringBehavior\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IBehaviorNode.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\SelectorNode.h">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\SequenceNode.h">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\ActionNode.h">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\DecoratorNode.h">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\AIConditions.h">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\ActionSelection.h">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UIObjects\TitleLogoUI.h">
+      <Filter>Game\UIObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RenderableObjects\UIRenderableObject .h">
+      <Filter>Game\RenderableObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -628,6 +661,21 @@
     </ClCompile>
     <ClCompile Include="Game\Visitor\CollisionVisitor.cpp">
       <Filter>Game\Visitor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SteeringBehavior\SeekBehavior.cpp">
+      <Filter>Game\SteeringBehavior\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\AIConditions.cpp">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\ActionSelection.cpp">
+      <Filter>Game\Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UIObjects\TitleLogoUI.cpp">
+      <Filter>Game\UIObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RenderableObjects\UIRenderableObject .cpp">
+      <Filter>Game\RenderableObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -48,13 +48,13 @@ public:
 	// コンストラクタ
 	Object(const float& m_maxTurnRate, const float& m_maxSpeed, const float& m_maxForce, const float& m_mass);
 	// デストラクタ
-	virtual ~Object();
+	 ~Object() override;
 	// 初期化する
-	virtual void Initialize();
+	void Initialize() override;
 	// 更新する
-	virtual void Update(const float& elapsedTime);
+	void Update(const float& elapsedTime) override;
 	// 後処理を行う
-	virtual void Finalize();
+	void Finalize() override;
 
 private:
 	// オブジェクト番号

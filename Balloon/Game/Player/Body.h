@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: Body.h
+// 概要: Body.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Object/Object.h"
 #include "Interface/IComposite.h"
@@ -38,11 +46,12 @@ public:
 		const DirectX::SimpleMath::Quaternion& rotation,
 		const DirectX::SimpleMath::Vector3& scale,
 		Message::MessageID messageID);
+
 	// デストラクタ
-	~Body() override;
+	~Body() override = default;
 
 	// 初期化する
-	void Initialize();
+	void Initialize() override;
 	// メッセージを取得する
 	void OnMessegeAccepted(Message::MessageData messageData) override;
 	// キーが押下げられたら通知する
@@ -59,6 +68,7 @@ public:
 
 private:
 
+	// オブジェクト作成
 	void CreateObject();
 	
 private:
@@ -84,8 +94,6 @@ private:
 	std::unique_ptr<Transform> m_transform;
 	// 描画オブジェクト
 	std::unique_ptr<IRenderableObject> m_renderableObject;
-	// 当たり判定
-	DirectX::BoundingSphere m_boundingSphere;
 
 	// プレイヤーの速度
 	DirectX::SimpleMath::Vector3 m_velocity;

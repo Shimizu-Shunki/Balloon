@@ -18,11 +18,12 @@
 const std::vector<D3D11_INPUT_ELEMENT_DESC> ShaderResources::UI_INPUT_LAYOUT =
 {
 	// セマンティック名 インデックス フォーマット         入力スロット    オフセット                                                                                                                                         データ種別        インスタンスステップ率
-		 { "SV_Position",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  0,                                                                                                                                                         D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 position
-		 { "NORMAL",     0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4),                                                                                                                      D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 rotate
-		 { "TEXCOORD" ,  0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3),                                                                               D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float3 scale
-		 { "TEXCOORD" ,  1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3),                                        D3D11_INPUT_PER_VERTEX_DATA, 0 }, // float4 rect
-		 { "COLOR",      0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  sizeof(DirectX::SimpleMath::Vector4) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector4), D3D11_INPUT_PER_VERTEX_DATA, 0 }  // float4 color
+	{ "SV_Position", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  0,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // position
+	{ "NORMAL",      0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 16,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // rotate
+	{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT,       0, 28,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // size
+	{ "TEXCOORD",    1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 36,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // rect
+	{ "COLOR",       0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 52,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // color
+	{ "TEXCOORD",    2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 68,  D3D11_INPUT_PER_VERTEX_DATA, 0 }, // rule
 };
 const std::vector<D3D11_INPUT_ELEMENT_DESC> ShaderResources::SEA_INPUT_LAYOUT =
 {

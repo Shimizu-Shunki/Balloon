@@ -205,9 +205,15 @@
     <ClInclude Include="Game\Balloon\Balloon.h" />
     <ClInclude Include="Game\Balloon\BalloonBody.h" />
     <ClInclude Include="Game\Balloon\BalloonRope.h" />
+    <ClInclude Include="Game\BehaviorTree\ActionNode.h" />
+    <ClInclude Include="Game\BehaviorTree\DecoratorNode.h" />
+    <ClInclude Include="Game\BehaviorTree\SelectorNode.h" />
+    <ClInclude Include="Game\BehaviorTree\SequenceNode.h" />
     <ClInclude Include="Game\Buffers.h" />
     <ClInclude Include="Game\Buffers\ConstantBuffer.h" />
     <ClInclude Include="Game\Cameras\DebugCamera.h" />
+    <ClInclude Include="Game\Enemy\ActionSelection.h" />
+    <ClInclude Include="Game\Enemy\AIConditions.h" />
     <ClInclude Include="Game\Enemy\Enemy.h" />
     <ClInclude Include="Game\Factorys\BalloonFactory.h" />
     <ClInclude Include="Game\Factorys\EffectFactory.h" />
@@ -235,6 +241,7 @@
     <ClInclude Include="Game\RenderableObjects\BalloonRenderableObject.h" />
     <ClInclude Include="Game\RenderableObjects\EnemyRenderableObject.h" />
     <ClInclude Include="Game\RenderableObjects\PlayerRenderableObject.h" />
+    <ClInclude Include="Game\RenderableObjects\UIRenderableObject .h" />
     <ClInclude Include="Game\Scenes\DebugScene.h" />
     <ClInclude Include="Game\Sea\Sea.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
@@ -245,8 +252,10 @@
     <ClInclude Include="Game\SteeringBehavior\FloatForceBehavior.h" />
     <ClInclude Include="Game\SteeringBehavior\KnockbackBehavior.h" />
     <ClInclude Include="Game\SteeringBehavior\PushBackBehavior.h" />
+    <ClInclude Include="Game\SteeringBehavior\SeekBehavior.h" />
     <ClInclude Include="Game\SteeringBehavior\WindBehavior.h" />
     <ClInclude Include="Game\Transform\Transform.h" />
+    <ClInclude Include="Game\UIObjects\TitleLogoUI.h" />
     <ClInclude Include="Game\UIObject\UIObject.h" />
     <ClInclude Include="Game\Visitor\CollisionVisitor.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -258,6 +267,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interface\IBalloonFactory.h" />
+    <ClInclude Include="Interface\IBehaviorNode.h" />
     <ClInclude Include="Interface\ICamera.h" />
     <ClInclude Include="Interface\ICollision.h" />
     <ClInclude Include="Interface\ICollisionVisitor.h" />
@@ -294,6 +304,8 @@
     <ClCompile Include="Game\Balloon\BalloonBody.cpp" />
     <ClCompile Include="Game\Balloon\BalloonRope.cpp" />
     <ClCompile Include="Game\Cameras\DebugCamera.cpp" />
+    <ClCompile Include="Game\Enemy\ActionSelection.cpp" />
+    <ClCompile Include="Game\Enemy\AIConditions.cpp" />
     <ClCompile Include="Game\Enemy\Enemy.cpp" />
     <ClCompile Include="Game\Factorys\BalloonFactory.cpp" />
     <ClCompile Include="Game\Factorys\EffectFactory.cpp" />
@@ -320,6 +332,7 @@
     <ClCompile Include="Game\RenderableObjects\BalloonRenderableObject.cpp" />
     <ClCompile Include="Game\RenderableObjects\EnemyRenderableObject.cpp" />
     <ClCompile Include="Game\RenderableObjects\PlayerRenderableObject.cpp" />
+    <ClCompile Include="Game\RenderableObjects\UIRenderableObject .cpp" />
     <ClCompile Include="Game\Scenes\DebugScene.cpp" />
     <ClCompile Include="Game\Sea\Sea.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
@@ -330,8 +343,10 @@
     <ClCompile Include="Game\SteeringBehavior\FloatForceBehavior.cpp" />
     <ClCompile Include="Game\SteeringBehavior\KnockbackBehavior.cpp" />
     <ClCompile Include="Game\SteeringBehavior\PushBackBehavior.cpp" />
+    <ClCompile Include="Game\SteeringBehavior\SeekBehavior.cpp" />
     <ClCompile Include="Game\SteeringBehavior\WindBehavior.cpp" />
     <ClCompile Include="Game\Transform\Transform.cpp" />
+    <ClCompile Include="Game\UIObjects\TitleLogoUI.cpp" />
     <ClCompile Include="Game\UIObject\UIObject.cpp" />
     <ClCompile Include="Game\Visitor\CollisionVisitor.cpp" />
     <ClCompile Include="imgui\imgui.cpp">

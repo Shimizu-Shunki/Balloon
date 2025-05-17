@@ -1,27 +1,27 @@
 #pragma once
 #include "pch.h"
 
+
 // UIの共通頂点バッファ
 struct UIVertexBuffer
 {
-    DirectX::SimpleMath::Vector4 position; // 位置
-    DirectX::SimpleMath::Vector3 rotation; // 回転
-    DirectX::SimpleMath::Vector3 scale;    // スケール
-	DirectX::SimpleMath::Vector4 rect;     // 矩形情報
-    DirectX::SimpleMath::Vector4 color;    // 頂点カラー
+	DirectX::SimpleMath::Vector4 position; // 中心座標（スクリーン空間）
+	DirectX::SimpleMath::Vector3 rotate;   // rotate.xy = scale、rotate.z = rotation角
+	DirectX::SimpleMath::Vector2 size;     // テクスチャ表示サイズ（スクリーン座標系）
+	DirectX::SimpleMath::Vector4 rect;     // xy: UV offset, zw: UV scale
+	DirectX::SimpleMath::Vector4 color;    // RGBAカラー
+	DirectX::SimpleMath::Vector4 rule;     // x: useRule, y: ruleProgress, z: inverse, w: reserved
 };
 
-// UIの共通定数バッファ
+
+// UIの定数バッファ
 struct UIConstBuffer
 {
-	DirectX::SimpleMath::Vector2 windowSize;  // ウィンドウサイズ
-	DirectX::SimpleMath::Vector2 textureSize; // テクスチャサイズ
-	float useTexture;                         // テクスチャ使用フラグ
-	float useRuleTexture;                     // ルール画像使用フラグ
-	float ruleProgress;                       // ルール画像適用度
-	float ruleInverse;                        // ルールの反転
-	DirectX::SimpleMath::Vector4 time;        // タイム
-};											  
+	DirectX::SimpleMath::Vector2 windowSize;
+	float useTexture;
+	float padding0;
+	DirectX::SimpleMath::Vector4 time;
+};
 
 // ライトの定数バッファ用構造体
 struct DirectionalLightBuffer

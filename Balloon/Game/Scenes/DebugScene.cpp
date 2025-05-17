@@ -23,13 +23,15 @@
 #include "Game/Factorys/EffectFactory.h"
 #include "Game/Message/ObjectMessenger.h"
 
+#include "Game/UIObjects/TitleLogoUI.h"
+
 
 DebugScene::DebugScene()
 {
-	m_commonResources = CommonResources::GetInstance();
-	m_parameters = Parameters::GetInstance();
+	m_commonResources  = CommonResources::GetInstance();
+	m_parameters       = Parameters::GetInstance();
 	m_steeringBehavior = WindBehavior::GetInstance();
-	m_root = Root::GetInstance();
+	m_root             = Root::GetInstance();
 }
 
 
@@ -54,8 +56,14 @@ void DebugScene::Initialize()
 	m_root->Attach(EnemyFactory::CreateEnemy(m_root,
 		DirectX::SimpleMath::Vector3::Backward, DirectX::SimpleMath::Vector3::Up, DirectX::SimpleMath::Vector3::One * 0.1f));
 	
-
 	m_root->Attach(EffectFactory::CreateEffectController({ ParametersID::PARTICLE , ParametersID::EFFECT }));
+
+
+	std::unique_ptr<IObject> logo = std::make_unique<TitleLogoUI>(m_root, nullptr, IObject::ObjectID::NODE_BASE,
+		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Quaternion::Identity, DirectX::SimpleMath::Vector3::One, Message::MessageID::ATTACK);
+	logo->Initialize();
+
+	m_root->Attach(std::move(logo));
 
 	ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::EXPLOSION ,0,0.0f ,true });
 	//ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::SMOKE ,0,0.0f ,true });

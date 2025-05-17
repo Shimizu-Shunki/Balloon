@@ -9,7 +9,7 @@ static const float4 VERTEX_OFFSET[VERTEX_COUNT] =
     float4(-0.5f,  0.5f, 0.0f, 1.0f), // 左上
     float4( 0.5f,  0.5f, 0.0f, 1.0f), // 右上
     float4(-0.5f, -0.5f, 0.0f, 1.0f), // 左下
-    float4(0.5f , -0.5f, 0.0f, 1.0f) // 右下
+    float4(0.5f , -0.5f, 0.0f, 1.0f)  // 右下
 };
 
 // 射影変換行列
@@ -41,20 +41,24 @@ void main(
     inout TriangleStream<PS_INPUT> output
 )
 {
-    matrix rot = GetRotateMatrix(input[0].rotate);
+    // 行列計算
+    matrix rot = GetRotateMatrix(input[0].rotate.z);
     matrix proj = GetProjection(windowSize);
+    
+    // 回転のXY成分スケールに使用
+    float2 scale = float2(input[0].rotate.x, input[0].rotate.y);
 
     for (uint i = 0; i < VERTEX_COUNT; i++)
     {
         PS_INPUT element = (PS_INPUT) 0;
 
         // サイズに基づくオフセット計算
-        float4 offset = VERTEX_OFFSET[i] * float4(input[0].scale.x * textureSize.x, input[0].scale.y * textureSize.y, 0.0f, 1.0f);
+        float4 offset = VERTEX_OFFSET[i] * float4(scale.x * input[0].size.x, scale.y * input[0].size.y, 0.0f, 1.0f);
 
         // 中心を基準に回転
-        offset.xy -= VERTEX_OFFSET[3].xy * float2(input[0].scale.x * textureSize.x, input[0].scale.y * textureSize.y) * 0.5f;
+        offset.xy -= VERTEX_OFFSET[3].xy * float2(scale.x * input[0].size.x, scale.y * input[0].size.y);
         offset = mul(offset, rot);
-        offset.xy += VERTEX_OFFSET[3].xy * float2(input[0].scale.x * textureSize.x, input[0].scale.y * textureSize.y) * 0.5f;
+        offset.xy += VERTEX_OFFSET[3].xy * float2(scale.x * input[0].size.x, scale.y * input[0].size.y);
 
         // 射影変換適用
         float4 p = input[0].position + offset;
@@ -67,7 +71,8 @@ void main(
 
         // その他の属性をコピー
         element.color = input[0].color;
-        element.rect = input[0].rect;
+        element.rect  = input[0].rect;
+        element.rule  = input[0].rule;
 
         output.Append(element);
     }

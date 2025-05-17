@@ -12,6 +12,7 @@ class KnockbackBehavior;
 class PushBackBehavior;
 class FloatBehavior;
 class FloatForceBehavior;
+class SeekBehavior;
 
 class Enemy : public Object , public ICollision ,public IComposite
 {
@@ -25,6 +26,9 @@ public:
 	int GetObjectNumber() const  override { return m_objectNumber; }
 
 	std::vector<IObject*> GetBalloonObject() { return m_balloonObject; }
+
+	// 敵のHPを取得する
+	float GetHp() const { return m_hp; }
 
 	// オブジェクトIDを取得する
 	IObject::ObjectID GetObjectID() const override { return m_objectID; }
@@ -107,6 +111,8 @@ private:
 
 	std::unique_ptr<PushBackBehavior> m_pushBackBehavior;
 
+	std::unique_ptr<SeekBehavior> m_seekBehavior;
+
 	// プレイヤーの速度
 	DirectX::SimpleMath::Vector3 m_velocity;
 	// 方向
@@ -117,5 +123,8 @@ private:
 	DirectX::SimpleMath::Vector3 m_acceralation;
 
 	float m_balloonIndex;
+
+	// Hp
+	float m_hp;
 
 };

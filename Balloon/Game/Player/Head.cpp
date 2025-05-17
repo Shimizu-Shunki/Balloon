@@ -1,11 +1,19 @@
+// ============================================
+// 
+// ファイル名: Head.cpp
+// 概要: プレイヤー、敵の頭オブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "pch.h"
 #include "Game/Player/Head.h"
 #include "Game/Object/Object.h"
+#include "Framework/CommonResources.h"
+#include "Framework/Resources/Resources.h"
+#include "Framework/Resources/ResourceKeys.h"
 #include "Game/RenderableObjects/PlayerRenderableObject.h"
 #include "Game/RenderableObjects/EnemyRenderableObject.h"
-#include "Framework/CommonResources.h"
-#include "Framework/Resources/ResourceKeys.h"
-#include "Game/Buffers.h"
 
 /// <summary>
 /// コンストラクタ

@@ -18,6 +18,7 @@
 #include "Game/SteeringBehavior/FloatBehavior.h"
 #include "Game/SteeringBehavior/FloatForceBehavior.h"
 #include "Game/SteeringBehavior/PushBackBehavior.h"
+#include "Game/SteeringBehavior/SeekBehavior.h"
 
 
 /// <summary>
@@ -100,11 +101,12 @@ void Enemy::Initialize()
 
 	m_pushBackBehavior = std::make_unique<PushBackBehavior>(this);
 
+	m_seekBehavior = std::make_unique<SeekBehavior>(this, dynamic_cast<Object*>( ObjectMessenger::GetInstance()->GetObjectI(0)));
+
 
 	// 体を追加する
 	this->Attach(EnemyFactory::CreateEnemyBody(this,
 		DirectX::SimpleMath::Vector3::Zero,DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One));
-
 
 	// 風船を追加する
 	this->Attach(BalloonFactory::CreateBalloon(this, IObject::ObjectID::BALLOON,
@@ -126,9 +128,8 @@ void Enemy::Initialize()
 	// オブジェクトのカウントをリセット
 	Object::ResetNumber();
 
+	// 当たり判定を準備する
 	m_collisionVisitor->StartPrepareCollision(this);
-
-	
 }
 
 /// <summary>
@@ -140,12 +141,13 @@ void Enemy::Update(const float& elapsedTime)
 	(void)elapsedTime;
 
 	m_knockbackBehavior->SetTargetObject(
-		dynamic_cast<Object*>(ObjectMessenger::GetInstance()->GetObjectI(0) ) );
+		dynamic_cast<Object*>(ObjectMessenger::GetInstance()->GetObjectI(0)));
 
 	// 操舵力から加速度を計算する
 	DirectX::SimpleMath::Vector3 acceleration =
 		m_steeringBehavior->Calculate() + m_knockbackBehavior->Calculate() +
-		m_floatBehavior->Calculate() + m_floatForceBehavior->Calculate() + m_pushBackBehavior->Calculate();
+		m_floatBehavior->Calculate() + m_floatForceBehavior->Calculate() +
+		m_pushBackBehavior->Calculate() + m_seekBehavior->Calculate();
 
 	// 速度に加速度を加算する
 	m_velocity += acceleration * elapsedTime;
@@ -166,13 +168,12 @@ void Enemy::Update(const float& elapsedTime)
 		child->Update(elapsedTime);
 	}
 
-	
+	// 当たり判定を行う
 	auto player = dynamic_cast<Player*>(ObjectMessenger::GetInstance()->GetObjectI(0));
 	for (const auto& balloon : player->GetBalloonObject())
 	{
 		m_collisionVisitor->DetectCollision(this, balloon);
 	}
-	
 }
 
 /// <summary>

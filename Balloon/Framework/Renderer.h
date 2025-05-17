@@ -7,6 +7,7 @@
 class CommonResources;
 class Particle;
 class ParticleEmitter;
+class UIRenderableObject;
 
 class Renderer
 {
@@ -20,6 +21,7 @@ public:
 	// 描画オブジェクト追加
 	void Attach(IObject* object, IRenderableObject* renderableObject);
 	void Attach(ParticleEmitter* emitter) { m_particleEmitter.push_back(emitter); }
+	void Attach(IObject* object, UIRenderableObject* renderableObject);
 
 	// 描画処理
 	void Render();
@@ -28,6 +30,8 @@ private:
 
 	// パーティクル描画
 	void ParticleRender(const DirectX::SimpleMath::Matrix& viewMatrix, const DirectX::SimpleMath::Matrix& projectionMatrix);
+	// UI描画
+	void UIRender();
 
 private:
 	// 共有リソース
@@ -40,26 +44,40 @@ private:
 	DirectX::CommonStates* m_commonStates;
 
 	// 描画オブジェクト
-	std::unordered_map<IObject*, IRenderableObject*> m_renderableObjects;
-
-
-	// 定数バッファ
-	std::unique_ptr<ConstantBuffer<ParticleConstBuffer>> m_particleConstBuffer;
-
+	std::unordered_map<IObject*, IRenderableObject*> m_modelRenderableObjects;
+	// UI描画オブジェクト
+	std::unordered_map<IObject*, UIRenderableObject*> m_UIRenderableObjects;
+	// パーティクルオブジェクト
 	std::vector<ParticleEmitter*> m_particleEmitter;
 
+
+	// === UI ===
+
 	// インプットレイアウト
-	ID3D11InputLayout* m_inputLayout;
-
+	ID3D11InputLayout* m_uiInputLayout;
 	// 頂点シェーダー
-	ID3D11VertexShader* m_vertexShader;
+	ID3D11VertexShader* m_uiVertexShader;
 	// ジオメトリシェーダー
-	ID3D11GeometryShader* m_geometryShader;
-
+	ID3D11GeometryShader* m_uiGeometryShader;
 	// 頂点バッファ
-	Microsoft::WRL::ComPtr<ID3D11Buffer> m_vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_uiVertexBuffer;
+	// 定数バッファデータ
+	UIConstBuffer m_uiConstBufferData;
+	// 定数バッファ
+	std::unique_ptr<ConstantBuffer<UIConstBuffer>> m_uiConstBuffer;
 
+	// === パーティクル ===
+	
+	// インプットレイアウト
+	ID3D11InputLayout* m_particleiInputLayout;
+	// 定数バッファ
+	std::unique_ptr<ConstantBuffer<ParticleConstBuffer>> m_particleConstBuffer;
+	// 頂点シェーダー
+	ID3D11VertexShader* m_particleVertexShader;
+	// ジオメトリシェーダー
+	ID3D11GeometryShader* m_particleGeometryShader;
+	// 頂点バッファ
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_particleVertexBuffer;
 	// ビルボード
 	DirectX::SimpleMath::Matrix m_billboardMatrix;
-
 };

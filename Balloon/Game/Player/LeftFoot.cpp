@@ -1,12 +1,19 @@
+// ============================================
+// 
+// ファイル名: LeftFoot.cpp
+// 概要: プレイヤー、敵の左足オブジェクト
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #include "pch.h"
 #include "Game/Player/LeftFoot.h"
-#include "Framework/CommonResources.h"
 #include "Game/Object/Object.h"
-#include "Game/RenderableObjects/PlayerRenderableObject.h"
-#include "Game/RenderableObjects/EnemyRenderableObject.h"
+#include "Framework/CommonResources.h"
 #include "Framework/Resources/Resources.h"
 #include "Framework/Resources/ResourceKeys.h"
-#include "Game/Buffers.h"
+#include "Game/RenderableObjects/PlayerRenderableObject.h"
+#include "Game/RenderableObjects/EnemyRenderableObject.h"
 
 /// <summary>
 /// コンストラクタ

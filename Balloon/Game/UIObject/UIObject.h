@@ -15,13 +15,13 @@ public:
 	// コンストラクタ
 	UIObject();
 	// デストラクタ
-	~UIObject();
+	~UIObject() override;
 	// 初期化する
-	void Initialize();
+	void Initialize() override;
 	// 更新する
-	void Update(const float& elapsedTime);
+	void Update(const float& elapsedTime) override;
 	// 後処理を行う
-	void Finalize();
+	void Finalize() override;
 
 private:
 	// オブジェクト番号

@@ -1,3 +1,11 @@
+// ============================================
+// 
+// ファイル名: RightArm.h
+// 概要: RightArm.cppのヘッダーファイル
+// 
+// 製作者 : 清水駿希
+// 
+// ============================================
 #pragma once
 #include "Game/Object/Object.h"
 #include "Interface/ILeaf.h"

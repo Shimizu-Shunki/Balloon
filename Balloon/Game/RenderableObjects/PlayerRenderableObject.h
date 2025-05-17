@@ -11,15 +11,14 @@ class PlayerRenderableObject : public IRenderableObject
 public:
 
     // アクティブ状態を設定
-    virtual void SetIsActive(const bool& active) { m_isAcitve = active; }
+    void SetIsActive(const bool& active) override { m_isAcitve = active; }
     // アクティブ状態を取得
-    virtual bool GetIsActive() const { return m_isAcitve; }
+    bool GetIsActive() const override { return m_isAcitve; }
 
 
     // ワールド行列を設定する
     void SetWorldMatrix(const DirectX::SimpleMath::Matrix& worldMatrix) { m_worldMatrix = worldMatrix; }
 
-   
     // 定数バッファを取得する
     ID3D11Buffer* GetConstantBuffer() const override;
 
