@@ -23,6 +23,7 @@ public:
 		ATTACK,
 		SMOKE,
 		MOVEMENT,
+		BALLOON_EXPLOSION,
 
 		// ”»’èˆ—
 		ON_COLLISION,

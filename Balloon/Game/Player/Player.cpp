@@ -290,9 +290,20 @@ void Player::OnMessegeAccepted(Message::MessageData messageData)
 
 		case Message::MessageID::ON_COLLISION:
 			
-			if(Object::GetState() == m_playerAttackState.get())
-			// 上向きのベクトルに変化する
-			m_velocity.y = m_velocity.y * -1.0f;
+			if (Object::GetState() == m_playerAttackState.get())
+			{
+				// 上向きのベクトルに変化する
+				m_velocity.y = m_velocity.y * -1.0f;
+
+				// 相手の風船を破棄する
+				auto enemy = ObjectMessenger::GetInstance()->GetObjectI(messageData.dataInt);
+				if (enemy->GetParent()->GetParent()->GetObjectID() == ObjectID::ENEMY)
+				{
+					// 敵のオブジェクトをキャストする
+					enemy->SetIsActive(false);
+				}
+
+			}
 			break;
 
 		default:
@@ -348,6 +359,7 @@ void Player::OnKeyPressed(KeyType type, const DirectX::Keyboard::Keys& key)
 						DirectX::XMConvertToRadians(2.0f))
 				)
 			);
+
 			break;
 		case DirectX::Keyboard::Keys::Right:
 

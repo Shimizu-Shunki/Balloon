@@ -208,7 +208,28 @@ void Enemy::Detach(std::unique_ptr<IObject> object)
 /// <param name="messageID">メッセージID</param>
 void Enemy::OnMessegeAccepted(Message::MessageData messageData)
 {
-	(void)messageData;
+	switch (messageData.messageId)
+	{
+		case Message::MessageID::ON_COLLISION:
+
+			if (true)
+			{
+				// 上向きのベクトルに変化する
+				m_velocity.y = m_velocity.y * -1.0f;
+
+				// 相手の風船を破棄する
+				auto enemy = ObjectMessenger::GetInstance()->GetObjectI(messageData.dataInt);
+				if (enemy->GetParent()->GetParent()->GetObjectID() == ObjectID::PLAYER)
+				{
+					// 敵のオブジェクトをキャストする
+					enemy->SetIsActive(false);
+				}
+			}
+
+			break;
+		default:
+			break;
+	}
 }
 
 // 通知する

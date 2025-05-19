@@ -7,5 +7,5 @@ class EffectFactory
 {
 public:
 
-	static std::unique_ptr<IObject> CreateEffectController(std::vector<ParametersID> ids);
+	static std::unique_ptr<IObject> CreateEffectController(IObject* parent, std::vector<ParametersID> ids);
 };

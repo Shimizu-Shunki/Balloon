@@ -37,7 +37,7 @@ enum class TextureKeyID : int
     ResultText,
     ResultSceneKeyGuide,
     ResultSceneText,
-    
+    BalloonExplosion,
 
     Meat,
     Wood,

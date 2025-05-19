@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game/Factorys/BalloonFactory.h"
 #include "Game/Node/root.h"
+#include "Game/Message/ObjectMessenger.h"
 
 // パーツ
 #include "Game/Balloon/Balloon.h"
@@ -25,6 +26,7 @@ std::unique_ptr<IObject> BalloonFactory::CreateBalloon(
 	player.reset(new Balloon(Root::GetInstance(),parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	player->Initialize();
+
 	// プレイヤークラスのインスタンスを返す
 	return std::move(player);
 }
@@ -46,6 +48,8 @@ std::unique_ptr<IObject> BalloonFactory::CreateBalloonBody(
 	enemyBody.reset(new BalloonBody(Root::GetInstance(), parent, objectID, initialPosition, rotation, initialScale, Message::MessageID::NONE));
 	// 初期化する
 	enemyBody->Initialize();
+	// オブジェクトメッセンジャーに登録
+	ObjectMessenger::GetInstance()->Register(enemyBody->GetObjectNumber(), enemyBody.get());
 	// プレイヤークラスのインスタンスを返す
 	return std::move(enemyBody);
 }

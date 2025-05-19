@@ -52,6 +52,9 @@ public:
 	// Transformを取得する
 	virtual Transform* GetTransform() const = 0;
 
+	// 親オブジェクトを取得する
+	virtual IObject* GetParent() const = 0;
+
 public:
 	// コンストラクタ
 	virtual ~IObject() = default;

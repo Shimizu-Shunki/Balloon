@@ -6,8 +6,9 @@
 
 const int EffectController::MAX_POOL = 10;
 
-EffectController::EffectController(bool isActive, IObject::ObjectID objectId)
+EffectController::EffectController(IObject* parent, bool isActive, IObject::ObjectID objectId)
 	:
+	m_parent(parent),
 	m_isActive(isActive),
 	m_objectId(objectId),
 	m_pools{}
@@ -128,6 +129,33 @@ void EffectController::OnMessegeAccepted(Message::MessageData messageData)
 
 		break;
 	case Message::MessageID::MOVEMENT:
+		break;
+
+	case Message::MessageID::BALLOON_EXPLOSION:
+
+		// 停止のメッセージだった場合
+		if (!messageData.dataBool)
+		{
+			m_pools[ParametersID::BALLOON_EXPLOSION][messageData.dataInt]->Stop();
+			break;
+		}
+
+		for (const auto& emitter : m_pools[ParametersID::BALLOON_EXPLOSION])
+		{
+			// 起動していないエミッターを再生する
+			if (!emitter->GetIsActive())
+			{
+				// 再生
+				emitter->Play();
+
+				// 再生したオブジェクトにプール番号を渡す
+				ObjectMessenger::GetInstance()->Dispatch(messageData.dataInt, { Message::MessageID::EFFECT_NUMBER , num });
+
+				continue;
+			}
+
+			num++;
+		}
 
 
 		break;

@@ -25,6 +25,8 @@
 
 #include "Game/UIObjects/TitleLogoUI.h"
 
+#include "Game/Factorys/CameraFactory.h"
+
 
 DebugScene::DebugScene()
 {
@@ -51,21 +53,36 @@ void DebugScene::Initialize()
 	
 
 	m_root->Attach(PlayerFactory::CreatePlayer(m_root,
-		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Up , DirectX::SimpleMath::Vector3::One * 0.1f));
+		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::Zero , DirectX::SimpleMath::Vector3::One * 0.1f));
 
 	m_root->Attach(EnemyFactory::CreateEnemy(m_root,
-		DirectX::SimpleMath::Vector3::Backward, DirectX::SimpleMath::Vector3::Up, DirectX::SimpleMath::Vector3::One * 0.1f));
+		DirectX::SimpleMath::Vector3::Backward, DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::One * 0.1f));
 	
-	m_root->Attach(EffectFactory::CreateEffectController({ ParametersID::PARTICLE , ParametersID::EFFECT }));
+	m_root->Attach(EffectFactory::CreateEffectController(m_root ,{ ParametersID::BALLOON_EXPLOSION, ParametersID::PARTICLE  }));
+
+	std::vector<std::unique_ptr<ICamera>> cameras;
+	cameras.emplace_back(CameraFactory::CreateFixedCaemra(
+		DirectX::SimpleMath::Vector3::Backward * 10,
+		DirectX::SimpleMath::Quaternion::Identity));
+	cameras.emplace_back(CameraFactory::CreateFixedCaemra(
+		DirectX::SimpleMath::Vector3::Forward * 5,
+		DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Right , DirectX::XMConvertToRadians(45.0f))));
+	cameras.emplace_back(CameraFactory::CreateFollowCaemra(
+		ObjectMessenger::GetInstance()->GetObjectI(0)->GetTransform(),
+		{0.0f ,8.0f ,8.0f}));
+
+	m_root->Attach(CameraFactory::CreateCameraSystem(m_root, std::move(cameras)));
 
 
-	std::unique_ptr<IObject> logo = std::make_unique<TitleLogoUI>(m_root, nullptr, IObject::ObjectID::NODE_BASE,
+	/*std::unique_ptr<IObject> logo = std::make_unique<TitleLogoUI>(m_root, nullptr, IObject::ObjectID::NODE_BASE,
 		DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Quaternion::Identity, DirectX::SimpleMath::Vector3::One, Message::MessageID::ATTACK);
 	logo->Initialize();
 
-	m_root->Attach(std::move(logo));
+	 m_root->Attach(std::move(logo));*/
 
-	ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::EXPLOSION ,0,0.0f ,true });
+	ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::BALLOON_EXPLOSION ,0,0.0f ,true });
+
+	ObjectMessenger::GetInstance()->Dispatch(3, { Message::MessageID::BALLOON_EXPLOSION ,2,5.0f ,true });
 	//ObjectMessenger::GetInstance()->Dispatch(2, { Message::MessageID::SMOKE ,0,0.0f ,true });
 
 	//m_emitter = std::make_unique< ParticleEmitter>();
@@ -89,15 +106,11 @@ void DebugScene::Update()
 
 	m_steeringBehavior->Update(elapsedTime);
 
-	// カメラを更新
-	m_debugCamera->Update();
-	m_commonResources->SetViewMatrix(m_debugCamera->GetViewMatrix());
-
-	m_commonResources->SetCameraTransform(m_debugCamera->GetTransform());
-
 	m_root->Update(elapsedTime);
 
-	// m_emitter->Update(elapsedTime);
+	// カメラを更新
+	/*m_debugCamera->Update();
+	m_commonResources->SetViewMatrix(m_debugCamera->GetViewMatrix());*/
 }
 
 void DebugScene::Render()

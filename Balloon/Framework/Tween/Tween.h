@@ -100,7 +100,7 @@ public:
     ~Tween() = default;
 
     // イージングの適応
-    float EasingFunction(EasingType type, float t);
+    static float EasingFunction(EasingType type, float t);
     // 回転ベクトルをクォータニオンに変換する
     DirectX::SimpleMath::Quaternion ConvertToYawPitchRoll(const DirectX::SimpleMath::Vector3& rotation);
     // ラジアンを度数に変換する

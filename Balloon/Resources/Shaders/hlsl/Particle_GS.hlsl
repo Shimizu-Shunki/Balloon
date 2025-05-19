@@ -38,10 +38,7 @@ void main(
         // 色を取得
         element.color = input[0].color;
         
-        // UV座標の計算
-        element.uv.x =  offset_array[i].x + 1.0f;
-        element.uv.y = -offset_array[i].y + 1.0f;
-        element.uv /= 2.0f;
+        element.uv = (offset_array[i].xy + 0.5f);
         
         // 頂点を出力ストリームに追加
         output.Append(element);

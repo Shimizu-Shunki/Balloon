@@ -19,6 +19,9 @@ public:
 	// Transformを取得する
 	Transform* GetTransform() const override { return m_transform.get(); }
 
+	// 親オブジェクトを取得する
+	IObject* GetParent() const override { return nullptr; }
+
 	// ノード番号を取得する
 	int GetObjectNumber() const override { return NodeBase::GetNodeCount(); }
 

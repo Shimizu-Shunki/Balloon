@@ -161,6 +161,12 @@
     <Filter Include="Game\BehaviorTree">
       <UniqueIdentifier>{7c58296e-1b99-4af4-aa7e-532347e4ba45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Factorys\Header">
+      <UniqueIdentifier>{e6570bff-a91c-4b55-bc8f-2223825416f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Factorys\Source">
+      <UniqueIdentifier>{fcb372be-6d41-4e47-bf17-2f46b7a6fa36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -324,17 +330,11 @@
     <ClInclude Include="Interface\IPlayerFactory.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Factorys\PlayerFactory.h">
-      <Filter>Game\Factorys</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Renderer.h">
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Interface\IEnemyFactory.h">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Factorys\EnemyFactory.h">
-      <Filter>Game\Factorys</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Enemy.h">
       <Filter>Game\Objects\Enemy</Filter>
@@ -365,9 +365,6 @@
     </ClInclude>
     <ClInclude Include="Interface\IBalloonFactory.h">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Factorys\BalloonFactory.h">
-      <Filter>Game\Factorys</Filter>
     </ClInclude>
     <ClInclude Include="Game\RenderableObjects\BalloonRenderableObject.h">
       <Filter>Game\RenderableObjects</Filter>
@@ -423,9 +420,6 @@
     <ClInclude Include="Game\Particle\EffectController.h">
       <Filter>Game\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Factorys\EffectFactory.h">
-      <Filter>Game\Factorys</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\ICollisionVisitor.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -464,6 +458,36 @@
     </ClInclude>
     <ClInclude Include="Game\RenderableObjects\UIRenderableObject .h">
       <Filter>Game\RenderableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scenes\TitleScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\CameraSystem.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\BlendingCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\FixedCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Cameras\FollowCamera.h">
+      <Filter>Game\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\BalloonFactory.h">
+      <Filter>Game\Factorys\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\CameraFactory.h">
+      <Filter>Game\Factorys\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\EffectFactory.h">
+      <Filter>Game\Factorys\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\EnemyFactory.h">
+      <Filter>Game\Factorys\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factorys\PlayerFactory.h">
+      <Filter>Game\Factorys\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -569,14 +593,8 @@
     <ClCompile Include="Game\Player\RightFoot.cpp">
       <Filter>Game\Objects\Player\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Factorys\PlayerFactory.cpp">
-      <Filter>Game\Factorys</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Renderer.cpp">
       <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Factorys\EnemyFactory.cpp">
-      <Filter>Game\Factorys</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Enemy.cpp">
       <Filter>Game\Objects\Enemy</Filter>
@@ -604,9 +622,6 @@
     </ClCompile>
     <ClCompile Include="Game\Balloon\BalloonRope.cpp">
       <Filter>Game\Objects\Balloon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Factorys\BalloonFactory.cpp">
-      <Filter>Game\Factorys</Filter>
     </ClCompile>
     <ClCompile Include="Game\RenderableObjects\BalloonRenderableObject.cpp">
       <Filter>Game\RenderableObjects</Filter>
@@ -656,9 +671,6 @@
     <ClCompile Include="Game\Particle\EffectController.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Factorys\EffectFactory.cpp">
-      <Filter>Game\Factorys</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Visitor\CollisionVisitor.cpp">
       <Filter>Game\Visitor</Filter>
     </ClCompile>
@@ -676,6 +688,36 @@
     </ClCompile>
     <ClCompile Include="Game\RenderableObjects\UIRenderableObject .cpp">
       <Filter>Game\RenderableObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scenes\TitleScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\CameraSystem.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\BlendingCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\FixedCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Cameras\FollowCamera.cpp">
+      <Filter>Game\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\BalloonFactory.cpp">
+      <Filter>Game\Factorys\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\CameraFactory.cpp">
+      <Filter>Game\Factorys\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\EnemyFactory.cpp">
+      <Filter>Game\Factorys\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\EffectFactory.cpp">
+      <Filter>Game\Factorys\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factorys\PlayerFactory.cpp">
+      <Filter>Game\Factorys\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

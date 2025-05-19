@@ -16,7 +16,7 @@ public:
 	// 初期化処理
 	virtual void Initialize() = 0;
 	// 更新処理
-	virtual void Update() = 0;
+	virtual void Update(const float& elapsedTime) = 0;
 	// ビュー行列の作成
 	virtual DirectX::SimpleMath::Matrix CalculateViewMatrix() = 0;
 };

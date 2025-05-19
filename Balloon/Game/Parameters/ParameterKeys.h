@@ -14,6 +14,8 @@ enum class ParametersID
 
 	PARTICLE,
 
+	BALLOON_EXPLOSION,
+
 };
 
 

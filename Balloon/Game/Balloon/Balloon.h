@@ -27,6 +27,9 @@ public:
 	// Transformを取得する
 	Transform* GetTransform() const override { return m_transform.get(); }
 
+	// 親オブジェクトを取得する
+	IObject* GetParent() const override { return m_parent; }
+
 	// 速度を取得する
 	DirectX::SimpleMath::Vector3& GetVelocity() override { return m_velocity; }
 	// 速度を設定する

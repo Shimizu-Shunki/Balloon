@@ -182,6 +182,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Framework\AudioManager.h" />
+    <ClInclude Include="Framework\CameraSystem.h" />
     <ClInclude Include="Framework\CommonResources.h" />
     <ClInclude Include="Framework\DepthStencil.h" />
     <ClInclude Include="Framework\DeviceResources.h" />
@@ -211,11 +212,15 @@
     <ClInclude Include="Game\BehaviorTree\SequenceNode.h" />
     <ClInclude Include="Game\Buffers.h" />
     <ClInclude Include="Game\Buffers\ConstantBuffer.h" />
+    <ClInclude Include="Game\Cameras\BlendingCamera.h" />
     <ClInclude Include="Game\Cameras\DebugCamera.h" />
+    <ClInclude Include="Game\Cameras\FixedCamera.h" />
+    <ClInclude Include="Game\Cameras\FollowCamera.h" />
     <ClInclude Include="Game\Enemy\ActionSelection.h" />
     <ClInclude Include="Game\Enemy\AIConditions.h" />
     <ClInclude Include="Game\Enemy\Enemy.h" />
     <ClInclude Include="Game\Factorys\BalloonFactory.h" />
+    <ClInclude Include="Game\Factorys\CameraFactory.h" />
     <ClInclude Include="Game\Factorys\EffectFactory.h" />
     <ClInclude Include="Game\Factorys\EnemyFactory.h" />
     <ClInclude Include="Game\Factorys\PlayerFactory.h" />
@@ -243,6 +248,7 @@
     <ClInclude Include="Game\RenderableObjects\PlayerRenderableObject.h" />
     <ClInclude Include="Game\RenderableObjects\UIRenderableObject .h" />
     <ClInclude Include="Game\Scenes\DebugScene.h" />
+    <ClInclude Include="Game\Scenes\TitleScene.h" />
     <ClInclude Include="Game\Sea\Sea.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\States\Player\PlayerAttackState.h" />
@@ -286,6 +292,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\AudioManager.cpp" />
+    <ClCompile Include="Framework\CameraSystem.cpp" />
     <ClCompile Include="Framework\DepthStencil.cpp" />
     <ClCompile Include="Framework\DeviceResources.cpp" />
     <ClCompile Include="Framework\InputManager.cpp" />
@@ -303,11 +310,15 @@
     <ClCompile Include="Game\Balloon\Balloon.cpp" />
     <ClCompile Include="Game\Balloon\BalloonBody.cpp" />
     <ClCompile Include="Game\Balloon\BalloonRope.cpp" />
+    <ClCompile Include="Game\Cameras\BlendingCamera.cpp" />
     <ClCompile Include="Game\Cameras\DebugCamera.cpp" />
+    <ClCompile Include="Game\Cameras\FixedCamera.cpp" />
+    <ClCompile Include="Game\Cameras\FollowCamera.cpp" />
     <ClCompile Include="Game\Enemy\ActionSelection.cpp" />
     <ClCompile Include="Game\Enemy\AIConditions.cpp" />
     <ClCompile Include="Game\Enemy\Enemy.cpp" />
     <ClCompile Include="Game\Factorys\BalloonFactory.cpp" />
+    <ClCompile Include="Game\Factorys\CameraFactory.cpp" />
     <ClCompile Include="Game\Factorys\EffectFactory.cpp" />
     <ClCompile Include="Game\Factorys\EnemyFactory.cpp" />
     <ClCompile Include="Game\Factorys\PlayerFactory.cpp" />
@@ -334,6 +345,7 @@
     <ClCompile Include="Game\RenderableObjects\PlayerRenderableObject.cpp" />
     <ClCompile Include="Game\RenderableObjects\UIRenderableObject .cpp" />
     <ClCompile Include="Game\Scenes\DebugScene.cpp" />
+    <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="Game\Sea\Sea.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\States\Player\PlayerAttackState.cpp" />

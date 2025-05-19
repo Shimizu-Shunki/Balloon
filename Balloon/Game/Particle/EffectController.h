@@ -26,8 +26,11 @@ public:
 	// Transformを取得する
 	Transform* GetTransform() const override { return nullptr; }
 
+	// 親オブジェクトを取得する
+	IObject* GetParent() const override { return m_parent; }
+
 	// コンストラクタ
-	EffectController(bool isActive , IObject::ObjectID objectId);
+	EffectController(IObject* parent , bool isActive , IObject::ObjectID objectId);
 
 	// デストラクタ
 	~EffectController() = default;
@@ -53,6 +56,8 @@ public:
 private:
 
 	bool m_isActive;
+
+	IObject* m_parent;
 
 	// オブジェクトID
 	IObject::ObjectID m_objectId;
